@@ -115,14 +115,22 @@ public class ToolbusProtocol extends AbstractProtocolHandler {
 					if (message.expectsReply()) {
 
 						IMessage reply = read(message);
+						if (reply == null) {
+							getLog().warn("Null reply received, discarding and waiting for next message.");
+							reply = read(message);
+						}
 
-						while (!message.getTarget().equals(reply.getTarget())
-								|| !message.getCommandName().equals(reply.getCommandName())) {
+						while (reply != null && (!message.getTarget().equals(reply.getTarget())
+								|| !message.getCommandName().equals(reply.getCommandName()))) {
 							getLog().debug("Out of order message " + reply.toString() + "\n"
 									+ Arrays.toString(reply.getData().toHexArray()));
 							reply.parseData();
 							getComControl().fireNewMessage(reply);
 							reply = read(message);
+						}
+
+						if (reply == null) {
+							throw new ComException("Null reply received after retries");
 						}
 
 						if (message instanceof ToolbusCommand) {
@@ -189,6 +197,9 @@ public class ToolbusProtocol extends AbstractProtocolHandler {
 				// Read the available bytes.
 				while (getComControl().getInputStream().available() > 0) {
 
+					if (idx >= buffer.length) {
+						buffer = Arrays.copyOf(buffer, buffer.length * 2);
+					}
 					buffer[idx] = getComControl().getInputStream().read();
 
 					if (buffer[idx] == DELIMITER) {
@@ -200,7 +211,14 @@ public class ToolbusProtocol extends AbstractProtocolHandler {
 						terminatorReceived = true;
 
 						if (isMessageIntact(buffer, idx)) {
-							return getBytesAsMessage(buffer, idx);
+							ToolbusCommand msg = getBytesAsMessage(buffer, idx);
+							if (msg != null) {
+								return msg;
+							}
+							// Unknown command: discard and continue waiting for the next message.
+							idx = 0;
+							terminatorReceived = false;
+							continue;
 						} else {
 							int[] messageBody = new int[idx];
 							System.arraycopy(buffer, 0, messageBody, 0, idx);
@@ -273,7 +291,8 @@ public class ToolbusProtocol extends AbstractProtocolHandler {
 		ToolbusCommand msg = this.getCommand(command);
 		
 		if (msg == null) {
-			getLog().debug("ToolbusCommandRegister não encontrado");
+			String raw = new String(messageBody, 0, length + 1);
+			getLog().warn("Unknown toolbus command '" + command + "', discarding message: " + raw);
 			return null;
 		}
 		IStatusCode status = ToolbusStatusRegister.get(new String("" + (char) messageBody[5] + (char) messageBody[6]));
@@ -355,3 +374,4 @@ public class ToolbusProtocol extends AbstractProtocolHandler {
 //		return   msg;
 	}
 }
+

@@ -81,11 +81,9 @@ public abstract class MemoryWrite extends ToolbusCommand {
         StringBuffer b = new StringBuffer(val.length);
         for (int i = 0; i < val.length; i++) {
             if (mode == BCD) {
-                // b.append(FORMAT.format(val[i]));
-                b.append(utils.getFormatedHex(val[i]));
-            } else {
-                // b.append(utils.getFormatedHex(val[i]));
                 b.append(FORMAT.format(val[i]));
+            } else {
+                b.append(utils.getFormatedHex(val[i]));
             }
         }
 

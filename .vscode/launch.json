@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "RrWrBitGui",
+            "request": "launch",
+            "mainClass": "gui.RrWrBitGui",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
+            "name": "DmTestGui",
+            "request": "launch",
+            "mainClass": "gui.DmTestGui",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
             "name": "Launch TestDM",
             "request": "launch",
             "mainClass": "demo.TestDM",

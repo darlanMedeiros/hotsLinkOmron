@@ -200,20 +200,16 @@ public class SerialPortPJC extends SerialPort implements SerialPortEventListener
 		return in;
 	}
 
-	public void setSerialComParameters(org.ctrl.comm.SerialParameters serialComParameters) {
-
-		this.setSerialComParameters(serialComParameters);
-
-	}
-
 	public void sendBreak(int millis) {
-		this.sendBreak(millis);
-
+		if (isOpened()) {
+			port.sendBreak(millis);
+		}
 	}
 
 	public void setOutputBufferSeize(int size) {
-		this.setOutputBufferSeize(size);
-
+		if (isOpened()) {
+			port.setOutputBufferSize(size);
+		}
 	}
 
 	@Override

@@ -15,7 +15,7 @@
  */
 package org.ctrl.comm;
 
-import javax.comm.SerialPort;
+import purejavacomm.SerialPort;
 
 /**
  * @author Remus

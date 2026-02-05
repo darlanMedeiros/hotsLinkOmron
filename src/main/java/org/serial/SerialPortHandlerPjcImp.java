@@ -9,11 +9,28 @@ public class SerialPortHandlerPjcImp extends AbstractComHandler implements ISeri
 
 	private SerialPort serialPort;
 	protected boolean shutDownHookRegistered = false;
+	private SerialParameters serialComParameters;
 
 	public SerialPortHandlerPjcImp(SerialPort serialPort) {
 
 		super();
 		this.serialPort = serialPort;
+		if (serialPort != null) {
+			this.serialComParameters = mapSerialParameters(serialPort.getSerialParameters());
+		}
+	}
+
+	private static SerialParameters mapSerialParameters(org.serial.SerialParameters source) {
+		if (source == null) {
+			return null;
+		}
+		SerialParameters target = new SerialParameters();
+		target.setPortName(source.getDevice());
+		target.setBaudRate(source.getBaudRate());
+		target.setDatabits(source.getDataBits());
+		target.setStopbits(source.getStopBits());
+		target.setParity(source.getParity().getValue());
+		return target;
 	}
 
 	@Override
@@ -24,8 +41,7 @@ public class SerialPortHandlerPjcImp extends AbstractComHandler implements ISeri
 
 	@Override
 	public SerialParameters getSerialComParameters() {
-		// TODO Auto-generated method stub
-		return null;
+		return serialComParameters;
 	}
 
 	@Override
@@ -86,7 +102,7 @@ public class SerialPortHandlerPjcImp extends AbstractComHandler implements ISeri
 
 	@Override
 	public void setSerialComParameters(SerialParameters serialComParameters) {
-
+		this.serialComParameters = serialComParameters;
 	}
 
 	@Override
