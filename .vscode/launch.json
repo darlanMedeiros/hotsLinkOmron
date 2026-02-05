@@ -1,0 +1,70 @@
+{
+    // Use o IntelliSense para saber mais sobre os atributos possíveis.
+    // Focalizar para exibir as descrições dos atributos existentes.
+    // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch TestDM",
+            "request": "launch",
+            "mainClass": "demo.TestDM",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
+            "name": "Launch TestCIO",
+            "request": "launch",
+            "mainClass": "demo.TestCIO",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
+            "name": "Launch SimpleTest_TAGvariable",
+            "request": "launch",
+            "mainClass": "demo.SimpleTest_TAGvariable",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
+            "name": "Launch SimpleTest_1",
+            "request": "launch",
+            "mainClass": "demo.SimpleTest_1",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch Test",
+            "request": "launch",
+            "mainClass": "demo.Test",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
+            "name": "Launch TestIOReadWrite",
+            "request": "launch",
+            "mainClass": "demo.TestIOReadWrite",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
+            "name": "Launch TestTC",
+            "request": "launch",
+            "mainClass": "demo.TestTC",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
+            "name": "Launch TesteGui",
+            "request": "launch",
+            "mainClass": "gui.TesteGui",
+            "projectName": "hostLink"
+        }
+    ]
+}
