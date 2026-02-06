@@ -19,14 +19,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 import org.ctrl.DeviceImp;
 import org.ctrl.DeviceRegisterImp;
+import org.ctrl.IData;
 import org.ctrl.IDevice;
 import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.ComException;
 import org.ctrl.comm.IComControl;
 import org.ctrl.comm.IStatusCode;
+import org.ctrl.db.config.DbConfig;
+import org.ctrl.db.model.DmValue;
+import org.ctrl.db.service.DmValueService;
+import org.ctrl.extras.Tag;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.AreaReadDM;
 import org.ctrl.vend.omron.toolbus.commands.AreaWriteDM;
@@ -36,6 +43,7 @@ import org.serial.SerialPort;
 import org.serial.SerialPortFactoryPJC;
 import org.serial.SerialPortHandlerPjcImp;
 import org.serial.SerialUtils;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class DmTestGui {
 
@@ -49,18 +57,26 @@ public class DmTestGui {
     private JTextField timeoutField;
 
     private JTextField readAddressField;
-    private JTextField readLengthField;
+    private JComboBox<String> readTypeCombo;
 
     private JTextField writeAddressField;
     private JTextField writeValuesField;
+    private JComboBox<String> writeTypeCombo;
     private JComboBox<String> writeModeCombo;
 
     private JTextArea logArea;
+    private JLabel syncStatusLabel;
+    private JTable dbTable;
+    private DefaultTableModel dbTableModel;
 
     private SerialPortHandlerPjcImp comHandler;
     private ToolbusProtocol protocol;
     private IDevice plc;
     private IDeviceRegister deviceRegister;
+    private AnnotationConfigApplicationContext dbContext;
+    private DmValueService dmValueService;
+    private Thread syncThread;
+    private volatile boolean syncRunning = false;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
@@ -76,16 +92,20 @@ public class DmTestGui {
     private void initialize() {
         frame = new JFrame("Teste DM - Omron Host Link");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(new Dimension(720, 520));
+        frame.setSize(new Dimension(820, 620));
         frame.setLayout(new BorderLayout(10, 10));
 
         JPanel configPanel = buildConfigPanel();
         JPanel ioPanel = buildIoPanel();
         JPanel logPanel = buildLogPanel();
+        JPanel dbPanel = buildDbPanel();
 
         frame.add(configPanel, BorderLayout.NORTH);
         frame.add(ioPanel, BorderLayout.CENTER);
-        frame.add(logPanel, BorderLayout.SOUTH);
+        JPanel bottom = new JPanel(new BorderLayout(10, 10));
+        bottom.add(logPanel, BorderLayout.CENTER);
+        bottom.add(dbPanel, BorderLayout.EAST);
+        frame.add(bottom, BorderLayout.SOUTH);
     }
 
     private JPanel buildConfigPanel() {
@@ -152,6 +172,25 @@ public class DmTestGui {
         c.gridx = 3;
         panel.add(disconnectButton, c);
 
+        JButton startSyncButton = new JButton("Start Sync");
+        startSyncButton.addActionListener(e -> startSync());
+        c.gridx = 4;
+        panel.add(startSyncButton, c);
+
+        JButton stopSyncButton = new JButton("Stop Sync");
+        stopSyncButton.addActionListener(e -> stopSync());
+        c.gridx = 5;
+        panel.add(stopSyncButton, c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        panel.add(new JLabel("Sync Status"), c);
+        syncStatusLabel = new JLabel("STOPPED");
+        c.gridx = 1;
+        c.gridwidth = 3;
+        panel.add(syncStatusLabel, c);
+        c.gridwidth = 1;
+
         return panel;
     }
 
@@ -163,10 +202,11 @@ public class DmTestGui {
         c.fill = GridBagConstraints.HORIZONTAL;
 
         readAddressField = new JTextField("0");
-        readLengthField = new JTextField("1");
+        readTypeCombo = new JComboBox<>(new String[] { "WORD", "DWORD" });
 
         writeAddressField = new JTextField("0");
         writeValuesField = new JTextField("10,11");
+        writeTypeCombo = new JComboBox<>(new String[] { "WORD", "DWORD" });
         writeModeCombo = new JComboBox<>(new String[] { "BCD", "HEX" });
 
         c.gridx = 0;
@@ -175,9 +215,9 @@ public class DmTestGui {
         c.gridx = 1;
         panel.add(readAddressField, c);
         c.gridx = 2;
-        panel.add(new JLabel("Len"), c);
+        panel.add(new JLabel("Type"), c);
         c.gridx = 3;
-        panel.add(readLengthField, c);
+        panel.add(readTypeCombo, c);
         JButton readButton = new JButton("Ler DM");
         readButton.addActionListener(e -> readDm());
         c.gridx = 4;
@@ -193,11 +233,35 @@ public class DmTestGui {
         c.gridx = 3;
         panel.add(writeValuesField, c);
         c.gridx = 4;
+        panel.add(writeTypeCombo, c);
+        c.gridx = 5;
         panel.add(writeModeCombo, c);
         JButton writeButton = new JButton("Escrever DM");
         writeButton.addActionListener(e -> writeDm());
-        c.gridx = 5;
+        c.gridx = 6;
         panel.add(writeButton, c);
+
+        return panel;
+    }
+
+    private JPanel buildDbPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder("DB Values"));
+
+        dbTableModel = new DefaultTableModel(new Object[] { "Address", "Value", "Updated" }, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        dbTable = new JTable(dbTableModel);
+        JScrollPane scroll = new JScrollPane(dbTable);
+        scroll.setPreferredSize(new Dimension(300, 180));
+        panel.add(scroll, BorderLayout.CENTER);
+
+        JButton refreshButton = new JButton("Refresh DB");
+        refreshButton.addActionListener(e -> refreshDbTable());
+        panel.add(refreshButton, BorderLayout.SOUTH);
 
         return panel;
     }
@@ -249,6 +313,7 @@ public class DmTestGui {
     private void disconnect() {
         if (comHandler != null) {
             try {
+                stopSync();
                 comHandler.stop();
                 log("Desconectado.");
             } catch (Exception ex) {
@@ -270,16 +335,24 @@ public class DmTestGui {
         try {
             connect();
             ensureDevice();
+            ensureDb();
 
             int addr = Integer.parseInt(readAddressField.getText().trim());
-            int len = Integer.parseInt(readLengthField.getText().trim());
+            Tag tag = buildDmTag(addr, readTypeCombo.getSelectedItem().toString());
 
-            AreaReadDM read = new AreaReadDM(plc, addr, len);
+            AreaReadDM read = new AreaReadDM(plc, tag.toMemoryVariable());
             comHandler.send(read);
 
             IStatusCode status = read.getResponseStatusCode();
-            log("READ DM addr=" + addr + " len=" + len + " reply=" + read.getReply()
+            log("READ DM tag=" + tag.getName() + " type=" + tag.getDataType()
+                    + " reply=" + read.getReply()
                     + " status=" + (status == null ? "null" : status.getCode() + " - " + status.getDescription()));
+
+            int[] values = parseReply(read.getReply(), tag.getLengthWords());
+            if (values != null && values.length > 0) {
+                dmValueService.saveRange(addr, values);
+                refreshDbTable();
+            }
         } catch (ComException ex) {
             log("Erro leitura: " + ex.getMessage());
         } catch (Exception ex) {
@@ -294,13 +367,20 @@ public class DmTestGui {
 
             int addr = Integer.parseInt(writeAddressField.getText().trim());
             int mode = writeModeCombo.getSelectedItem().toString().equals("BCD") ? MemoryWrite.BCD : MemoryWrite.HEX;
+            Tag tag = buildDmTag(addr, writeTypeCombo.getSelectedItem().toString());
             int[] values = parseValues(writeValuesField.getText().trim(), mode == MemoryWrite.HEX);
+            if (values.length != tag.getLengthWords()) {
+                log("Quantidade de valores (" + values.length + ") diferente do tipo " + tag.getDataType()
+                        + " (" + tag.getLengthWords() + ").");
+                return;
+            }
 
-            AreaWriteDM write = new AreaWriteDM(plc, addr, values, mode);
+            AreaWriteDM write = new AreaWriteDM(plc, tag.toMemoryVariable(), values, mode);
             comHandler.send(write);
 
             IStatusCode status = write.getResponseStatusCode();
-            log("WRITE DM addr=" + addr + " values=" + writeValuesField.getText().trim()
+            log("WRITE DM tag=" + tag.getName() + " type=" + tag.getDataType()
+                    + " values=" + writeValuesField.getText().trim()
                     + " mode=" + writeModeCombo.getSelectedItem().toString()
                     + " status=" + (status == null ? "null" : status.getCode() + " - " + status.getDescription()));
         } catch (ComException ex) {
@@ -308,6 +388,14 @@ public class DmTestGui {
         } catch (Exception ex) {
             log("Erro escrita: " + ex.getMessage());
         }
+    }
+
+    private Tag buildDmTag(int address, String typeText) {
+        String name = String.format("DM_%04d", address);
+        if ("DWORD".equalsIgnoreCase(typeText)) {
+            return Tag.dmDWord(name, address);
+        }
+        return Tag.dmWord(name, address);
     }
 
     private int[] parseValues(String text, boolean hexInput) {
@@ -332,5 +420,139 @@ public class DmTestGui {
             logArea.append(msg + "\n");
             logArea.setCaretPosition(logArea.getDocument().getLength());
         });
+    }
+
+    private void refreshDbTable() {
+        if (dmValueService == null) {
+            return;
+        }
+        SwingUtilities.invokeLater(() -> {
+            dbTableModel.setRowCount(0);
+            List<DmValue> rows = dmValueService.getRange(0, 1000);
+            for (DmValue row : rows) {
+                dbTableModel.addRow(new Object[] {
+                        row.getAddress(),
+                        row.getValue(),
+                        row.getUpdatedAt()
+                });
+            }
+        });
+    }
+
+    private void startSync() {
+        if (syncRunning) {
+            log("Sync ja em execucao.");
+            return;
+        }
+        try {
+            connect();
+            ensureDevice();
+            ensureDb();
+        } catch (Exception ex) {
+            log("Erro ao iniciar sync: " + ex.getMessage());
+            return;
+        }
+
+        syncRunning = true;
+        syncThread = new Thread(() -> {
+            setSyncStatus("RUNNING");
+            int[] lastValues = new int[1001];
+            for (int i = 0; i < lastValues.length; i++) {
+                lastValues[i] = Integer.MIN_VALUE;
+            }
+            while (syncRunning) {
+                try {
+                    pollDmRange(0, 1000, 100, lastValues);
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                } catch (Exception ex) {
+                    log("Erro no sync: " + ex.getMessage());
+                }
+            }
+            setSyncStatus("STOPPED");
+        }, "dm-sync");
+        syncThread.setDaemon(true);
+        syncThread.start();
+    }
+
+    private void stopSync() {
+        syncRunning = false;
+        if (syncThread != null) {
+            syncThread.interrupt();
+            syncThread = null;
+        }
+        if (dbContext != null) {
+            dbContext.close();
+            dbContext = null;
+            dmValueService = null;
+        }
+        setSyncStatus("STOPPED");
+    }
+
+    private void ensureDb() {
+        if (dbContext == null) {
+            dbContext = new AnnotationConfigApplicationContext(DbConfig.class);
+            dmValueService = dbContext.getBean(DmValueService.class);
+        }
+    }
+
+    private void pollDmRange(int startAddr, int endAddr, int chunkSize, int[] lastValues) {
+        int addr = startAddr;
+        while (addr <= endAddr) {
+            int remaining = endAddr - addr + 1;
+            int length = Math.min(chunkSize, remaining);
+            AreaReadDM read = new AreaReadDM(plc, addr, length);
+            comHandler.send(read);
+
+            int[] values = parseReply(read.getReply(), length);
+            if (values != null) {
+                List<DmValue> changed = new ArrayList<>();
+                for (int i = 0; i < values.length; i++) {
+                    int currentAddr = addr + i;
+                    int index = currentAddr - startAddr;
+                    int currentVal = values[i];
+                    if (lastValues[index] != currentVal) {
+                        lastValues[index] = currentVal;
+                        changed.add(new DmValue(currentAddr, currentVal, null));
+                    }
+                }
+                if (!changed.isEmpty()) {
+                    dmValueService.saveBatch(changed);
+                    log("Sync: " + changed.size() + " valores atualizados.");
+                }
+            }
+            addr += length;
+        }
+    }
+
+    private int[] parseReply(IData reply, int length) {
+        if (reply == null) {
+            return null;
+        }
+        int[] dataBuff = reply.toHexArray();
+        if (dataBuff == null) {
+            return null;
+        }
+        int[] out = new int[length];
+        for (int i = 0; i < length; i++) {
+            String val = "";
+            for (int j = 0; j < 4; j++) {
+                int idx = i * 4 + j;
+                if (idx < dataBuff.length) {
+                    val = val + (char) dataBuff[idx];
+                }
+            }
+            try {
+                out[i] = Integer.parseInt(val.trim(), 16);
+            } catch (NumberFormatException ex) {
+                out[i] = 0;
+            }
+        }
+        return out;
+    }
+
+    private void setSyncStatus(String status) {
+        SwingUtilities.invokeLater(() -> syncStatusLabel.setText(status));
     }
 }

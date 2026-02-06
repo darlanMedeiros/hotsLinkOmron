@@ -14,4 +14,5 @@
     "workbench.iconTheme": "material-icon-theme",
     "editor.cursorBlinking": "solid",
     "files.autoSaveDelay": 3000,
+    "java.configuration.updateBuildConfiguration": "interactive",
 }

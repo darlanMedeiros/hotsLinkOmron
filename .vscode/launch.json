@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TestDmDbWrite",
+            "request": "launch",
+            "mainClass": "demo.TestDmDbWrite",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
+            "name": "DmDbSyncMain",
+            "request": "launch",
+            "mainClass": "demo.DmDbSyncMain",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
+            "name": "TestTagDM",
+            "request": "launch",
+            "mainClass": "demo.TestTagDM",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
             "name": "RrWrBitGui",
             "request": "launch",
             "mainClass": "gui.RrWrBitGui",
