@@ -6,6 +6,41 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TestWriteDM",
+            "request": "launch",
+            "mainClass": "demo.TestWriteDM",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
+            "name": "TestDmDbWrite",
+            "request": "launch",
+            "mainClass": "demo.TestDmDbWrite",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
+            "name": "TestDbConnection",
+            "request": "launch",
+            "mainClass": "demo.TestDbConnection",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
+            "name": "ApiApplication",
+            "request": "launch",
+            "mainClass": "org.ctrl.db.ApiApplication",
+            "projectName": "api"
+        },
+        {
+            "type": "java",
+            "name": "ApiApplication",
+            "request": "launch",
+            "mainClass": "org.ctrl.db.ApiApplication",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
             "name": "TestDbConnection",
             "request": "launch",
             "mainClass": "demo.TestDbConnection",
