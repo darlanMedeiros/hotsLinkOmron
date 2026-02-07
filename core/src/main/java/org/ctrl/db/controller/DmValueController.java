@@ -3,7 +3,7 @@ package org.ctrl.db.controller;
 import java.util.List;
 import java.util.Optional;
 import org.ctrl.db.model.DeviceInfo;
-import org.ctrl.db.model.DmValue;
+import org.ctrl.db.model.MemoryValue;
 import org.ctrl.db.service.DmValueService;
 
 public class DmValueController {
@@ -14,11 +14,11 @@ public class DmValueController {
         this.service = service;
     }
 
-    public Optional<DmValue> getByAddress(DeviceInfo device, int address) {
+    public Optional<MemoryValue> getByAddress(DeviceInfo device, int address) {
         return service.getByAddress(device, address);
     }
 
-    public List<DmValue> getRange(DeviceInfo device, int startAddress, int endAddress) {
+    public List<MemoryValue> getRange(DeviceInfo device, int startAddress, int endAddress) {
         return service.getRange(device, startAddress, endAddress);
     }
 

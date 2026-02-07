@@ -190,13 +190,11 @@ public class SerialPortPJC extends SerialPort implements SerialPortEventListener
 
 	@Override
 	public OutputStream getOutputSream() {
-		// TODO Auto-generated method stub
 		return out;
 	}
 
 	@Override
 	public InputStream inputStream() {
-		// TODO Auto-generated method stub
 		return in;
 	}
 

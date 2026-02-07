@@ -31,6 +31,8 @@ import org.ctrl.utils.OmronUtils;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.ToolbusWordBit;
 import org.ctrl.vend.omron.toolbus.commands.AreaReadRR;
+import org.ctrl.vend.omron.toolbus.commands.AreaWriteWR;
+import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
 import org.serial.SerialPortFactoryPJC;
@@ -50,6 +52,7 @@ public class TesteReadBit {
     private JTextField timeoutField;
     private JTextField intervalField;
     private JTextField addressField;
+    private JTextField writeBitField;
 
     private JLabel[] bitLabels = new JLabel[8];
     private JLabel statusLabel;
@@ -205,6 +208,8 @@ public class TesteReadBit {
         startButton.addActionListener(e -> startPolling());
         JButton stopButton = new JButton("Parar");
         stopButton.addActionListener(e -> stopPolling());
+        JButton writeBitButton = new JButton("Alternar bit");
+        writeBitButton.addActionListener(e -> writeBit1000());
 
         c.gridx = 0;
         c.gridy = 0;
@@ -213,12 +218,21 @@ public class TesteReadBit {
         panel.add(startButton, c);
         c.gridx = 2;
         panel.add(stopButton, c);
+        c.gridx = 3;
+        panel.add(writeBitButton, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        panel.add(new JLabel("Bit (0-7)"), c);
+        writeBitField = new JTextField("0");
+        c.gridx = 1;
+        panel.add(writeBitField, c);
 
         statusLabel = new JLabel("Status: parado");
         dbStatusLabel = new JLabel("DB: sem gravação");
-        c.gridx = 3;
+        c.gridx = 2;
         panel.add(statusLabel, c);
-        c.gridx = 4;
+        c.gridx = 3;
         panel.add(dbStatusLabel, c);
 
         return panel;
@@ -339,6 +353,59 @@ public class TesteReadBit {
         } catch (Exception ex) {
             setStatus("Erro leitura: " + ex.getMessage());
         }
+    }
+
+    private void writeBit1000() {
+        try {
+            connect();
+            ensureDevice();
+            if (comHandler == null || !comHandler.isStarted()) {
+                setStatus("Nao conectado.");
+                return;
+            }
+            int bit = getWriteBitIndex();
+            int baseAddr = getBaseAddress();
+            int baseValue = readWordRr(baseAddr);
+            String baseHex = utils.getFormateHexWrite(baseValue);
+            wordBit.setWorldBits(baseAddr, baseHex);
+            boolean current = wordBit.getWordBit(bit);
+            boolean newValue = !current;
+            wordBit.setBit(bit, newValue);
+
+            int newWordValue = Integer.parseInt(wordBit.getBitToWorld(), 2);
+            AreaWriteWR write = new AreaWriteWR(plc, baseAddr, new int[] { newWordValue }, MemoryWrite.HEX);
+            comHandler.send(write);
+
+            updateBitLabel(bit, newValue);
+            saveIfChanged(baseAddr, bit, newValue);
+            setStatus("Escrito WR " + formatBitLabel(baseAddr, bit) + "=" + (newValue ? "1" : "0"));
+        } catch (ComException ex) {
+            setStatus("Erro escrita: " + ex.getMessage());
+        } catch (Exception ex) {
+            setStatus("Erro escrita: " + ex.getMessage());
+        }
+    }
+
+    private int getWriteBitIndex() {
+        try {
+            int bit = Integer.parseInt(writeBitField.getText().trim());
+            if (bit < 0 || bit > 7) {
+                return 0;
+            }
+            return bit;
+        } catch (NumberFormatException ex) {
+            return 0;
+        }
+    }
+
+    private int readWordRr(int address) throws ComException {
+        AreaReadRR read = new AreaReadRR(plc, address, 1);
+        comHandler.send(read);
+        String reply = read.getReply() == null ? null : read.getReply().toString();
+        if (reply == null) {
+            throw new IllegalStateException("RR read returned null reply for address " + address);
+        }
+        return utils.convertToHexDec16(reply);
     }
 
     private void updateBitLabel(int bit, boolean on) {

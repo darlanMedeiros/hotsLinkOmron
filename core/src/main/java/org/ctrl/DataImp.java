@@ -136,7 +136,6 @@ public class DataImp implements IData {
 
 
 	public int toInteger() {
-		// TODO Auto-generated method stub
 		//Melhorar esse metodo, reconhecer o tipo de variável e o valor
 		
 

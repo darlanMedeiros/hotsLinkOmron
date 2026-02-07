@@ -29,15 +29,15 @@ import org.ctrl.comm.IMessage;
  */
 public class CommandRegisterImp implements ICommandRegister {
 
-    protected ArrayList<Integer>   commandIds = new ArrayList<Integer>();
-    protected ArrayList<String>  commandNames = new ArrayList<String>();
-    protected ArrayList<Class> commandClasses = new ArrayList<Class>();
+    protected ArrayList<Integer> commandIds = new ArrayList<Integer>();
+    protected ArrayList<String> commandNames = new ArrayList<String>();
+    protected ArrayList<Class<? extends IMessage>> commandClasses = new ArrayList<Class<? extends IMessage>>();
     
     
     /* (non-Javadoc)
      * @see org.pereni.ctrl.CommandRegister#addCommand(int, java.lang.String, java.lang.Class)
      */
-    public void addCommand(int id, String name, Class commandClass) {
+    public void addCommand(int id, String name, Class<? extends IMessage> commandClass) {
         if( name == null || commandClass == null ) return;
         commandIds.add(id);
         commandNames.add(name);

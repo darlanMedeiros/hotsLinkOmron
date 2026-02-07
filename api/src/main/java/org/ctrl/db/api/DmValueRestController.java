@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.ctrl.db.model.DeviceInfo;
-import org.ctrl.db.model.DmValue;
+import org.ctrl.db.model.MemoryValue;
 import org.ctrl.db.service.DmValueService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,42 +24,42 @@ public class DmValueRestController {
     }
 
     @GetMapping("/devices/{mnemonic}/dm/{address:\\d+}")
-    public ResponseEntity<DmValue> getByAddress(
+    public ResponseEntity<MemoryValue> getByAddress(
             @PathVariable String mnemonic,
             @PathVariable int address) {
         DeviceInfo device = new DeviceInfo(mnemonic, "", "");
-        Optional<DmValue> value = service.getByAddress(device, address);
+        Optional<MemoryValue> value = service.getByAddress(device, address);
         return value.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/devices/{mnemonic}/dm/{address:\\d+}/last")
-    public ResponseEntity<DmValue> getLatestByAddress(
+    public ResponseEntity<MemoryValue> getLatestByAddress(
             @PathVariable String mnemonic,
             @PathVariable int address) {
         DeviceInfo device = new DeviceInfo(mnemonic, "", "");
-        Optional<DmValue> value = service.getByAddress(device, address);
+        Optional<MemoryValue> value = service.getByAddress(device, address);
         return value.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/devices/{mnemonic}/dm/{address:\\d+}/current")
-    public ResponseEntity<DmValue> getCurrentByAddress(
+    public ResponseEntity<MemoryValue> getCurrentByAddress(
             @PathVariable String mnemonic,
             @PathVariable int address) {
         DeviceInfo device = new DeviceInfo(mnemonic, "", "");
-        Optional<DmValue> value = service.getCurrentByAddress(device, address);
+        Optional<MemoryValue> value = service.getCurrentByAddress(device, address);
         return value.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/devices/{mnemonic}/dm/last")
-    public ResponseEntity<DmValue> getLatest(
+    public ResponseEntity<MemoryValue> getLatest(
             @PathVariable String mnemonic) {
         DeviceInfo device = new DeviceInfo(mnemonic, "", "");
-        Optional<DmValue> value = service.getLatest(device);
+        Optional<MemoryValue> value = service.getLatest(device);
         return value.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/devices/{mnemonic}/dm")
-    public List<DmValue> getRange(
+    public List<MemoryValue> getRange(
             @PathVariable String mnemonic,
             @RequestParam(defaultValue = "0") int start,
             @RequestParam(defaultValue = "1000") int end) {

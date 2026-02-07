@@ -27,8 +27,6 @@ public abstract class AbstractProtocolHandler implements IProtocolHandler {
 	protected Log log = null;
 	protected IComControl comControl = null;
 	protected ICommandRegister commandRegister = null;
-	
-	
 
 	/*
 	 * (non-Javadoc)
@@ -56,7 +54,7 @@ public abstract class AbstractProtocolHandler implements IProtocolHandler {
 	 * ComControl)
 	 */
 	public void setComControl(IComControl comControl) {
-						
+
 		if (comControl != null) {
 			this.comControl = comControl;
 		} else {

@@ -1,12 +1,13 @@
 package org.ctrl.db.config;
 
+import java.util.Objects;
 import javax.sql.DataSource;
 import org.ctrl.db.controller.DmValueController;
 import org.ctrl.db.controller.RrValueController;
-import org.ctrl.db.repository.DmValueRepository;
-import org.ctrl.db.repository.JdbcDmValueRepository;
-import org.ctrl.db.repository.JdbcRrValueRepository;
-import org.ctrl.db.repository.RrValueRepository;
+import org.ctrl.db.repository.JdbcMemoryValueRepository;
+import org.ctrl.db.repository.JdbcTagRepository;
+import org.ctrl.db.repository.MemoryValueRepository;
+import org.ctrl.db.repository.TagRepository;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.db.service.RrValueService;
 import org.springframework.context.annotation.Bean;
@@ -33,16 +34,21 @@ public class DbConfig {
 
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
+        return new JdbcTemplate(Objects.requireNonNull(dataSource, "dataSource"));
     }
 
     @Bean
-    public DmValueRepository dmValueRepository(JdbcTemplate jdbcTemplate) {
-        return new JdbcDmValueRepository(jdbcTemplate);
+    public MemoryValueRepository memoryValueRepository(JdbcTemplate jdbcTemplate) {
+        return new JdbcMemoryValueRepository(jdbcTemplate);
     }
 
     @Bean
-    public DmValueService dmValueService(DmValueRepository repository) {
+    public TagRepository tagRepository(JdbcTemplate jdbcTemplate) {
+        return new JdbcTagRepository(jdbcTemplate);
+    }
+
+    @Bean
+    public DmValueService dmValueService(MemoryValueRepository repository) {
         return new DmValueService(repository);
     }
 
@@ -52,12 +58,7 @@ public class DbConfig {
     }
 
     @Bean
-    public RrValueRepository rrValueRepository(JdbcTemplate jdbcTemplate) {
-        return new JdbcRrValueRepository(jdbcTemplate);
-    }
-
-    @Bean
-    public RrValueService rrValueService(RrValueRepository repository) {
+    public RrValueService rrValueService(MemoryValueRepository repository) {
         return new RrValueService(repository);
     }
 

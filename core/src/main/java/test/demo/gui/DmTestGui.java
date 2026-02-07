@@ -32,7 +32,7 @@ import org.ctrl.comm.IComControl;
 import org.ctrl.comm.IStatusCode;
 import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.model.DeviceInfo;
-import org.ctrl.db.model.DmValue;
+import org.ctrl.db.model.MemoryValue;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.extras.Tag;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
@@ -455,10 +455,10 @@ public class DmTestGui {
         }
         SwingUtilities.invokeLater(() -> {
             dbTableModel.setRowCount(0);
-            List<DmValue> rows = dmValueService.getRange(deviceInfo, 0, 1000);
-            for (DmValue row : rows) {
+            List<MemoryValue> rows = dmValueService.getRange(deviceInfo, 0, 1000);
+            for (MemoryValue row : rows) {
                 dbTableModel.addRow(new Object[] {
-                        row.getAddress(),
+                        DmValueService.parseDmAddress(row.getName()),
                         row.getValue(),
                         row.getUpdatedAt()
                 });
@@ -525,9 +525,6 @@ public class DmTestGui {
         if (dbContext == null) {
             dbContext = new AnnotationConfigApplicationContext(DbConfig.class);
             dmValueService = dbContext.getBean(DmValueService.class);
-            if (plc != null) {
-                dmValueService.setDeviceInfo("PLC", plc.getName(), plc.getDescription());
-            }
         }
     }
 
@@ -541,14 +538,14 @@ public class DmTestGui {
 
             int[] values = parseReply(read.getReply(), length);
             if (values != null) {
-                List<DmValue> changed = new ArrayList<>();
+                List<MemoryValue> changed = new ArrayList<>();
                 for (int i = 0; i < values.length; i++) {
                     int currentAddr = addr + i;
                     int index = currentAddr - startAddr;
                     int currentVal = values[i];
                     if (lastValues[index] != currentVal) {
                         lastValues[index] = currentVal;
-                        changed.add(new DmValue(currentAddr, currentVal, null));
+                        changed.add(DmValueService.buildDmValue(currentAddr, currentVal, null));
                     }
                 }
                 if (!changed.isEmpty()) {

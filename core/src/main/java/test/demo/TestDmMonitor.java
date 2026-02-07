@@ -1,6 +1,6 @@
 package test.demo;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.IComControl;
 import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.model.DeviceInfo;
-import org.ctrl.db.model.DmValue;
+import org.ctrl.db.model.MemoryValue;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.AreaReadDM;
@@ -73,12 +73,12 @@ public class TestDmMonitor {
                 int[] values = parseReply(read.getReply(), END_ADDR - START_ADDR + 1, MemoryWrite.HEX);
 
                 if (values != null) {
-                    List<DmValue> changed = new ArrayList<>();
+                    List<MemoryValue> changed = new ArrayList<>();
                     for (int i = 0; i < values.length; i++) {
                         int addr = START_ADDR + i;
                         if (lastValues[i] != values[i]) {
                             lastValues[i] = values[i];
-                            changed.add(new DmValue(addr, values[i], Instant.now()));
+                            changed.add(DmValueService.buildDmValue(addr, values[i], LocalDateTime.now()));
                         }
                     }
                     if (!changed.isEmpty()) {

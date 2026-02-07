@@ -1,6 +1,6 @@
 package test.demo;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.IComControl;
 import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.model.DeviceInfo;
-import org.ctrl.db.model.DmValue;
+import org.ctrl.db.model.MemoryValue;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.AreaReadDM;
@@ -110,14 +110,14 @@ public class DmDbSyncMain {
 
             int[] values = parseReply(read.getReply(), length, MemoryWrite.HEX);
             if (values != null) {
-                List<DmValue> changed = new ArrayList<>();
+                List<MemoryValue> changed = new ArrayList<>();
                 for (int i = 0; i < values.length; i++) {
                     int currentAddr = addr + i;
                     int index = currentAddr - START_ADDR;
                     int currentVal = values[i];
                     if (lastValues[index] != currentVal) {
                         lastValues[index] = currentVal;
-                        changed.add(new DmValue(currentAddr, currentVal, Instant.now()));
+                        changed.add(DmValueService.buildDmValue(currentAddr, currentVal, LocalDateTime.now()));
                     }
                 }
                 if (!changed.isEmpty()) {

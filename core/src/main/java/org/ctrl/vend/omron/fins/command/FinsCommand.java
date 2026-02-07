@@ -159,7 +159,6 @@ public abstract class FinsCommand extends AbstractMessage {
      * @see org.pereni.ctrl.comm.Message#formatData()
      */
     public void formatData() {
-        // TODO Auto-generated method stub
     }
     
 

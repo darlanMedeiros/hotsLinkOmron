@@ -155,8 +155,9 @@ public class ToolbusProtocol extends AbstractProtocolHandler {
 			}
 		}
 
+		String messageText = message == null ? "null" : message.toString();
 		throw new MaximumNumberOfRetriesReachedException(" Maximum number of retries reached: "
-				+ getComControl().getNumberOfRetries() + " for: " + message.toString(), message);
+				+ getComControl().getNumberOfRetries() + " for: " + messageText, message);
 	}
 
 	/*

@@ -27,7 +27,7 @@ public interface ICommandRegister {
 
     void addCommand(IMessage message);
     
-    void addCommand(int id, String name, Class<?> commandClass);
+    void addCommand(int id, String name, Class<? extends IMessage> commandClass);
     
     IMessage getNewById(int id);
     
