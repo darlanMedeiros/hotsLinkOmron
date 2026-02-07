@@ -5,7 +5,6 @@ import org.ctrl.DeviceRegisterImp;
 import org.ctrl.IDevice;
 import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.IComControl;
-import org.ctrl.utils.OmronUtils;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.AreaReadDM;
 import org.ctrl.vend.omron.toolbus.commands.AreaReadHR;
@@ -113,7 +112,7 @@ public class Test {
 //				
 				//String str = Integer.toBinaryString(i);
 //				
-				OmronUtils utils = new OmronUtils();
+				
 //				
 				//System.out.println("Test - valor recebido em string >>>>>>" + readData.getReply().toString());
 //				

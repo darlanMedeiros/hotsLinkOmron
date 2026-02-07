@@ -83,36 +83,30 @@ public class MemoryMap {
    */
   public void process(String name, MemoryRead mr, int mode) {
     IData m = mr.getReply();
-    String whichMemory = "";
     if (mr.getCommandName().equalsIgnoreCase("RD")) {
-      whichMemory = "DM";
     } else if (mr.getCommandName().equalsIgnoreCase("RH")) {
-      whichMemory = "HR";
     } else if (mr.getCommandName().equalsIgnoreCase("RR")) {
-      whichMemory = "IO";
     } else {
       log.error("could not place memory area for command name " + mr.getCommandName());
       return;
     }
     int[] dataBuff = m.toHexArray();
-    int start = mr.getAddress();
     int length = mr.getLength();
     for (int i = 0; i < length; i++) {
       String val = "";
       for (int j = 0; j < 4; j++) {
         val = val + (char) dataBuff[i * 4 + j];
       }
-      int h = 0;
       if (mode == BCD) {
         try {
-          h = Integer.parseInt(val.trim());
+          Integer.parseInt(val.trim());
         } catch (NumberFormatException ex) {
           log.debug("NumberFormatException in parsing BCD values");
         }
       } else {
         try {
           /* convert a hex String to int -- Note, there is no lead 0x, case insensitive */
-          h = Integer.parseInt(val.trim(), 16 /* radix */ );
+          Integer.parseInt(val.trim(), 16 /* radix */ );
         } catch (NumberFormatException ex) {
           log.debug("NumberFormatException in parsing HEX values");
         }

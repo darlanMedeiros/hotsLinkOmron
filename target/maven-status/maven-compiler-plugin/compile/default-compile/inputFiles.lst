@@ -2,11 +2,14 @@ C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\demo\DmDbSyncMain.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\demo\SimpleTest_TAGvariable.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\demo\Test.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\demo\TestCIO.java
+C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\demo\TestDbConnection.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\demo\TestDM.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\demo\TestDmDbWrite.java
+C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\demo\TestDmMonitor.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\demo\TestIOReadWrite.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\demo\TestTagDM.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\demo\TestTC.java
+C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\demo\TestWriteDM.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\gui\DmTestGui.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\gui\RrWrBitGui.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\gui\TesteGui.java
@@ -35,6 +38,7 @@ C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\org\ctrl\CommandRegisterImp.jav
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\org\ctrl\DataImp.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\org\ctrl\db\config\DbConfig.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\org\ctrl\db\controller\DmValueController.java
+C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\org\ctrl\db\model\DeviceInfo.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\org\ctrl\db\model\DmValue.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\org\ctrl\db\repository\DmValueRepository.java
 C:\dev\hostLinkOmron\hotsLinkOmron\src\main\java\org\ctrl\db\repository\JdbcDmValueRepository.java

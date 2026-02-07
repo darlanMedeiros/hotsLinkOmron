@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TestDbConnection",
+            "request": "launch",
+            "mainClass": "demo.TestDbConnection",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
+            "name": "TestWriteDM",
+            "request": "launch",
+            "mainClass": "demo.TestWriteDM",
+            "projectName": "hostLink"
+        },
+        {
+            "type": "java",
             "name": "TestDmDbWrite",
             "request": "launch",
             "mainClass": "demo.TestDmDbWrite",

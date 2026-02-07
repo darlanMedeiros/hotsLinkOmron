@@ -31,6 +31,7 @@ import org.ctrl.comm.ComException;
 import org.ctrl.comm.IComControl;
 import org.ctrl.comm.IStatusCode;
 import org.ctrl.db.config.DbConfig;
+import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.model.DmValue;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.extras.Tag;
@@ -64,6 +65,10 @@ public class DmTestGui {
     private JComboBox<String> writeTypeCombo;
     private JComboBox<String> writeModeCombo;
 
+    private JTextField pollMsField;
+    private JTextField chunkSizeField;
+    private JTextField delayMsField;
+
     private JTextArea logArea;
     private JLabel syncStatusLabel;
     private JTable dbTable;
@@ -73,6 +78,7 @@ public class DmTestGui {
     private ToolbusProtocol protocol;
     private IDevice plc;
     private IDeviceRegister deviceRegister;
+    private DeviceInfo deviceInfo;
     private AnnotationConfigApplicationContext dbContext;
     private DmValueService dmValueService;
     private Thread syncThread;
@@ -162,9 +168,29 @@ public class DmTestGui {
         c.gridx = 1;
         panel.add(nodeField, c);
 
+        c.gridx = 2;
+        panel.add(new JLabel("Poll ms"), c);
+        pollMsField = new JTextField("1500");
+        c.gridx = 3;
+        panel.add(pollMsField, c);
+
+        c.gridx = 4;
+        panel.add(new JLabel("Chunk"), c);
+        chunkSizeField = new JTextField("10");
+        c.gridx = 5;
+        panel.add(chunkSizeField, c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        panel.add(new JLabel("Delay ms"), c);
+        delayMsField = new JTextField("100");
+        c.gridx = 1;
+        panel.add(delayMsField, c);
+
         JButton connectButton = new JButton("Conectar");
         connectButton.addActionListener(e -> connect());
         c.gridx = 2;
+        c.gridy = 3;
         panel.add(connectButton, c);
 
         JButton disconnectButton = new JButton("Desconectar");
@@ -183,7 +209,7 @@ public class DmTestGui {
         panel.add(stopSyncButton, c);
 
         c.gridx = 0;
-        c.gridy = 3;
+        c.gridy = 4;
         panel.add(new JLabel("Sync Status"), c);
         syncStatusLabel = new JLabel("STOPPED");
         c.gridx = 1;
@@ -328,6 +354,7 @@ public class DmTestGui {
             plc = new DeviceImp(nodeId, "PLC", "PLC", "Omron PLC");
             deviceRegister = DeviceRegisterImp.getInstance();
             deviceRegister.addDevice(plc);
+            deviceInfo = new DeviceInfo("PLC", plc.getName(), plc.getDescription());
         }
     }
 
@@ -350,7 +377,7 @@ public class DmTestGui {
 
             int[] values = parseReply(read.getReply(), tag.getLengthWords());
             if (values != null && values.length > 0) {
-                dmValueService.saveRange(addr, values);
+                dmValueService.saveRange(deviceInfo, addr, values);
                 refreshDbTable();
             }
         } catch (ComException ex) {
@@ -423,12 +450,12 @@ public class DmTestGui {
     }
 
     private void refreshDbTable() {
-        if (dmValueService == null) {
+        if (dmValueService == null || deviceInfo == null) {
             return;
         }
         SwingUtilities.invokeLater(() -> {
             dbTableModel.setRowCount(0);
-            List<DmValue> rows = dmValueService.getRange(0, 1000);
+            List<DmValue> rows = dmValueService.getRange(deviceInfo, 0, 1000);
             for (DmValue row : rows) {
                 dbTableModel.addRow(new Object[] {
                         row.getAddress(),
@@ -454,16 +481,20 @@ public class DmTestGui {
         }
 
         syncRunning = true;
+        final int pollMs = parseInt(pollMsField.getText().trim(), 1500);
+        final int chunkSize = parseInt(chunkSizeField.getText().trim(), 10);
+        final int delayMs = parseInt(delayMsField.getText().trim(), 100);
+
         syncThread = new Thread(() -> {
             setSyncStatus("RUNNING");
-            int[] lastValues = new int[1001];
+            int[] lastValues = new int[11];
             for (int i = 0; i < lastValues.length; i++) {
                 lastValues[i] = Integer.MIN_VALUE;
             }
             while (syncRunning) {
                 try {
-                    pollDmRange(0, 1000, 100, lastValues);
-                    Thread.sleep(1000);
+                    pollDmRange(0, 10, chunkSize, delayMs, lastValues);
+                    Thread.sleep(pollMs);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 } catch (Exception ex) {
@@ -494,10 +525,13 @@ public class DmTestGui {
         if (dbContext == null) {
             dbContext = new AnnotationConfigApplicationContext(DbConfig.class);
             dmValueService = dbContext.getBean(DmValueService.class);
+            if (plc != null) {
+                dmValueService.setDeviceInfo("PLC", plc.getName(), plc.getDescription());
+            }
         }
     }
 
-    private void pollDmRange(int startAddr, int endAddr, int chunkSize, int[] lastValues) {
+    private void pollDmRange(int startAddr, int endAddr, int chunkSize, int delayMs, int[] lastValues) {
         int addr = startAddr;
         while (addr <= endAddr) {
             int remaining = endAddr - addr + 1;
@@ -518,11 +552,29 @@ public class DmTestGui {
                     }
                 }
                 if (!changed.isEmpty()) {
-                    dmValueService.saveBatch(changed);
+                    dmValueService.saveBatch(deviceInfo, changed);
                     log("Sync: " + changed.size() + " valores atualizados.");
                 }
             }
             addr += length;
+            if (delayMs > 0) {
+                try {
+                    Thread.sleep(delayMs);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    }
+
+    private int parseInt(String value, int fallback) {
+        if (value == null || value.trim().isEmpty()) {
+            return fallback;
+        }
+        try {
+            return Integer.parseInt(value.trim());
+        } catch (NumberFormatException ex) {
+            return fallback;
         }
     }
 

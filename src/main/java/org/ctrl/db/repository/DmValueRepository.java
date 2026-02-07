@@ -6,11 +6,11 @@ import org.ctrl.db.model.DmValue;
 
 public interface DmValueRepository {
 
-    Optional<DmValue> findByAddress(int address);
+    Optional<DmValue> findByAddress(String deviceMnemonic, int address);
 
-    List<DmValue> findRange(int startAddress, int endAddress);
+    List<DmValue> findRange(String deviceMnemonic, int startAddress, int endAddress);
 
-    void upsert(DmValue value);
+    void upsert(String deviceMnemonic, String deviceName, String deviceDescription, DmValue value);
 
-    void upsertBatch(List<DmValue> values);
+    void upsertBatch(String deviceMnemonic, String deviceName, String deviceDescription, List<DmValue> values);
 }

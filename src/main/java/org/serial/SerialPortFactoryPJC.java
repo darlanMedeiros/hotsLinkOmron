@@ -30,8 +30,6 @@ import java.util.List;
  */
 public class SerialPortFactoryPJC extends SerialPortAbstractFactory {
 
-    final private ValidatorSerialPortFactory validator = new ValidatorSerialPortFactory("purejavacomm.PureJavaComm", SerialPortFactoryPJC.class.getCanonicalName());
-
     public SerialPortFactoryPJC() {
     }
 

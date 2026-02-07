@@ -15,7 +15,7 @@ public class DbConfig {
 
     @Bean
     public DataSource dataSource() {
-        String url = getenv("DB_URL", "jdbc:postgresql://localhost:5432/omron");
+        String url = getenv("DB_URL", "jdbc:postgresql://localhost:5432/omron?currentSchema=public");
         String user = getenv("DB_USER", "omron_user");
         String password = getenv("DB_PASSWORD", "admin");
 

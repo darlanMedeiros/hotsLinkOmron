@@ -3,9 +3,6 @@ package demo;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.plaf.TextUI;
-
-import org.ctrl.DataImp;
 import org.ctrl.DeviceImp;
 import org.ctrl.DeviceRegisterImp;
 import org.ctrl.IDeviceRegister;
@@ -13,7 +10,6 @@ import org.ctrl.comm.IComControl;
 import org.ctrl.extras.EnumLenght;
 import org.ctrl.extras.MemoryMap;
 import org.ctrl.extras.MemoryVariable;
-import org.ctrl.utils.OmronUtils;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.AreaReadDM;
 import org.ctrl.vend.omron.toolbus.commands.AreaWriteDM;
@@ -165,8 +161,6 @@ public class TestDM {
 
                 //int[] dataBuff = readData.getReply().toHexArray();
                 //System.out.println(" took time :: " + (System.currentTimeMillis() - startT));
-
-                OmronUtils utils = new OmronUtils();               
 
                System.out.println(" data inp is    " + readData.getReply().toString());
                System.out.println(" data inp is    " + readData.getReply().toInteger());

@@ -25,13 +25,12 @@ import org.serial.SerialUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
- * Poll DM area 0000-1000 and persist changes to Postgres.
+ * Monitor DM 0..10 and persist only changes.
  */
-public class DmDbSyncMain {
+public class TestDmMonitor {
 
     private static final int START_ADDR = 0;
     private static final int END_ADDR = 10;
-    private static final int DEFAULT_CHUNK = 1;
     private static final int DEFAULT_POLL_MS = 1000;
     private static final int DEFAULT_TIMEOUT_MS = 10000;
 
@@ -44,7 +43,6 @@ public class DmDbSyncMain {
             int nodeId = getIntArg(args, 5, 0);
             int timeoutMs = getIntArg(args, 6, DEFAULT_TIMEOUT_MS);
             int pollMs = getIntArg(args, 7, DEFAULT_POLL_MS);
-            int chunkSize = getIntArg(args, 8, DEFAULT_CHUNK);
 
             ctx = new AnnotationConfigApplicationContext(DbConfig.class);
             DmValueService service = ctx.getBean(DmValueService.class);
@@ -69,64 +67,37 @@ public class DmDbSyncMain {
                 lastValues[i] = Integer.MIN_VALUE;
             }
 
-            final SerialPortHandlerPjcImp shutdownHandler = comHandler;
-            final AnnotationConfigApplicationContext shutdownCtx = ctx;
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                if (shutdownHandler != null) {
-                    shutdownHandler.stop();
-                }
-                if (shutdownCtx != null) {
-                    shutdownCtx.close();
-                }
-            }));
-
             while (true) {
-                pollOnce(comHandler, plc, service, deviceInfo, lastValues, chunkSize);
+                AreaReadDM read = new AreaReadDM(plc, START_ADDR, END_ADDR - START_ADDR + 1);
+                comHandler.send(read);
+                int[] values = parseReply(read.getReply(), END_ADDR - START_ADDR + 1, MemoryWrite.HEX);
+
+                if (values != null) {
+                    List<DmValue> changed = new ArrayList<>();
+                    for (int i = 0; i < values.length; i++) {
+                        int addr = START_ADDR + i;
+                        if (lastValues[i] != values[i]) {
+                            lastValues[i] = values[i];
+                            changed.add(new DmValue(addr, values[i], Instant.now()));
+                        }
+                    }
+                    if (!changed.isEmpty()) {
+                        service.saveBatch(deviceInfo, changed);
+                        System.out.println("Changed values: " + changed.size());
+                    }
+                }
+
                 Thread.sleep(pollMs);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        } finally {
             if (comHandler != null) {
                 comHandler.stop();
             }
             if (ctx != null) {
                 ctx.close();
             }
-        }
-    }
-
-    private static void pollOnce(SerialPortHandlerPjcImp comHandler,
-                                 IDevice plc,
-                                 DmValueService service,
-                                 DeviceInfo deviceInfo,
-                                 int[] lastValues,
-                                 int chunkSize) {
-        int addr = START_ADDR;
-        while (addr <= END_ADDR) {
-            int remaining = END_ADDR - addr + 1;
-            int length = Math.min(chunkSize, remaining);
-            AreaReadDM read = new AreaReadDM(plc, addr, length);
-            comHandler.send(read);
-
-            int[] values = parseReply(read.getReply(), length, MemoryWrite.HEX);
-            if (values != null) {
-                List<DmValue> changed = new ArrayList<>();
-                for (int i = 0; i < values.length; i++) {
-                    int currentAddr = addr + i;
-                    int index = currentAddr - START_ADDR;
-                    int currentVal = values[i];
-                    if (lastValues[index] != currentVal) {
-                        lastValues[index] = currentVal;
-                        changed.add(new DmValue(currentAddr, currentVal, Instant.now()));
-                    }
-                }
-                if (!changed.isEmpty()) {
-
-                    service.saveBatch(deviceInfo, changed);
-                }
-            }
-
-            addr += length;
         }
     }
 
