@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TesteReadBit",
+            "request": "launch",
+            "mainClass": "test.demo.gui.TesteReadBit",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
+            "name": "TestReadWriteBit",
+            "request": "launch",
+            "mainClass": "test.demo.TestReadWriteBit",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
             "name": "TestWriteDM",
             "request": "launch",
             "mainClass": "demo.TestWriteDM",

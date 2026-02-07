@@ -2,9 +2,13 @@ package org.ctrl.db.config;
 
 import javax.sql.DataSource;
 import org.ctrl.db.controller.DmValueController;
+import org.ctrl.db.controller.RrValueController;
 import org.ctrl.db.repository.DmValueRepository;
 import org.ctrl.db.repository.JdbcDmValueRepository;
+import org.ctrl.db.repository.JdbcRrValueRepository;
+import org.ctrl.db.repository.RrValueRepository;
 import org.ctrl.db.service.DmValueService;
+import org.ctrl.db.service.RrValueService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -45,6 +49,21 @@ public class DbConfig {
     @Bean
     public DmValueController dmValueController(DmValueService service) {
         return new DmValueController(service);
+    }
+
+    @Bean
+    public RrValueRepository rrValueRepository(JdbcTemplate jdbcTemplate) {
+        return new JdbcRrValueRepository(jdbcTemplate);
+    }
+
+    @Bean
+    public RrValueService rrValueService(RrValueRepository repository) {
+        return new RrValueService(repository);
+    }
+
+    @Bean
+    public RrValueController rrValueController(RrValueService service) {
+        return new RrValueController(service);
     }
 
     private String getenv(String name, String fallback) {
