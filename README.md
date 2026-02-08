@@ -32,7 +32,7 @@ Exemplos:
 1. `GET http://localhost:8080/api/devices/PLC/dm?start=0&end=10`
 2. `GET http://localhost:8080/api/devices/PLC/dm/0`
 3. `GET http://localhost:8080/api/devices/PLC/rr/10/bit/0`
-4. `GET http://localhost:8080/api/device/PLC/tag/producao`
+4. `GET http://localhost:8080/api/devices/PLC/tag/producao`
 
 **Endpoints POST (TAG)**
 1. `POST http://localhost:8080/api/devices/PLC/tags/dm/0?name=producao`
