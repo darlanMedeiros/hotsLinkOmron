@@ -4,12 +4,14 @@ import java.util.Objects;
 import javax.sql.DataSource;
 import org.ctrl.db.controller.DmValueController;
 import org.ctrl.db.controller.RrValueController;
+import org.ctrl.db.controller.TagController;
 import org.ctrl.db.repository.JdbcMemoryValueRepository;
 import org.ctrl.db.repository.JdbcTagRepository;
 import org.ctrl.db.repository.MemoryValueRepository;
 import org.ctrl.db.repository.TagRepository;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.db.service.RrValueService;
+import org.ctrl.db.service.TagService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -48,6 +50,11 @@ public class DbConfig {
     }
 
     @Bean
+    public TagService tagService(TagRepository repository, JdbcTemplate jdbcTemplate) {
+        return new TagService(repository, jdbcTemplate);
+    }
+
+    @Bean
     public DmValueService dmValueService(MemoryValueRepository repository) {
         return new DmValueService(repository);
     }
@@ -65,6 +72,11 @@ public class DbConfig {
     @Bean
     public RrValueController rrValueController(RrValueService service) {
         return new RrValueController(service);
+    }
+
+    @Bean
+    public TagController tagController(TagService service) {
+        return new TagController(service);
     }
 
     private String getenv(String name, String fallback) {

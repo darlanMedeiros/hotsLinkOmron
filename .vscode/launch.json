@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TagTestGui",
+            "request": "launch",
+            "mainClass": "test.demo.gui.TagTestGui",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
             "name": "TesteReadBit",
             "request": "launch",
             "mainClass": "test.demo.gui.TesteReadBit",

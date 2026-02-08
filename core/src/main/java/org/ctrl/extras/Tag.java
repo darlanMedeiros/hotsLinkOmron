@@ -6,12 +6,14 @@ package org.ctrl.extras;
 public class Tag {
 
     public enum Area {
-        DM
+        DM,
+        RR
     }
 
     public enum DataType {
         WORD(1),
-        DWORD(2);
+        DWORD(2),
+        BIT(0);
 
         private final int wordLength;
 
@@ -28,6 +30,7 @@ public class Tag {
     private final Area area;
     private final int address;
     private final DataType dataType;
+    private final Integer bit;
 
     public Tag(String name, Area area, int address, DataType dataType) {
         if (name == null || name.trim().isEmpty()) {
@@ -42,10 +45,34 @@ public class Tag {
         if (address < 0) {
             throw new IllegalArgumentException("Address must be >= 0");
         }
+        if (dataType == DataType.BIT) {
+            throw new IllegalArgumentException("BIT tags must provide a bit index");
+        }
         this.name = name;
         this.area = area;
         this.address = address;
         this.dataType = dataType;
+        this.bit = null;
+    }
+
+    public Tag(String name, Area area, int address, int bit) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Tag name is required");
+        }
+        if (area == null) {
+            throw new IllegalArgumentException("Area is required");
+        }
+        if (address < 0) {
+            throw new IllegalArgumentException("Address must be >= 0");
+        }
+        if (bit < 0 || bit > 15) {
+            throw new IllegalArgumentException("Bit must be between 0 and 15");
+        }
+        this.name = name;
+        this.area = area;
+        this.address = address;
+        this.dataType = DataType.BIT;
+        this.bit = bit;
     }
 
     public static Tag dmWord(String name, int address) {
@@ -54,6 +81,10 @@ public class Tag {
 
     public static Tag dmDWord(String name, int address) {
         return new Tag(name, Area.DM, address, DataType.DWORD);
+    }
+
+    public static Tag rrBit(String name, int address, int bit) {
+        return new Tag(name, Area.RR, address, bit);
     }
 
     public String getName() {
@@ -76,7 +107,25 @@ public class Tag {
         return dataType.getWordLength();
     }
 
+    public Integer getBit() {
+        return bit;
+    }
+
+    public boolean isBit() {
+        return dataType == DataType.BIT;
+    }
+
+    public String getAddressBit() {
+        if (!isBit()) {
+            throw new IllegalStateException("Tag is not BIT");
+        }
+        return String.format("%d.%02d", address, bit);
+    }
+
     public MemoryVariable toMemoryVariable() {
+        if (isBit()) {
+            throw new IllegalStateException("BIT tag does not map to MemoryVariable");
+        }
         return new MemoryVariable(name, area.name(), address, getLengthWords());
     }
 
