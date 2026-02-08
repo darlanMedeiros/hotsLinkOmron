@@ -1,5 +1,5 @@
 /*
- *  Copyright [2005] [Remus Pereni http://remus.pereni.org]
+ *  Copyright [2006] [Remus Pereni http://remus.pereni.org]
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License. 
  */
-package org.ctrl.vend.omron.toolbus.commands;
+package org.ctrl.vend.omron.toolbus.commands.area;
 
 
 import org.ctrl.DataImp;
@@ -22,10 +22,10 @@ import org.ctrl.vend.omron.toolbus.memory.MemoryRead;
 
 
 /**
- * @author Remus
- *
+ * @author JanCarel
+ * RR is for io area inputs and outputs
  */
-public class AreaReadCIO extends MemoryRead{
+public class AreaReadRR extends MemoryRead{
 
     
     public static final String NAME = "RR";
@@ -35,25 +35,23 @@ public class AreaReadCIO extends MemoryRead{
     /**
      * 
      */
-    public AreaReadCIO() {
+    public AreaReadRR() {
         setData(new DataImp());   
     }
 
     
-    public AreaReadCIO(IDevice target, int startAddr, int length) {
+    public AreaReadRR(IDevice target, int startAddr, int length) {
         this();
         setTarget(target);
         setAddress(startAddr);
         setLength(length);
     }
 
-    
-
     /* (non-Javadoc)
      * @see org.pereni.ctrl.Command#getCommandId()
      */
     public int getCommandId() {
-        return 1;
+      return NAME.hashCode();
     }
 
 
@@ -73,7 +71,7 @@ public class AreaReadCIO extends MemoryRead{
         return DESCRIPTION;
     }
 
-
+   
     
 
 }

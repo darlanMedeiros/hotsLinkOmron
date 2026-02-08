@@ -1,5 +1,5 @@
 /*
- *  Copyright [2006] [Remus Pereni http://remus.pereni.org]
+ *  Copyright [2005] [Remus Pereni http://remus.pereni.org]
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,45 +13,53 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License. 
  */
-package org.ctrl.vend.omron.toolbus.commands;
+package org.ctrl.vend.omron.toolbus.commands.area;
 
 
 import org.ctrl.DataImp;
 import org.ctrl.IDevice;
+import org.ctrl.extras.MemoryVariable;
 import org.ctrl.vend.omron.toolbus.memory.MemoryRead;
 
 
 /**
- * @author JanCarel
- * RR is for io area inputs and outputs
+ * @author Remus
+ *
  */
-public class AreaReadTC extends MemoryRead{
+public class AreaReadDM extends MemoryRead{
 
     
-    public static final String NAME = "RC";
-    public static final String DESCRIPTION = "TC Area Read";
+    public static final String NAME = "RD";
+    public static final String DESCRIPTION = "DM Area Read";
    
     
     /**
      * 
      */
-    public AreaReadTC() {
+    public AreaReadDM() {
         setData(new DataImp());   
     }
 
     
-    public AreaReadTC(IDevice target, int startAddr, int length) {
+    public AreaReadDM(IDevice target, int startAddr, int length) {
         this();
         setTarget(target);
         setAddress(startAddr);
         setLength(length);
     }
 
+    public AreaReadDM(IDevice target, MemoryVariable variable) {
+        this();
+        setTarget(target);
+        addVariable(variable);
+    }
+
+
     /* (non-Javadoc)
      * @see org.pereni.ctrl.Command#getCommandId()
      */
     public int getCommandId() {
-      return NAME.hashCode();
+        return 1;
     }
 
 
@@ -68,8 +76,17 @@ public class AreaReadTC extends MemoryRead{
      */
     @Override
     public String getCommandDescription() {
+    	
+    	
         return DESCRIPTION;
     }
+
+   
+    
+
+
+    
+    
 
    
     

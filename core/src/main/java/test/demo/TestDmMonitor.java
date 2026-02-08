@@ -15,7 +15,7 @@ import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.model.MemoryValue;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
-import org.ctrl.vend.omron.toolbus.commands.AreaReadDM;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;

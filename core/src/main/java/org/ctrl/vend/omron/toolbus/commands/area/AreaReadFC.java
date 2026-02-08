@@ -1,4 +1,6 @@
 /*
+ * $Id: AreaReadFC.java,v 1.1 2005/07/27 09:52:50 remus Exp $
+ *
  *  Copyright [2005] [Remus Pereni http://remus.pereni.org]
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,57 +13,45 @@
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
- *  limitations under the License. 
+ *  limitations under the License.
  */
-package org.ctrl.vend.omron.toolbus.commands;
-
+package org.ctrl.vend.omron.toolbus.commands.area;
 
 import org.ctrl.DataImp;
 import org.ctrl.IDevice;
-import org.ctrl.extras.MemoryVariable;
 import org.ctrl.vend.omron.toolbus.memory.MemoryRead;
 
-
 /**
- * @author Remus
  *
+ * @author <a href="http://remus.pereni.org">Remus Pereni</a>
+ * @version $Revision: 1.1 $ $Date: 2005/07/27 09:52:50 $
  */
-public class AreaReadDM extends MemoryRead{
-
+public class AreaReadFC extends MemoryRead {
     
-    public static final String NAME = "RD";
-    public static final String DESCRIPTION = "DM Area Read";
-   
+    public static final String NAME = "FC";
+    public static final String DESCRIPTION = "FC Based Area Read";
     
     /**
      * 
      */
-    public AreaReadDM() {
-        setData(new DataImp());   
+    public AreaReadFC() {
+        setData(new DataImp());
     }
 
     
-    public AreaReadDM(IDevice target, int startAddr, int length) {
+    public AreaReadFC(IDevice target, int startAddr, int length) {
         this();
         setTarget(target);
         setAddress(startAddr);
         setLength(length);
     }
-
-    public AreaReadDM(IDevice target, MemoryVariable variable) {
-        this();
-        setTarget(target);
-        addVariable(variable);
-    }
-
-
+    
     /* (non-Javadoc)
      * @see org.pereni.ctrl.Command#getCommandId()
      */
     public int getCommandId() {
-        return 1;
+        return 7;
     }
-
 
     /* (non-Javadoc)
      * @see org.pereni.ctrl.Command#getCommandName()
@@ -69,26 +59,15 @@ public class AreaReadDM extends MemoryRead{
     public String getCommandName() {
         return NAME;
     }
-
+    
 
     /* (non-Javadoc)
      * @see org.pereni.ctrl.comm.AbstractMessage#getCommandDescription()
      */
     @Override
     public String getCommandDescription() {
-    	
-    	
         return DESCRIPTION;
     }
 
-   
-    
-
-
-    
-    
-
-   
-    
 
 }

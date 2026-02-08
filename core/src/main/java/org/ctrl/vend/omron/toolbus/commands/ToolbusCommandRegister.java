@@ -16,6 +16,14 @@
 package org.ctrl.vend.omron.toolbus.commands;
 
 import org.ctrl.CommandRegisterImp;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaReadFC;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaReadHR;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaReadRR;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaReadTC;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteDM;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteHR;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteWR;
 
 /**
  * @author Remus

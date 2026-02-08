@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 
-package org.ctrl.vend.omron.toolbus.commands;
+package org.ctrl.vend.omron.toolbus.commands.area;
 
 import org.ctrl.DataImp;
 import org.ctrl.IDevice;

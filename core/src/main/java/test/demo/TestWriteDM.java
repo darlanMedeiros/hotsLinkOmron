@@ -6,7 +6,7 @@ import org.ctrl.IDevice;
 import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.IComControl;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
-import org.ctrl.vend.omron.toolbus.commands.AreaWriteDM;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteDM;
 import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;

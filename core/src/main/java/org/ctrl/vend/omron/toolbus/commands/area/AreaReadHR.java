@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.ctrl.vend.omron.toolbus.commands;
+package org.ctrl.vend.omron.toolbus.commands.area;
 
 import org.ctrl.DataImp;
 import org.ctrl.IDevice;

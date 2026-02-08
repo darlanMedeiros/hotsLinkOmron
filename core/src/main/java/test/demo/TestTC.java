@@ -6,7 +6,7 @@ import org.ctrl.IDevice;
 import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.IComControl;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
-import org.ctrl.vend.omron.toolbus.commands.AreaReadTC;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaReadTC;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
 import org.serial.SerialPortException;

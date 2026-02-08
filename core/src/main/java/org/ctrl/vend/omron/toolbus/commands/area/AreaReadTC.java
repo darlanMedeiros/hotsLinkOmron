@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License. 
  */
-package org.ctrl.vend.omron.toolbus.commands;
+package org.ctrl.vend.omron.toolbus.commands.area;
 
 
 import org.ctrl.DataImp;
@@ -25,22 +25,22 @@ import org.ctrl.vend.omron.toolbus.memory.MemoryRead;
  * @author JanCarel
  * RR is for io area inputs and outputs
  */
-public class AreaReadRR extends MemoryRead{
+public class AreaReadTC extends MemoryRead{
 
     
-    public static final String NAME = "RR";
-    public static final String DESCRIPTION = "IO Area Read";
+    public static final String NAME = "RC";
+    public static final String DESCRIPTION = "TC Area Read";
    
     
     /**
      * 
      */
-    public AreaReadRR() {
+    public AreaReadTC() {
         setData(new DataImp());   
     }
 
     
-    public AreaReadRR(IDevice target, int startAddr, int length) {
+    public AreaReadTC(IDevice target, int startAddr, int length) {
         this();
         setTarget(target);
         setAddress(startAddr);
