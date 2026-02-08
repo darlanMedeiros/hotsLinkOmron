@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.lang.NonNull;
 
 public class TagService {
 
@@ -44,7 +45,7 @@ public class TagService {
 
     private final TagRepository repository;
     private final NamedParameterJdbcTemplate namedTemplate;
-    private final RowMapper<TagValue> tagValueMapper = this::mapTagValue;
+    private final @NonNull RowMapper<TagValue> tagValueMapper = this::mapTagValue;
     private final Map<String, Integer> memoryIdCache = new HashMap<>();
     private Integer cachedDeviceId = null;
     private String cachedMnemonic = null;

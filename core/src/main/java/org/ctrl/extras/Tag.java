@@ -104,6 +104,9 @@ public class Tag {
     }
 
     public int getLengthWords() {
+        if (isBit()) {
+            throw new IllegalStateException("BIT tag does not have word length");
+        }
         return dataType.getWordLength();
     }
 

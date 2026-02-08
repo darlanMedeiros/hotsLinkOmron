@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.lang.NonNull;
 
 public class JdbcTagRepository implements TagRepository {
 
@@ -38,7 +39,7 @@ public class JdbcTagRepository implements TagRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedTemplate;
-    private final RowMapper<Tag> rowMapper = this::mapRow;
+    private final @NonNull RowMapper<Tag> rowMapper = this::mapRow;
 
     public JdbcTagRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = Objects.requireNonNull(jdbcTemplate, "jdbcTemplate");
@@ -65,7 +66,7 @@ public class JdbcTagRepository implements TagRepository {
 
     @Override
     public Optional<Tag> findByDeviceAndName(int deviceId, String name) {
-        return queryOptional(SQL_FIND_BY_DEVICE_NAME, deviceId, name);
+        return queryOptional(SQL_FIND_BY_DEVICE_NAME, deviceId, Objects.requireNonNull(name, "name"));
     }
 
     @Override

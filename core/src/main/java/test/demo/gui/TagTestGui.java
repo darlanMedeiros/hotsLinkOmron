@@ -303,6 +303,8 @@ public class TagTestGui {
         try {
             connect();
             ensureDevice();
+            ensureDb();
+            ensureTags();
 
             int wordValue = readWordRr(LAMPADA_TAG.getAddress());
             String baseHex = utils.getFormateHexWrite(wordValue);
@@ -349,6 +351,8 @@ public class TagTestGui {
         try {
             connect();
             ensureDevice();
+            ensureDb();
+            ensureTags();
 
             AreaReadDM read = new AreaReadDM(plc, PRODUCAO_TAG.toMemoryVariable());
             comHandler.send(read);
