@@ -6,6 +6,34 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TestDmDbWrite",
+            "request": "launch",
+            "mainClass": "test.demo.TestDmDbWrite",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
+            "name": "DmMonitorApplication",
+            "request": "launch",
+            "mainClass": "org.omron.collector.DmMonitorApplication",
+            "projectName": "collector"
+        },
+        {
+            "type": "java",
+            "name": "RrWrBitGui",
+            "request": "launch",
+            "mainClass": "test.demo.gui.RrWrBitGui",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
+            "name": "DmTestGui",
+            "request": "launch",
+            "mainClass": "test.demo.gui.DmTestGui",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
             "name": "TagTestGui",
             "request": "launch",
             "mainClass": "test.demo.gui.TagTestGui",

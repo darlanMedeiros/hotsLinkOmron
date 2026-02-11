@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.perini</groupId>
+        <groupId>org.omron</groupId>
         <artifactId>hostLink-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>

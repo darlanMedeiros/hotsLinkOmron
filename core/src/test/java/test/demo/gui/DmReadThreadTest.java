@@ -1,10 +1,5 @@
 package test.demo.gui;
 
-
-
-
-
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -100,7 +95,7 @@ class DmReadThreadTest {
         leituraThread.start();
 
         // deixa rodar um pouco
-        Thread.sleep(3000);
+        Thread.sleep(10000);
 
         // encerra
         running.set(false);

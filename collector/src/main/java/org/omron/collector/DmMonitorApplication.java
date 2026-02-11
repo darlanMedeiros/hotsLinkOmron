@@ -1,0 +1,181 @@
+package org.omron.collector;
+
+import org.ctrl.DeviceImp;
+import org.ctrl.DeviceRegisterImp;
+import org.ctrl.IDevice;
+import org.ctrl.IDeviceRegister;
+import org.ctrl.comm.IComControl;
+import org.ctrl.db.config.DbConfig;
+import org.ctrl.db.model.DeviceInfo;
+import org.ctrl.db.service.DmValueService;
+import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
+import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
+import org.serial.SerialParameters;
+import org.serial.SerialPort;
+import org.serial.SerialPortFactoryPJC;
+import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialUtils;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class DmMonitorApplication {
+
+    private static final int START_ADDR = 0;
+    private static final int END_ADDR =100;
+    private static final int VALUE_MODE = MemoryWrite.HEX;
+    private static final int CHUNK_SIZE = 1;
+
+    public static void main(String[] args) {
+
+        SerialPortHandlerPjcImp comHandler = null;
+        AnnotationConfigApplicationContext ctx = null;
+
+        try {
+
+            // =============================
+            // CONFIGURAÇÃO SERIAL
+            // =============================
+            SerialParameters sp = new SerialParameters();
+            sp.setDevice("COM2");
+            sp.setBaudRate(SerialPort.BaudRate.BAUD_RATE_9600);
+            sp.setDataBits(7);
+            sp.setStopBits(2);
+            sp.setParity(SerialPort.Parity.EVEN);
+
+            int nodeId = 0;
+            int timeoutMs = 10000;
+            int delayMs = 1000;
+
+            // =============================
+            // SPRING CONTEXT (BANCO)
+            // =============================
+            ctx = new AnnotationConfigApplicationContext(DbConfig.class);
+            DmValueService service = ctx.getBean(DmValueService.class);
+
+            // =============================
+            // SERIAL + PROTOCOLO
+            // =============================
+            SerialUtils.setSerialPortFactory(new SerialPortFactoryPJC());
+            comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
+
+            ToolbusProtocol protocol = new ToolbusProtocol();
+            comHandler.setProtocolHandler(protocol);
+
+            if (comHandler instanceof IComControl) {
+                ((IComControl) comHandler).setCommunicationTimeOut(timeoutMs);
+            }
+
+            comHandler.initialize();
+            comHandler.start();
+
+            // =============================
+            // DEVICE
+            // =============================
+            IDevice plc = new DeviceImp(nodeId, "PLC", "PLC", "Omron PLC");
+            IDeviceRegister deviceRegister = DeviceRegisterImp.getInstance();
+            deviceRegister.addDevice(plc);
+
+            DeviceInfo deviceInfo = new DeviceInfo("PLC", plc.getName(), plc.getDescription());
+
+            // =============================
+            // MONITORAMENTO CONTÍNUO
+            // =============================
+            int size = END_ADDR - START_ADDR + 1;
+            int[] lastValues = new int[size];
+            boolean firstRead = true;
+
+            System.out.println("Starting DM Monitor 0..100");
+
+            while (true) {
+
+                int addr = START_ADDR;
+
+                while (addr <= END_ADDR) {
+
+                    int remaining = END_ADDR - addr + 1;
+                    int length = Math.min(CHUNK_SIZE, remaining);
+
+                    AreaReadDM read = new AreaReadDM(plc, addr, length);
+                    comHandler.send(read);
+
+                    int[] values = parseReply(read.getReply(), length);
+
+                    if (values != null) {
+
+                        for (int i = 0; i < values.length; i++) {
+
+                            int absoluteAddr = addr + i;
+
+                            int index = absoluteAddr - START_ADDR;
+
+                            if (firstRead || lastValues[index] != values[i]) {
+
+                                service.saveRange(deviceInfo, absoluteAddr, new int[] { values[i] });
+
+                                System.out.println("CHANGE DM "
+                                        + absoluteAddr
+                                        + " old=" + lastValues[index]
+                                        + " new=" + values[i]);
+
+                                lastValues[index] = values[i];
+                            }
+                        }
+                    }
+
+                    addr += length;
+                }
+
+                firstRead = false;
+
+                Thread.sleep(delayMs);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+
+            if (comHandler != null) {
+                comHandler.stop();
+            }
+
+            if (ctx != null) {
+                ctx.close();
+            }
+        }
+    }
+
+    // =====================================
+    // PARSER DA RESPOSTA
+    // =====================================
+    private static int[] parseReply(org.ctrl.IData reply, int length) {
+
+        if (reply == null)
+            return null;
+
+        int[] dataBuff = reply.toHexArray();
+        if (dataBuff == null)
+            return null;
+
+        int[] out = new int[length];
+
+        for (int i = 0; i < length; i++) {
+
+            String val = "";
+
+            for (int j = 0; j < 4; j++) {
+                int idx = i * 4 + j;
+                if (idx < dataBuff.length) {
+                    val += (char) dataBuff[idx];
+                }
+            }
+
+            try {
+                out[i] = Integer.parseInt(val.trim(), 16);
+            } catch (Exception e) {
+                out[i] = 0;
+            }
+        }
+
+        return out;
+    }
+}
