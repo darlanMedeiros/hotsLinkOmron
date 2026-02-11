@@ -1,4 +1,5 @@
 # GET Endpoints
+<!-- cSpell:ignore Endpoints -->
 
 Base path: `/api`
 
