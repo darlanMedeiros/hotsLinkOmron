@@ -6,6 +6,34 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CollectorGuiApplication",
+            "request": "launch",
+            "mainClass": "org.omron.collector.CollectorGuiApplication",
+            "projectName": "collector"
+        },
+        {
+            "type": "java",
+            "name": "TestIOReadWrite",
+            "request": "launch",
+            "mainClass": "test.demo.TestIOReadWrite",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
+            "name": "SimpleTest_TAGvariable",
+            "request": "launch",
+            "mainClass": "test.demo.SimpleTest_TAGvariable",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
+            "name": "DmDbSyncMain",
+            "request": "launch",
+            "mainClass": "test.demo.DmDbSyncMain",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
             "name": "TestDmDbWrite",
             "request": "launch",
             "mainClass": "test.demo.TestDmDbWrite",

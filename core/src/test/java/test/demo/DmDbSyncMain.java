@@ -96,11 +96,11 @@ public class DmDbSyncMain {
     }
 
     private static void pollOnce(SerialPortHandlerPjcImp comHandler,
-                                 IDevice plc,
-                                 DmValueService service,
-                                 DeviceInfo deviceInfo,
-                                 int[] lastValues,
-                                 int chunkSize) {
+            IDevice plc,
+            DmValueService service,
+            DeviceInfo deviceInfo,
+            int[] lastValues,
+            int chunkSize) {
         int addr = START_ADDR;
         while (addr <= END_ADDR) {
             int remaining = END_ADDR - addr + 1;

@@ -21,11 +21,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class DmMonitorApplication {
 
     private static final int START_ADDR = 0;
-    private static final int END_ADDR =100;
+    private static final int END_ADDR = 10;
     private static final int VALUE_MODE = MemoryWrite.HEX;
-    // Define o tamanho do chunk para leitura. Pode ser ajustado conforme necessário.
-    // Valorer acima de 10 estão causando bug no windows, provavelmente por causa do buffer da porta serial. Testar com valores maiores em Linux.
-    
+    // Define o tamanho do chunk para leitura. Pode ser ajustado conforme
+    // necessário.
+    // Valorer acima de 10 estão causando bug no windows, provavelmente por causa do
+    // buffer da porta serial. Testar com valores maiores em Linux.
+
     private static final int CHUNK_SIZE = 1;
 
     public static void main(String[] args) {

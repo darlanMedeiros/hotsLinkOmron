@@ -54,7 +54,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.omron.collector.DmMonitorApplication</mainClass>
+                            <mainClass>org.omron.collector.CollectorGuiApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
