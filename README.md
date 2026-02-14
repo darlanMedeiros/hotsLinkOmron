@@ -1,11 +1,15 @@
 # hotsLinkOmron
 
-Projeto de comunicacao com CLP Omron via protocolo HostLink, com coleta de dados, persistencia em Postgres e API REST para frontend.
+Projeto para comunicacao com CLP Omron via protocolo HostLink, com coleta de dados, persistencia em Postgres, API REST em Spring Boot e frontend web.
 
 ## Modulos
-1. `api`: exposicao REST para o frontend, leitura/escrita de dados persistidos e operacoes de tags.
-2. `core`: biblioteca base (protocolo HostLink, serial, modelos, repositorios e servicos compartilhados).
-3. `collector`: regra de negocio de coleta, comunicacao com CLP e persistencia periodica no banco.
+1. `api`: exposicao REST para consulta de DM/RR/TAG.
+2. `core`: biblioteca base (HostLink, serial, modelos, repositorios e servicos).
+3. `collector`: rotina de coleta e persistencia no banco.
+4. `web`: frontend React + Vite.
+
+## Arquitetura
+Visao completa em `ARCHITECTURE.md`.
 
 ## Banco de dados
 Scripts:
@@ -19,31 +23,58 @@ Tabelas principais:
 4. `memory_value_current`
 5. `tag`
 
-## Executar API
-1. Configure o Postgres (exemplo: database `omron`, usuario `omron_user`).
-2. Ajuste variaveis de ambiente quando necessario: `DB_URL`, `DB_USER`, `DB_PASSWORD`.
-3. Inicie a aplicacao `api` (classe `org.ctrl.db.ApiApplication`).
+## Subir localmente
+Pre-requisitos:
+1. Java 17+
+2. Maven 3.9+
+3. Node.js 18+
+4. Postgres configurado
 
-## Executar Collector
-1. Ajuste os parametros seriais em `collector/src/main/java/org/omron/collector/DmMonitorApplication.java`.
-2. Garanta acesso ao mesmo banco configurado no `core`.
-3. Execute a classe `org.omron.collector.DmMonitorApplication`.
+### Backend (API Spring Boot)
+1. Configure `DB_URL`, `DB_USER`, `DB_PASSWORD` se necessario.
+2. Execute na raiz:
 
-## Endpoints GET
-Arquivo completo:
-1. `GET_ENDPOINTS.md`
+```bash
+mvn -pl api spring-boot:run
+```
+
+API padrao: `http://localhost:8080`
+
+### Frontend (Vite)
+1. Crie `web/.env` a partir de `web/.env.example`.
+2. Execute:
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Frontend padrao: `http://localhost:5173`
+
+## Integracao frontend-backend
+- No desenvolvimento, o frontend chama `/api/...`.
+- O Vite faz proxy para `VITE_API_URL` (default `http://localhost:8080`).
+- Configuracao em `web/vite.config.ts`.
+- Exemplo de ambiente em `web/.env.example`.
+
+## Status atual do frontend
+- Estrutura e build do modulo `web` estao funcionando.
+- Proxy para backend esta configurado.
+- `web/src/app/App.tsx` ainda usa dados mockados.
+- Proximo passo: trocar mocks por chamadas reais para `/api/devices/...`.
+
+## Endpoints principais
+Ver lista em `GET_ENDPOINTS.md`.
 
 Exemplos:
 1. `GET http://localhost:8080/api/devices/PLC/dm?start=0&end=10`
-2. `GET http://localhost:8080/api/devices/PLC/dm/0`
+2. `GET http://localhost:8080/api/devices/PLC/dm/0/current`
 3. `GET http://localhost:8080/api/devices/PLC/rr/10/bit/0`
 4. `GET http://localhost:8080/api/devices/PLC/tag/producao`
+5. `POST http://localhost:8080/api/devices/PLC/tags/dm/0?name=producao`
 
-## Endpoints POST (TAG)
-1. `POST http://localhost:8080/api/devices/PLC/tags/dm/0?name=producao`
-2. `POST http://localhost:8080/api/devices/PLC/tags/rr/10/bit/0?name=lampada`
-
-## Demos GUI
+## Demos GUI (core)
 1. `core/src/main/java/test/demo/gui/TagTestGui.java`
 2. `core/src/main/java/test/demo/gui/DmTestGui.java`
 3. `core/src/main/java/test/demo/gui/RrWrBitGui.java`
