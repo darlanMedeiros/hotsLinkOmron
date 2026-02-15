@@ -1,12 +1,8 @@
-import { CheckCircle2, XCircle } from 'lucide-react';
-
 interface QualityChartProps {
   percentage: number;
-  approved: number;
-  rejected: number;
 }
 
-export function QualityChart({ percentage, approved, rejected }: QualityChartProps) {
+export function QualityChart({ percentage }: QualityChartProps) {
   const circumference = 2 * Math.PI * 40;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
@@ -44,23 +40,7 @@ export function QualityChart({ percentage, approved, rejected }: QualityChartPro
         </div>
       </div>
 
-      <div className="space-y-2">
-        <div className="flex items-center justify-between p-2 bg-green-50 rounded-lg border border-green-200">
-          <div className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-green-600" />
-            <span className="text-xs font-medium text-gray-700">Aprovadas</span>
-          </div>
-          <span className="text-sm font-bold text-green-700">{approved.toLocaleString('pt-BR')}</span>
-        </div>
-        
-        <div className="flex items-center justify-between p-2 bg-red-50 rounded-lg border border-red-200">
-          <div className="flex items-center gap-1.5">
-            <XCircle className="w-4 h-4 text-red-600" />
-            <span className="text-xs font-medium text-gray-700">Rejeitadas</span>
-          </div>
-          <span className="text-sm font-bold text-red-700">{rejected.toLocaleString('pt-BR')}</span>
-        </div>
-      </div>
+      
     </div>
   );
 }

@@ -1,8 +1,11 @@
 package org.ctrl.db.service;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -42,6 +45,15 @@ public class TagService {
             "JOIN public.memory m ON m.id = t.memory_id " +
             "JOIN public.memory_value_current mvc ON mvc.memory_id = m.id " +
             "WHERE d.mnemonic = :mnemonic AND t.name = :tagName";
+
+    private static final String SQL_FIND_CURRENT_BY_MEMORY_NAME =
+            "SELECT mvc.value, mvc.updated_at " +
+            "FROM public.device d " +
+            "JOIN public.memory m ON m.device_id = d.id " +
+            "JOIN public.memory_value_current mvc ON mvc.memory_id = m.id " +
+            "WHERE d.mnemonic = :mnemonic AND m.name = :memoryName";
+
+    private static final Map<String, org.ctrl.extras.Tag> TAG_CATALOG = buildTagCatalog();
 
     private final TagRepository repository;
     private final NamedParameterJdbcTemplate namedTemplate;
@@ -95,7 +107,14 @@ public class TagService {
                 .addValue("mnemonic", deviceMnemonic)
                 .addValue("tagName", tagName);
         try {
-            return Optional.ofNullable(namedTemplate.queryForObject(SQL_FIND_CURRENT_BY_TAG, params, tagValueMapper));
+            TagValue base = namedTemplate.queryForObject(SQL_FIND_CURRENT_BY_TAG, params, tagValueMapper);
+            if (base == null) {
+                return Optional.empty();
+            }
+            if (!isDmDwordTag(tagName, base.getMemoryName())) {
+                return Optional.of(base);
+            }
+            return Optional.of(buildDwordValue(base));
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
@@ -146,5 +165,98 @@ public class TagService {
         java.sql.Timestamp ts = rs.getTimestamp("updated_at");
         LocalDateTime updatedAt = ts == null ? null : ts.toLocalDateTime();
         return new TagValue(tagName, memoryName, deviceMnemonic, value, updatedAt);
+    }
+
+    private TagValue buildDwordValue(TagValue base) {
+        Integer lowWord = base.getValue();
+        if (lowWord == null) {
+            return base;
+        }
+
+        int startAddress = DmValueService.parseDmAddress(base.getMemoryName());
+        String highMemoryName = DmValueService.formatDmName(startAddress + 1);
+        Optional<MemoryCurrent> high = findCurrentByMemoryName(base.getDeviceMnemonic(), highMemoryName);
+        if (high.isEmpty() || high.get().value == null) {
+            return base;
+        }
+
+        int low = lowWord.intValue() & 0xFFFF;
+        int highWord = high.get().value.intValue() & 0xFFFF;
+        int dwordValue = (highWord << 16) | low;
+        LocalDateTime updatedAt = mostRecent(base.getUpdatedAt(), high.get().updatedAt);
+        return new TagValue(base.getTagName(), base.getMemoryName(), base.getDeviceMnemonic(), dwordValue, updatedAt);
+    }
+
+    private Optional<MemoryCurrent> findCurrentByMemoryName(String deviceMnemonic, String memoryName) {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("mnemonic", deviceMnemonic)
+                .addValue("memoryName", memoryName);
+        try {
+            return Optional.ofNullable(namedTemplate.queryForObject(SQL_FIND_CURRENT_BY_MEMORY_NAME, params,
+                    (rs, rowNum) -> {
+                        Integer value = rs.getInt("value");
+                        if (rs.wasNull()) {
+                            value = null;
+                        }
+                        java.sql.Timestamp ts = rs.getTimestamp("updated_at");
+                        LocalDateTime updatedAt = ts == null ? null : ts.toLocalDateTime();
+                        return new MemoryCurrent(value, updatedAt);
+                    }));
+        } catch (EmptyResultDataAccessException ex) {
+            return Optional.empty();
+        }
+    }
+
+    private boolean isDmDwordTag(String tagName, String memoryName) {
+        if (memoryName == null || !memoryName.startsWith("DM_")) {
+            return false;
+        }
+        org.ctrl.extras.Tag tag = TAG_CATALOG.get(tagName);
+        return tag != null
+                && tag.getArea() == org.ctrl.extras.Tag.Area.DM
+                && tag.getDataType() == org.ctrl.extras.Tag.DataType.DWORD;
+    }
+
+    private static Map<String, org.ctrl.extras.Tag> buildTagCatalog() {
+        Map<String, org.ctrl.extras.Tag> map = new HashMap<>();
+        for (Field field : org.ctrl.extras.Tag.class.getDeclaredFields()) {
+            if (field.getType() != org.ctrl.extras.Tag.class) {
+                continue;
+            }
+            int mod = field.getModifiers();
+            if (!Modifier.isStatic(mod)) {
+                continue;
+            }
+            try {
+                Object raw = field.get(null);
+                if (raw instanceof org.ctrl.extras.Tag) {
+                    org.ctrl.extras.Tag tag = (org.ctrl.extras.Tag) raw;
+                    map.put(tag.getName(), tag);
+                }
+            } catch (IllegalAccessException ex) {
+                // Ignore inaccessible fields.
+            }
+        }
+        return Collections.unmodifiableMap(map);
+    }
+
+    private LocalDateTime mostRecent(LocalDateTime a, LocalDateTime b) {
+        if (a == null) {
+            return b;
+        }
+        if (b == null) {
+            return a;
+        }
+        return a.isAfter(b) ? a : b;
+    }
+
+    private static final class MemoryCurrent {
+        private final Integer value;
+        private final LocalDateTime updatedAt;
+
+        private MemoryCurrent(Integer value, LocalDateTime updatedAt) {
+            this.value = value;
+            this.updatedAt = updatedAt;
+        }
     }
 }

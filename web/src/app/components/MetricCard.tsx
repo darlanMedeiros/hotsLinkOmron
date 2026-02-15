@@ -15,11 +15,7 @@ export function MetricCard({ title, value, unit, icon: Icon, trend, color }: Met
       <div className="flex items-start justify-between mb-3">
         
         {trend !== undefined && (
-          <div className={`text-xs font-semibold px-2 py-0.5 rounded ${
-            trend >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-          }`}>
-            {trend >= 0 ? '+' : ''}{trend}%
-          </div>
+          null
         )}
       </div>
       <div className="space-y-0.5">

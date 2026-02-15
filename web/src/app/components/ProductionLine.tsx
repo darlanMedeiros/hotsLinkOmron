@@ -1,18 +1,16 @@
 import { Factory, Gauge } from 'lucide-react';
 import { MetricCard } from './MetricCard';
 import { QualityChart } from './QualityChart';
-import { DefectsList, Defect } from './DefectsList';
 
 interface ProductionLineProps {
   lineNumber: number;
   lineName: string;
   pecasPrensa: number;
   pecasRoller: number;
-  aprovadas: number;
-  rejeitadas: number;
+  qualidade: number;
+  lastUpdatedAt: string | null;
   trendPrensa: number;
   trendRoller: number;
-  defects: Defect[];
   color: string;
 }
 
@@ -21,18 +19,16 @@ export function ProductionLine({
   lineName,
   pecasPrensa,
   pecasRoller,
-  aprovadas,
-  rejeitadas,
+  qualidade,
+  lastUpdatedAt,
   trendPrensa,
   trendRoller,
-  defects,
   color
 }: ProductionLineProps) {
-  const total = aprovadas + rejeitadas;
-  const qualidadePercentual = total > 0 ? Math.round((aprovadas / total) * 100) : 0;
+  const qualidadePercentual = Math.max(0, Math.min(100, Math.round(qualidade)));
 
   return (
-    <div className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden h-full flex flex-col">
+    <div className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden flex flex-col min-h-[320px]">
       {/* Header da Linha */}
       <div className={`${color} px-4 py-3`}>
         <div className="flex items-center gap-2">
@@ -40,14 +36,16 @@ export function ProductionLine({
             <Factory className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h2 className="text-base font-bold text-white">MF 4{lineNumber}</h2>
-            <p className="text-white/90 text-xs">{lineName}</p>
+            <h2 className="text-base font-bold text-white">{lineName}</h2>
+            <p className="text-[11px] text-white/90">
+              Ultima atualizacao: {lastUpdatedAt ?? '--'}
+            </p>
           </div>
         </div>
       </div>
 
       {/* Conteúdo */}
-      <div className="p-4 flex-1 flex flex-col gap-4 overflow-y-auto">
+      <div className="p-4 flex-1 flex flex-col gap-4">
         {/* Métricas - Prensa e Roller lado a lado */}
         <div className="grid grid-cols-2 gap-3">
           <MetricCard
@@ -72,12 +70,7 @@ export function ProductionLine({
         {/* Qualidade */}
         <QualityChart
           percentage={qualidadePercentual}
-          approved={aprovadas}
-          rejected={rejeitadas}
         />
-
-        {/* Lista de Defeitos */}
-        <DefectsList defects={defects} />
       </div>
     </div>
   );

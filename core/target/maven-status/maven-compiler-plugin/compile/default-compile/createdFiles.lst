@@ -87,6 +87,7 @@ org\ctrl\comm\IProtocolHandler.class
 org\ctrl\comm\IStatusCode.class
 org\ctrl\db\repository\MemoryValueRepository.class
 org\ctrl\db\repository\TagRepository.class
+org\ctrl\db\service\TagService$MemoryCurrent.class
 org\ctrl\vend\omron\toolbus\commands\ErrorInfo.class
 org\ctrl\comm\IMessageListener.class
 org\ctrl\comm\AbstractComHandler.class

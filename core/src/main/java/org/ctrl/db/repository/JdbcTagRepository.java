@@ -18,6 +18,8 @@ public class JdbcTagRepository implements TagRepository {
     private static final String SQL_INSERT =
             "INSERT INTO public.tag (name, device_id, memory_id) " +
             "VALUES (:name, :deviceId, :memoryId) " +
+            "ON CONFLICT (memory_id) DO UPDATE " +
+            "SET name = EXCLUDED.name, device_id = EXCLUDED.device_id " +
             "RETURNING id, name, device_id, memory_id";
 
     private static final String SQL_FIND_BY_ID =
@@ -48,10 +50,6 @@ public class JdbcTagRepository implements TagRepository {
 
     @Override
     public Tag create(String name, int deviceId, int memoryId) {
-        Optional<Tag> existing = findByMemoryId(memoryId);
-        if (existing.isPresent()) {
-            throw new IllegalStateException("Memory id " + memoryId + " already has a tag");
-        }
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("name", name)
                 .addValue("deviceId", deviceId)

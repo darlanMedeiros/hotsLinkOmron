@@ -10,7 +10,6 @@ import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
-import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
 import org.serial.SerialPortFactoryPJC;
@@ -22,7 +21,7 @@ public class DmMonitorApplication {
 
     private static final int START_ADDR = 0;
     private static final int END_ADDR = 10;
-    private static final int VALUE_MODE = MemoryWrite.HEX;
+    //private static final int VALUE_MODE = MemoryWrite.HEX;
     // Define o tamanho do chunk para leitura. Pode ser ajustado conforme
     // necessário.
     // Valorer acima de 10 estão causando bug no windows, provavelmente por causa do

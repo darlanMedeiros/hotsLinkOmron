@@ -9,7 +9,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -31,6 +32,8 @@ import org.ctrl.comm.IComControl;
 import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.service.DmValueService;
+import org.ctrl.db.service.TagService;
+import org.ctrl.extras.Tag;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.serial.SerialParameters;
@@ -42,9 +45,23 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 public class CollectorGuiApplication {
 
-    private static final int MONITOR_LENGTH = 100;
-    private static final int CHUNK_SIZE = 1;
     private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private static final int INTER_TAG_DELAY_MS = 120;
+    private static final int ERROR_RETRY_DELAY_MS = 1500;
+    private static final Tag[] MONITORED_TAGS = new Tag[] {
+            Tag.PECAPH29,
+            Tag.PECAPH30,
+            Tag.PECAPH31,
+            Tag.PECAROLLERCARGA41,
+            Tag.PECAROLLERDESC41,
+            Tag.PECAROLLERCARGA42,
+            Tag.PECAROLLERDESC42,
+            Tag.PECAROLLERCARGA43,
+            Tag.PECAROLLERDESC43,
+            Tag.QUALIDADE41,
+            Tag.QUALIDADE42,
+            Tag.QUALIDADE43
+    };
 
     private JFrame frame;
     private JTextField portField;
@@ -55,7 +72,6 @@ public class CollectorGuiApplication {
     private JTextField nodeField;
     private JTextField timeoutField;
     private JTextField pollMsField;
-    private JTextField startDmField;
     private JLabel commStatusLabel;
     private JLabel monitorStatusLabel;
     private JTextArea logArea;
@@ -65,6 +81,7 @@ public class CollectorGuiApplication {
     private SerialPortHandlerPjcImp comHandler;
     private AnnotationConfigApplicationContext dbContext;
     private DmValueService dmValueService;
+    private TagService tagService;
     private IDevice plc;
     private DeviceInfo deviceInfo;
 
@@ -80,7 +97,7 @@ public class CollectorGuiApplication {
     }
 
     private void buildUi() {
-        frame = new JFrame("Collector DM Monitor");
+        frame = new JFrame("Collector TAG Monitor");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(880, 520));
         frame.setLayout(new BorderLayout(10, 10));
@@ -176,23 +193,21 @@ public class CollectorGuiApplication {
 
     private JPanel buildMonitorPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Monitoramento DM"));
+        panel.setBorder(BorderFactory.createTitledBorder("Monitoramento TAGs (DWORD)"));
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(4, 6, 4, 6);
         c.fill = GridBagConstraints.HORIZONTAL;
 
-        startDmField = new JTextField("0");
-
         c.gridx = 0;
         c.gridy = 0;
-        panel.add(new JLabel("DM inicial"), c);
+        panel.add(new JLabel("TAGs monitoradas"), c);
         c.gridx = 1;
-        panel.add(startDmField, c);
+        panel.add(new JLabel(Integer.toString(MONITORED_TAGS.length)), c);
 
         c.gridx = 2;
-        panel.add(new JLabel("Faixa monitorada"), c);
+        panel.add(new JLabel("Modo"), c);
         c.gridx = 3;
-        panel.add(new JLabel("DM inicial ate DM inicial + 99"), c);
+        panel.add(new JLabel("Leitura por TAG (DM DWORD)"), c);
 
         JButton startButton = new JButton("Iniciar monitor");
         startButton.addActionListener(e -> startMonitor());
@@ -289,14 +304,10 @@ public class CollectorGuiApplication {
             return;
         }
         ensureDb();
+        ensureTagBindings();
 
-        final int startAddr;
         final int pollMs;
         try {
-            startAddr = Integer.parseInt(startDmField.getText().trim());
-            if (startAddr < 0) {
-                throw new IllegalArgumentException("DM inicial deve ser >= 0.");
-            }
             pollMs = Integer.parseInt(pollMsField.getText().trim());
             if (pollMs < 100) {
                 throw new IllegalArgumentException("Poll deve ser >= 100ms.");
@@ -307,56 +318,42 @@ public class CollectorGuiApplication {
         }
 
         monitoring = true;
-        monitorThread = new Thread(() -> runMonitorLoop(startAddr, startAddr + MONITOR_LENGTH - 1, pollMs), "collector-dm-monitor");
+        monitorThread = new Thread(() -> runMonitorLoop(pollMs), "collector-tag-monitor");
         monitorThread.setDaemon(true);
         monitorThread.start();
     }
 
-    private void runMonitorLoop(int startAddr, int endAddr, int pollMs) {
+    private void runMonitorLoop(int pollMs) {
         setMonitorStatus("RODANDO");
-        log("Monitor iniciado: DM " + startAddr + " ate DM " + endAddr + ".");
+        log("Monitor iniciado para " + MONITORED_TAGS.length + " TAGs.");
 
-        int[] lastValues = new int[MONITOR_LENGTH];
-        Arrays.fill(lastValues, Integer.MIN_VALUE);
-        boolean firstCycle = true;
+        Map<String, int[]> lastValues = new LinkedHashMap<>();
 
         while (monitoring) {
             try {
-                int addr = startAddr;
-                while (addr <= endAddr && monitoring) {
-                    int length = Math.min(CHUNK_SIZE, endAddr - addr + 1);
-                    AreaReadDM read = new AreaReadDM(plc, addr, length);
+                for (Tag tag : MONITORED_TAGS) {
+                    if (!monitoring) {
+                        break;
+                    }
+                    AreaReadDM read = new AreaReadDM(plc, tag.toMemoryVariable());
                     comHandler.send(read);
 
-                    int[] values = parseReply(read.getReply(), length);
+                    int[] values = parseReply(read.getReply(), tag.getLengthWords());
                     if (values == null) {
-                        log("Leitura invalida para DM " + addr + ".");
+                        log("Leitura invalida para TAG " + tag.getName() + ".");
                     } else {
-                        for (int i = 0; i < values.length; i++) {
-                            int currentAddr = addr + i;
-                            int index = currentAddr - startAddr;
-                            int currentValue = values[i];
-
-                            if (firstCycle) {
-                                lastValues[index] = currentValue;
-                                continue;
-                            }
-
-                            if (lastValues[index] != currentValue) {
-                                dmValueService.saveRange(deviceInfo, currentAddr, new int[] { currentValue });
-                                log("Alteracao salva: DM " + currentAddr + " de " + lastValues[index] + " para "
-                                        + currentValue + ".");
-                                lastValues[index] = currentValue;
-                            }
+                        int[] previous = lastValues.get(tag.getName());
+                        if (hasChanged(previous, values)) {
+                            dmValueService.saveRange(deviceInfo, tag.getAddress(), values);
+                            log("Alteracao salva: TAG " + tag.getName() + " (DM " + tag.getAddress()
+                                    + ".." + (tag.getAddress() + tag.getLengthWords() - 1) + ") = "
+                                    + formatWords(values) + ".");
+                            lastValues.put(tag.getName(), copyWords(values));
                         }
                     }
 
-                    addr += length;
-                }
-
-                if (firstCycle) {
-                    log("Leitura inicial concluida. Mudancas serao persistidas a partir do proximo ciclo.");
-                    firstCycle = false;
+                    // Evita rajadas de consultas na serial e reduz erros de checksum.
+                    Thread.sleep(INTER_TAG_DELAY_MS);
                 }
 
                 setCommStatus("CONECTADO - ultimo ciclo " + LocalDateTime.now().format(TIME_FMT));
@@ -368,7 +365,7 @@ public class CollectorGuiApplication {
                 setCommStatus("ERRO DE COMUNICACAO");
                 log("Erro no monitoramento: " + ex.getMessage());
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(ERROR_RETRY_DELAY_MS);
                 } catch (InterruptedException interrupted) {
                     Thread.currentThread().interrupt();
                     break;
@@ -393,6 +390,7 @@ public class CollectorGuiApplication {
         if (dbContext == null) {
             dbContext = new AnnotationConfigApplicationContext(DbConfig.class);
             dmValueService = dbContext.getBean(DmValueService.class);
+            tagService = dbContext.getBean(TagService.class);
         }
     }
 
@@ -401,6 +399,7 @@ public class CollectorGuiApplication {
             dbContext.close();
             dbContext = null;
             dmValueService = null;
+            tagService = null;
         }
     }
 
@@ -436,6 +435,15 @@ public class CollectorGuiApplication {
         closeDb();
     }
 
+    private void ensureTagBindings() {
+        if (tagService == null || deviceInfo == null) {
+            return;
+        }
+        for (Tag tag : MONITORED_TAGS) {
+            tagService.getOrCreateDmTag(deviceInfo, tag.getName(), tag.getAddress());
+        }
+    }
+
     private int[] parseReply(IData reply, int length) {
         if (reply == null) {
             return null;
@@ -469,6 +477,39 @@ public class CollectorGuiApplication {
 
     private void setMonitorStatus(String text) {
         SwingUtilities.invokeLater(() -> monitorStatusLabel.setText(text));
+    }
+
+    private boolean hasChanged(int[] previous, int[] current) {
+        if (current == null) {
+            return false;
+        }
+        if (previous == null || previous.length != current.length) {
+            return true;
+        }
+        for (int i = 0; i < current.length; i++) {
+            if (previous[i] != current[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int[] copyWords(int[] values) {
+        int[] copy = new int[values.length];
+        for (int i = 0; i < values.length; i++) {
+            copy[i] = values[i];
+        }
+        return copy;
+    }
+
+    private String formatWords(int[] words) {
+        if (words == null || words.length == 0) {
+            return "[]";
+        }
+        if (words.length == 1) {
+            return "[" + words[0] + "]";
+        }
+        return "[" + words[0] + ", " + words[1] + "]";
     }
 
     private void log(String message) {
