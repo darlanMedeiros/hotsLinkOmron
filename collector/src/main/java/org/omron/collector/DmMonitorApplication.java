@@ -28,6 +28,10 @@ public class DmMonitorApplication {
     // buffer da porta serial. Testar com valores maiores em Linux.
 
     private static final int CHUNK_SIZE = 1;
+    private static final int HISTORY_RETENTION_DAYS = 14;
+    private static final int HISTORY_PRUNE_INTERVAL_CYCLES = 300;
+    private static final int ERROR_RETRY_DELAY_MS = 1500;
+    private static final int MAX_ERROR_RETRY_DELAY_MS = 15000;
 
     public static void main(String[] args) {
 
@@ -90,48 +94,69 @@ public class DmMonitorApplication {
 
             System.out.println("Starting DM Monitor 0..100");
 
+            int cycleCount = 0;
+            int consecutiveErrors = 0;
+
             while (true) {
+                try {
+                    int addr = START_ADDR;
 
-                int addr = START_ADDR;
+                    while (addr <= END_ADDR) {
 
-                while (addr <= END_ADDR) {
+                        int remaining = END_ADDR - addr + 1;
+                        int length = Math.min(CHUNK_SIZE, remaining);
 
-                    int remaining = END_ADDR - addr + 1;
-                    int length = Math.min(CHUNK_SIZE, remaining);
+                        AreaReadDM read = new AreaReadDM(plc, addr, length);
+                        comHandler.send(read);
 
-                    AreaReadDM read = new AreaReadDM(plc, addr, length);
-                    comHandler.send(read);
+                        int[] values = parseReply(read.getReply(), length);
 
-                    int[] values = parseReply(read.getReply(), length);
+                        if (values != null) {
 
-                    if (values != null) {
+                            for (int i = 0; i < values.length; i++) {
 
-                        for (int i = 0; i < values.length; i++) {
+                                int absoluteAddr = addr + i;
 
-                            int absoluteAddr = addr + i;
+                                int index = absoluteAddr - START_ADDR;
 
-                            int index = absoluteAddr - START_ADDR;
+                                if (firstRead || lastValues[index] != values[i]) {
 
-                            if (firstRead || lastValues[index] != values[i]) {
+                                    service.saveRange(deviceInfo, absoluteAddr, new int[] { values[i] });
 
-                                service.saveRange(deviceInfo, absoluteAddr, new int[] { values[i] });
+                                    System.out.println("CHANGE DM "
+                                            + absoluteAddr
+                                            + " old=" + lastValues[index]
+                                            + " new=" + values[i]);
 
-                                System.out.println("CHANGE DM "
-                                        + absoluteAddr
-                                        + " old=" + lastValues[index]
-                                        + " new=" + values[i]);
-
-                                lastValues[index] = values[i];
+                                    lastValues[index] = values[i];
+                                }
                             }
                         }
+
+                        addr += length;
                     }
 
-                    addr += length;
+                    firstRead = false;
+                    cycleCount++;
+                    consecutiveErrors = 0;
+                    if (cycleCount % HISTORY_PRUNE_INTERVAL_CYCLES == 0) {
+                        int deletedRows = service.pruneHistoryOlderThanDays(HISTORY_RETENTION_DAYS);
+                        if (deletedRows > 0) {
+                            System.out.println("Cleanup memory_value: removed " + deletedRows + " rows.");
+                        }
+                    }
+                    Thread.sleep(delayMs);
+                } catch (InterruptedException interrupted) {
+                    Thread.currentThread().interrupt();
+                    break;
+                } catch (Exception loopEx) {
+                    consecutiveErrors++;
+                    int factor = 1 << Math.min(consecutiveErrors - 1, 3);
+                    int backoffMs = Math.min(MAX_ERROR_RETRY_DELAY_MS, ERROR_RETRY_DELAY_MS * factor);
+                    System.err.println("Collector loop error: " + loopEx.getMessage() + ". Retrying in "
+                            + backoffMs + " ms.");
+                    Thread.sleep(backoffMs);
                 }
-
-                firstRead = false;
-
-                Thread.sleep(delayMs);
             }
 
         } catch (Exception ex) {

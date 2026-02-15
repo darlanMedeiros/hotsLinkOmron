@@ -170,6 +170,7 @@ public class ToolbusProtocol extends AbstractProtocolHandler {
 
 		int[] buffer = new int[128];
 		int idx = 0;
+		boolean messageStarted = false;
 		long startTime = System.currentTimeMillis();
 		boolean terminatorReceived = false;
 
@@ -188,7 +189,7 @@ public class ToolbusProtocol extends AbstractProtocolHandler {
 				}
 			}
 		} catch (IOException e) {
-			getLog().warn("Exception durring read.", e);
+			throw new ComException("Serial read failed while waiting for data", e);
 		}
 
 		try {
@@ -197,11 +198,19 @@ public class ToolbusProtocol extends AbstractProtocolHandler {
 
 				// Read the available bytes.
 				while (getComControl().getInputStream().available() > 0) {
-
+					int incoming = getComControl().getInputStream().read();
+					if (!messageStarted) {
+						if (incoming != START_MARKER) {
+							// Ignore bytes until the standard frame start marker is found.
+							continue;
+						}
+						messageStarted = true;
+						idx = 0;
+					}
 					if (idx >= buffer.length) {
 						buffer = Arrays.copyOf(buffer, buffer.length * 2);
 					}
-					buffer[idx] = getComControl().getInputStream().read();
+					buffer[idx] = incoming;
 
 					if (buffer[idx] == DELIMITER) {
 
@@ -218,6 +227,7 @@ public class ToolbusProtocol extends AbstractProtocolHandler {
 							}
 							// Unknown command: discard and continue waiting for the next message.
 							idx = 0;
+							messageStarted = false;
 							terminatorReceived = false;
 							continue;
 						} else {
@@ -245,12 +255,12 @@ public class ToolbusProtocol extends AbstractProtocolHandler {
 						}
 					}
 				} catch (IOException e) {
-					getLog().warn("Exception durring read.", e);
+					throw new ComException("Serial read failed while waiting for frame completion", e);
 				}
 
 			}
 		} catch (IOException ex) {
-			getLog().warn("Exception durring read.", ex);
+			throw new ComException("Serial read failed while receiving frame", ex);
 		}
 		return null;
 	}

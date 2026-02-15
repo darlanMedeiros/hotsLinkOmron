@@ -1,5 +1,9 @@
 package org.serial;
 
+import java.io.IOException;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.ctrl.comm.AbstractComHandler;
 import org.ctrl.comm.ISerialComHandler;
 import org.ctrl.comm.ISpontaneousEventListener;
@@ -7,9 +11,12 @@ import org.ctrl.comm.SerialParameters;
 
 public class SerialPortHandlerPjcImp extends AbstractComHandler implements ISerialComHandler {
 
+	private static final AtomicBoolean SHUTDOWN_HOOK_REGISTERED = new AtomicBoolean(false);
+	private static final Set<SerialPortHandlerPjcImp> ACTIVE_HANDLERS = ConcurrentHashMap.newKeySet();
+
 	private SerialPort serialPort;
-	protected boolean shutDownHookRegistered = false;
 	private SerialParameters serialComParameters;
+	private Thread workerThread;
 
 	public SerialPortHandlerPjcImp(SerialPort serialPort) {
 
@@ -48,10 +55,16 @@ public class SerialPortHandlerPjcImp extends AbstractComHandler implements ISeri
 	public void initialize()  {
 		getLog().info(NAME + " initialized");
 
-		if (!shutDownHookRegistered) {
+		if (SHUTDOWN_HOOK_REGISTERED.compareAndSet(false, true)) {
 			Runtime.getRuntime().addShutdownHook(new Thread() {
 				public void run() {
-					terminate();
+					for (SerialPortHandlerPjcImp handler : ACTIVE_HANDLERS) {
+						try {
+							handler.terminate();
+						} catch (Exception ignored) {
+							// Shutdown path should not fail the JVM exit.
+						}
+					}
 				}
 
 			});
@@ -115,8 +128,9 @@ public class SerialPortHandlerPjcImp extends AbstractComHandler implements ISeri
 			// setOutputStream(this.serialPort.getOutputSream());
 
 			// connection.serialPort.addEventListener(reader);
-			Thread thread = new Thread(this);
-			thread.start();
+			workerThread = new Thread(this, NAME + "-worker");
+			workerThread.setDaemon(true);
+			workerThread.start();
 
 			out = serialPort.getOutputSream();
 			in = serialPort.getInputStream();
@@ -126,6 +140,7 @@ public class SerialPortHandlerPjcImp extends AbstractComHandler implements ISeri
 			getLog().info("Serial Comunication Handler Started");
 			
 			this.isStarted = true;
+			ACTIVE_HANDLERS.add(this);
 			
 		} catch (SerialPortException ex) {
 			getLog().error("Unable to open connection", ex);			
@@ -137,7 +152,33 @@ public class SerialPortHandlerPjcImp extends AbstractComHandler implements ISeri
 	@Override
 	public void stop() {
 		stopRequired = true;
-		this.serialPort.close();
+		ACTIVE_HANDLERS.remove(this);
+		if (workerThread != null) {
+			workerThread.interrupt();
+			workerThread = null;
+		}
+		if (out != null) {
+			try {
+				out.close();
+			} catch (IOException ignored) {
+				// best-effort cleanup
+			} finally {
+				out = null;
+			}
+		}
+		if (in != null) {
+			try {
+				in.close();
+			} catch (IOException ignored) {
+				// best-effort cleanup
+			} finally {
+				in = null;
+			}
+		}
+		if (this.serialPort != null) {
+			this.serialPort.close();
+		}
+		this.isStarted = false;
 		getLog().info("Serial Comunication Handler Stoped");
 
 	}

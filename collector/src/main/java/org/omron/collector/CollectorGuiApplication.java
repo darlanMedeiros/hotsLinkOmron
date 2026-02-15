@@ -1,4 +1,4 @@
-package org.omron.collector;
+﻿package org.omron.collector;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -7,6 +7,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
@@ -17,11 +23,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
 
 import org.ctrl.DeviceImp;
 import org.ctrl.DeviceRegisterImp;
@@ -46,8 +54,14 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class CollectorGuiApplication {
 
     private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm:ss");
-    private static final int INTER_TAG_DELAY_MS = 120;
+    private static final DateTimeFormatter FILE_TIME_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final int INTER_TAG_DELAY_MS = 1000;
     private static final int ERROR_RETRY_DELAY_MS = 1500;
+    private static final int MAX_ERROR_RETRY_DELAY_MS = 15000;
+    private static final int MAX_LOG_LINES = 3000;
+    private static final int HISTORY_RETENTION_DAYS = 14;
+    private static final int HISTORY_PRUNE_INTERVAL_CYCLES = 500;
+    private static final Path LOG_FILE = Path.of("collector-gui.log");
     private static final Tag[] MONITORED_TAGS = new Tag[] {
             Tag.PECAPH29,
             Tag.PECAPH30,
@@ -84,8 +98,10 @@ public class CollectorGuiApplication {
     private TagService tagService;
     private IDevice plc;
     private DeviceInfo deviceInfo;
+    private volatile boolean shuttingDown;
 
     public static void main(String[] args) {
+        installGlobalExceptionHandler();
         SwingUtilities.invokeLater(() -> {
             CollectorGuiApplication app = new CollectorGuiApplication();
             app.frame.setVisible(true);
@@ -98,13 +114,13 @@ public class CollectorGuiApplication {
 
     private void buildUi() {
         frame = new JFrame("Collector TAG Monitor");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setSize(new Dimension(880, 520));
         frame.setLayout(new BorderLayout(10, 10));
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                shutdown();
+                confirmAndShutdown();
             }
         });
 
@@ -130,7 +146,7 @@ public class CollectorGuiApplication {
         parityCombo.setSelectedItem("EVEN");
         nodeField = new JTextField("0");
         timeoutField = new JTextField("10000");
-        pollMsField = new JTextField("1000");
+        pollMsField = new JTextField("2000");
 
         int row = 0;
         c.gridx = 0;
@@ -249,6 +265,8 @@ public class CollectorGuiApplication {
         return panel;
     }
 
+    // Foca na logica de comunicacao e monitoramento, mantendo a interface simples e
+    // responsiva.
     private void connect() {
         if (isConnected()) {
             log("Comunicacao ja esta ativa.");
@@ -328,6 +346,8 @@ public class CollectorGuiApplication {
         log("Monitor iniciado para " + MONITORED_TAGS.length + " TAGs.");
 
         Map<String, int[]> lastValues = new LinkedHashMap<>();
+        int cycleCount = 0;
+        int consecutiveErrors = 0;
 
         while (monitoring) {
             try {
@@ -357,15 +377,27 @@ public class CollectorGuiApplication {
                 }
 
                 setCommStatus("CONECTADO - ultimo ciclo " + LocalDateTime.now().format(TIME_FMT));
+                cycleCount++;
+                consecutiveErrors = 0;
+                if (cycleCount % HISTORY_PRUNE_INTERVAL_CYCLES == 0) {
+                    int deletedRows = dmValueService.pruneHistoryOlderThanDays(HISTORY_RETENTION_DAYS);
+                    if (deletedRows > 0) {
+                        log("Limpeza de historico: " + deletedRows
+                                + " registros removidos de memory_value.");
+                    }
+                }
                 Thread.sleep(pollMs);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
                 break;
             } catch (Exception ex) {
+                consecutiveErrors++;
                 setCommStatus("ERRO DE COMUNICACAO");
                 log("Erro no monitoramento: " + ex.getMessage());
                 try {
-                    Thread.sleep(ERROR_RETRY_DELAY_MS);
+                    int factor = 1 << Math.min(consecutiveErrors - 1, 3);
+                    int backoffMs = Math.min(MAX_ERROR_RETRY_DELAY_MS, ERROR_RETRY_DELAY_MS * factor);
+                    Thread.sleep(backoffMs);
                 } catch (InterruptedException interrupted) {
                     Thread.currentThread().interrupt();
                     break;
@@ -430,9 +462,30 @@ public class CollectorGuiApplication {
     }
 
     private void shutdown() {
+        if (shuttingDown) {
+            return;
+        }
+        shuttingDown = true;
         stopMonitor();
         safeStopHandler();
         closeDb();
+        if (frame != null) {
+            frame.dispose();
+        }
+    }
+
+    private void confirmAndShutdown() {
+        int confirm = JOptionPane.showConfirmDialog(
+                frame,
+                "Encerrar o Collector agora?",
+                "Confirmar encerramento",
+                JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            log("Encerramento solicitado pelo usuario.");
+            shutdown();
+        } else {
+            log("Encerramento cancelado.");
+        }
     }
 
     private void ensureTagBindings() {
@@ -472,11 +525,11 @@ public class CollectorGuiApplication {
     }
 
     private void setCommStatus(String text) {
-        SwingUtilities.invokeLater(() -> commStatusLabel.setText(text));
+        runOnEdt(() -> commStatusLabel.setText(text));
     }
 
     private void setMonitorStatus(String text) {
-        SwingUtilities.invokeLater(() -> monitorStatusLabel.setText(text));
+        runOnEdt(() -> monitorStatusLabel.setText(text));
     }
 
     private boolean hasChanged(int[] previous, int[] current) {
@@ -513,10 +566,69 @@ public class CollectorGuiApplication {
     }
 
     private void log(String message) {
-        SwingUtilities.invokeLater(() -> {
+        appendPersistentLog(message, null);
+        runOnEdt(() -> {
             String time = LocalDateTime.now().format(TIME_FMT);
             logArea.append("[" + time + "] " + message + "\n");
+            trimLogIfNeeded();
             logArea.setCaretPosition(logArea.getDocument().getLength());
         });
+    }
+
+    private void runOnEdt(Runnable task) {
+        if (SwingUtilities.isEventDispatchThread()) {
+            task.run();
+            return;
+        }
+        SwingUtilities.invokeLater(task);
+    }
+
+    private void trimLogIfNeeded() {
+        int lineCount = logArea.getLineCount();
+        if (lineCount <= MAX_LOG_LINES) {
+            return;
+        }
+        int linesToRemove = lineCount - MAX_LOG_LINES;
+        try {
+            int endOffset = logArea.getLineEndOffset(linesToRemove - 1);
+            logArea.replaceRange("", 0, endOffset);
+        } catch (BadLocationException ex) {
+            // Keep monitor running even if GUI line offsets temporarily mismatch.
+        }
+    }
+
+    private static void installGlobalExceptionHandler() {
+        Thread.setDefaultUncaughtExceptionHandler((thread, error) -> {
+            String message = "Uncaught exception thread=" + thread.getName() + ": "
+                    + error.getClass().getSimpleName() + " - " + error.getMessage();
+            appendPersistentLog(message, error);
+        });
+    }
+
+    private static synchronized void appendPersistentLog(String message, Throwable error) {
+        try {
+            StringBuilder line = new StringBuilder();
+            line.append("[")
+                    .append(LocalDateTime.now().format(FILE_TIME_FMT))
+                    .append("] ")
+                    .append(message)
+                    .append(System.lineSeparator());
+            if (error != null) {
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                error.printStackTrace(pw);
+                pw.flush();
+                line.append(sw).append(System.lineSeparator());
+            }
+            Files.writeString(
+                    LOG_FILE,
+                    line.toString(),
+                    StandardCharsets.UTF_8,
+                    StandardOpenOption.CREATE,
+                    StandardOpenOption.WRITE,
+                    StandardOpenOption.APPEND);
+        } catch (Exception ignored) {
+            // Logging should never interrupt application flow.
+        }
     }
 }

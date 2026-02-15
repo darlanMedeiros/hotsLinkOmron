@@ -84,6 +84,10 @@ public class JdbcMemoryValueRepository implements MemoryValueRepository {
             "ORDER BY mvc.updated_at DESC " +
             "LIMIT 1";
 
+    private static final String SQL_DELETE_HISTORY_OLDER_THAN_DAYS =
+            "DELETE FROM public.memory_value " +
+            "WHERE updated_at < (NOW() - (:days * INTERVAL '1 day'))";
+
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedTemplate;
     private final @NonNull RowMapper<MemoryValue> rowMapper = (ResultSet rs, int rowNum) -> mapRow(rs);
@@ -174,6 +178,16 @@ public class JdbcMemoryValueRepository implements MemoryValueRepository {
         }
         namedTemplate.batchUpdate(SQL_INSERT_VALUE, batch);
         namedTemplate.batchUpdate(SQL_UPSERT_CURRENT, batch);
+    }
+
+    @Override
+    public int pruneHistoryOlderThanDays(int days) {
+        if (days <= 0) {
+            return 0;
+        }
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("days", days);
+        return namedTemplate.update(SQL_DELETE_HISTORY_OLDER_THAN_DAYS, params);
     }
 
     private MemoryValue mapRow(ResultSet rs) throws SQLException {

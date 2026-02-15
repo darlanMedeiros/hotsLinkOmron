@@ -19,4 +19,6 @@ public interface MemoryValueRepository {
     void upsert(String deviceMnemonic, String deviceName, String deviceDescription, MemoryValue value);
 
     void upsertBatch(String deviceMnemonic, String deviceName, String deviceDescription, List<MemoryValue> values);
+
+    int pruneHistoryOlderThanDays(int days);
 }

@@ -63,6 +63,10 @@ public class DmValueService {
         repository.upsertBatch(device.getMnemonic(), device.getName(), device.getDescription(), values);
     }
 
+    public int pruneHistoryOlderThanDays(int days) {
+        return repository.pruneHistoryOlderThanDays(days);
+    }
+
     public static String formatDmName(int address) {
         return String.format("DM_%04d", address);
     }

@@ -254,8 +254,8 @@ export default function App() {
             <div className="flex items-center gap-3">
               <Factory className="w-7 h-7 text-white" />
               <div>
-                <h1 className="text-xl font-bold text-white">Dashboard Industrial</h1>
-                <p className="text-blue-100 text-xs">Monitoramento em tempo real - 3 linhas (API TAG)</p>
+                <h1 className="text-xl font-bold text-white">Dashboard PB 4</h1>
+                <p className="text-blue-100 text-xs">Monitoramento em tempo real - 3 linhas</p>
               </div>
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-lg">
