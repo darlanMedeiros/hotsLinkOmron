@@ -1,48 +1,65 @@
 # hotsLinkOmron
 
-Projeto para comunicacao com CLP Omron via protocolo HostLink, com coleta de dados, persistencia em Postgres, API REST em Spring Boot e frontend web.
+Projeto para comunicacao com CLP Omron via protocolo HostLink, com coleta de dados, persistencia em Postgres, API REST em Spring Boot e frontend React.
 
 ## Modulos
-1. `api`: exposicao REST para consulta de DM/RR/TAG.
-2. `core`: biblioteca base (HostLink, serial, modelos, repositorios e servicos).
-3. `collector`: rotina de coleta e persistencia no banco.
-4. `web`: frontend React + Vite.
 
-## Arquitetura
-Visao completa em `ARCHITECTURE.md`.
+1. `core`: biblioteca base (protocolo HostLink, serial, modelos, repositorios e servicos).
+2. `api`: exposicao REST para consulta de DM, RR e TAG.
+3. `collector`: processos de coleta e persistencia no banco (modo GUI e modo headless).
+4. `web`: dashboard React + Vite para monitoramento em tempo real.
 
-## Banco de dados
-Scripts:
-1. `core/src/main/resources/db/schema.sql`
-2. `core/src/main/resources/db/init-db.sql`
+## Pre-requisitos
 
-Tabelas principais:
-1. `device`
-2. `memory`
-3. `memory_value`
-4. `memory_value_current`
-5. `tag`
-
-## Subir localmente
-Pre-requisitos:
-1. Java 17+
+1. Java 11+
 2. Maven 3.9+
 3. Node.js 18+
-4. Postgres configurado
+4. PostgreSQL 14+ (ou compativel)
 
-### Backend (API Spring Boot)
-1. Configure `DB_URL`, `DB_USER`, `DB_PASSWORD` se necessario.
-2. Execute na raiz:
+## Banco de dados
+
+Scripts SQL:
+
+1. `core/src/main/resources/db/schema.sql` (cria estruturas sem reset)
+2. `core/src/main/resources/db/init-db.sql` (recria schema `public`)
+
+Variaveis de ambiente usadas por `DbConfig`:
+
+1. `DB_URL` (default: `jdbc:postgresql://localhost:5432/omron?currentSchema=public`)
+2. `DB_USER` (default: `omron_user`)
+3. `DB_PASSWORD` (default: `admin`)
+
+## Execucao local
+
+### 1. API (Spring Boot)
+
+Na raiz do projeto:
 
 ```bash
 mvn -pl api spring-boot:run
 ```
 
-API padrao: `http://localhost:8080`
+URL padrao: `http://localhost:8080`
 
-### Frontend (Vite)
-1. Crie `web/.env` a partir de `web/.env.example`.
-2. Execute:
+### 2. Collector GUI (Swing)
+
+```bash
+mvn -pl collector -am exec:java -Dexec.mainClass=org.omron.collector.CollectorGuiApplication
+```
+
+Ou via script Windows:
+
+```powershell
+./run-gui.ps1
+```
+
+### 3. Collector headless (loop DM)
+
+```bash
+mvn -pl collector -am exec:java -Dexec.mainClass=org.omron.collector.DmMonitorApplication
+```
+
+### 4. Frontend (Vite)
 
 ```bash
 cd web
@@ -50,31 +67,35 @@ npm install
 npm run dev
 ```
 
-Frontend padrao: `http://localhost:5173`
+URL padrao: `http://localhost:5173`
 
 ## Integracao frontend-backend
-- No desenvolvimento, o frontend chama `/api/...`.
-- O Vite faz proxy para `VITE_API_URL` (default `http://localhost:8080`).
-- Configuracao em `web/vite.config.ts`.
-- Exemplo de ambiente em `web/.env.example`.
 
-## Status atual do frontend
-- Estrutura e build do modulo `web` estao funcionando.
-- Proxy para backend esta configurado.
-- `web/src/app/App.tsx` ainda usa dados mockados.
-- Proximo passo: trocar mocks por chamadas reais para `/api/devices/...`.
+1. O frontend chama `/api/...`.
+2. O Vite faz proxy para `VITE_API_URL` (default: `http://localhost:8080`).
+3. Configuracao em `web/vite.config.ts`.
+4. Exemplo de ambiente em `web/.env.example`.
 
-## Endpoints principais
-Ver lista em `GET_ENDPOINTS.md`.
+## Endpoints
+
+Lista completa em `GET_ENDPOINTS.md`.
 
 Exemplos:
+
 1. `GET http://localhost:8080/api/devices/PLC/dm?start=0&end=10`
 2. `GET http://localhost:8080/api/devices/PLC/dm/0/current`
 3. `GET http://localhost:8080/api/devices/PLC/rr/10/bit/0`
-4. `GET http://localhost:8080/api/devices/PLC/tag/producao`
-5. `POST http://localhost:8080/api/devices/PLC/tags/dm/0?name=producao`
+4. `GET http://localhost:8080/api/devices/PLC/tag/PECAPH29`
+5. `POST http://localhost:8080/api/devices/PLC/tags/dm/29?name=PECAPH29`
 
-## Demos GUI (core)
-1. `core/src/main/java/test/demo/gui/TagTestGui.java`
-2. `core/src/main/java/test/demo/gui/DmTestGui.java`
-3. `core/src/main/java/test/demo/gui/RrWrBitGui.java`
+## Documentacao adicional
+
+1. Arquitetura: `ARCHITECTURE.md`
+2. Endpoints: `GET_ENDPOINTS.md`
+3. Integracao dashboard: `web/src/app/components/README-INTEGRATION.md`
+
+## Observacoes
+
+1. A API fixa timezone em `America/Sao_Paulo` (`ApiApplication`).
+2. O dashboard web ja consome API real (nao usa mais mock).
+3. O collector GUI grava log em `collector-gui.log`.
