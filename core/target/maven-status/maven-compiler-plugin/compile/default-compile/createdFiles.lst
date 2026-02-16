@@ -7,6 +7,7 @@ org\ctrl\utils\OmronUtils.class
 org\ctrl\IDeviceRegister.class
 org\ctrl\vend\omron\toolbus\commands\Abort.class
 org\ctrl\db\repository\JdbcMemoryValueRepository.class
+org\serial\SerialPortFactoryJssc.class
 org\ctrl\vend\omron\toolbus\commands\area\AreaReadCIO.class
 org\ctrl\extras\Tag$DataType.class
 org\ctrl\vend\omron\fins\command\FinsCommandRegister.class
@@ -24,11 +25,13 @@ org\ctrl\db\controller\RrValueController.class
 org\ctrl\comm\ISerialComHandler.class
 org\ctrl\DeviceRegisterImp.class
 org\ctrl\extras\EnumLenght.class
+org\serial\SerialPortJssc$JsscOutputStream.class
 org\ctrl\comm\AbstractProtocolHandler.class
 org\ctrl\ICommandRegister.class
 org\ctrl\vend\omron\toolbus\commands\area\AreaReadHR.class
 org\serial\SerialParameters.class
 org\serial\SerialPortHandlerPjcImp.class
+org\serial\SerialPortJSerialComm$1.class
 org\ctrl\vend\omron\toolbus\commands\Test.class
 org\ctrl\comm\SerialComHandlerImp.class
 org\ctrl\vend\omron\toolbus\ToolbusProtocol.class
@@ -38,12 +41,14 @@ org\ctrl\vend\omron\toolbus\commands\ErrorRead.class
 org\ctrl\comm\MaximumNumberOfRetriesReachedException.class
 org\ctrl\db\service\RrValueService.class
 org\serial\SerialPortHandlerPjcImp$1.class
+org\serial\SerialPortJssc$JsscInputStream.class
 org\ctrl\CommandRegisterImp.class
 org\ctrl\vend\omron\toolbus\ToolbusWordBit.class
 org\ctrl\db\config\DbConfig.class
 org\ctrl\comm\StatusCodeImp.class
 org\ctrl\vend\omron\fins\FinsStatusRegister.class
 org\ctrl\db\service\DmValueService.class
+org\serial\SerialPortFactoryJSerialComm.class
 org\serial\Modbus$1.class
 org\serial\SerialPortAbstractFactory.class
 org\ctrl\comm\ISpontaneousEventListener.class
@@ -53,7 +58,9 @@ org\ctrl\comm\IComHandler.class
 org\ctrl\UnknownDevice.class
 org\serial\SerialPort$Parity.class
 org\ctrl\vend\omron\toolbus\commands\area\AreaReadWriteBit$ParsedAddress.class
+org\serial\SerialPortJssc$1.class
 org\ctrl\extras\Tag$Area.class
+org\serial\SerialPortJSerialComm.class
 org\ctrl\vend\omron\toolbus\commands\area\AreaReadDM.class
 org\ctrl\DataImp.class
 org\ctrl\DeviceImp.class
@@ -81,6 +88,7 @@ org\ctrl\db\model\Tag.class
 org\ctrl\vend\omron\toolbus\commands\area\AreaWriteHR.class
 org\serial\Modbus.class
 org\ctrl\vend\omron\toolbus\commands\ToolbusCommand.class
+org\serial\SerialPortJssc.class
 org\ctrl\vend\omron\toolbus\commands\area\AreaReadRR.class
 org\serial\SerialPort$BaudRate.class
 org\ctrl\comm\IProtocolHandler.class

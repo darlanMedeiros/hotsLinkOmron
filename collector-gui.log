@@ -5951,3 +5951,96 @@
 [2026-02-15 19:39:56] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [21, 0].
 [2026-02-15 19:39:57] Alteracao salva: TAG QUALIDADE42 (DM 20..21) = [21, 0].
 [2026-02-15 19:39:58] Alteracao salva: TAG QUALIDADE43 (DM 22..23) = [21, 0].
+[2026-02-15 22:44:48] Conectado ao CLP na porta COM6.
+[2026-02-15 22:48:03] Encerramento solicitado pelo usuario.
+[2026-02-15 22:48:52] Conectado ao CLP na porta COM6.
+[2026-02-15 22:49:18] Conecte ao CLP antes de iniciar o monitor.
+[2026-02-15 22:51:25] Encerramento solicitado pelo usuario.
+[2026-02-15 22:52:03] Conectado ao CLP na porta COM1.
+[2026-02-15 22:56:54] Encerramento solicitado pelo usuario.
+[2026-02-15 22:58:50] Conectado ao CLP na porta COM1.
+[2026-02-15 22:58:57] Comunicacao encerrada.
+[2026-02-15 22:59:08] Conectado ao CLP na porta COM2.
+[2026-02-15 22:59:22] Comunicacao encerrada.
+[2026-02-15 23:01:55] Encerramento solicitado pelo usuario.
+[2026-02-15 23:08:34] Conectado ao CLP na porta COM1.
+[2026-02-15 23:09:12] Comunicacao encerrada.
+[2026-02-15 23:09:19] Conectado ao CLP na porta COM2.
+[2026-02-15 23:09:26] Monitor iniciado para 12 TAGs.
+[2026-02-15 23:09:46] Erro no monitoramento:  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 48, 48, 48, 48, 48, 48, 50] / 00000002
+[2026-02-15 23:09:48] Alteracao salva: TAG PECAPH29 (DM 0..1) = [115, 0].
+[2026-02-15 23:09:50] Alteracao salva: TAG PECAPH30 (DM 2..3) = [116, 0].
+[2026-02-15 23:09:51] Alteracao salva: TAG PECAPH31 (DM 4..5) = [116, 0].
+[2026-02-15 23:09:53] Alteracao salva: TAG PECAROLLERCARGA41 (DM 6..7) = [117, 0].
+[2026-02-15 23:09:54] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [117, 0].
+[2026-02-15 23:09:56] Alteracao salva: TAG PECAROLLERCARGA42 (DM 10..11) = [117, 0].
+[2026-02-15 23:09:56] Monitor finalizado.
+[2026-02-15 23:15:47] Comunicacao encerrada.
+[2026-02-15 23:15:57] Conectado ao CLP na porta COM1.
+[2026-02-15 23:17:14] Comunicacao encerrada.
+[2026-02-15 23:17:19] Encerramento solicitado pelo usuario.
+[2026-02-15 23:17:41] Conectado ao CLP na porta COM1.
+[2026-02-15 23:20:58] Encerramento solicitado pelo usuario.
+[2026-02-15 23:25:25] Uncaught exception thread=AWT-EventQueue-0: Error - Unresolved compilation problems: 
+	SerialUtils cannot be resolved
+	SerialUtils cannot be resolved
+
+java.lang.Error: Unresolved compilation problems: 
+	SerialUtils cannot be resolved
+	SerialUtils cannot be resolved
+
+	at org.omron.collector.CollectorGuiApplication.refreshAvailablePorts(CollectorGuiApplication.java:608)
+	at org.omron.collector.CollectorGuiApplication.buildSerialPanel(CollectorGuiApplication.java:160)
+	at org.omron.collector.CollectorGuiApplication.buildUi(CollectorGuiApplication.java:129)
+	at org.omron.collector.CollectorGuiApplication.<init>(CollectorGuiApplication.java:114)
+	at org.omron.collector.CollectorGuiApplication.lambda$0(CollectorGuiApplication.java:108)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:313)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:770)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:740)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+[2026-02-15 23:25:56] Uncaught exception thread=AWT-EventQueue-0: Error - Unresolved compilation problems: 
+	SerialUtils cannot be resolved
+	SerialUtils cannot be resolved
+
+java.lang.Error: Unresolved compilation problems: 
+	SerialUtils cannot be resolved
+	SerialUtils cannot be resolved
+
+	at org.omron.collector.CollectorGuiApplication.refreshAvailablePorts(CollectorGuiApplication.java:608)
+	at org.omron.collector.CollectorGuiApplication.buildSerialPanel(CollectorGuiApplication.java:160)
+	at org.omron.collector.CollectorGuiApplication.buildUi(CollectorGuiApplication.java:129)
+	at org.omron.collector.CollectorGuiApplication.<init>(CollectorGuiApplication.java:114)
+	at org.omron.collector.CollectorGuiApplication.lambda$0(CollectorGuiApplication.java:108)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:313)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:770)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:740)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+[2026-02-15 23:32:06] Conectado ao CLP na porta COM1.
+[2026-02-15 23:32:14] Comunicacao encerrada.
+[2026-02-15 23:32:18] Conectado ao CLP na porta COM2.
+[2026-02-15 23:32:31] Comunicacao encerrada.
+[2026-02-15 23:32:38] Conectado ao CLP na porta COM4.
+[2026-02-15 23:32:44] Comunicacao encerrada.
+[2026-02-15 23:32:47] Conectado ao CLP na porta COM1.
+[2026-02-15 23:32:53] Comunicacao encerrada.
+[2026-02-15 23:32:56] Conectado ao CLP na porta COM1.

@@ -1,4 +1,4 @@
-﻿package org.omron.collector;
+package org.omron.collector;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -16,6 +16,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -29,6 +30,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.BadLocationException;
 
 import org.ctrl.DeviceImp;
@@ -46,7 +48,7 @@ import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
-import org.serial.SerialPortFactoryPJC;
+import org.serial.SerialPortFactoryJSerialComm;
 import org.serial.SerialPortHandlerPjcImp;
 import org.serial.SerialUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -78,7 +80,7 @@ public class CollectorGuiApplication {
     };
 
     private JFrame frame;
-    private JTextField portField;
+    private JComboBox<String> portCombo;
     private JComboBox<String> baudCombo;
     private JTextField dataBitsField;
     private JTextField stopBitsField;
@@ -137,7 +139,8 @@ public class CollectorGuiApplication {
         c.insets = new Insets(4, 6, 4, 6);
         c.fill = GridBagConstraints.HORIZONTAL;
 
-        portField = new JTextField("COM2");
+        portCombo = new JComboBox<>();
+        portCombo.setEditable(true);
         baudCombo = new JComboBox<>(new String[] { "4800", "9600", "14400", "19200", "38400", "57600", "115200" });
         baudCombo.setSelectedItem("9600");
         dataBitsField = new JTextField("7");
@@ -153,7 +156,8 @@ public class CollectorGuiApplication {
         c.gridy = row;
         panel.add(new JLabel("Porta"), c);
         c.gridx = 1;
-        panel.add(portField, c);
+        panel.add(portCombo, c);
+        refreshAvailablePorts("COM2");
 
         c.gridx = 2;
         panel.add(new JLabel("Baud"), c);
@@ -273,15 +277,24 @@ public class CollectorGuiApplication {
             return;
         }
 
+        String requestedPort = getSelectedPortName();
+        refreshAvailablePorts(requestedPort);
+        requestedPort = getSelectedPortName();
+        if (requestedPort.isEmpty()) {
+            log("Selecione uma porta serial valida.");
+            setCommStatus("PORTA INVALIDA");
+            return;
+        }
+
         try {
             SerialParameters sp = new SerialParameters();
-            sp.setDevice(portField.getText().trim());
+            sp.setDevice(requestedPort);
             sp.setBaudRate(SerialPort.BaudRate.getBaudRate(Integer.parseInt(baudCombo.getSelectedItem().toString())));
             sp.setDataBits(Integer.parseInt(dataBitsField.getText().trim()));
             sp.setStopBits(Integer.parseInt(stopBitsField.getText().trim()));
             sp.setParity(SerialPort.Parity.valueOf(parityCombo.getSelectedItem().toString()));
 
-            SerialUtils.setSerialPortFactory(new SerialPortFactoryPJC());
+            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
             comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
             comHandler.setProtocolHandler(new ToolbusProtocol());
             if (comHandler instanceof IComControl) {
@@ -298,8 +311,14 @@ public class CollectorGuiApplication {
             setCommStatus("CONECTADO");
             log("Conectado ao CLP na porta " + sp.getDevice() + ".");
         } catch (Exception ex) {
-            setCommStatus("ERRO");
-            log("Falha na conexao: " + ex.getMessage());
+            if (isSerialPortInUse(ex)) {
+                setCommStatus("PORTA EM USO");
+                log("Porta serial " + requestedPort + " em uso por outro processo.");
+                showPortInUseDialog(requestedPort);
+            } else {
+                setCommStatus("ERRO");
+                log("Falha na conexao: " + ex.getMessage());
+            }
             safeStopHandler();
         }
     }
@@ -581,6 +600,88 @@ public class CollectorGuiApplication {
             return;
         }
         SwingUtilities.invokeLater(task);
+    }
+
+    private void refreshAvailablePorts(String preferredPort) {
+        String selected = (preferredPort == null || preferredPort.trim().isEmpty()) ? getSelectedPortName() : preferredPort.trim();
+        try {
+            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
+            List<String> ports = SerialUtils.getPortIdentifiers();
+            portCombo.removeAllItems();
+            for (String port : ports) {
+                portCombo.addItem(port);
+            }
+            if (selected == null || selected.isEmpty()) {
+                if (ports.contains("COM2")) {
+                    selected = "COM2";
+                } else if (!ports.isEmpty()) {
+                    selected = ports.get(0);
+                }
+            } else if (!ports.contains(selected)) {
+                portCombo.addItem(selected);
+            }
+            if (selected != null && !selected.isEmpty()) {
+                portCombo.setSelectedItem(selected);
+            }
+        } catch (Exception ex) {
+            if (selected != null && !selected.isEmpty()) {
+                portCombo.removeAllItems();
+                portCombo.addItem(selected);
+                portCombo.setSelectedItem(selected);
+            }
+            String message = "Nao foi possivel listar portas automaticamente: " + ex.getMessage();
+            if (logArea != null) {
+                log(message);
+            } else {
+                appendPersistentLog(message, null);
+            }
+        }
+    }
+
+    private String getSelectedPortName() {
+        if (portCombo == null) {
+            return "";
+        }
+        Object selectedItem = portCombo.getSelectedItem();
+        if (selectedItem == null) {
+            return "";
+        }
+        String value = selectedItem.toString().trim();
+        if (value.isEmpty() && portCombo.getEditor() != null) {
+            java.awt.Component editorComponent = portCombo.getEditor().getEditorComponent();
+            if (editorComponent instanceof JTextComponent) {
+                value = ((JTextComponent) editorComponent).getText().trim();
+            }
+        }
+        return value;
+    }
+
+    private boolean isSerialPortInUse(Throwable error) {
+        Throwable current = error;
+        while (current != null) {
+            String className = current.getClass().getSimpleName();
+            if ("PortInUseException".equals(className)) {
+                return true;
+            }
+            String message = current.getMessage();
+            if (message != null) {
+                String normalized = message.toLowerCase();
+                if (normalized.contains("in use") || normalized.contains("em uso")) {
+                    return true;
+                }
+            }
+            current = current.getCause();
+        }
+        return false;
+    }
+
+    private void showPortInUseDialog(String portName) {
+        runOnEdt(() -> JOptionPane.showMessageDialog(
+                frame,
+                "A porta serial " + portName + " ja esta em uso por outro processo.\n"
+                        + "Feche o aplicativo que esta usando essa porta e tente novamente.",
+                "Porta em uso",
+                JOptionPane.WARNING_MESSAGE));
     }
 
     private void trimLogIfNeeded() {

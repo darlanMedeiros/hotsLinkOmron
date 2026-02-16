@@ -12,7 +12,7 @@ import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
-import org.serial.SerialPortFactoryPJC;
+import org.serial.SerialPortFactoryJSerialComm;
 import org.serial.SerialPortHandlerPjcImp;
 import org.serial.SerialUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -63,7 +63,7 @@ public class DmMonitorApplication {
             // =============================
             // SERIAL + PROTOCOLO
             // =============================
-            SerialUtils.setSerialPortFactory(new SerialPortFactoryPJC());
+            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
             comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
 
             ToolbusProtocol protocol = new ToolbusProtocol();
