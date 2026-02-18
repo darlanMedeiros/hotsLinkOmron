@@ -18,8 +18,8 @@ public class JdbcTagRepository implements TagRepository {
     private static final String SQL_INSERT =
             "INSERT INTO public.tag (name, device_id, memory_id) " +
             "VALUES (:name, :deviceId, :memoryId) " +
-            "ON CONFLICT (memory_id) DO UPDATE " +
-            "SET name = EXCLUDED.name, device_id = EXCLUDED.device_id " +
+            "ON CONFLICT (device_id, name) DO UPDATE " +
+            "SET memory_id = EXCLUDED.memory_id " +
             "RETURNING id, name, device_id, memory_id";
 
     private static final String SQL_FIND_BY_ID =

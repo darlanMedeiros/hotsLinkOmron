@@ -78,11 +78,8 @@ public class TagService {
     public Tag getOrCreateTag(DeviceInfo device, String tagName, String memoryName) {
         Objects.requireNonNull(device, "device");
         int deviceId = ensureDevice(device.getMnemonic(), device.getName(), device.getDescription());
-        Optional<Tag> existing = repository.findByDeviceAndName(deviceId, tagName);
-        if (existing.isPresent()) {
-            return existing.get();
-        }
         int memoryId = ensureMemory(deviceId, memoryName);
+        // Upsert by (device_id, tag name). If address/memory changes, mapping is updated.
         return repository.create(tagName, deviceId, memoryId);
     }
 
