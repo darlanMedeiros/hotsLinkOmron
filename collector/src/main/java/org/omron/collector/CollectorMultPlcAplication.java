@@ -118,8 +118,8 @@ public class CollectorMultPlcAplication {
     private void buildUi() {
         frame = new JFrame("Collector Multi PLC Monitor");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        frame.setSize(new Dimension(1120, 860));
-        frame.setLayout(new BorderLayout(10, 10));
+        frame.setSize(new Dimension(1366, 700));
+        frame.setLayout(new BorderLayout(5, 5));
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -129,15 +129,16 @@ public class CollectorMultPlcAplication {
 
         frame.add(buildSharedSerialPanel(), BorderLayout.NORTH);
 
-        JPanel container = new JPanel(new GridLayout(PLC_NODES, 1, 8, 8));
+        JPanel container = new JPanel(new GridLayout(PLC_NODES, 1, 4, 4));
+        container.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         for (int i = 0; i < PLC_NODES; i++) {
             PlcNodePanel panel = new PlcNodePanel(i + 1, i);
             plcPanels.add(panel);
             container.add(panel.panel);
         }
 
-        frame.add(new JScrollPane(container), BorderLayout.CENTER);
-        frame.add(buildLogPanel(), BorderLayout.SOUTH);
+        frame.add(container, BorderLayout.CENTER);
+        frame.add(buildLogPanel(), BorderLayout.EAST);
     }
 
     private JPanel buildSharedSerialPanel() {
@@ -164,7 +165,7 @@ public class CollectorMultPlcAplication {
         panel.add(new JLabel("Porta"), c);
         c.gridx = 1;
         panel.add(portCombo, c);
-        refreshAvailablePorts("COM2");
+        refreshAvailablePorts("COM1");
 
         c.gridx = 2;
         panel.add(new JLabel("Baud"), c);
@@ -218,6 +219,7 @@ public class CollectorMultPlcAplication {
     private JPanel buildLogPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Log Global"));
+        panel.setPreferredSize(new Dimension(600, 0));
         logArea = new JTextArea(10, 100);
         logArea.setEditable(false);
         panel.add(new JScrollPane(logArea), BorderLayout.CENTER);
@@ -267,7 +269,7 @@ public class CollectorMultPlcAplication {
         } catch (Exception ex) {
             if (isSerialPortInUse(ex)) {
                 setSerialStatus("PORTA EM USO");
-                log("Porta serial " + requestedPort + " em uso por outro processo.");
+                log("Porta serial " + requestedPort + " em uso por outro processo. Detalhe: " + ex.getMessage());
                 showPortInUseDialog(requestedPort);
             } else {
                 setSerialStatus("ERRO");
@@ -311,7 +313,7 @@ public class CollectorMultPlcAplication {
     }
 
     private void refreshNodeCommStatus() {
-        String shared = isSharedConnected() ? "SERIAL CONECTADA" : "SERIAL DESCONECTADA";
+        String shared = isSharedConnected() ? "CONECTADA" : "DESCONECTADA";
         for (PlcNodePanel panel : plcPanels) {
             panel.setCommStatus(shared);
         }
@@ -340,52 +342,66 @@ public class CollectorMultPlcAplication {
         private JPanel buildNodePanel(int defaultNodeId) {
             JPanel nodePanel = new JPanel(new GridBagLayout());
             nodePanel.setBorder(BorderFactory.createTitledBorder("PLC " + nodeIndex));
+            nodePanel.setPreferredSize(new Dimension(0, 88));
 
             GridBagConstraints c = new GridBagConstraints();
-            c.insets = new Insets(3, 5, 3, 5);
+            c.insets = new Insets(2, 4, 2, 4);
             c.fill = GridBagConstraints.HORIZONTAL;
 
             nodeField = new JTextField(Integer.toString(defaultNodeId));
             pollMsField = new JTextField("2000");
+            nodeField.setColumns(6);
+            pollMsField.setColumns(6);
 
             int row = 0;
+            c.weightx = 0;
             c.gridx = 0;
             c.gridy = row;
             nodePanel.add(new JLabel("Node ID"), c);
+            c.weightx = 0.2;
             c.gridx = 1;
             nodePanel.add(nodeField, c);
 
+            c.weightx = 0;
             c.gridx = 2;
             nodePanel.add(new JLabel("Poll (ms)"), c);
+            c.weightx = 0.2;
             c.gridx = 3;
             nodePanel.add(pollMsField, c);
 
             JButton startButton = new JButton("Iniciar monitor");
             startButton.addActionListener(e -> startMonitor());
+            c.weightx = 0.3;
             c.gridx = 4;
             nodePanel.add(startButton, c);
 
             JButton stopButton = new JButton("Parar monitor");
             stopButton.addActionListener(e -> stopMonitor());
+            c.weightx = 0.3;
             c.gridx = 5;
             nodePanel.add(stopButton, c);
 
             row++;
+            c.weightx = 0;
             c.gridx = 0;
             c.gridy = row;
             nodePanel.add(new JLabel("Comunicacao"), c);
-            commStatusLabel = new JLabel("SERIAL DESCONECTADA");
+            commStatusLabel = new JLabel("DESCONECTADA");
+            c.weightx = 0.35;
             c.gridx = 1;
             c.gridwidth = 2;
             nodePanel.add(commStatusLabel, c);
             c.gridwidth = 1;
 
-            c.gridx = 3;
+            c.weightx = 0;
+            c.gridx = 2;
             nodePanel.add(new JLabel("Monitor"), c);
             monitorStatusLabel = new JLabel("PARADO");
-            c.gridx = 4;
-            c.gridwidth = 2;
+            c.weightx = 0.65;
+            c.gridx = 3;
+            c.gridwidth = 3;
             nodePanel.add(monitorStatusLabel, c);
+            c.gridwidth = 1;
 
             return nodePanel;
         }
@@ -464,7 +480,7 @@ public class CollectorMultPlcAplication {
                         Thread.sleep(INTER_TAG_DELAY_MS);
                     }
 
-                    setCommStatus("SERIAL CONECTADA - ultimo ciclo " + LocalDateTime.now().format(TIME_FMT));
+                    setCommStatus("CONECTADA - ciclo " + LocalDateTime.now().format(TIME_FMT));
                     cycleCount++;
                     consecutiveErrors = 0;
                     if (cycleCount % HISTORY_PRUNE_INTERVAL_CYCLES == 0) {
@@ -495,9 +511,9 @@ public class CollectorMultPlcAplication {
 
             setMonitorStatus("PARADO");
             if (isSharedConnected()) {
-                setCommStatus("SERIAL CONECTADA");
+                setCommStatus("CONECTADA");
             } else {
-                setCommStatus("SERIAL DESCONECTADA");
+                setCommStatus("DESCONECTADA");
             }
             logPrefix("Monitor finalizado.");
         }
@@ -594,7 +610,8 @@ public class CollectorMultPlcAplication {
     }
 
     private void refreshAvailablePorts(String preferredPort) {
-        String selected = (preferredPort == null || preferredPort.trim().isEmpty()) ? getSelectedPortName() : preferredPort.trim();
+        String selected = (preferredPort == null || preferredPort.trim().isEmpty()) ? getSelectedPortName()
+                : preferredPort.trim();
         try {
             SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
             List<String> ports = SerialUtils.getPortIdentifiers();
@@ -603,8 +620,8 @@ public class CollectorMultPlcAplication {
                 portCombo.addItem(port);
             }
             if (selected == null || selected.isEmpty()) {
-                if (ports.contains("COM2")) {
-                    selected = "COM2";
+                if (ports.contains("COM1")) {
+                    selected = "COM1";
                 } else if (!ports.isEmpty()) {
                     selected = ports.get(0);
                 }
@@ -736,7 +753,11 @@ public class CollectorMultPlcAplication {
             String message = current.getMessage();
             if (message != null) {
                 String normalized = message.toLowerCase();
-                if (normalized.contains("in use") || normalized.contains("em uso")) {
+                if (normalized.contains("in use")
+                        || normalized.contains("em uso")
+                        || normalized.contains("busy")
+                        || normalized.contains("access denied")
+                        || normalized.contains("acesso negado")) {
                     return true;
                 }
             }

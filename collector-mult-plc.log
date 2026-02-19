@@ -8676,3 +8676,425 @@
 [2026-02-18 06:15:12] Comunicacao serial compartilhada encerrada.
 [2026-02-18 06:15:19] Encerramento solicitado pelo usuario.
 [2026-02-18 06:15:19] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:18:07] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-18 20:18:30] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-18 20:18:31] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [54994, 0].
+[2026-02-18 20:18:32] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [55623, 0].
+[2026-02-18 20:18:34] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55252, 0].
+[2026-02-18 20:18:35] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [676, 0].
+[2026-02-18 20:18:36] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-18 20:18:38] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [679, 0].
+[2026-02-18 20:18:39] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-18 20:18:41] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [682, 0].
+[2026-02-18 20:18:42] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-18 20:18:44] [PLC 1] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [0, 0].
+[2026-02-18 20:18:45] [PLC 1] Alteracao salva: TAG QUALIDADE42 (DM 20..21) = [0, 0].
+[2026-02-18 20:18:47] [PLC 1] Alteracao salva: TAG QUALIDADE43 (DM 22..23) = [0, 0].
+[2026-02-18 20:18:50] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55032, 0].
+[2026-02-18 20:18:51] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [55661, 0].
+[2026-02-18 20:18:52] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55290, 0].
+[2026-02-18 20:18:54] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [695, 0].
+[2026-02-18 20:18:56] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [698, 0].
+[2026-02-18 20:18:59] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [700, 0].
+[2026-02-18 20:19:06] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55062, 0].
+[2026-02-18 20:19:08] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [55695, 0].
+[2026-02-18 20:19:09] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55322, 0].
+[2026-02-18 20:19:10] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [712, 0].
+[2026-02-18 20:19:13] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [714, 0].
+[2026-02-18 20:19:16] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [717, 0].
+[2026-02-18 20:19:23] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55096, 0].
+[2026-02-18 20:19:25] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [55729, 0].
+[2026-02-18 20:19:26] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55354, 0].
+[2026-02-18 20:19:28] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [729, 0].
+[2026-02-18 20:19:30] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [732, 0].
+[2026-02-18 20:19:32] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [734, 0].
+[2026-02-18 20:19:40] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55124, 0].
+[2026-02-18 20:19:42] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [55763, 0].
+[2026-02-18 20:19:43] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55388, 0].
+[2026-02-18 20:19:44] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [746, 0].
+[2026-02-18 20:19:47] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [748, 0].
+[2026-02-18 20:19:49] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [751, 0].
+[2026-02-18 20:19:57] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55158, 0].
+[2026-02-18 20:19:58] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [55795, 0].
+[2026-02-18 20:19:59] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55420, 0].
+[2026-02-18 20:20:00] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [762, 0].
+[2026-02-18 20:20:03] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [764, 0].
+[2026-02-18 20:20:05] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [767, 0].
+[2026-02-18 20:20:13] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55190, 0].
+[2026-02-18 20:20:14] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [55829, 0].
+[2026-02-18 20:20:16] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55454, 0].
+[2026-02-18 20:20:17] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [779, 0].
+[2026-02-18 20:20:19] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [781, 0].
+[2026-02-18 20:20:22] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [783, 0].
+[2026-02-18 20:20:29] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55224, 0].
+[2026-02-18 20:20:30] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [55861, 0].
+[2026-02-18 20:20:32] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55486, 0].
+[2026-02-18 20:20:33] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [795, 0].
+[2026-02-18 20:20:35] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [797, 0].
+[2026-02-18 20:20:38] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [799, 0].
+[2026-02-18 20:20:45] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55256, 0].
+[2026-02-18 20:20:47] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [55893, 0].
+[2026-02-18 20:20:48] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55514, 0].
+[2026-02-18 20:20:49] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [811, 0].
+[2026-02-18 20:20:51] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [813, 0].
+[2026-02-18 20:20:54] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [815, 0].
+[2026-02-18 20:21:01] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55286, 0].
+[2026-02-18 20:21:03] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [55925, 0].
+[2026-02-18 20:21:04] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55544, 0].
+[2026-02-18 20:21:05] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [827, 0].
+[2026-02-18 20:21:08] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [829, 0].
+[2026-02-18 20:21:10] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [832, 0].
+[2026-02-18 20:21:17] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55318, 0].
+[2026-02-18 20:21:19] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [55957, 0].
+[2026-02-18 20:21:20] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55576, 0].
+[2026-02-18 20:21:21] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [843, 0].
+[2026-02-18 20:21:24] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [845, 0].
+[2026-02-18 20:21:26] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [848, 0].
+[2026-02-18 20:21:34] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55350, 0].
+[2026-02-18 20:21:35] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [55989, 0].
+[2026-02-18 20:21:36] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55608, 0].
+[2026-02-18 20:21:37] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [859, 0].
+[2026-02-18 20:21:40] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [861, 0].
+[2026-02-18 20:21:42] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [864, 0].
+[2026-02-18 20:21:50] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55380, 0].
+[2026-02-18 20:21:51] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [56023, 0].
+[2026-02-18 20:21:53] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55642, 0].
+[2026-02-18 20:21:54] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [875, 0].
+[2026-02-18 20:21:56] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [878, 0].
+[2026-02-18 20:21:59] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [880, 0].
+[2026-02-18 20:22:06] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55412, 0].
+[2026-02-18 20:22:07] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [56053, 0].
+[2026-02-18 20:22:09] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55674, 0].
+[2026-02-18 20:22:10] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [892, 0].
+[2026-02-18 20:22:12] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [894, 0].
+[2026-02-18 20:22:15] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [896, 0].
+[2026-02-18 20:22:22] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55444, 0].
+[2026-02-18 20:22:23] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [56085, 0].
+[2026-02-18 20:22:25] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [55706, 0].
+[2026-02-18 20:22:26] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [908, 0].
+[2026-02-18 20:22:28] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [910, 0].
+[2026-02-18 20:22:31] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [912, 0].
+[2026-02-18 20:22:38] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [55474, 0].
+[2026-02-18 20:22:40] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [56117, 0].
+[2026-02-18 20:22:40] [PLC 1] Monitor finalizado.
+[2026-02-18 20:22:40] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:22:50] Encerramento solicitado pelo usuario.
+[2026-02-18 20:22:50] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:35:59] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:36:03] Encerramento solicitado pelo usuario.
+[2026-02-18 20:36:03] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:37:31] Encerramento solicitado pelo usuario.
+[2026-02-18 20:37:31] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:41:08] Encerramento solicitado pelo usuario.
+[2026-02-18 20:41:08] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:48:31] Encerramento solicitado pelo usuario.
+[2026-02-18 20:48:31] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:51:23] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-18 20:51:33] [PLC 1] Conecte a serial compartilhada antes de iniciar o monitor.
+[2026-02-18 20:51:43] Encerramento solicitado pelo usuario.
+[2026-02-18 20:51:43] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:51:52] Encerramento solicitado pelo usuario.
+[2026-02-18 20:51:52] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:51:59] Encerramento solicitado pelo usuario.
+[2026-02-18 20:51:59] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:52:14] Encerramento solicitado pelo usuario.
+[2026-02-18 20:52:14] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:53:22] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-18 20:55:04] Encerramento solicitado pelo usuario.
+[2026-02-18 20:55:04] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:55:49] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-18 20:56:23] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:56:41] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-18 20:56:52] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:56:55] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-18 20:57:03] Comunicacao serial compartilhada encerrada.
+[2026-02-18 20:57:11] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-18 20:57:20] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-18 20:57:21] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [59526, 0].
+[2026-02-18 20:57:22] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [60263, 0].
+[2026-02-18 20:57:23] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [59794, 0].
+[2026-02-18 20:57:25] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [3007, 0].
+[2026-02-18 20:57:26] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-18 20:57:28] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [3009, 0].
+[2026-02-18 20:57:29] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-18 20:57:31] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [3012, 0].
+[2026-02-18 20:57:32] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-18 20:57:34] [PLC 1] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [0, 0].
+[2026-02-18 20:57:35] [PLC 1] Alteracao salva: TAG QUALIDADE42 (DM 20..21) = [0, 0].
+[2026-02-18 20:57:36] [PLC 1] Monitor finalizado.
+[2026-02-18 20:57:36] Comunicacao serial compartilhada encerrada.
+[2026-02-18 21:06:28] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-18 21:06:33] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-18 21:06:53] [PLC 1] Erro no monitoramento:  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-18 21:07:14] [PLC 1] Erro no monitoramento:  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-18 21:07:17] [PLC 1] Erro no monitoramento:  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-18 21:07:23] [PLC 1] Erro no monitoramento:  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-18 21:07:30] Encerramento solicitado pelo usuario.
+[2026-02-18 21:07:30] [PLC 1] Monitor finalizado.
+[2026-02-18 21:07:30] Comunicacao serial compartilhada encerrada.
+[2026-02-18 21:07:41] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-18 21:07:48] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-18 21:08:08] [PLC 1] Erro no monitoramento:  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-18 21:08:16] [PLC 2] Monitor iniciado para 12 TAGs.
+[2026-02-18 21:08:29] [PLC 1] Erro no monitoramento:  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-18 21:08:32] [PLC 1] Monitor finalizado.
+[2026-02-18 21:08:50] [PLC 2] Erro no monitoramento:  Maximum number of retries reached: 1 for:  dev:PLC id: 1 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-18 21:09:11] [PLC 2] Erro no monitoramento:  Maximum number of retries reached: 1 for:  dev:PLC id: 1 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-18 21:09:34] [PLC 2] Erro no monitoramento:  Maximum number of retries reached: 1 for:  dev:PLC id: 1 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-18 21:09:34] Comunicacao serial compartilhada encerrada.
+[2026-02-18 21:09:40] Encerramento cancelado.
+[2026-02-18 21:09:40] [PLC 2] Monitor finalizado.
+[2026-02-18 21:09:44] Comunicacao serial compartilhada encerrada.
+[2026-02-18 21:09:48] Encerramento solicitado pelo usuario.
+[2026-02-18 21:09:48] Comunicacao serial compartilhada encerrada.
+[2026-02-18 21:13:02] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-18 21:13:08] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-18 21:13:09] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-18 21:13:10] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62101, 0].
+[2026-02-18 21:13:12] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [61634, 0].
+[2026-02-18 21:13:13] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [3930, 0].
+[2026-02-18 21:13:15] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-18 21:13:16] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [3932, 0].
+[2026-02-18 21:13:18] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-18 21:13:19] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [3935, 0].
+[2026-02-18 21:13:20] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-18 21:13:22] [PLC 1] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [0, 0].
+[2026-02-18 21:13:23] [PLC 1] Alteracao salva: TAG QUALIDADE42 (DM 20..21) = [0, 0].
+[2026-02-18 21:13:25] [PLC 1] Alteracao salva: TAG QUALIDADE43 (DM 22..23) = [0, 0].
+[2026-02-18 21:13:29] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62139, 0].
+[2026-02-18 21:13:30] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [61672, 0].
+[2026-02-18 21:13:32] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [3948, 0].
+[2026-02-18 21:13:34] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [3951, 0].
+[2026-02-18 21:13:35] [PLC 1] Monitor finalizado.
+[2026-02-18 21:14:06] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-18 21:14:06] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-18 21:14:07] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62217, 0].
+[2026-02-18 21:14:09] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [61748, 0].
+[2026-02-18 21:14:10] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [3987, 0].
+[2026-02-18 21:14:11] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-18 21:14:12] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [3989, 0].
+[2026-02-18 21:14:14] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-18 21:14:15] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [3992, 0].
+[2026-02-18 21:14:16] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-18 21:14:17] [PLC 1] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [0, 0].
+[2026-02-18 21:14:19] [PLC 1] Alteracao salva: TAG QUALIDADE42 (DM 20..21) = [0, 0].
+[2026-02-18 21:14:20] [PLC 1] Alteracao salva: TAG QUALIDADE43 (DM 22..23) = [0, 0].
+[2026-02-18 21:14:24] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62247, 0].
+[2026-02-18 21:14:25] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [61782, 0].
+[2026-02-18 21:14:27] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4003, 0].
+[2026-02-18 21:14:29] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4006, 0].
+[2026-02-18 21:14:31] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4008, 0].
+[2026-02-18 21:14:40] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62279, 0].
+[2026-02-18 21:14:41] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [61810, 0].
+[2026-02-18 21:14:42] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4019, 0].
+[2026-02-18 21:14:45] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4021, 0].
+[2026-02-18 21:14:47] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4024, 0].
+[2026-02-18 21:14:56] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62311, 0].
+[2026-02-18 21:14:57] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [61842, 0].
+[2026-02-18 21:14:58] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4035, 0].
+[2026-02-18 21:15:01] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4037, 0].
+[2026-02-18 21:15:03] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4040, 0].
+[2026-02-18 21:15:12] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62341, 0].
+[2026-02-18 21:15:13] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [61874, 0].
+[2026-02-18 21:15:14] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4051, 0].
+[2026-02-18 21:15:17] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4053, 0].
+[2026-02-18 21:15:19] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4056, 0].
+[2026-02-18 21:15:28] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62373, 0].
+[2026-02-18 21:15:29] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [61906, 0].
+[2026-02-18 21:15:30] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4067, 0].
+[2026-02-18 21:15:33] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4069, 0].
+[2026-02-18 21:15:35] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4072, 0].
+[2026-02-18 21:15:44] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62405, 0].
+[2026-02-18 21:15:45] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [61938, 0].
+[2026-02-18 21:15:46] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4083, 0].
+[2026-02-18 21:15:48] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4085, 0].
+[2026-02-18 21:15:51] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4087, 0].
+[2026-02-18 21:15:59] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62437, 0].
+[2026-02-18 21:16:01] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [61970, 0].
+[2026-02-18 21:16:02] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4099, 0].
+[2026-02-18 21:16:05] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4101, 0].
+[2026-02-18 21:16:07] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4104, 0].
+[2026-02-18 21:16:16] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62467, 0].
+[2026-02-18 21:16:17] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62000, 0].
+[2026-02-18 21:16:19] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4115, 0].
+[2026-02-18 21:16:21] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4118, 0].
+[2026-02-18 21:16:23] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4120, 0].
+[2026-02-18 21:16:32] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62497, 0].
+[2026-02-18 21:16:33] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62030, 0].
+[2026-02-18 21:16:34] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4131, 0].
+[2026-02-18 21:16:37] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4133, 0].
+[2026-02-18 21:16:39] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4136, 0].
+[2026-02-18 21:16:48] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62529, 0].
+[2026-02-18 21:16:49] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62064, 0].
+[2026-02-18 21:16:51] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4147, 0].
+[2026-02-18 21:16:53] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4150, 0].
+[2026-02-18 21:16:56] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4152, 0].
+[2026-02-18 21:17:04] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62563, 0].
+[2026-02-18 21:17:06] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62096, 0].
+[2026-02-18 21:17:07] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4164, 0].
+[2026-02-18 21:17:09] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4166, 0].
+[2026-02-18 21:17:12] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4168, 0].
+[2026-02-18 21:17:20] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62595, 0].
+[2026-02-18 21:17:22] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62128, 0].
+[2026-02-18 21:17:23] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4180, 0].
+[2026-02-18 21:17:25] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4182, 0].
+[2026-02-18 21:17:28] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4184, 0].
+[2026-02-18 21:17:36] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62627, 0].
+[2026-02-18 21:17:38] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62160, 0].
+[2026-02-18 21:17:39] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4196, 0].
+[2026-02-18 21:17:41] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4198, 0].
+[2026-02-18 21:17:44] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4200, 0].
+[2026-02-18 21:17:52] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62655, 0].
+[2026-02-18 21:17:54] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62192, 0].
+[2026-02-18 21:17:55] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4212, 0].
+[2026-02-18 21:17:57] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4214, 0].
+[2026-02-18 21:18:00] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4217, 0].
+[2026-02-18 21:18:08] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62687, 0].
+[2026-02-18 21:18:10] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62224, 0].
+[2026-02-18 21:18:11] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4228, 0].
+[2026-02-18 21:18:13] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4230, 0].
+[2026-02-18 21:18:16] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4232, 0].
+[2026-02-18 21:18:24] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62719, 0].
+[2026-02-18 21:18:26] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62256, 0].
+[2026-02-18 21:18:27] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4244, 0].
+[2026-02-18 21:18:29] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4246, 0].
+[2026-02-18 21:18:32] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4248, 0].
+[2026-02-18 21:18:40] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62751, 0].
+[2026-02-18 21:18:42] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62288, 0].
+[2026-02-18 21:18:43] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4260, 0].
+[2026-02-18 21:18:45] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4262, 0].
+[2026-02-18 21:18:48] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4264, 0].
+[2026-02-18 21:18:56] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62781, 0].
+[2026-02-18 21:18:58] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62320, 0].
+[2026-02-18 21:18:59] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4276, 0].
+[2026-02-18 21:19:01] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4278, 0].
+[2026-02-18 21:19:04] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4280, 0].
+[2026-02-18 21:19:12] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62813, 0].
+[2026-02-18 21:19:14] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62352, 0].
+[2026-02-18 21:19:15] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4292, 0].
+[2026-02-18 21:19:17] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4294, 0].
+[2026-02-18 21:19:20] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4296, 0].
+[2026-02-18 21:19:29] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62845, 0].
+[2026-02-18 21:19:30] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62384, 0].
+[2026-02-18 21:19:31] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4308, 0].
+[2026-02-18 21:19:34] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4310, 0].
+[2026-02-18 21:19:36] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4313, 0].
+[2026-02-18 21:19:45] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62877, 0].
+[2026-02-18 21:19:46] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62416, 0].
+[2026-02-18 21:19:47] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4324, 0].
+[2026-02-18 21:19:49] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4326, 0].
+[2026-02-18 21:19:52] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4328, 0].
+[2026-02-18 21:20:00] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62909, 0].
+[2026-02-18 21:20:02] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62446, 0].
+[2026-02-18 21:20:03] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4340, 0].
+[2026-02-18 21:20:05] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4342, 0].
+[2026-02-18 21:20:08] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4344, 0].
+[2026-02-18 21:20:16] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62939, 0].
+[2026-02-18 21:20:17] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62478, 0].
+[2026-02-18 21:20:19] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4355, 0].
+[2026-02-18 21:20:21] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4358, 0].
+[2026-02-18 21:20:23] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4360, 0].
+[2026-02-18 21:20:32] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [62971, 0].
+[2026-02-18 21:20:33] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62510, 0].
+[2026-02-18 21:20:35] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4371, 0].
+[2026-02-18 21:20:37] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4374, 0].
+[2026-02-18 21:20:40] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4376, 0].
+[2026-02-18 21:20:48] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63005, 0].
+[2026-02-18 21:20:49] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62542, 0].
+[2026-02-18 21:20:51] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4387, 0].
+[2026-02-18 21:20:53] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4390, 0].
+[2026-02-18 21:20:55] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4392, 0].
+[2026-02-18 21:21:04] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63035, 0].
+[2026-02-18 21:21:05] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62574, 0].
+[2026-02-18 21:21:07] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4403, 0].
+[2026-02-18 21:21:09] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4406, 0].
+[2026-02-18 21:21:11] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4408, 0].
+[2026-02-18 21:21:20] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63067, 0].
+[2026-02-18 21:21:21] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62606, 0].
+[2026-02-18 21:21:23] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4419, 0].
+[2026-02-18 21:21:25] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4422, 0].
+[2026-02-18 21:21:27] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4424, 0].
+[2026-02-18 21:21:36] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63099, 0].
+[2026-02-18 21:21:37] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62638, 0].
+[2026-02-18 21:21:39] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4435, 0].
+[2026-02-18 21:21:41] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4438, 0].
+[2026-02-18 21:21:43] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4440, 0].
+[2026-02-18 21:21:52] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63131, 0].
+[2026-02-18 21:21:53] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62668, 0].
+[2026-02-18 21:21:54] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4451, 0].
+[2026-02-18 21:21:57] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4453, 0].
+[2026-02-18 21:21:59] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4456, 0].
+[2026-02-18 21:22:08] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63163, 0].
+[2026-02-18 21:22:09] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62700, 0].
+[2026-02-18 21:22:10] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4467, 0].
+[2026-02-18 21:22:12] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4469, 0].
+[2026-02-18 21:22:15] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4471, 0].
+[2026-02-18 21:22:24] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63195, 0].
+[2026-02-18 21:22:25] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62732, 0].
+[2026-02-18 21:22:26] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4483, 0].
+[2026-02-18 21:22:29] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4486, 0].
+[2026-02-18 21:22:31] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4488, 0].
+[2026-02-18 21:22:40] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63227, 0].
+[2026-02-18 21:22:41] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62764, 0].
+[2026-02-18 21:22:42] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4499, 0].
+[2026-02-18 21:22:45] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4501, 0].
+[2026-02-18 21:22:47] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4504, 0].
+[2026-02-18 21:22:56] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63259, 0].
+[2026-02-18 21:22:57] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62796, 0].
+[2026-02-18 21:22:58] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4515, 0].
+[2026-02-18 21:23:01] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4517, 0].
+[2026-02-18 21:23:03] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4520, 0].
+[2026-02-18 21:23:12] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63291, 0].
+[2026-02-18 21:23:13] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62828, 0].
+[2026-02-18 21:23:14] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4531, 0].
+[2026-02-18 21:23:17] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4533, 0].
+[2026-02-18 21:23:19] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4536, 0].
+[2026-02-18 21:23:28] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63323, 0].
+[2026-02-18 21:23:29] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62860, 0].
+[2026-02-18 21:23:30] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4547, 0].
+[2026-02-18 21:23:33] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4549, 0].
+[2026-02-18 21:23:35] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4552, 0].
+[2026-02-18 21:23:44] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63351, 0].
+[2026-02-18 21:23:45] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62892, 0].
+[2026-02-18 21:23:46] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4563, 0].
+[2026-02-18 21:23:48] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4565, 0].
+[2026-02-18 21:23:51] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4567, 0].
+[2026-02-18 21:24:00] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63383, 0].
+[2026-02-18 21:24:01] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62922, 0].
+[2026-02-18 21:24:02] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4579, 0].
+[2026-02-18 21:24:05] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4581, 0].
+[2026-02-18 21:24:07] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4584, 0].
+[2026-02-18 21:24:15] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63415, 0].
+[2026-02-18 21:24:17] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62954, 0].
+[2026-02-18 21:24:18] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4595, 0].
+[2026-02-18 21:24:21] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4597, 0].
+[2026-02-18 21:24:23] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4600, 0].
+[2026-02-18 21:24:32] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63447, 0].
+[2026-02-18 21:24:33] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [62986, 0].
+[2026-02-18 21:24:34] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4611, 0].
+[2026-02-18 21:24:36] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4613, 0].
+[2026-02-18 21:24:39] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4615, 0].
+[2026-02-18 21:24:48] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63477, 0].
+[2026-02-18 21:24:49] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [63018, 0].
+[2026-02-18 21:24:50] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4627, 0].
+[2026-02-18 21:24:53] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4629, 0].
+[2026-02-18 21:24:55] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4632, 0].
+[2026-02-18 21:25:04] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63509, 0].
+[2026-02-18 21:25:05] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [63050, 0].
+[2026-02-18 21:25:06] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4643, 0].
+[2026-02-18 21:25:08] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4645, 0].
+[2026-02-18 21:25:11] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4648, 0].
+[2026-02-18 21:25:19] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63541, 0].
+[2026-02-18 21:25:21] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [63082, 0].
+[2026-02-18 21:25:22] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4659, 0].
+[2026-02-18 21:25:25] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4661, 0].
+[2026-02-18 21:25:27] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4664, 0].
+[2026-02-18 21:25:36] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [63573, 0].
+[2026-02-18 21:25:37] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [63114, 0].
+[2026-02-18 21:25:38] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [4675, 0].
+[2026-02-18 21:25:41] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [4677, 0].
+[2026-02-18 21:25:43] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [4680, 0].
+[2026-02-18 21:25:51] [PLC 1] Monitor finalizado.
+[2026-02-18 21:25:51] Comunicacao serial compartilhada encerrada.
+[2026-02-18 21:25:56] Encerramento solicitado pelo usuario.
+[2026-02-18 21:25:56] Comunicacao serial compartilhada encerrada.

@@ -51,19 +51,20 @@ BEGIN
  Bar[2]:=
  BEGIN
   BarID:=59414;
-  Pos:="689 5";
+  Visible:=0;
+  Pos:="564 5";
   Docking:=1;
   MRUDockID:=59422;
-  MRUDockPos:="689 5 943 176";
+  MRUDockPos:="564 5 958 150";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="160546";
+  PctWidth:="782352";
   MRUFloat:="300 180";
-  MRUHorzDock:="254 171";
+  MRUHorzDock:="1064 194";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -75,19 +76,19 @@ BEGIN
  Bar[3]:=
  BEGIN
   BarID:=59412;
-  Pos:="949 5";
+  Pos:="347 5";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="949 5 1600 176";
+  MRUDockPos:="347 5 1366 199";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="409752";
+  PctWidth:="749387";
   MRUFloat:="300 180";
-  MRUHorzDock:="651 171";
+  MRUHorzDock:="1019 194";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -110,9 +111,9 @@ BEGIN
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="751889";
+  PctWidth:="1448301";
   MRUFloat:="300 180";
-  MRUHorzDock:="1194 171";
+  MRUHorzDock:="1961 194";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -127,7 +128,7 @@ BEGIN
   Pos:="0 -2";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="0 -2 308 500";
+  MRUDockPos:="0 -2 237 345";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=8084;
@@ -137,7 +138,7 @@ BEGIN
   PctWidth:="1000000";
   MRUFloat:="300 180";
   MRUHorzDock:="300 180";
-  MRUVertDock:="308 502";
+  MRUVertDock:="237 347";
   MRUDockingState:=0;
   DockingStyle:=61440;
   TypeID:=0;
@@ -151,16 +152,16 @@ BEGIN
   Pos:="1 5";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="1 5 683 176";
+  MRUDockPos:="1 5 341 199";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="429701";
+  PctWidth:="250612";
   MRUFloat:="300 180";
-  MRUHorzDock:="682 171";
+  MRUHorzDock:="340 194";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -179,39 +180,25 @@ BEGIN
  Item[2]:=12;
  Item[3]:=13;
  ItemCount:=4;
- Sumcheck:=47;
+ Sumcheck:=48;
  Selected:=18;
 END;
 Frame[0]:=
 BEGIN
- Norm:="0078 0078 1001 0398";
+ Norm:="0104 0104 1027 0424";
  Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1.Sections.Reset!Reset";
+ Access:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1.Sections.PH30!PH30";
  Type:=1;
  Views:=
  BEGIN
   View[0]:=
   BEGIN
+   Yscroll:=4;
   END;
   nViews:=1;
  END;
 END;
 Frame[1]:=
-BEGIN
- Norm:="0130 0130 1053 0450";
- Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1.Sections.PH31!PH31";
- Type:=1;
- Views:=
- BEGIN
-  View[0]:=
-  BEGIN
-   Yscroll:=2;
-  END;
-  nViews:=1;
- END;
-END;
-Frame[2]:=
 BEGIN
  Norm:="0052 0052 0949 0416";
  Min:="-001 -001";
@@ -234,29 +221,13 @@ BEGIN
     Width[4]:=84;
     Width[5]:=48;
     Width[6]:=200;
-    SortCol:=6;
-    SortAscending:=false;
+    SortCol:=2;
    END;
   END;
   nViews:=1;
  END;
 END;
-Frame[3]:=
-BEGIN
- Norm:="0104 0104 1027 0424";
- Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1.Sections.PH30!PH30";
- Type:=1;
- Views:=
- BEGIN
-  View[0]:=
-  BEGIN
-   Yscroll:=4;
-  END;
-  nViews:=1;
- END;
-END;
-Frame[4]:=
+Frame[2]:=
 BEGIN
  Norm:="0078 0078 1208 0422";
  Min:="-001 -001";
@@ -271,7 +242,51 @@ BEGIN
   nViews:=1;
  END;
 END;
+Frame[3]:=
+BEGIN
+ Norm:="0078 0078 1001 0398";
+ Min:="-001 -001";
+ Access:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1.Sections.Reset!Reset";
+ Type:=1;
+ Views:=
+ BEGIN
+  View[0]:=
+  BEGIN
+  END;
+  nViews:=1;
+ END;
+END;
+Frame[4]:=
+BEGIN
+ Norm:="0130 0130 1053 0450";
+ Min:="-001 -001";
+ Access:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1.Sections.PH31!PH31";
+ Type:=1;
+ Views:=
+ BEGIN
+  View[0]:=
+  BEGIN
+   Yscroll:=6;
+  END;
+  nViews:=1;
+ END;
+END;
 Frame[5]:=
+BEGIN
+ Norm:="0052 0052 0949 0316";
+ Min:="-001 -001";
+ Access:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1.Sections.RollerTeste!RollerTeste";
+ Type:=1;
+ Views:=
+ BEGIN
+  View[0]:=
+  BEGIN
+   Yscroll:=10;
+  END;
+  nViews:=1;
+ END;
+END;
+Frame[6]:=
 BEGIN
  Max:=true;
  Norm:="0104 0104 1234 0448";
@@ -282,12 +297,12 @@ BEGIN
  BEGIN
   View[0]:=
   BEGIN
-   Yscroll:=4;
+   Yscroll:=6;
   END;
   nViews:=1;
  END;
 END;
-nFrames:=6;
+nFrames:=7;
 WatchWindow:=
 BEGIN
  NumWatch:=3;
@@ -300,11 +315,11 @@ BEGIN
   ColumnWidth[3]:=60;
   ColumnWidth[4]:=60;
   ColumnWidth[5]:=60;
-  NumWatches:=4;
+  NumWatches:=14;
   Watch[0]:=
   BEGIN
    PLC:="NewPLC1";
-   Reference:="numberCavidPH29";
+   Reference:="NewProgram1.numberCavidPH29";
    TypeKnown:=true;
    Path:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1!NewProgram1.Symbols";
    Type:=200;
@@ -320,12 +335,92 @@ BEGIN
   Watch[2]:=
   BEGIN
    PLC:="NewPLC1";
-   Reference:="codFormPH31";
+   Reference:="NewProgram1.codFormPH31";
    TypeKnown:=true;
    Path:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1!NewProgram1.Symbols";
    Type:=200;
   END;
   Watch[3]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="NewProgram1.pecaRoller41";
+   TypeKnown:=true;
+   Path:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1!NewProgram1.Symbols";
+   Type:=200;
+  END;
+  Watch[4]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="DM107";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.NewResource1.Symbols";
+   Type:=200;
+  END;
+  Watch[5]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="NewProgram1.pecaRoller42";
+   TypeKnown:=true;
+   Path:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1!NewProgram1.Symbols";
+   Type:=200;
+  END;
+  Watch[6]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="DM109";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.NewResource1.Symbols";
+   Type:=200;
+  END;
+  Watch[7]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="NewProgram1.pecaRoller43";
+   TypeKnown:=true;
+   Path:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1!NewProgram1.Symbols";
+   Type:=200;
+  END;
+  Watch[8]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="pecaPH29";
+   TypeKnown:=true;
+   Path:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1!NewProgram1.Symbols";
+   Type:=200;
+  END;
+  Watch[9]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="DM101";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.NewResource1.Symbols";
+   Type:=200;
+  END;
+  Watch[10]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="pecaPH30";
+   TypeKnown:=true;
+   Path:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1!NewProgram1.Symbols";
+   Type:=200;
+  END;
+  Watch[11]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="DM103";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.NewResource1.Symbols";
+   Type:=200;
+  END;
+  Watch[12]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="DM99";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.NewResource1.Symbols";
+   Type:=200;
+  END;
+  Watch[13]:=
   BEGIN
   END;
  END;
