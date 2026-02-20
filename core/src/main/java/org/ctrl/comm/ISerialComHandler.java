@@ -5,7 +5,7 @@
  */
 package org.ctrl.comm;
 
-import org.serial.SerialParameters;
+import org.ctrl.comm.serial.SerialParameters;
 
 /**
  *

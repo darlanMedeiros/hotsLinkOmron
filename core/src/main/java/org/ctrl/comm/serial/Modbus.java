@@ -1,4 +1,4 @@
-package org.serial;
+package org.ctrl.comm.serial;
 
 import java.util.logging.Handler;
 import java.util.logging.Level;

@@ -5,14 +5,14 @@ import org.ctrl.DeviceRegisterImp;
 import org.ctrl.IDevice;
 import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.IComControl;
+import org.ctrl.comm.serial.SerialParameters;
+import org.ctrl.comm.serial.SerialPort;
+import org.ctrl.comm.serial.SerialPortFactoryJSerialComm;
+import org.ctrl.comm.serial.SerialPortHandlerImp;
+import org.ctrl.comm.serial.SerialUtils;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteDM;
 import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
-import org.serial.SerialParameters;
-import org.serial.SerialPort;
-import org.serial.SerialPortFactoryJSerialComm;
-import org.serial.SerialPortHandlerImp;
-import org.serial.SerialUtils;
 
 /**
  * Writes random values 0..100 to DM 0..100.

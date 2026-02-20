@@ -1,4 +1,4 @@
-package org.serial;
+package org.ctrl.comm.serial;
 
 public class ValidatorSerialPortFactory implements Comparable<ValidatorSerialPortFactory> {
     final private String factoryClassname;

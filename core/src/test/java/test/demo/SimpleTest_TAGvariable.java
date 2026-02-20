@@ -8,18 +8,18 @@ import org.ctrl.DeviceImp;
 import org.ctrl.DeviceRegisterImp;
 import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.IComControl;
+import org.ctrl.comm.serial.SerialParameters;
+import org.ctrl.comm.serial.SerialPort;
+import org.ctrl.comm.serial.SerialPortException;
+import org.ctrl.comm.serial.SerialPortFactoryJSerialComm;
+import org.ctrl.comm.serial.SerialPortHandlerImp;
+import org.ctrl.comm.serial.SerialUtils;
 import org.ctrl.extras.MemoryMap;
 import org.ctrl.extras.MemoryVariable;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteDM;
 import org.ctrl.vend.omron.toolbus.memory.MemoryRead;
-import org.serial.SerialParameters;
-import org.serial.SerialPort;
-import org.serial.SerialPortException;
-import org.serial.SerialPortFactoryJSerialComm;
-import org.serial.SerialPortHandlerImp;
-import org.serial.SerialUtils;
 
 public class SimpleTest_TAGvariable {
 

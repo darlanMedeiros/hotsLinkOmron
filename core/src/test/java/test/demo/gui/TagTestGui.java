@@ -25,6 +25,11 @@ import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.ComException;
 import org.ctrl.comm.IComControl;
 import org.ctrl.comm.IStatusCode;
+import org.ctrl.comm.serial.SerialParameters;
+import org.ctrl.comm.serial.SerialPort;
+import org.ctrl.comm.serial.SerialPortFactoryJSerialComm;
+import org.ctrl.comm.serial.SerialPortHandlerImp;
+import org.ctrl.comm.serial.SerialUtils;
 import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.service.DmValueService;
@@ -39,11 +44,6 @@ import org.ctrl.vend.omron.toolbus.commands.area.AreaReadRR;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteDM;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteWR;
 import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
-import org.serial.SerialParameters;
-import org.serial.SerialPort;
-import org.serial.SerialPortFactoryJSerialComm;
-import org.serial.SerialPortHandlerImp;
-import org.serial.SerialUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class TagTestGui {

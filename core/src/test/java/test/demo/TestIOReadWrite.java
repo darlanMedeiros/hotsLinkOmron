@@ -5,17 +5,17 @@ import org.ctrl.DeviceRegisterImp;
 import org.ctrl.IDevice;
 import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.IComControl;
+import org.ctrl.comm.serial.SerialParameters;
+import org.ctrl.comm.serial.SerialPort;
+import org.ctrl.comm.serial.SerialPortException;
+import org.ctrl.comm.serial.SerialPortHandlerImp;
+import org.ctrl.comm.serial.SerialUtils;
 import org.ctrl.utils.OmronUtils;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.ToolbusWordBit;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadRR;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteWR;
 import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
-import org.serial.SerialParameters;
-import org.serial.SerialPort;
-import org.serial.SerialPortException;
-import org.serial.SerialPortHandlerImp;
-import org.serial.SerialUtils;
 
 // Teste de leitura e escrita de IOs RR e WR
 public class TestIOReadWrite {

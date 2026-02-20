@@ -1,4 +1,4 @@
-package org.serial;
+package org.ctrl.comm.serial;
 
 import java.util.ArrayList;
 import java.util.List;

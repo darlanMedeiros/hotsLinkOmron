@@ -16,7 +16,7 @@
 package org.ctrl.comm;
 
 import org.apache.commons.logging.Log;
-import org.serial.SerialPortException;
+import org.ctrl.comm.serial.SerialPortException;
 
 
 /**
