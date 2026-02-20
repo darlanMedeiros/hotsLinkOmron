@@ -51,7 +51,7 @@ import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
 import org.serial.SerialPortFactoryJSerialComm;
-import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialPortHandlerImp;
 import org.serial.SerialUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -97,7 +97,7 @@ public class CollectorMultPlcAplication {
     private final List<PlcNodePanel> plcPanels = new ArrayList<>();
     private final Object comLock = new Object();
 
-    private SerialPortHandlerPjcImp sharedComHandler;
+    private SerialPortHandlerImp sharedComHandler;
     private AnnotationConfigApplicationContext dbContext;
     private DmValueService dmValueService;
     private TagService tagService;
@@ -251,7 +251,7 @@ public class CollectorMultPlcAplication {
             sp.setParity(SerialPort.Parity.valueOf(parityCombo.getSelectedItem().toString()));
 
             SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
-            SerialPortHandlerPjcImp handler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
+            SerialPortHandlerImp handler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
             handler.setProtocolHandler(new ToolbusProtocol());
             if (handler instanceof IComControl) {
                 int timeout = Integer.parseInt(timeoutField.getText().trim());

@@ -9,22 +9,22 @@ import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadWriteBit;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
-import org.serial.SerialPortFactoryPJC;
-import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialPortFactoryJSerialComm;
+import org.serial.SerialPortHandlerImp;
 import org.serial.SerialUtils;
 
 public class TestReadWriteBit {
 
     public static void main(String[] args) {
-        SerialPortHandlerPjcImp comHandler = null;
+        SerialPortHandlerImp comHandler = null;
         try {
             SerialParameters sp = buildSerialParams(args);
             int nodeId = getIntArg(args, 5, 0);
             int timeoutMs = getIntArg(args, 6, 10000);
             String addressBit = getArg(args, 7, "10.00");
 
-            SerialUtils.setSerialPortFactory(new SerialPortFactoryPJC());
-            comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
+            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
+            comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
             ToolbusProtocol protocol = new ToolbusProtocol();
             comHandler.setProtocolHandler(protocol);
             if (comHandler instanceof IComControl) {

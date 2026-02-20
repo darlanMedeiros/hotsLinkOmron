@@ -14,7 +14,7 @@ import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
 import org.serial.SerialPortException;
-import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialPortHandlerImp;
 import org.serial.SerialUtils;
 
 // Teste de leitura e escrita de IOs RR e WR
@@ -69,7 +69,7 @@ public class TestIOReadWrite {
 				sp.setParity(SerialPort.Parity.EVEN);
 				sp.setStopBits(2);
 
-				// SerialUtils.setSerialPortFactory(new SerialPortFactoryPJC());
+				// SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
 
 			}
 
@@ -82,7 +82,7 @@ public class TestIOReadWrite {
 				// Create a device list
 				deviceRegister.addDevice(plc);
 				// Create a standard serial port
-				comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
+				comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
 				// Create the protocol
 				ToolbusProtocol toolbusProtocol = new ToolbusProtocol();
 
@@ -163,11 +163,12 @@ public class TestIOReadWrite {
 			}
 		});
 	}
+
 	// DEFINE THE SERIAL PORT PARAMETERS
 	private static SerialParameters sp;
 	// DEFINE THE COMMUNICATION HANDLER (manipulador de comunicação)
-	protected static SerialPortHandlerPjcImp comHandler = null;
-	// CREATE THE DEVICE (PLC)			
+	protected static SerialPortHandlerImp comHandler = null;
+	// CREATE THE DEVICE (PLC)
 	protected static IDevice plc = null;
 	// CREATE THE DEVICE REGISTER
 	protected static IDeviceRegister deviceRegister;

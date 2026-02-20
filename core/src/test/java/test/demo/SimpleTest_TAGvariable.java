@@ -17,8 +17,8 @@ import org.ctrl.vend.omron.toolbus.memory.MemoryRead;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
 import org.serial.SerialPortException;
-import org.serial.SerialPortFactoryPJC;
-import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialPortFactoryJSerialComm;
+import org.serial.SerialPortHandlerImp;
 import org.serial.SerialUtils;
 
 public class SimpleTest_TAGvariable {
@@ -27,7 +27,7 @@ public class SimpleTest_TAGvariable {
     // protected String comPort = "COM3";
     // protected int comSpeed = 57600;
     // protected boolean updateOnMin = true;
-    protected SerialPortHandlerPjcImp comHandler = null;
+    protected SerialPortHandlerImp comHandler = null;
     protected DeviceImp plc = null;
     protected IDeviceRegister deviceRegister;
     // protected FinsProxy readData;
@@ -37,9 +37,6 @@ public class SimpleTest_TAGvariable {
     private int counter = 0;
     private MemoryVariable variable = new MemoryVariable("TEMPO", "DM", 5, 2);
     MemoryMap memoryMap = MemoryMap.getInstance();
-
-               
-
 
     private static SerialParameters sp;
 
@@ -83,16 +80,11 @@ public class SimpleTest_TAGvariable {
         if (comHandler.isStarted()) {
 
             readData = new AreaReadDM(plc, 5, 2);
-            
+
             aw = new AreaWriteDM(plc);
 
             aw.setVariable(variable);
 
-
-
-
-
-            
             Timer pingTimer = new Timer();
             pingTimer.schedule(new PingTask(), 1000, 100);
 
@@ -113,7 +105,7 @@ public class SimpleTest_TAGvariable {
         sp.setDataBits(7);
         sp.setParity(SerialPort.Parity.EVEN);
         sp.setStopBits(2);
-        SerialUtils.setSerialPortFactory(new SerialPortFactoryPJC());
+        SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
 
     }
 
@@ -124,7 +116,7 @@ public class SimpleTest_TAGvariable {
         deviceRegister = DeviceRegisterImp.getInstance();
         deviceRegister.addDevice(plc);
 
-        comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
+        comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
 
         ToolbusProtocol toolbusProtocol = new ToolbusProtocol();
         comHandler.setProtocolHandler(toolbusProtocol);
@@ -156,7 +148,7 @@ public class SimpleTest_TAGvariable {
 
                 // Adiciona o valor na memoria.
                 aw.setVariable(variable);
-                aw.setValue( new int[] { counter, counter + 1 });
+                aw.setValue(new int[] { counter, counter + 1 });
 
                 System.out.println("Counter >>> " + counter + " >>>> Counter + 1 >>>" + (counter + 1));
 
@@ -176,9 +168,6 @@ public class SimpleTest_TAGvariable {
 
                 // Le o valor armazenado.
 
-               
-                
-
                 memoryMap.addValue(variable, dataBuff, 1);
 
                 int dm5[] = memoryMap.getValue(variable);
@@ -197,8 +186,7 @@ public class SimpleTest_TAGvariable {
 
                 for (int i = 0; i < length; i++) {
 
-                    System.out.println("D5  TEMPO >>>>>> "+i+" " + dm5[i]+"\n");
-
+                    System.out.println("D5  TEMPO >>>>>> " + i + " " + dm5[i] + "\n");
 
                 }
 

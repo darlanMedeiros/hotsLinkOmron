@@ -15,8 +15,8 @@ import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteDM;
 import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
-import org.serial.SerialPortFactoryPJC;
-import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialPortFactoryJSerialComm;
+import org.serial.SerialPortHandlerImp;
 import org.serial.SerialUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import java.util.concurrent.ThreadLocalRandom;
@@ -33,7 +33,7 @@ public class TestDmDbWrite {
     private static final int RANDOM_MAX = 100;
 
     public static void main(String[] args) {
-        SerialPortHandlerPjcImp comHandler = null;
+        SerialPortHandlerImp comHandler = null;
         AnnotationConfigApplicationContext ctx = null;
 
         try {
@@ -46,8 +46,8 @@ public class TestDmDbWrite {
             ctx = new AnnotationConfigApplicationContext(DbConfig.class);
             DmValueService service = ctx.getBean(DmValueService.class);
 
-            SerialUtils.setSerialPortFactory(new SerialPortFactoryPJC());
-            comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
+            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
+            comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
             ToolbusProtocol protocol = new ToolbusProtocol();
             comHandler.setProtocolHandler(protocol);
             if (comHandler instanceof IComControl) {

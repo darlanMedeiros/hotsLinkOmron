@@ -7,38 +7,24 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.ctrl.comm.AbstractComHandler;
 import org.ctrl.comm.ISerialComHandler;
 import org.ctrl.comm.ISpontaneousEventListener;
-import org.ctrl.comm.SerialParameters;
 
-public class SerialPortHandlerPjcImp extends AbstractComHandler implements ISerialComHandler {
+public class SerialPortHandlerImp extends AbstractComHandler implements ISerialComHandler {
 
 	private static final AtomicBoolean SHUTDOWN_HOOK_REGISTERED = new AtomicBoolean(false);
-	private static final Set<SerialPortHandlerPjcImp> ACTIVE_HANDLERS = ConcurrentHashMap.newKeySet();
+	private static final Set<SerialPortHandlerImp> ACTIVE_HANDLERS = ConcurrentHashMap.newKeySet();
 
 	private SerialPort serialPort;
 	private SerialParameters serialComParameters;
 	private Thread workerThread;
 
-	public SerialPortHandlerPjcImp(SerialPort serialPort) {
+	public SerialPortHandlerImp(SerialPort serialPort) {
 
 		super();
 		this.serialPort = serialPort;
-		if (serialPort != null) {
-			this.serialComParameters = mapSerialParameters(serialPort.getSerialParameters());
-		}
+	
 	}
 
-	private static SerialParameters mapSerialParameters(org.serial.SerialParameters source) {
-		if (source == null) {
-			return null;
-		}
-		SerialParameters target = new SerialParameters();
-		target.setPortName(source.getDevice());
-		target.setBaudRate(source.getBaudRate());
-		target.setDatabits(source.getDataBits());
-		target.setStopbits(source.getStopBits());
-		target.setParity(source.getParity().getValue());
-		return target;
-	}
+
 
 	@Override
 	public String getName() {
@@ -58,7 +44,7 @@ public class SerialPortHandlerPjcImp extends AbstractComHandler implements ISeri
 		if (SHUTDOWN_HOOK_REGISTERED.compareAndSet(false, true)) {
 			Runtime.getRuntime().addShutdownHook(new Thread() {
 				public void run() {
-					for (SerialPortHandlerPjcImp handler : ACTIVE_HANDLERS) {
+					for (SerialPortHandlerImp handler : ACTIVE_HANDLERS) {
 						try {
 							handler.terminate();
 						} catch (Exception ignored) {

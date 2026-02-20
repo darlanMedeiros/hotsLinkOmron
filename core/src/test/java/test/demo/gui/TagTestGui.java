@@ -41,8 +41,8 @@ import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteWR;
 import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
-import org.serial.SerialPortFactoryPJC;
-import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialPortFactoryJSerialComm;
+import org.serial.SerialPortHandlerImp;
 import org.serial.SerialUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -67,7 +67,7 @@ public class TagTestGui {
     private JLabel statusLabel;
     private JLabel dbStatusLabel;
 
-    private SerialPortHandlerPjcImp comHandler;
+    private SerialPortHandlerImp comHandler;
     private ToolbusProtocol protocol;
     private IDevice plc;
     private IDeviceRegister deviceRegister;
@@ -245,8 +245,8 @@ public class TagTestGui {
             sp.setStopBits(Integer.parseInt(stopBitsField.getText().trim()));
             sp.setParity(SerialPort.Parity.valueOf(parityCombo.getSelectedItem().toString()));
 
-            SerialUtils.setSerialPortFactory(new SerialPortFactoryPJC());
-            comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
+            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
+            comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
 
             int timeout = Integer.parseInt(timeoutField.getText().trim());
             if (comHandler instanceof IComControl) {
@@ -378,7 +378,8 @@ public class TagTestGui {
             ensureDevice();
 
             int value = Integer.parseInt(Objects.requireNonNull(producaoValueField.getText()).trim());
-            AreaWriteDM write = new AreaWriteDM(plc, PRODUCAO_TAG.toMemoryVariable(), new int[] { value }, MemoryWrite.HEX);
+            AreaWriteDM write = new AreaWriteDM(plc, PRODUCAO_TAG.toMemoryVariable(), new int[] { value },
+                    MemoryWrite.HEX);
             comHandler.send(write);
 
             saveProducao(value);

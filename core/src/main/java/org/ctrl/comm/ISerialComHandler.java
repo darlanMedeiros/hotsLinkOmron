@@ -5,6 +5,8 @@
  */
 package org.ctrl.comm;
 
+import org.serial.SerialParameters;
+
 /**
  *
  * @author darla

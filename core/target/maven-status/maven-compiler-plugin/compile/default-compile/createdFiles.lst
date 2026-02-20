@@ -69,7 +69,7 @@ org\ctrl\vend\omron\toolbus\commands\StatusRead.class
 org\ctrl\db\controller\TagController.class
 org\ctrl\comm\IComControl.class
 org\ctrl\vend\omron\toolbus\commands\area\AreaWriteDM.class
-org\serial\SerialPortFactoryPJC.class
+org\serial\SerialPortFactoryJSerialComm.class
 org\ctrl\vend\omron\toolbus\memory\MemoryRead.class
 org\ctrl\db\model\DeviceInfo.class
 org\ctrl\comm\IMessage.class

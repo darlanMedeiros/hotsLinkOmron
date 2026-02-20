@@ -18,16 +18,15 @@ import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
 import org.serial.SerialPortException;
-import org.serial.SerialPortFactoryPJC;
-import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialPortFactoryJSerialComm;
+import org.serial.SerialPortHandlerImp;
 import org.serial.SerialUtils;
 
 public class TestDM {
 
-   
-    protected SerialPortHandlerPjcImp comHandler = null;
+    protected SerialPortHandlerImp comHandler = null;
     protected DeviceImp plc = null;
-    protected IDeviceRegister deviceRegister;   
+    protected IDeviceRegister deviceRegister;
     protected AreaReadDM readData;
     protected AreaReadDM readData1;
     protected AreaReadDM readData2;
@@ -37,10 +36,7 @@ public class TestDM {
     private MemoryVariable variable = new MemoryVariable("TEMPO", "DM", 1000, EnumLenght.DWORD.getLenght());
     MemoryMap memoryMap = MemoryMap.getInstance();
     private int endereco = 1000;
-    private int[]value = new int []  {1,1,1,1};     
-
-               
-
+    private int[] value = new int[] { 1, 1, 1, 1 };
 
     private static SerialParameters sp;
 
@@ -68,7 +64,7 @@ public class TestDM {
     }
 
     private void initSystem() {
-//       variable.setValue(123456, 0);
+        // variable.setValue(123456, 0);
         memoryMap.addVariable(variable);
 
         if (comHandler == null) {
@@ -84,10 +80,10 @@ public class TestDM {
         if (comHandler.isStarted()) {
 
             readData = new AreaReadDM(plc, variable);
-            readData1 = new AreaReadDM(plc, endereco, EnumLenght.DWORD.getLenght()); 
-            readData2 = new AreaReadDM(plc, endereco, EnumLenght.QWORD.getLenght());  
-            writeData = new AreaWriteDM(plc,variable,value, MemoryWrite.BCD);                
-                        
+            readData1 = new AreaReadDM(plc, endereco, EnumLenght.DWORD.getLenght());
+            readData2 = new AreaReadDM(plc, endereco, EnumLenght.QWORD.getLenght());
+            writeData = new AreaWriteDM(plc, variable, value, MemoryWrite.BCD);
+
             Timer pingTimer = new Timer();
             pingTimer.schedule(new PingTask(), 1000, 100);
 
@@ -97,7 +93,8 @@ public class TestDM {
         }
 
     }
-// DEFINE THE SERIAL PORT PARAMETERS
+
+    // DEFINE THE SERIAL PORT PARAMETERS
     private void setPort() {
 
         sp = new SerialParameters();
@@ -109,10 +106,10 @@ public class TestDM {
         sp.setParity(SerialPort.Parity.EVEN);
         sp.setStopBits(2);
         // end of default parameters
-        SerialUtils.setSerialPortFactory(new SerialPortFactoryPJC());
+        SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
 
     }
-// DEFINE THE COMMUNICATION HANDLER (manipulador de comunicação)
+    // DEFINE THE COMMUNICATION HANDLER (manipulador de comunicação)
 
     private void setCommHandler() throws SerialPortException {
 
@@ -120,12 +117,12 @@ public class TestDM {
 
         deviceRegister = DeviceRegisterImp.getInstance();
         deviceRegister.addDevice(plc);
-// CREATE THE COMMUNICATION HANDLER
-        comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
-// SET THE PROTOCOL HANDLER
+        // CREATE THE COMMUNICATION HANDLER
+        comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
+        // SET THE PROTOCOL HANDLER
         ToolbusProtocol toolbusProtocol = new ToolbusProtocol();
         comHandler.setProtocolHandler(toolbusProtocol);
- // SET THE TIMEOUT FOR COMMUNICATION            
+        // SET THE TIMEOUT FOR COMMUNICATION
         if (comHandler instanceof IComControl) {
             ((IComControl) comHandler).setCommunicationTimeOut(1000);
         }
@@ -138,49 +135,47 @@ public class TestDM {
 
         public void run() {
 
-            try {                
-                
-                // dataRead.clear();     
-                
+            try {
+
+                // dataRead.clear();
 
                 counter++;
-                if (counter > 3) {                  
+                if (counter > 3) {
 
                     comHandler.stop();
                     System.exit(0);
                 }
 
-                comHandler.send(readData);   
+                comHandler.send(readData);
                 comHandler.send(writeData);
                 comHandler.send(readData1);
                 comHandler.send(readData2);
 
-
                 System.out.println("Write mensagem" + writeData.getResponseStatusCode());
                 System.out.println("Write mensagem" + readData.getResponseStatusCode());
 
-                //int[] dataBuff = readData.getReply().toHexArray();
-                //System.out.println(" took time :: " + (System.currentTimeMillis() - startT));
+                // int[] dataBuff = readData.getReply().toHexArray();
+                // System.out.println(" took time :: " + (System.currentTimeMillis() - startT));
 
-               System.out.println(" data inp is    " + readData.getReply().toString());
-               System.out.println(" data inp is    " + readData.getReply().toInteger());
-               System.out.println(" data inp is 1  " + readData1.getReply().toString());
-               System.out.println(" data inp is 1  " + readData1.getReply().toInteger());
-               System.out.println(" data inp is 2  " + readData2.getReply().toString());
-               System.out.println(" data inp is 2  " + readData2.getReply().toInteger());
+                System.out.println(" data inp is    " + readData.getReply().toString());
+                System.out.println(" data inp is    " + readData.getReply().toInteger());
+                System.out.println(" data inp is 1  " + readData1.getReply().toString());
+                System.out.println(" data inp is 1  " + readData1.getReply().toInteger());
+                System.out.println(" data inp is 2  " + readData2.getReply().toString());
+                System.out.println(" data inp is 2  " + readData2.getReply().toInteger());
                 System.out.println(" Variable data " + variable.getStringValue());
                 System.out.println(" Variable data " + variable.getIntValue());
 
-                //System.out.println(readData.getReply().toInteger());
-                //System.out.println(utils.convertStringHexDoubleToDec(readData.getReply().toString()));
+                // System.out.println(readData.getReply().toInteger());
+                // System.out.println(utils.convertStringHexDoubleToDec(readData.getReply().toString()));
 
                 // Cria um buffer na memória do
                 // MemoryMap.getInstance().process(readData, MemoryMap.HEX);
 
-                // Le o valor armazenado.   
+                // Le o valor armazenado.
                 Thread.sleep(1000);
-                //value[0]--;
-                //writeData.setValue(value);
+                // value[0]--;
+                // writeData.setValue(value);
 
             } catch (Exception e) {
 

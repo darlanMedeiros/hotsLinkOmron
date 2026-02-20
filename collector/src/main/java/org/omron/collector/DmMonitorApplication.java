@@ -13,7 +13,7 @@ import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
 import org.serial.SerialPortFactoryJSerialComm;
-import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialPortHandlerImp;
 import org.serial.SerialUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -21,7 +21,7 @@ public class DmMonitorApplication {
 
     private static final int START_ADDR = 0;
     private static final int END_ADDR = 10;
-    //private static final int VALUE_MODE = MemoryWrite.HEX;
+    // private static final int VALUE_MODE = MemoryWrite.HEX;
     // Define o tamanho do chunk para leitura. Pode ser ajustado conforme
     // necessário.
     // Valorer acima de 10 estão causando bug no windows, provavelmente por causa do
@@ -35,7 +35,7 @@ public class DmMonitorApplication {
 
     public static void main(String[] args) {
 
-        SerialPortHandlerPjcImp comHandler = null;
+        SerialPortHandlerImp comHandler = null;
         AnnotationConfigApplicationContext ctx = null;
 
         try {
@@ -44,7 +44,7 @@ public class DmMonitorApplication {
             // CONFIGURAÇÃO SERIAL
             // =============================
             SerialParameters sp = new SerialParameters();
-            sp.setDevice("COM2");
+            sp.setDevice("COM5");
             sp.setBaudRate(SerialPort.BaudRate.BAUD_RATE_9600);
             sp.setDataBits(7);
             sp.setStopBits(2);
@@ -64,7 +64,7 @@ public class DmMonitorApplication {
             // SERIAL + PROTOCOLO
             // =============================
             SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
-            comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
+            comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
 
             ToolbusProtocol protocol = new ToolbusProtocol();
             comHandler.setProtocolHandler(protocol);

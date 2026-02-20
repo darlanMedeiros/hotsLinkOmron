@@ -86,7 +86,7 @@ C:\dev\hostLinkOmron\hotsLinkOmron\core\src\main\java\org\serial\SerialPortAbstr
 C:\dev\hostLinkOmron\hotsLinkOmron\core\src\main\java\org\serial\SerialPortException.java
 C:\dev\hostLinkOmron\hotsLinkOmron\core\src\main\java\org\serial\SerialPortFactoryJSerialComm.java
 C:\dev\hostLinkOmron\hotsLinkOmron\core\src\main\java\org\serial\SerialPortFactoryJssc.java
-C:\dev\hostLinkOmron\hotsLinkOmron\core\src\main\java\org\serial\SerialPortFactoryPJC.java
+C:\dev\hostLinkOmron\hotsLinkOmron\core\src\main\java\org\serial\SerialPortFactoryJSerialComm.java
 C:\dev\hostLinkOmron\hotsLinkOmron\core\src\main\java\org\serial\SerialPortHandlerPjcImp.java
 C:\dev\hostLinkOmron\hotsLinkOmron\core\src\main\java\org\serial\SerialPortJSerialComm.java
 C:\dev\hostLinkOmron\hotsLinkOmron\core\src\main\java\org\serial\SerialPortJssc.java

@@ -49,7 +49,7 @@ import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
 import org.serial.SerialPortFactoryJSerialComm;
-import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialPortHandlerImp;
 import org.serial.SerialUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -94,7 +94,7 @@ public class CollectorGuiApplication {
 
     private volatile boolean monitoring;
     private Thread monitorThread;
-    private SerialPortHandlerPjcImp comHandler;
+    private SerialPortHandlerImp comHandler;
     private AnnotationConfigApplicationContext dbContext;
     private DmValueService dmValueService;
     private TagService tagService;
@@ -295,7 +295,7 @@ public class CollectorGuiApplication {
             sp.setParity(SerialPort.Parity.valueOf(parityCombo.getSelectedItem().toString()));
 
             SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
-            comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
+            comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
             comHandler.setProtocolHandler(new ToolbusProtocol());
             if (comHandler instanceof IComControl) {
                 int timeout = Integer.parseInt(timeoutField.getText().trim());

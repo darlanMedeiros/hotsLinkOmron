@@ -1,7 +1,5 @@
 package org.serial;
 
-
-
 import java.util.*;
 
 /*
@@ -36,7 +34,7 @@ public class SerialUtils {
     static {
         registerSerialPortFactory("com.fazecast.jSerialComm.SerialPort", "org.serial.SerialPortFactoryJSerialComm");
         registerSerialPortFactory("jssc.SerialPort", "org.serial.SerialPortFactoryJssc");
-        registerSerialPortFactory("purejavacomm.PureJavaComm", "org.serial.SerialPortFactoryPJC");
+        registerSerialPortFactory("purejavacomm.PureJavaComm", "org.serial.SerialPortFactoryJSerialComm");
     }
 
     static private SerialPortAbstractFactory factory = null;
@@ -51,7 +49,7 @@ public class SerialUtils {
         Iterator<ValidatorSerialPortFactory> iterator = validatorSet.iterator();
         while (iterator.hasNext() && getSerialPortFactory() == null) {
             ValidatorSerialPortFactory validator = iterator.next();
-            if (validator.validate() ) {
+            if (validator.validate()) {
                 try {
                     setSerialPortFactory(validator.getFactory());
                 } catch (ClassNotFoundException e) {
@@ -83,15 +81,14 @@ public class SerialUtils {
     static public void setSerialPortFactory(SerialPortAbstractFactory factory) {
         SerialUtils.factory = factory;
     }
-    
+
     /**
      * 
      * @return return Serial Port implementation
      */
-    
 
     static public SerialPortAbstractFactory getSerialPortFactory() {
-        if (SerialUtils.factory == null){
+        if (SerialUtils.factory == null) {
             SerialUtils.factory = new SerialPortFactoryJSerialComm();
         }
         return SerialUtils.factory;

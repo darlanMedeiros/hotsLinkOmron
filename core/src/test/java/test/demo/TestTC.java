@@ -10,8 +10,8 @@ import org.ctrl.vend.omron.toolbus.commands.area.AreaReadTC;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
 import org.serial.SerialPortException;
-import org.serial.SerialPortFactoryPJC;
-import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialPortFactoryJSerialComm;
+import org.serial.SerialPortHandlerImp;
 import org.serial.SerialUtils;
 
 public class TestTC {
@@ -66,7 +66,7 @@ public class TestTC {
 				deviceRegister = DeviceRegisterImp.getInstance();
 				deviceRegister.addDevice(plc);
 
-				comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
+				comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
 
 				ToolbusProtocol toolbusProtocol = new ToolbusProtocol();
 				comHandler.setProtocolHandler(toolbusProtocol);
@@ -93,7 +93,7 @@ public class TestTC {
 				sp.setParity(SerialPort.Parity.EVEN);
 				sp.setStopBits(2);
 
-				SerialUtils.setSerialPortFactory(new SerialPortFactoryPJC());
+				SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
 
 			}
 
@@ -139,7 +139,7 @@ public class TestTC {
 	}
 
 	private static SerialParameters sp;
-	protected static SerialPortHandlerPjcImp comHandler = null;
+	protected static SerialPortHandlerImp comHandler = null;
 	protected static IDevice plc = null;
 	protected static IDeviceRegister deviceRegister;
 	protected static int endereco = 0;

@@ -17,8 +17,8 @@ import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
-import org.serial.SerialPortFactoryPJC;
-import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialPortFactoryJSerialComm;
+import org.serial.SerialPortHandlerImp;
 import org.serial.SerialUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -37,7 +37,7 @@ class DmReadThreadTest {
         DmValueService service = ctx.getBean(DmValueService.class);
 
         // ===== Serial =====
-        SerialUtils.setSerialPortFactory(new SerialPortFactoryPJC());
+        SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
 
         SerialParameters sp = new SerialParameters();
         sp.setDevice("COM2"); // ajuste se necessário
@@ -46,7 +46,7 @@ class DmReadThreadTest {
         sp.setStopBits(2);
         sp.setParity(SerialPort.Parity.EVEN);
 
-        SerialPortHandlerPjcImp comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
+        SerialPortHandlerImp comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
 
         ToolbusProtocol protocol = new ToolbusProtocol();
         comHandler.setProtocolHandler(protocol);

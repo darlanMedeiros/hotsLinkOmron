@@ -10,8 +10,8 @@ import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteDM;
 import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
-import org.serial.SerialPortFactoryPJC;
-import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialPortFactoryJSerialComm;
+import org.serial.SerialPortHandlerImp;
 import org.serial.SerialUtils;
 
 /**
@@ -20,14 +20,14 @@ import org.serial.SerialUtils;
 public class TestWriteDM {
 
     public static void main(String[] args) {
-        SerialPortHandlerPjcImp comHandler = null;
+        SerialPortHandlerImp comHandler = null;
         try {
             SerialParameters sp = buildSerialParams(args);
             int nodeId = getIntArg(args, 5, 0);
             int timeoutMs = getIntArg(args, 6, 10000);
 
-            SerialUtils.setSerialPortFactory(new SerialPortFactoryPJC());
-            comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
+            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
+            comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
             ToolbusProtocol protocol = new ToolbusProtocol();
             comHandler.setProtocolHandler(protocol);
             if (comHandler instanceof IComControl) {
@@ -45,7 +45,8 @@ public class TestWriteDM {
                 int[] value = new int[] { randomValue };
                 AreaWriteDM write = new AreaWriteDM(plc, addr, value, MemoryWrite.BCD);
                 comHandler.send(write);
-                System.out.println("WRITE DM addr=" + addr + " value=" + randomValue + " status: " + write.getResponseStatusCode());
+                System.out.println("WRITE DM addr=" + addr + " value=" + randomValue + " status: "
+                        + write.getResponseStatusCode());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

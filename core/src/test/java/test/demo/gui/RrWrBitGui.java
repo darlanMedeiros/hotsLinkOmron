@@ -33,8 +33,8 @@ import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteWR;
 import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
 import org.serial.SerialParameters;
 import org.serial.SerialPort;
-import org.serial.SerialPortFactoryPJC;
-import org.serial.SerialPortHandlerPjcImp;
+import org.serial.SerialPortFactoryJSerialComm;
+import org.serial.SerialPortHandlerImp;
 import org.serial.SerialUtils;
 
 public class RrWrBitGui {
@@ -62,7 +62,7 @@ public class RrWrBitGui {
 
     private JTextArea logArea;
 
-    private SerialPortHandlerPjcImp comHandler;
+    private SerialPortHandlerImp comHandler;
     private ToolbusProtocol protocol;
     private IDevice plc;
     private IDeviceRegister deviceRegister;
@@ -270,8 +270,8 @@ public class RrWrBitGui {
             sp.setStopBits(Integer.parseInt(stopBitsField.getText().trim()));
             sp.setParity(SerialPort.Parity.valueOf(parityCombo.getSelectedItem().toString()));
 
-            SerialUtils.setSerialPortFactory(new SerialPortFactoryPJC());
-            comHandler = new SerialPortHandlerPjcImp(SerialUtils.createSerial(sp));
+            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
+            comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
 
             int timeout = Integer.parseInt(timeoutField.getText().trim());
             if (comHandler instanceof IComControl) {
@@ -393,6 +393,3 @@ public class RrWrBitGui {
         });
     }
 }
-
-
-
