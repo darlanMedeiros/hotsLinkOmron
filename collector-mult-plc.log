@@ -9179,3 +9179,20 @@
 [2026-02-21 09:37:49] [PLC 1] Monitor finalizado.
 [2026-02-21 09:37:49] Comunicacao serial compartilhada encerrada.
 [2026-02-21 09:37:54] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-21 14:49:24] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-21 14:49:28] [PLC 1] Conecte a serial compartilhada antes de iniciar o monitor.
+[2026-02-21 14:49:52] Comunicacao serial compartilhada encerrada.
+[2026-02-21 14:50:02] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-21 14:50:09] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-21 14:50:09] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-21 14:50:11] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13875, 0].
+[2026-02-21 14:50:12] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7650, 0].
+[2026-02-21 14:50:13] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [13222, 0].
+[2026-02-21 14:50:15] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-21 14:50:16] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [13227, 0].
+[2026-02-21 14:50:18] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-21 14:50:19] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [13230, 0].
+[2026-02-21 14:50:21] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-21 14:50:22] [PLC 1] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [0, 0].
+[2026-02-21 14:50:22] [PLC 1] Monitor finalizado.
+[2026-02-21 14:50:22] Comunicacao serial compartilhada encerrada.
