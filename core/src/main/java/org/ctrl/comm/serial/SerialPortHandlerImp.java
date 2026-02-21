@@ -127,8 +127,10 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 			ACTIVE_HANDLERS.add(this);
 
 		} catch (SerialPortException ex) {
+			this.isStarted = false;
+			ACTIVE_HANDLERS.remove(this);
 			getLog().error("Unable to open connection", ex);
-
+			throw new IllegalStateException("Unable to open serial connection", ex);
 		}
 
 	}

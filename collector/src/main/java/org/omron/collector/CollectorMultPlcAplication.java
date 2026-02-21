@@ -283,6 +283,10 @@ public class CollectorMultPlcAplication {
 
             handler.initialize();
             handler.start();
+            if (!handler.isStarted()) {
+                throw new IllegalStateException(
+                        "Nao foi possivel iniciar a comunicacao serial na porta " + requestedPort + ".");
+            }
 
             sharedComHandler = handler;
             ensureDb();
