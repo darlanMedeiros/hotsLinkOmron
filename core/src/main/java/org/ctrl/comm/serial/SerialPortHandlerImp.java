@@ -66,22 +66,27 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 	@Override
 	public void run() {
 
-		getLog().info(getName() + " thread run");
+		try {
 
-		while (stopRequired != true) {
-			try {
-				Thread.sleep(SLEEP_TIME);
-				if (protocolHandler instanceof ISpontaneousEventListener) {
-					((ISpontaneousEventListener) protocolHandler).checkEvent();
+			while (!stopRequired && !Thread.currentThread().isInterrupted()) {
+
+				if (in != null && in.available() > 0) {
+					int data = in.read();
+					// processa
 				}
-			} catch (InterruptedException ex) {
 
-				System.out.println("Erro run " + ex);
+				Thread.sleep(2); // 🔥 evita loop 100% CPU
 			}
+
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+
+		} catch (Exception e) {
+			getLog().warn("Serial thread error: " + e.getMessage());
+
+		} finally {
+			getLog().info("Serial Communication Handler thread stopped");
 		}
-
-		getLog().info(getName() + " thread stopped");
-
 	}
 
 	@Override
@@ -103,24 +108,24 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 	}
 
 	@Override
-	public void start() {
+	public void start() throws SerialPortException {
+
 		stopRequired = false;
+
 		try {
 			this.serialPort.open();
 
-			// setInputStream(this.serialPort.getInputStream());
-			// setOutputStream(this.serialPort.getOutputStream());
-
-			// connection.serialPort.addEventListener(reader);
 			workerThread = new Thread(this, NAME + "-worker");
 			workerThread.setDaemon(true);
 			workerThread.start();
 
 			out = serialPort.getOutputStream();
 			in = serialPort.getInputStream();
+
 			if (protocolHandler != null) {
 				protocolHandler.setComControl(this);
 			}
+
 			getLog().info("Serial Comunication Handler Started");
 
 			this.isStarted = true;
@@ -129,42 +134,48 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 		} catch (SerialPortException ex) {
 			getLog().error("Unable to open connection", ex);
 
+			throw ex; // 🔥 ESSA LINHA RESOLVE TUDO
 		}
-
 	}
 
 	@Override
-	public void stop() {
-		stopRequired = true;
-		ACTIVE_HANDLERS.remove(this);
-		if (workerThread != null) {
-			workerThread.interrupt();
-			workerThread = null;
-		}
-		if (out != null) {
-			try {
-				out.close();
-			} catch (IOException ignored) {
-				// best-effort cleanup
-			} finally {
-				out = null;
-			}
-		}
-		if (in != null) {
-			try {
-				in.close();
-			} catch (IOException ignored) {
-				// best-effort cleanup
-			} finally {
-				in = null;
-			}
-		}
-		if (this.serialPort != null) {
-			this.serialPort.close();
-		}
-		this.isStarted = false;
-		getLog().info("Serial Comunication Handler Stoped");
+	public synchronized void stop() {
 
+		if (!isStarted) {
+			return;
+		}
+
+		stopRequired = true;
+
+		try {
+			// 🔥 Força desbloquear read()
+			if (serialPort != null) {
+				serialPort.setReadTimeout(1);
+			}
+
+			// 🔥 Interrompe a thread caso esteja dormindo
+			if (workerThread != null) {
+				workerThread.interrupt();
+				workerThread.join(1500);
+			}
+
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+
+		try {
+			if (serialPort != null) {
+				serialPort.close();
+				Thread.sleep(200); // 🔥 CH340 precisa disso
+			}
+		} catch (Exception e) {
+			getLog().warn("Error closing serial port: " + e.getMessage());
+		}
+
+		isStarted = false;
+		ACTIVE_HANDLERS.remove(this);
+
+		getLog().info("Serial Communication Handler stopped");
 	}
 
 	protected void terminate() {
