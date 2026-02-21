@@ -11,7 +11,7 @@ import org.ctrl.IDevice;
 import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.IComControl;
 import org.ctrl.comm.serial.SerialParameters;
-import org.ctrl.comm.serial.SerialPort;
+import org.ctrl.comm.serial.SerialPortAbstract;
 import org.ctrl.comm.serial.SerialPortFactoryJSerialComm;
 import org.ctrl.comm.serial.SerialPortHandlerImp;
 import org.ctrl.comm.serial.SerialUtils;
@@ -173,10 +173,10 @@ public class DmDbSyncMain {
 
         SerialParameters sp = new SerialParameters();
         sp.setDevice(port);
-        sp.setBaudRate(SerialPort.BaudRate.getBaudRate(baud));
+        sp.setBaudRate(SerialPortAbstract.BaudRate.getBaudRate(baud));
         sp.setDataBits(dataBits);
         sp.setStopBits(stopBits);
-        sp.setParity(SerialPort.Parity.valueOf(parityText));
+        sp.setParity(SerialPortAbstract.Parity.valueOf(parityText));
         return sp;
     }
 

@@ -6,7 +6,7 @@ import org.ctrl.IDevice;
 import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.IComControl;
 import org.ctrl.comm.serial.SerialParameters;
-import org.ctrl.comm.serial.SerialPort;
+import org.ctrl.comm.serial.SerialPortAbstract;
 import org.ctrl.comm.serial.SerialPortException;
 import org.ctrl.comm.serial.SerialPortFactoryJSerialComm;
 import org.ctrl.comm.serial.SerialPortHandlerImp;
@@ -88,9 +88,9 @@ public class TestTC {
 
 				sp.setDevice("COM2");
 				// these parameters are set by default
-				sp.setBaudRate(SerialPort.BaudRate.BAUD_RATE_9600);
+				sp.setBaudRate(SerialPortAbstract.BaudRate.BAUD_RATE_9600);
 				sp.setDataBits(7);
-				sp.setParity(SerialPort.Parity.EVEN);
+				sp.setParity(SerialPortAbstract.Parity.EVEN);
 				sp.setStopBits(2);
 
 				SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());

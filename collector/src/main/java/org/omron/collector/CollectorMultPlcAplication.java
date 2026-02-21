@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,7 +43,7 @@ import org.ctrl.IDevice;
 import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.IComControl;
 import org.ctrl.comm.serial.SerialParameters;
-import org.ctrl.comm.serial.SerialPort;
+import org.ctrl.comm.serial.SerialPortAbstract;
 import org.ctrl.comm.serial.SerialPortFactoryJSerialComm;
 import org.ctrl.comm.serial.SerialPortHandlerImp;
 import org.ctrl.comm.serial.SerialUtils;
@@ -67,6 +68,7 @@ public class CollectorMultPlcAplication {
     private static final int HISTORY_RETENTION_DAYS = 14;
     private static final int HISTORY_PRUNE_INTERVAL_CYCLES = 500;
     private static final Path LOG_FILE = Path.of("collector-mult-plc.log");
+    private static volatile CollectorMultPlcAplication activeInstance;
 
     private static final Tag[] MONITORED_TAGS = new Tag[] {
             Tag.PECAPH29,
@@ -92,6 +94,8 @@ public class CollectorMultPlcAplication {
     private JTextField stopBitsField;
     private JComboBox<String> parityCombo;
     private JTextField timeoutField;
+    private JCheckBox rtsCheckBox;
+    private JCheckBox dtrCheckBox;
     private JLabel serialStatusLabel;
 
     private final List<PlcNodePanel> plcPanels = new ArrayList<>();
@@ -112,6 +116,7 @@ public class CollectorMultPlcAplication {
     }
 
     public CollectorMultPlcAplication() {
+        activeInstance = this;
         buildUi();
     }
 
@@ -158,6 +163,8 @@ public class CollectorMultPlcAplication {
         parityCombo = new JComboBox<>(new String[] { "EVEN", "NONE", "ODD", "MARK", "SPACE" });
         parityCombo.setSelectedItem("EVEN");
         timeoutField = new JTextField("10000");
+        rtsCheckBox = new JCheckBox("RTS", true);
+        dtrCheckBox = new JCheckBox("DTS", true);
 
         int row = 0;
         c.gridx = 0;
@@ -165,7 +172,7 @@ public class CollectorMultPlcAplication {
         panel.add(new JLabel("Porta"), c);
         c.gridx = 1;
         panel.add(portCombo, c);
-        refreshAvailablePorts("COM1");
+        refreshAvailablePorts(null);
 
         c.gridx = 2;
         panel.add(new JLabel("Baud"), c);
@@ -193,6 +200,15 @@ public class CollectorMultPlcAplication {
         panel.add(new JLabel("Timeout (ms)"), c);
         c.gridx = 5;
         panel.add(timeoutField, c);
+
+        row++;
+        c.gridx = 0;
+        c.gridy = row;
+        panel.add(new JLabel("Controle linha"), c);
+        c.gridx = 1;
+        panel.add(rtsCheckBox, c);
+        c.gridx = 2;
+        panel.add(dtrCheckBox, c);
 
         row++;
         JButton connectButton = new JButton("Conectar serial");
@@ -233,22 +249,29 @@ public class CollectorMultPlcAplication {
         }
 
         String requestedPort = getSelectedPortName();
-        refreshAvailablePorts(requestedPort);
-        requestedPort = getSelectedPortName();
         if (requestedPort.isEmpty()) {
             setSerialStatus("PORTA INVALIDA");
             refreshNodeCommStatus();
             log("Selecione uma porta serial valida.");
             return;
         }
+        refreshAvailablePorts(requestedPort);
+        if (!isPortAvailable(requestedPort)) {
+            setSerialStatus("PORTA INEXISTENTE");
+            refreshNodeCommStatus();
+            log("Porta serial " + requestedPort + " nao encontrada. Selecione uma porta disponivel.");
+            return;
+        }
 
         try {
             SerialParameters sp = new SerialParameters();
             sp.setDevice(requestedPort);
-            sp.setBaudRate(SerialPort.BaudRate.getBaudRate(Integer.parseInt(baudCombo.getSelectedItem().toString())));
+            sp.setBaudRate(SerialPortAbstract.BaudRate.getBaudRate(Integer.parseInt(baudCombo.getSelectedItem().toString())));
             sp.setDataBits(Integer.parseInt(dataBitsField.getText().trim()));
             sp.setStopBits(Integer.parseInt(stopBitsField.getText().trim()));
-            sp.setParity(SerialPort.Parity.valueOf(parityCombo.getSelectedItem().toString()));
+            sp.setParity(SerialPortAbstract.Parity.valueOf(parityCombo.getSelectedItem().toString()));
+            sp.setRtsEnabled(rtsCheckBox.isSelected());
+            sp.setDtrEnabled(dtrCheckBox.isSelected());
 
             SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
             SerialPortHandlerImp handler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
@@ -269,11 +292,11 @@ public class CollectorMultPlcAplication {
         } catch (Exception ex) {
             if (isSerialPortInUse(ex)) {
                 setSerialStatus("PORTA EM USO");
-                log("Porta serial " + requestedPort + " em uso por outro processo. Detalhe: " + ex.getMessage());
+                logError("Porta serial " + requestedPort + " em uso por outro processo", ex);
                 showPortInUseDialog(requestedPort);
             } else {
                 setSerialStatus("ERRO");
-                log("Falha na conexao serial: " + ex.getMessage());
+                logError("Falha na conexao serial", ex);
             }
             safeStopSharedHandler();
             refreshNodeCommStatus();
@@ -497,7 +520,7 @@ public class CollectorMultPlcAplication {
                 } catch (Exception ex) {
                     consecutiveErrors++;
                     setCommStatus("ERRO DE COMUNICACAO");
-                    logPrefix("Erro no monitoramento: " + ex.getMessage());
+                    logPrefix("Erro no monitoramento: " + describeError(ex));
                     try {
                         int factor = 1 << Math.min(consecutiveErrors - 1, 3);
                         int backoffMs = Math.min(MAX_ERROR_RETRY_DELAY_MS, ERROR_RETRY_DELAY_MS * factor);
@@ -602,6 +625,7 @@ public class CollectorMultPlcAplication {
             return;
         }
         shuttingDown = true;
+        activeInstance = null;
         disconnectSharedSerial();
         closeDb();
         if (frame != null) {
@@ -637,7 +661,7 @@ public class CollectorMultPlcAplication {
                 portCombo.addItem(selected);
                 portCombo.setSelectedItem(selected);
             }
-            log("Nao foi possivel listar portas automaticamente: " + ex.getMessage());
+            logError("Nao foi possivel listar portas automaticamente", ex);
         }
     }
 
@@ -657,6 +681,22 @@ public class CollectorMultPlcAplication {
             }
         }
         return value;
+    }
+
+    private boolean isPortAvailable(String portName) {
+        try {
+            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
+            List<String> ports = SerialUtils.getPortIdentifiers();
+            for (String port : ports) {
+                if (portName.equalsIgnoreCase(port)) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception ex) {
+            logError("Falha ao validar porta serial " + portName, ex);
+            return false;
+        }
     }
 
     private static int[] parseReply(IData reply, int length) {
@@ -722,6 +762,23 @@ public class CollectorMultPlcAplication {
     private void log(String message) {
         appendPersistentLog(message, null);
         runOnEdt(() -> {
+            if (logArea == null) {
+                return;
+            }
+            String time = LocalDateTime.now().format(TIME_FMT);
+            logArea.append("[" + time + "] " + message + "\n");
+            trimLogIfNeeded();
+            logArea.setCaretPosition(logArea.getDocument().getLength());
+        });
+    }
+
+    private void logError(String context, Throwable error) {
+        String message = context + ": " + describeError(error);
+        appendPersistentLog(message, error);
+        runOnEdt(() -> {
+            if (logArea == null) {
+                return;
+            }
             String time = LocalDateTime.now().format(TIME_FMT);
             logArea.append("[" + time + "] " + message + "\n");
             trimLogIfNeeded();
@@ -786,9 +843,25 @@ public class CollectorMultPlcAplication {
     private static void installGlobalExceptionHandler() {
         Thread.setDefaultUncaughtExceptionHandler((thread, error) -> {
             String message = "Uncaught exception thread=" + thread.getName() + ": "
-                    + error.getClass().getSimpleName() + " - " + error.getMessage();
+                    + describeError(error);
             appendPersistentLog(message, error);
+            CollectorMultPlcAplication app = activeInstance;
+            if (app != null) {
+                app.logError("Erro nao tratado", error);
+            }
         });
+    }
+
+    private static String describeError(Throwable error) {
+        if (error == null) {
+            return "erro desconhecido";
+        }
+        String type = error.getClass().getSimpleName();
+        String text = error.getMessage();
+        if (text == null || text.trim().isEmpty()) {
+            return type;
+        }
+        return type + " - " + text;
     }
 
     private static synchronized void appendPersistentLog(String message, Throwable error) {

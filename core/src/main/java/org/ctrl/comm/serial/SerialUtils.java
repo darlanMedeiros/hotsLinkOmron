@@ -8,7 +8,8 @@ public class SerialUtils {
     static private Set<ValidatorSerialPortFactory> validatorSet = new TreeSet<ValidatorSerialPortFactory>();
 
     static {
-        registerSerialPortFactory("com.fazecast.jSerialComm.SerialPort", "org.serial.SerialPortFactoryJSerialComm");
+        registerSerialPortFactory("com.fazecast.jSerialComm.SerialPort",
+                "org.ctrl.comm.serial.SerialPortFactoryJSerialComm");
 
     }
 
@@ -37,7 +38,7 @@ public class SerialUtils {
         }
     }
 
-    static public SerialPort createSerial(SerialParameters sp) throws SerialPortException {
+    static public SerialPortAbstract createSerial(SerialParameters sp) throws SerialPortException {
         return getSerialPortFactory().createSerial(sp);
     }
 

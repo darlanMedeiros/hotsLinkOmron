@@ -13,18 +13,16 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 	private static final AtomicBoolean SHUTDOWN_HOOK_REGISTERED = new AtomicBoolean(false);
 	private static final Set<SerialPortHandlerImp> ACTIVE_HANDLERS = ConcurrentHashMap.newKeySet();
 
-	private SerialPort serialPort;
+	private SerialPortAbstract serialPort;
 	private SerialParameters serialComParameters;
 	private Thread workerThread;
 
-	public SerialPortHandlerImp(SerialPort serialPort) {
+	public SerialPortHandlerImp(SerialPortAbstract serialPort) {
 
 		super();
 		this.serialPort = serialPort;
-	
+
 	}
-
-
 
 	@Override
 	public String getName() {
@@ -38,7 +36,7 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 	}
 
 	@Override
-	public void initialize()  {
+	public void initialize() {
 		getLog().info(NAME + " initialized");
 
 		if (SHUTDOWN_HOOK_REGISTERED.compareAndSet(false, true)) {
@@ -61,15 +59,15 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 			protocolHandler.setComControl(this);
 		}
 
-		//this.isStarted = true;
+		// this.isStarted = true;
 
 	}
 
 	@Override
 	public void run() {
-		
+
 		getLog().info(getName() + " thread run");
-		
+
 		while (stopRequired != true) {
 			try {
 				Thread.sleep(SLEEP_TIME);
@@ -77,7 +75,7 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 					((ISpontaneousEventListener) protocolHandler).checkEvent();
 				}
 			} catch (InterruptedException ex) {
-				
+
 				System.out.println("Erro run " + ex);
 			}
 		}
@@ -105,32 +103,32 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 	}
 
 	@Override
-	public void start(){
+	public void start() {
 		stopRequired = false;
 		try {
 			this.serialPort.open();
 
 			// setInputStream(this.serialPort.getInputStream());
-			// setOutputStream(this.serialPort.getOutputSream());
+			// setOutputStream(this.serialPort.getOutputStream());
 
 			// connection.serialPort.addEventListener(reader);
 			workerThread = new Thread(this, NAME + "-worker");
 			workerThread.setDaemon(true);
 			workerThread.start();
 
-			out = serialPort.getOutputSream();
+			out = serialPort.getOutputStream();
 			in = serialPort.getInputStream();
 			if (protocolHandler != null) {
 				protocolHandler.setComControl(this);
 			}
 			getLog().info("Serial Comunication Handler Started");
-			
+
 			this.isStarted = true;
 			ACTIVE_HANDLERS.add(this);
-			
+
 		} catch (SerialPortException ex) {
-			getLog().error("Unable to open connection", ex);			
-			
+			getLog().error("Unable to open connection", ex);
+
 		}
 
 	}

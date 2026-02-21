@@ -13,10 +13,10 @@ abstract public class SerialPortAbstractFactory {
         return "Connector is missing";
     }
 
-    abstract public SerialPort createSerialImpl(SerialParameters sp) throws SerialPortException;
+    abstract public SerialPortAbstract createSerialImpl(SerialParameters sp) throws SerialPortException;
     abstract public List<String> getPortIdentifiersImpl() throws SerialPortException;
 
-    final SerialPort createSerial(SerialParameters sp) throws SerialPortException {
+    final SerialPortAbstract createSerial(SerialParameters sp) throws SerialPortException {
         return createSerialImpl(sp);
     }
 

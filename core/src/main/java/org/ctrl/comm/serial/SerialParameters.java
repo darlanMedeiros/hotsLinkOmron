@@ -1,34 +1,48 @@
 package org.ctrl.comm.serial;
 
-
 public class SerialParameters {
-    private String device = null;
-    private SerialPort.BaudRate baudRate;
+
+    private String device;
+    private SerialPortAbstract.BaudRate baudRate;
     private int dataBits;
     private int stopBits;
-    private SerialPort.Parity parity;
+    private SerialPortAbstract.Parity parity;
+
+    private boolean rtsEnabled = false;
+    private boolean dtrEnabled = false;
 
     public SerialParameters() {
-        setBaudRate(SerialPort.BaudRate.BAUD_RATE_9600);
+        setBaudRate(SerialPortAbstract.BaudRate.BAUD_RATE_9600);
         setDataBits(8);
         setStopBits(1);
-        setParity(SerialPort.Parity.NONE);
+        setParity(SerialPortAbstract.Parity.NONE);
     }
 
-    /**
-     * @param device   the name(path) of the serial port
-     * @param baudRate baud rate
-     * @param dataBits the number of data bits
-     * @param stopBits the number of stop bits(1,2)
-     * @param parity   parity check (NONE, EVEN, ODD, MARK, SPACE)
-     */
-    public SerialParameters(String device, SerialPort.BaudRate baudRate, int dataBits, int stopBits, SerialPort.Parity parity) {
-        setDevice(device);
-        setBaudRate(baudRate);
-        setDataBits(dataBits);
-        setStopBits(stopBits);
-        setParity(parity);
+    public SerialParameters(String device,
+            SerialPortAbstract.BaudRate baudRate,
+            int dataBits,
+            int stopBits,
+            SerialPortAbstract.Parity parity) {
+        this(device, baudRate, dataBits, stopBits, parity, false, false);
     }
+
+    public SerialParameters(String device,
+            SerialPortAbstract.BaudRate baudRate,
+            int dataBits,
+            int stopBits,
+            SerialPortAbstract.Parity parity,
+            boolean rtsEnabled,
+            boolean dtrEnabled) {
+        this.device = device;
+        this.baudRate = baudRate;
+        this.dataBits = dataBits;
+        this.stopBits = stopBits;
+        this.parity = parity;
+        this.rtsEnabled = rtsEnabled;
+        this.dtrEnabled = dtrEnabled;
+    }
+
+    // getters e setters normais...
 
     public String getDevice() {
         return device;
@@ -42,7 +56,7 @@ public class SerialParameters {
         return baudRate.getValue();
     }
 
-    public void setBaudRate(SerialPort.BaudRate baudRate) {
+    public void setBaudRate(SerialPortAbstract.BaudRate baudRate) {
         this.baudRate = baudRate;
     }
 
@@ -62,13 +76,27 @@ public class SerialParameters {
         this.stopBits = stopBits;
     }
 
-    public SerialPort.Parity getParity() {
+    public SerialPortAbstract.Parity getParity() {
         return parity;
     }
 
-    public void setParity(SerialPort.Parity parity) {
+    public void setParity(SerialPortAbstract.Parity parity) {
         this.parity = parity;
     }
 
-	
+    public boolean isRtsEnabled() {
+        return rtsEnabled;
+    }
+
+    public void setRtsEnabled(boolean rtsEnabled) {
+        this.rtsEnabled = rtsEnabled;
+    }
+
+    public boolean isDtrEnabled() {
+        return dtrEnabled;
+    }
+
+    public void setDtrEnabled(boolean dtrEnabled) {
+        this.dtrEnabled = dtrEnabled;
+    }
 }

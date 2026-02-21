@@ -1,3 +1,6 @@
+org\omron\collector\CollectorMultPlcAplication.class
 org\omron\collector\CollectorGuiApplication$1.class
+org\omron\collector\CollectorMultPlcAplication$PlcNodePanel.class
 org\omron\collector\CollectorGuiApplication.class
+org\omron\collector\CollectorMultPlcAplication$1.class
 org\omron\collector\DmMonitorApplication.class

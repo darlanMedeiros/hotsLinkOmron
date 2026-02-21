@@ -6,7 +6,7 @@ import java.util.List;
 public class SerialPortFactoryJSerialComm extends SerialPortAbstractFactory {
 
     @Override
-    public SerialPort createSerialImpl(SerialParameters sp) {
+    public SerialPortAbstract createSerialImpl(SerialParameters sp) {
         return new SerialPortJSerialComm(sp);
     }
 

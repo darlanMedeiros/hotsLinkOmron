@@ -1,31 +1,24 @@
 package org.ctrl.comm.serial;
 
-
-
-
-
-
 public class SerialPortException extends Exception {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
-	public SerialPortException() {
-		
-	}
-	
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-	public SerialPortException(Exception cause)  {
+    public SerialPortException() {
+
+    }
+
+    public SerialPortException(Exception cause) {
         super(cause);
     }
 
     public SerialPortException(String msg) throws SerialPortException {
         super(msg);
     }
-    
-    public SerialPortException (String msg, Exception causa) throws SerialPortException{
+
+    public SerialPortException(String msg, Exception causa) throws SerialPortException {
         super(msg, causa);
     }
 }

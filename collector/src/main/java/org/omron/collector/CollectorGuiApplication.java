@@ -40,7 +40,7 @@ import org.ctrl.IDevice;
 import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.IComControl;
 import org.ctrl.comm.serial.SerialParameters;
-import org.ctrl.comm.serial.SerialPort;
+import org.ctrl.comm.serial.SerialPortAbstract;
 import org.ctrl.comm.serial.SerialPortFactoryJSerialComm;
 import org.ctrl.comm.serial.SerialPortHandlerImp;
 import org.ctrl.comm.serial.SerialUtils;
@@ -289,10 +289,10 @@ public class CollectorGuiApplication {
         try {
             SerialParameters sp = new SerialParameters();
             sp.setDevice(requestedPort);
-            sp.setBaudRate(SerialPort.BaudRate.getBaudRate(Integer.parseInt(baudCombo.getSelectedItem().toString())));
+            sp.setBaudRate(SerialPortAbstract.BaudRate.getBaudRate(Integer.parseInt(baudCombo.getSelectedItem().toString())));
             sp.setDataBits(Integer.parseInt(dataBitsField.getText().trim()));
             sp.setStopBits(Integer.parseInt(stopBitsField.getText().trim()));
-            sp.setParity(SerialPort.Parity.valueOf(parityCombo.getSelectedItem().toString()));
+            sp.setParity(SerialPortAbstract.Parity.valueOf(parityCombo.getSelectedItem().toString()));
 
             SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
             comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));

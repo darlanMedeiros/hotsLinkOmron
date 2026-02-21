@@ -1,17 +1,15 @@
 package org.ctrl.comm.serial;
 
-
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public abstract class SerialPort {
+public abstract class SerialPortAbstract {
 
     final private SerialParameters serialParameters;
     private int readTimeout = Modbus.MAX_RESPONSE_TIMEOUT;
 
-    public SerialPort(SerialParameters sp) {
+    public SerialPortAbstract(SerialParameters sp) {
         this.serialParameters = sp;
     }
 
@@ -27,8 +25,13 @@ public abstract class SerialPort {
         this.readTimeout = readTimeout;
     }
 
-    
-   
+    abstract public void setRTS(boolean enabled);
+
+    abstract public void setDTR(boolean enabled);
+
+    abstract public boolean isRTS();
+
+    abstract public boolean isDTR();
 
     abstract public void write(int b) throws IOException;
 
@@ -43,15 +46,22 @@ public abstract class SerialPort {
     abstract public void close();
 
     abstract public boolean isOpened();
-    
-    abstract public OutputStream getOutputSream();
-    
+
+    abstract public OutputStream getOutputStream();
+
+    /**
+     * @deprecated Use {@link #getOutputStream()}.
+     */
+    @Deprecated
+    public OutputStream getOutputSream() {
+        return getOutputStream();
+    }
+
     abstract public InputStream inputStream();
-    
+
     abstract public InputStream getInputStream();
 
-
-public enum Parity {
+    public enum Parity {
         NONE(0),
         ODD(1),
         EVEN(2),
@@ -117,26 +127,16 @@ public enum Parity {
         }
     }
 
-	public void sendBreak(int millis) {
-		
-		System.out.println("Metodo não implementado");
-				
-		
-	}
+    public void sendBreak(int millis) {
+        throw new UnsupportedOperationException("sendBreak is not supported by this serial implementation");
+    }
 
-	public void setOutputBufferSeize(int size) {
-	
-		System.out.println("Metodo não implementado");
-		
-	}
+    public void setOutputBufferSeize(int size) {
+        throw new UnsupportedOperationException("setOutputBufferSeize is not supported by this serial implementation");
+    }
 
-	public void setSerialComParameters(SerialParameters serialComParameters) {
-		
-		System.out.println("Metodo não implementado");
-	}
+    public void setSerialComParameters(SerialParameters serialComParameters) {
+        throw new UnsupportedOperationException("setSerialComParameters is not supported by this serial implementation");
+    }
 
-	
-
-	
-	
 }

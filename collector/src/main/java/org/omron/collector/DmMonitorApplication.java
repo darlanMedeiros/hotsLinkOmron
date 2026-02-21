@@ -6,7 +6,7 @@ import org.ctrl.IDevice;
 import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.IComControl;
 import org.ctrl.comm.serial.SerialParameters;
-import org.ctrl.comm.serial.SerialPort;
+import org.ctrl.comm.serial.SerialPortAbstract;
 import org.ctrl.comm.serial.SerialPortFactoryJSerialComm;
 import org.ctrl.comm.serial.SerialPortHandlerImp;
 import org.ctrl.comm.serial.SerialUtils;
@@ -45,10 +45,10 @@ public class DmMonitorApplication {
             // =============================
             SerialParameters sp = new SerialParameters();
             sp.setDevice("COM5");
-            sp.setBaudRate(SerialPort.BaudRate.BAUD_RATE_9600);
+            sp.setBaudRate(SerialPortAbstract.BaudRate.BAUD_RATE_9600);
             sp.setDataBits(7);
             sp.setStopBits(2);
-            sp.setParity(SerialPort.Parity.EVEN);
+            sp.setParity(SerialPortAbstract.Parity.EVEN);
 
             int nodeId = 0;
             int timeoutMs = 10000;
