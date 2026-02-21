@@ -1,5 +1,7 @@
 package org.ctrl.comm.serial;
 
+import java.util.Objects;
+
 public class SerialParameters {
 
     private String device;
@@ -49,15 +51,21 @@ public class SerialParameters {
     }
 
     public void setDevice(String device) {
-        this.device = device;
+        if (device == null || device.trim().isEmpty()) {
+            throw new IllegalArgumentException("Device must not be null or empty");
+        }
+        this.device = device.trim();
     }
 
     public int getBaudRate() {
+        if (baudRate == null) {
+            throw new IllegalStateException("Baud rate is not configured");
+        }
         return baudRate.getValue();
     }
 
     public void setBaudRate(SerialPortAbstract.BaudRate baudRate) {
-        this.baudRate = baudRate;
+        this.baudRate = Objects.requireNonNull(baudRate, "Baud rate must not be null");
     }
 
     public int getDataBits() {
@@ -65,6 +73,9 @@ public class SerialParameters {
     }
 
     public void setDataBits(int dataBits) {
+        if (dataBits < 5 || dataBits > 8) {
+            throw new IllegalArgumentException("Data bits must be between 5 and 8");
+        }
         this.dataBits = dataBits;
     }
 
@@ -73,6 +84,9 @@ public class SerialParameters {
     }
 
     public void setStopBits(int stopBits) {
+        if (stopBits != 1 && stopBits != 2) {
+            throw new IllegalArgumentException("Stop bits must be 1 or 2");
+        }
         this.stopBits = stopBits;
     }
 
@@ -81,7 +95,7 @@ public class SerialParameters {
     }
 
     public void setParity(SerialPortAbstract.Parity parity) {
-        this.parity = parity;
+        this.parity = Objects.requireNonNull(parity, "Parity must not be null");
     }
 
     public boolean isRtsEnabled() {

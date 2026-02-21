@@ -4,16 +4,11 @@ import org.ctrl.DeviceImp;
 import org.ctrl.DeviceRegisterImp;
 import org.ctrl.IDevice;
 import org.ctrl.IDeviceRegister;
-import org.ctrl.comm.IComControl;
-import org.ctrl.comm.serial.SerialParameters;
 import org.ctrl.comm.serial.SerialPortAbstract;
-import org.ctrl.comm.serial.SerialPortFactoryJSerialComm;
 import org.ctrl.comm.serial.SerialPortHandlerImp;
-import org.ctrl.comm.serial.SerialUtils;
 import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.service.DmValueService;
-import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -36,6 +31,7 @@ public class DmMonitorApplication {
     public static void main(String[] args) {
 
         SerialPortHandlerImp comHandler = null;
+        SharedSerial sharedSerial = new SharedSerial();
         AnnotationConfigApplicationContext ctx = null;
 
         try {
@@ -43,13 +39,6 @@ public class DmMonitorApplication {
             // =============================
             // CONFIGURAÇÃO SERIAL
             // =============================
-            SerialParameters sp = new SerialParameters();
-            sp.setDevice("COM5");
-            sp.setBaudRate(SerialPortAbstract.BaudRate.BAUD_RATE_9600);
-            sp.setDataBits(7);
-            sp.setStopBits(2);
-            sp.setParity(SerialPortAbstract.Parity.EVEN);
-
             int nodeId = 0;
             int timeoutMs = 10000;
             int delayMs = 1000;
@@ -63,18 +52,17 @@ public class DmMonitorApplication {
             // =============================
             // SERIAL + PROTOCOLO
             // =============================
-            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
-            comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
-
-            ToolbusProtocol protocol = new ToolbusProtocol();
-            comHandler.setProtocolHandler(protocol);
-
-            if (comHandler instanceof IComControl) {
-                ((IComControl) comHandler).setCommunicationTimeOut(timeoutMs);
-            }
-
-            comHandler.initialize();
-            comHandler.start();
+            SharedSerial.Config config = new SharedSerial.Config(
+                    "COM5",
+                    9600,
+                    7,
+                    2,
+                    SerialPortAbstract.Parity.EVEN,
+                    timeoutMs,
+                    null,
+                    null);
+            sharedSerial.connect(config);
+            comHandler = sharedSerial.getHandler();
 
             // =============================
             // DEVICE
@@ -164,7 +152,7 @@ public class DmMonitorApplication {
         } finally {
 
             if (comHandler != null) {
-                comHandler.stop();
+                sharedSerial.disconnect();
             }
 
             if (ctx != null) {

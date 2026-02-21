@@ -9525,3 +9525,415 @@ Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM
 [2026-02-21 15:12:58] Comunicacao serial compartilhada encerrada.
 [2026-02-21 15:13:01] Encerramento solicitado pelo usuario.
 [2026-02-21 15:13:01] Comunicacao serial compartilhada encerrada.
+[2026-02-21 15:17:44] Porta serial COM5 em uso por outro processo: IllegalStateException - Unable to open serial connection
+java.lang.IllegalStateException: Unable to open serial connection
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:133)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:285)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$1(CollectorMultPlcAplication.java:215)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.ctrl.comm.serial.SerialPortException: Serial port in use COM5
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:285)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:78)
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:109)
+	... 37 more
+Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM5 (port busy, access denied, or unavailable)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:289)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:54)
+	... 38 more
+
+[2026-02-21 15:17:53] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-21 15:17:59] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:18:19] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:18:20] [PLC 1] Monitor finalizado.
+[2026-02-21 15:18:25] [PLC 2] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:18:25] [PLC 2] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-21 15:18:27] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17227, 0].
+[2026-02-21 15:18:28] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10976, 0].
+[2026-02-21 15:18:30] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [14899, 0].
+[2026-02-21 15:18:31] [PLC 2] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-21 15:18:32] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [14904, 0].
+[2026-02-21 15:18:34] [PLC 2] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-21 15:18:35] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [14907, 0].
+[2026-02-21 15:18:36] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:18:56] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:18:57] [PLC 2] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-21 15:18:58] [PLC 2] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [0, 0].
+[2026-02-21 15:19:18] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:19:18] [PLC 2] Alteracao salva: TAG QUALIDADE42 (DM 20..21) = [0, 0].
+[2026-02-21 15:19:18] [PLC 2] Monitor finalizado.
+[2026-02-21 15:19:18] Comunicacao serial compartilhada encerrada.
+[2026-02-21 15:19:21] [PLC 1] Monitor finalizado.
+[2026-02-21 15:19:33] Encerramento solicitado pelo usuario.
+[2026-02-21 15:19:33] Comunicacao serial compartilhada encerrada.
+[2026-02-21 15:40:19] Porta serial COM5 em uso por outro processo: IllegalStateException - Unable to open serial connection
+java.lang.IllegalStateException: Unable to open serial connection
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:133)
+	at org.omron.collector.SharedSerial.connect(SharedSerial.java:85)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:263)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$buildSharedSerialPanel$3(CollectorMultPlcAplication.java:202)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.ctrl.comm.serial.SerialPortException: Serial port in use COM5
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:285)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:78)
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:109)
+	... 38 more
+Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM5 (port busy, access denied, or unavailable)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:289)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:54)
+	... 39 more
+
+[2026-02-21 15:40:29] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-21 15:40:36] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:40:50] [PLC 2] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:40:56] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:40:56] [PLC 2] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-21 15:40:57] [PLC 1] Monitor finalizado.
+[2026-02-21 15:40:58] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [19923, 0].
+[2026-02-21 15:40:59] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [13642, 0].
+[2026-02-21 15:41:01] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [16250, 0].
+[2026-02-21 15:41:02] [PLC 2] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-21 15:41:03] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [16255, 0].
+[2026-02-21 15:41:05] [PLC 2] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-21 15:41:06] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [16258, 0].
+[2026-02-21 15:41:08] [PLC 2] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-21 15:41:09] [PLC 2] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [0, 0].
+[2026-02-21 15:41:10] [PLC 2] Alteracao salva: TAG QUALIDADE42 (DM 20..21) = [0, 0].
+[2026-02-21 15:41:12] [PLC 2] Alteracao salva: TAG QUALIDADE43 (DM 22..23) = [0, 0].
+[2026-02-21 15:41:16] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [19961, 0].
+[2026-02-21 15:41:17] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [13678, 0].
+[2026-02-21 15:41:19] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [16269, 0].
+[2026-02-21 15:41:21] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [16273, 0].
+[2026-02-21 15:41:23] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [16275, 0].
+[2026-02-21 15:41:32] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [19993, 0].
+[2026-02-21 15:41:33] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [13710, 0].
+[2026-02-21 15:41:35] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [16285, 0].
+[2026-02-21 15:41:37] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [16289, 0].
+[2026-02-21 15:41:39] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [16291, 0].
+[2026-02-21 15:41:48] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20025, 0].
+[2026-02-21 15:41:49] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [13742, 0].
+[2026-02-21 15:41:51] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [16301, 0].
+[2026-02-21 15:41:53] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [16305, 0].
+[2026-02-21 15:41:55] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [16307, 0].
+[2026-02-21 15:42:04] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20057, 0].
+[2026-02-21 15:42:05] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [13774, 0].
+[2026-02-21 15:42:07] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [16317, 0].
+[2026-02-21 15:42:09] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [16321, 0].
+[2026-02-21 15:42:11] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [16323, 0].
+[2026-02-21 15:42:20] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20089, 0].
+[2026-02-21 15:42:21] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [13806, 0].
+[2026-02-21 15:42:22] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [16333, 0].
+[2026-02-21 15:42:25] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [16337, 0].
+[2026-02-21 15:42:27] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [16339, 0].
+[2026-02-21 15:42:36] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20121, 0].
+[2026-02-21 15:42:37] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [13838, 0].
+[2026-02-21 15:42:39] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [16348, 0].
+[2026-02-21 15:42:41] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [16353, 0].
+[2026-02-21 15:42:43] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [16355, 0].
+[2026-02-21 15:42:52] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20151, 0].
+[2026-02-21 15:42:53] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [13868, 0].
+[2026-02-21 15:42:55] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [16365, 0].
+[2026-02-21 15:42:57] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [16369, 0].
+[2026-02-21 15:42:59] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [16371, 0].
+[2026-02-21 15:43:08] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20183, 0].
+[2026-02-21 15:43:10] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [13900, 0].
+[2026-02-21 15:43:11] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [16381, 0].
+[2026-02-21 15:43:13] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [16385, 0].
+[2026-02-21 15:43:16] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [16388, 0].
+[2026-02-21 15:43:17] [PLC 2] Monitor finalizado.
+[2026-02-21 15:43:30] Encerramento solicitado pelo usuario.
+[2026-02-21 15:43:30] Comunicacao serial compartilhada encerrada.
+[2026-02-21 15:49:00] Porta serial COM5 em uso por outro processo: IllegalStateException - Unable to open serial connection
+java.lang.IllegalStateException: Unable to open serial connection
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:133)
+	at org.omron.collector.SharedSerial.connect(SharedSerial.java:85)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:267)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$8(CollectorMultPlcAplication.java:205)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.ctrl.comm.serial.SerialPortException: Serial port in use COM5
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:285)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:78)
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:109)
+	... 38 more
+Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM5 (port busy, access denied, or unavailable)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:289)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:54)
+	... 39 more
+
+[2026-02-21 15:49:08] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-21 15:49:16] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:49:20] [PLC 2] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:49:37] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:49:37] [PLC 2] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-21 15:49:38] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20963, 0].
+[2026-02-21 15:49:58] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:49:59] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [14706, 0].
+[2026-02-21 15:50:00] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [16790, 0].
+[2026-02-21 15:50:01] [PLC 2] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-21 15:50:21] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:50:22] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [16814, 0].
+[2026-02-21 15:50:23] [PLC 2] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-21 15:50:25] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [16817, 0].
+[2026-02-21 15:50:26] [PLC 2] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-21 15:50:27] [PLC 2] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [0, 0].
+[2026-02-21 15:50:48] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:50:48] [PLC 2] Alteracao salva: TAG QUALIDADE42 (DM 20..21) = [0, 0].
+[2026-02-21 15:50:50] [PLC 2] Alteracao salva: TAG QUALIDADE43 (DM 22..23) = [0, 0].
+[2026-02-21 15:50:54] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [21115, 0].
+[2026-02-21 15:50:55] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [14820, 0].
+[2026-02-21 15:50:57] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [16847, 0].
+[2026-02-21 15:50:59] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [16851, 0].
+[2026-02-21 15:51:00] [PLC 1] Monitor finalizado.
+[2026-02-21 15:51:01] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [16853, 0].
+[2026-02-21 15:51:10] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [21147, 0].
+[2026-02-21 15:51:11] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [14852, 0].
+[2026-02-21 15:51:13] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [16863, 0].
+[2026-02-21 15:51:15] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [16867, 0].
+[2026-02-21 15:51:17] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [16869, 0].
+[2026-02-21 15:51:26] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [21179, 0].
+[2026-02-21 15:51:27] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [14884, 0].
+[2026-02-21 15:51:29] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [16879, 0].
+[2026-02-21 15:51:31] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [16883, 0].
+[2026-02-21 15:51:33] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [16885, 0].
+[2026-02-21 15:51:35] [PLC 2] Monitor finalizado.
+[2026-02-21 15:53:57] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-21 15:54:04] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:54:24] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:54:46] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:54:46] [PLC 1] MaximumNumberOfRetriesReachedException por 21s. Parando monitor deste PLC.
+[2026-02-21 15:54:46] [PLC 1] Monitor finalizado.
+[2026-02-21 15:55:11] [PLC 2] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:55:12] [PLC 2] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-21 15:55:13] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [21629, 0].
+[2026-02-21 15:55:14] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [15332, 0].
+[2026-02-21 15:55:16] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [17106, 0].
+[2026-02-21 15:55:17] [PLC 2] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-21 15:55:19] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [17111, 0].
+[2026-02-21 15:55:19] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:55:35] Encerramento solicitado pelo usuario.
+[2026-02-21 15:55:35] Comunicacao serial compartilhada encerrada.
+[2026-02-21 15:55:40] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:55:40] [PLC 2] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-21 15:55:42] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [17134, 0].
+[2026-02-21 15:56:02] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:56:02] [PLC 1] MaximumNumberOfRetriesReachedException por 21s. Parando monitor deste PLC.
+[2026-02-21 15:56:02] [PLC 1] Monitor finalizado.
+[2026-02-21 15:56:02] [PLC 2] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-21 15:56:04] [PLC 2] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [0, 0].
+[2026-02-21 15:56:05] [PLC 2] Alteracao salva: TAG QUALIDADE42 (DM 20..21) = [0, 0].
+[2026-02-21 15:56:07] [PLC 2] Alteracao salva: TAG QUALIDADE43 (DM 22..23) = [0, 0].
+[2026-02-21 15:56:11] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [21747, 0].
+[2026-02-21 15:56:12] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [15448, 0].
+[2026-02-21 15:56:14] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [17164, 0].
+[2026-02-21 15:56:16] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [17168, 0].
+[2026-02-21 15:56:18] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [17170, 0].
+[2026-02-21 15:56:27] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [21779, 0].
+[2026-02-21 15:56:28] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [15480, 0].
+[2026-02-21 15:56:30] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [17180, 0].
+[2026-02-21 15:56:32] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [17184, 0].
+[2026-02-21 15:56:34] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [17186, 0].
+[2026-02-21 15:56:43] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [21811, 0].
+[2026-02-21 15:56:44] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [15512, 0].
+[2026-02-21 15:56:46] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [17196, 0].
+[2026-02-21 15:56:48] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [17200, 0].
+[2026-02-21 15:56:51] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [17203, 0].
+[2026-02-21 15:56:59] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [21843, 0].
+[2026-02-21 15:57:01] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [15544, 0].
+[2026-02-21 15:57:02] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [17212, 0].
+[2026-02-21 15:57:04] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [17216, 0].
+[2026-02-21 15:57:07] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [17219, 0].
+[2026-02-21 15:57:15] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [21875, 0].
+[2026-02-21 15:57:17] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [15576, 0].
+[2026-02-21 15:57:18] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [17228, 0].
+[2026-02-21 15:57:20] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [17232, 0].
+[2026-02-21 15:57:23] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [17235, 0].
+[2026-02-21 15:57:27] [PLC 2] Monitor finalizado.
+[2026-02-21 15:57:29] Comunicacao serial compartilhada encerrada.
+[2026-02-21 15:57:31] Encerramento solicitado pelo usuario.
+[2026-02-21 15:57:31] Comunicacao serial compartilhada encerrada.
+[2026-02-21 15:57:40] Porta serial COM5 em uso por outro processo: IllegalStateException - Unable to open serial connection
+java.lang.IllegalStateException: Unable to open serial connection
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:133)
+	at org.omron.collector.SharedSerial.connect(SharedSerial.java:85)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:267)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$8(CollectorMultPlcAplication.java:205)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.ctrl.comm.serial.SerialPortException: Serial port in use COM5
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:285)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:78)
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:109)
+	... 38 more
+Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM5 (port busy, access denied, or unavailable)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:289)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:54)
+	... 39 more
+
+[2026-02-21 15:57:47] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-21 15:57:58] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:58:00] [PLC 2] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:58:18] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:58:19] [PLC 2] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-21 15:58:40] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 15:58:40] [PLC 1] MaximumNumberOfRetriesReachedException por 21s. Parando monitor deste PLC.
+[2026-02-21 15:58:40] [PLC 1] Monitor finalizado.
+[2026-02-21 15:58:40] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [22045, 0].
+[2026-02-21 15:58:42] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [15746, 0].
+[2026-02-21 15:58:43] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [17313, 0].
+[2026-02-21 15:58:44] [PLC 2] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-21 15:58:46] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [17318, 0].
+[2026-02-21 15:58:47] [PLC 2] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-21 15:58:49] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [17321, 0].
+[2026-02-21 15:58:50] [PLC 2] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-21 15:58:52] [PLC 2] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [0, 0].
+[2026-02-21 15:58:52] [PLC 2] Monitor finalizado.
+[2026-02-21 15:58:52] Comunicacao serial compartilhada encerrada.
+[2026-02-21 15:58:55] Encerramento solicitado pelo usuario.
+[2026-02-21 15:58:55] Comunicacao serial compartilhada encerrada.
+[2026-02-21 16:00:14] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-21 16:00:20] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-21 16:00:40] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 16:01:02] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 0 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-21 16:01:02] [PLC 1] MaximumNumberOfRetriesReachedException por 21s. Parando monitor deste PLC.
+[2026-02-21 16:01:02] [PLC 1] Monitor finalizado.
+[2026-02-21 16:01:20] [PLC 2] Monitor iniciado para 12 TAGs.
+[2026-02-21 16:01:20] [PLC 2] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-21 16:01:21] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [22365, 0].
+[2026-02-21 16:01:23] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [16066, 0].
+[2026-02-21 16:01:24] [PLC 2] Monitor finalizado.
+[2026-02-21 16:01:31] Encerramento solicitado pelo usuario.
+[2026-02-21 16:01:31] Comunicacao serial compartilhada encerrada.

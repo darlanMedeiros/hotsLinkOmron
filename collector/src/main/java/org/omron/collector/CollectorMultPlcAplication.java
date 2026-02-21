@@ -17,9 +17,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -34,26 +32,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.JTextComponent;
 
-import org.ctrl.DeviceImp;
-import org.ctrl.DeviceRegisterImp;
-import org.ctrl.IData;
-import org.ctrl.IDevice;
-import org.ctrl.IDeviceRegister;
-import org.ctrl.comm.IComControl;
-import org.ctrl.comm.serial.SerialParameters;
 import org.ctrl.comm.serial.SerialPortAbstract;
-import org.ctrl.comm.serial.SerialPortFactoryJSerialComm;
-import org.ctrl.comm.serial.SerialPortHandlerImp;
-import org.ctrl.comm.serial.SerialUtils;
 import org.ctrl.db.config.DbConfig;
-import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.db.service.TagService;
 import org.ctrl.extras.Tag;
-import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
-import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class CollectorMultPlcAplication {
@@ -61,12 +45,7 @@ public class CollectorMultPlcAplication {
     private static final int PLC_NODES = 5;
     private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm:ss");
     private static final DateTimeFormatter FILE_TIME_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private static final int INTER_TAG_DELAY_MS = 1000;
-    private static final int ERROR_RETRY_DELAY_MS = 1500;
-    private static final int MAX_ERROR_RETRY_DELAY_MS = 15000;
     private static final int MAX_LOG_LINES = 4000;
-    private static final int HISTORY_RETENTION_DAYS = 14;
-    private static final int HISTORY_PRUNE_INTERVAL_CYCLES = 500;
     private static final Path LOG_FILE = Path.of("collector-mult-plc.log");
     private static volatile CollectorMultPlcAplication activeInstance;
 
@@ -98,14 +77,13 @@ public class CollectorMultPlcAplication {
     private JCheckBox dtrCheckBox;
     private JLabel serialStatusLabel;
 
-    private final List<PlcNodePanel> plcPanels = new ArrayList<>();
-    private final Object comLock = new Object();
-
-    private SerialPortHandlerImp sharedComHandler;
+    private final List<PlcNodeMonitorPanel> plcPanels = new ArrayList<>();
+    private final SharedSerial sharedSerial = new SharedSerial();
     private AnnotationConfigApplicationContext dbContext;
     private DmValueService dmValueService;
     private TagService tagService;
     private volatile boolean shuttingDown;
+    private volatile boolean forcedDisconnectInProgress;
 
     public static void main(String[] args) {
         installGlobalExceptionHandler();
@@ -137,9 +115,21 @@ public class CollectorMultPlcAplication {
         JPanel container = new JPanel(new GridLayout(PLC_NODES, 1, 4, 4));
         container.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         for (int i = 0; i < PLC_NODES; i++) {
-            PlcNodePanel panel = new PlcNodePanel(i + 1, i);
+            int nodeNumber = i + 1;
+            PlcNodeMonitorPanel panel = new PlcNodeMonitorPanel(
+                    nodeNumber,
+                    i,
+                    MONITORED_TAGS,
+                    sharedSerial.getIoLock(),
+                    this::isSharedConnected,
+                    sharedSerial::getHandler,
+                    this::ensureDb,
+                    () -> dmValueService,
+                    () -> tagService,
+                    this::log,
+                    () -> requestDisconnectByUnresponsiveNode(nodeNumber));
             plcPanels.add(panel);
-            container.add(panel.panel);
+            container.add(panel.getPanel());
         }
 
         frame.add(container, BorderLayout.CENTER);
@@ -247,6 +237,7 @@ public class CollectorMultPlcAplication {
             log("Comunicacao serial compartilhada ja esta ativa.");
             return;
         }
+        forcedDisconnectInProgress = false;
 
         String requestedPort = getSelectedPortName();
         if (requestedPort.isEmpty()) {
@@ -264,35 +255,20 @@ public class CollectorMultPlcAplication {
         }
 
         try {
-            SerialParameters sp = new SerialParameters();
-            sp.setDevice(requestedPort);
-            sp.setBaudRate(SerialPortAbstract.BaudRate.getBaudRate(Integer.parseInt(baudCombo.getSelectedItem().toString())));
-            sp.setDataBits(Integer.parseInt(dataBitsField.getText().trim()));
-            sp.setStopBits(Integer.parseInt(stopBitsField.getText().trim()));
-            sp.setParity(SerialPortAbstract.Parity.valueOf(parityCombo.getSelectedItem().toString()));
-            sp.setRtsEnabled(rtsCheckBox.isSelected());
-            sp.setDtrEnabled(dtrCheckBox.isSelected());
-
-            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
-            SerialPortHandlerImp handler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
-            handler.setProtocolHandler(new ToolbusProtocol());
-            if (handler instanceof IComControl) {
-                int timeout = Integer.parseInt(timeoutField.getText().trim());
-                ((IComControl) handler).setCommunicationTimeOut(timeout);
-            }
-
-            handler.initialize();
-            handler.start();
-            if (!handler.isStarted()) {
-                throw new IllegalStateException(
-                        "Nao foi possivel iniciar a comunicacao serial na porta " + requestedPort + ".");
-            }
-
-            sharedComHandler = handler;
+            SharedSerial.Config config = new SharedSerial.Config(
+                    requestedPort,
+                    Integer.parseInt(baudCombo.getSelectedItem().toString()),
+                    Integer.parseInt(dataBitsField.getText().trim()),
+                    Integer.parseInt(stopBitsField.getText().trim()),
+                    SerialPortAbstract.Parity.valueOf(parityCombo.getSelectedItem().toString()),
+                    Integer.parseInt(timeoutField.getText().trim()),
+                    Boolean.valueOf(rtsCheckBox.isSelected()),
+                    Boolean.valueOf(dtrCheckBox.isSelected()));
+            sharedSerial.connect(config);
             ensureDb();
             setSerialStatus("CONECTADO");
             refreshNodeCommStatus();
-            log("Comunicacao serial compartilhada conectada na porta " + sp.getDevice() + ".");
+            log("Comunicacao serial compartilhada conectada na porta " + requestedPort + ".");
         } catch (Exception ex) {
             if (isSerialPortInUse(ex)) {
                 setSerialStatus("PORTA EM USO");
@@ -307,8 +283,8 @@ public class CollectorMultPlcAplication {
         }
     }
 
-    private void disconnectSharedSerial() {
-        for (PlcNodePanel panel : plcPanels) {
+    private synchronized void disconnectSharedSerial() {
+        for (PlcNodeMonitorPanel panel : plcPanels) {
             panel.stopMonitor();
         }
         safeStopSharedHandler();
@@ -317,21 +293,35 @@ public class CollectorMultPlcAplication {
         log("Comunicacao serial compartilhada encerrada.");
     }
 
+    private void requestDisconnectByUnresponsiveNode(int nodeIndex) {
+        if (shuttingDown || !isSharedConnected()) {
+            return;
+        }
+        synchronized (this) {
+            if (forcedDisconnectInProgress) {
+                return;
+            }
+            forcedDisconnectInProgress = true;
+        }
+        Thread disconnectThread = new Thread(() -> {
+            try {
+                log("[PLC " + nodeIndex + "] Sem resposta prolongada. Desconectando serial compartilhada para liberar a porta.");
+                disconnectSharedSerial();
+            } finally {
+                forcedDisconnectInProgress = false;
+            }
+        }, "collector-force-shared-disconnect");
+        disconnectThread.setDaemon(true);
+        disconnectThread.start();
+    }
+
     private boolean isSharedConnected() {
-        return sharedComHandler != null && sharedComHandler.isStarted();
+        return sharedSerial.isConnected();
     }
 
     private void safeStopSharedHandler() {
-        if (sharedComHandler != null) {
-            synchronized (comLock) {
-                try {
-                    sharedComHandler.stop();
-                } catch (Exception ex) {
-                    log("Erro ao parar comunicacao serial: " + ex.getMessage());
-                } finally {
-                    sharedComHandler = null;
-                }
-            }
+        if (sharedSerial.isConnected()) {
+            sharedSerial.disconnect();
         }
     }
 
@@ -341,255 +331,8 @@ public class CollectorMultPlcAplication {
 
     private void refreshNodeCommStatus() {
         String shared = isSharedConnected() ? "CONECTADA" : "DESCONECTADA";
-        for (PlcNodePanel panel : plcPanels) {
+        for (PlcNodeMonitorPanel panel : plcPanels) {
             panel.setCommStatus(shared);
-        }
-    }
-
-    private final class PlcNodePanel {
-
-        private final int nodeIndex;
-        private final JPanel panel;
-
-        private JTextField nodeField;
-        private JTextField pollMsField;
-        private JLabel commStatusLabel;
-        private JLabel monitorStatusLabel;
-
-        private volatile boolean monitoring;
-        private Thread monitorThread;
-        private IDevice plc;
-        private DeviceInfo deviceInfo;
-
-        private PlcNodePanel(int nodeIndex, int defaultNodeId) {
-            this.nodeIndex = nodeIndex;
-            this.panel = buildNodePanel(defaultNodeId);
-        }
-
-        private JPanel buildNodePanel(int defaultNodeId) {
-            JPanel nodePanel = new JPanel(new GridBagLayout());
-            nodePanel.setBorder(BorderFactory.createTitledBorder("PLC " + nodeIndex));
-            nodePanel.setPreferredSize(new Dimension(0, 88));
-
-            GridBagConstraints c = new GridBagConstraints();
-            c.insets = new Insets(2, 4, 2, 4);
-            c.fill = GridBagConstraints.HORIZONTAL;
-
-            nodeField = new JTextField(Integer.toString(defaultNodeId));
-            pollMsField = new JTextField("2000");
-            nodeField.setColumns(6);
-            pollMsField.setColumns(6);
-
-            int row = 0;
-            c.weightx = 0;
-            c.gridx = 0;
-            c.gridy = row;
-            nodePanel.add(new JLabel("Node ID"), c);
-            c.weightx = 0.2;
-            c.gridx = 1;
-            nodePanel.add(nodeField, c);
-
-            c.weightx = 0;
-            c.gridx = 2;
-            nodePanel.add(new JLabel("Poll (ms)"), c);
-            c.weightx = 0.2;
-            c.gridx = 3;
-            nodePanel.add(pollMsField, c);
-
-            JButton startButton = new JButton("Iniciar monitor");
-            startButton.addActionListener(e -> startMonitor());
-            c.weightx = 0.3;
-            c.gridx = 4;
-            nodePanel.add(startButton, c);
-
-            JButton stopButton = new JButton("Parar monitor");
-            stopButton.addActionListener(e -> stopMonitor());
-            c.weightx = 0.3;
-            c.gridx = 5;
-            nodePanel.add(stopButton, c);
-
-            row++;
-            c.weightx = 0;
-            c.gridx = 0;
-            c.gridy = row;
-            nodePanel.add(new JLabel("Comunicacao"), c);
-            commStatusLabel = new JLabel("DESCONECTADA");
-            c.weightx = 0.35;
-            c.gridx = 1;
-            c.gridwidth = 2;
-            nodePanel.add(commStatusLabel, c);
-            c.gridwidth = 1;
-
-            c.weightx = 0;
-            c.gridx = 2;
-            nodePanel.add(new JLabel("Monitor"), c);
-            monitorStatusLabel = new JLabel("PARADO");
-            c.weightx = 0.65;
-            c.gridx = 3;
-            c.gridwidth = 3;
-            nodePanel.add(monitorStatusLabel, c);
-            c.gridwidth = 1;
-
-            return nodePanel;
-        }
-
-        private void startMonitor() {
-            if (monitoring) {
-                logPrefix("Monitor ja esta em execucao.");
-                return;
-            }
-            if (!isSharedConnected()) {
-                logPrefix("Conecte a serial compartilhada antes de iniciar o monitor.");
-                return;
-            }
-            ensureDb();
-            ensureDevice();
-            ensureTagBindings();
-
-            final int pollMs;
-            try {
-                pollMs = Integer.parseInt(pollMsField.getText().trim());
-                if (pollMs < 100) {
-                    throw new IllegalArgumentException("Poll deve ser >= 100ms.");
-                }
-            } catch (Exception ex) {
-                logPrefix("Parametros invalidos: " + ex.getMessage());
-                return;
-            }
-
-            monitoring = true;
-            monitorThread = new Thread(() -> runMonitorLoop(pollMs), "collector-node-" + nodeIndex + "-monitor");
-            monitorThread.setDaemon(true);
-            monitorThread.start();
-        }
-
-        private void runMonitorLoop(int pollMs) {
-            setMonitorStatus("RODANDO");
-            logPrefix("Monitor iniciado para " + MONITORED_TAGS.length + " TAGs.");
-
-            Map<String, int[]> lastValues = new LinkedHashMap<>();
-            int cycleCount = 0;
-            int consecutiveErrors = 0;
-
-            while (monitoring) {
-                try {
-                    if (!isSharedConnected()) {
-                        throw new IllegalStateException("Serial compartilhada desconectada.");
-                    }
-
-                    for (Tag tag : MONITORED_TAGS) {
-                        if (!monitoring) {
-                            break;
-                        }
-
-                        AreaReadDM read = new AreaReadDM(plc, tag.toMemoryVariable());
-                        synchronized (comLock) {
-                            if (!isSharedConnected()) {
-                                throw new IllegalStateException("Serial compartilhada desconectada.");
-                            }
-                            sharedComHandler.send(read);
-                        }
-
-                        int[] values = parseReply(read.getReply(), tag.getLengthWords());
-                        if (values == null) {
-                            logPrefix("Leitura invalida para TAG " + tag.getName() + ".");
-                        } else {
-                            int[] previous = lastValues.get(tag.getName());
-                            if (hasChanged(previous, values)) {
-                                dmValueService.saveRange(deviceInfo, tag.getAddress(), values);
-                                logPrefix("Alteracao salva: TAG " + tag.getName() + " (DM " + tag.getAddress()
-                                        + ".." + (tag.getAddress() + tag.getLengthWords() - 1) + ") = "
-                                        + formatWords(values) + ".");
-                                lastValues.put(tag.getName(), copyWords(values));
-                            }
-                        }
-
-                        Thread.sleep(INTER_TAG_DELAY_MS);
-                    }
-
-                    setCommStatus("CONECTADA - ciclo " + LocalDateTime.now().format(TIME_FMT));
-                    cycleCount++;
-                    consecutiveErrors = 0;
-                    if (cycleCount % HISTORY_PRUNE_INTERVAL_CYCLES == 0) {
-                        int deletedRows = dmValueService.pruneHistoryOlderThanDays(HISTORY_RETENTION_DAYS);
-                        if (deletedRows > 0) {
-                            logPrefix("Limpeza de historico: " + deletedRows
-                                    + " registros removidos de memory_value.");
-                        }
-                    }
-                    Thread.sleep(pollMs);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                    break;
-                } catch (Exception ex) {
-                    consecutiveErrors++;
-                    setCommStatus("ERRO DE COMUNICACAO");
-                    logPrefix("Erro no monitoramento: " + describeError(ex));
-                    try {
-                        int factor = 1 << Math.min(consecutiveErrors - 1, 3);
-                        int backoffMs = Math.min(MAX_ERROR_RETRY_DELAY_MS, ERROR_RETRY_DELAY_MS * factor);
-                        Thread.sleep(backoffMs);
-                    } catch (InterruptedException interrupted) {
-                        Thread.currentThread().interrupt();
-                        break;
-                    }
-                }
-            }
-
-            setMonitorStatus("PARADO");
-            if (isSharedConnected()) {
-                setCommStatus("CONECTADA");
-            } else {
-                setCommStatus("DESCONECTADA");
-            }
-            logPrefix("Monitor finalizado.");
-        }
-
-        private void stopMonitor() {
-            monitoring = false;
-            Thread localThread = monitorThread;
-            if (localThread != null) {
-                localThread.interrupt();
-                try {
-                    localThread.join(2000);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                } finally {
-                    monitorThread = null;
-                }
-            }
-            setMonitorStatus("PARADO");
-        }
-
-        private void ensureDevice() {
-            int nodeId = Integer.parseInt(nodeField.getText().trim());
-            if (plc == null || plc.getId() != nodeId) {
-                plc = new DeviceImp(nodeId, "PLC-" + nodeIndex, "PLC", "Omron PLC node " + nodeIndex);
-                IDeviceRegister deviceRegister = DeviceRegisterImp.getInstance();
-                deviceRegister.addDevice(plc);
-                deviceInfo = new DeviceInfo("PLC", plc.getName(), plc.getDescription());
-            }
-        }
-
-        private void setCommStatus(String text) {
-            runOnEdt(() -> commStatusLabel.setText(text));
-        }
-
-        private void setMonitorStatus(String text) {
-            runOnEdt(() -> monitorStatusLabel.setText(text));
-        }
-
-        private void logPrefix(String message) {
-            log("[PLC " + nodeIndex + "] " + message);
-        }
-
-        private void ensureTagBindings() {
-            if (tagService == null || deviceInfo == null) {
-                return;
-            }
-            for (Tag tag : MONITORED_TAGS) {
-                tagService.getOrCreateDmTag(deviceInfo, tag.getName(), tag.getAddress());
-            }
         }
     }
 
@@ -641,24 +384,7 @@ public class CollectorMultPlcAplication {
         String selected = (preferredPort == null || preferredPort.trim().isEmpty()) ? getSelectedPortName()
                 : preferredPort.trim();
         try {
-            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
-            List<String> ports = SerialUtils.getPortIdentifiers();
-            portCombo.removeAllItems();
-            for (String port : ports) {
-                portCombo.addItem(port);
-            }
-            if (selected == null || selected.isEmpty()) {
-                if (ports.contains("COM1")) {
-                    selected = "COM1";
-                } else if (!ports.isEmpty()) {
-                    selected = ports.get(0);
-                }
-            } else if (!ports.contains(selected)) {
-                portCombo.addItem(selected);
-            }
-            if (selected != null && !selected.isEmpty()) {
-                portCombo.setSelectedItem(selected);
-            }
+            SharedSerial.refreshAvailablePorts(portCombo, selected, "COM1");
         } catch (Exception ex) {
             if (selected != null && !selected.isEmpty()) {
                 portCombo.removeAllItems();
@@ -670,97 +396,16 @@ public class CollectorMultPlcAplication {
     }
 
     private String getSelectedPortName() {
-        if (portCombo == null) {
-            return "";
-        }
-        Object selectedItem = portCombo.getSelectedItem();
-        if (selectedItem == null) {
-            return "";
-        }
-        String value = selectedItem.toString().trim();
-        if (value.isEmpty() && portCombo.getEditor() != null) {
-            java.awt.Component editorComponent = portCombo.getEditor().getEditorComponent();
-            if (editorComponent instanceof JTextComponent) {
-                value = ((JTextComponent) editorComponent).getText().trim();
-            }
-        }
-        return value;
+        return SharedSerial.getSelectedPortName(portCombo);
     }
 
     private boolean isPortAvailable(String portName) {
         try {
-            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
-            List<String> ports = SerialUtils.getPortIdentifiers();
-            for (String port : ports) {
-                if (portName.equalsIgnoreCase(port)) {
-                    return true;
-                }
-            }
-            return false;
+            return SharedSerial.isPortAvailable(portName);
         } catch (Exception ex) {
             logError("Falha ao validar porta serial " + portName, ex);
             return false;
         }
-    }
-
-    private static int[] parseReply(IData reply, int length) {
-        if (reply == null) {
-            return null;
-        }
-        int[] dataBuff = reply.toHexArray();
-        if (dataBuff == null) {
-            return null;
-        }
-
-        int[] out = new int[length];
-        for (int i = 0; i < length; i++) {
-            String value = "";
-            for (int j = 0; j < 4; j++) {
-                int idx = i * 4 + j;
-                if (idx < dataBuff.length) {
-                    value = value + (char) dataBuff[idx];
-                }
-            }
-            try {
-                out[i] = Integer.parseInt(value.trim(), 16);
-            } catch (NumberFormatException ex) {
-                out[i] = 0;
-            }
-        }
-        return out;
-    }
-
-    private static boolean hasChanged(int[] previous, int[] current) {
-        if (current == null) {
-            return false;
-        }
-        if (previous == null || previous.length != current.length) {
-            return true;
-        }
-        for (int i = 0; i < current.length; i++) {
-            if (previous[i] != current[i]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static int[] copyWords(int[] values) {
-        int[] copy = new int[values.length];
-        for (int i = 0; i < values.length; i++) {
-            copy[i] = values[i];
-        }
-        return copy;
-    }
-
-    private static String formatWords(int[] words) {
-        if (words == null || words.length == 0) {
-            return "[]";
-        }
-        if (words.length == 1) {
-            return "[" + words[0] + "]";
-        }
-        return "[" + words[0] + ", " + words[1] + "]";
     }
 
     private void log(String message) {
@@ -805,26 +450,7 @@ public class CollectorMultPlcAplication {
     }
 
     private static boolean isSerialPortInUse(Throwable error) {
-        Throwable current = error;
-        while (current != null) {
-            String className = current.getClass().getSimpleName();
-            if ("PortInUseException".equals(className)) {
-                return true;
-            }
-            String message = current.getMessage();
-            if (message != null) {
-                String normalized = message.toLowerCase();
-                if (normalized.contains("in use")
-                        || normalized.contains("em uso")
-                        || normalized.contains("busy")
-                        || normalized.contains("access denied")
-                        || normalized.contains("acesso negado")) {
-                    return true;
-                }
-            }
-            current = current.getCause();
-        }
-        return false;
+        return SharedSerial.isSerialPortInUse(error);
     }
 
     private void showPortInUseDialog(String portName) {
@@ -846,8 +472,7 @@ public class CollectorMultPlcAplication {
 
     private static void installGlobalExceptionHandler() {
         Thread.setDefaultUncaughtExceptionHandler((thread, error) -> {
-            String message = "Uncaught exception thread=" + thread.getName() + ": "
-                    + describeError(error);
+            String message = "Uncaught exception thread=" + thread.getName() + ": " + describeError(error);
             appendPersistentLog(message, error);
             CollectorMultPlcAplication app = activeInstance;
             if (app != null) {

@@ -68,15 +68,15 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 
 		getLog().info(getName() + " thread run");
 
-		while (stopRequired != true) {
+		while (!stopRequired) {
 			try {
 				Thread.sleep(SLEEP_TIME);
 				if (protocolHandler instanceof ISpontaneousEventListener) {
 					((ISpontaneousEventListener) protocolHandler).checkEvent();
 				}
 			} catch (InterruptedException ex) {
-
-				System.out.println("Erro run " + ex);
+				Thread.currentThread().interrupt();
+				break;
 			}
 		}
 
@@ -139,9 +139,18 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 	public void stop() {
 		stopRequired = true;
 		ACTIVE_HANDLERS.remove(this);
-		if (workerThread != null) {
-			workerThread.interrupt();
-			workerThread = null;
+		Thread localWorker = workerThread;
+		if (localWorker != null) {
+			localWorker.interrupt();
+			try {
+				localWorker.join(2000);
+			} catch (InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			} finally {
+				if (workerThread == localWorker) {
+					workerThread = null;
+				}
+			}
 		}
 		if (out != null) {
 			try {

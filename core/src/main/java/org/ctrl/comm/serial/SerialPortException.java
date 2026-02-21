@@ -14,11 +14,11 @@ public class SerialPortException extends Exception {
         super(cause);
     }
 
-    public SerialPortException(String msg) throws SerialPortException {
+    public SerialPortException(String msg) {
         super(msg);
     }
 
-    public SerialPortException(String msg, Exception causa) throws SerialPortException {
-        super(msg, causa);
+    public SerialPortException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 }

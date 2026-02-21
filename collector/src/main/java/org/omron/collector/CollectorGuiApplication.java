@@ -16,7 +16,6 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -30,7 +29,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.text.JTextComponent;
 import javax.swing.text.BadLocationException;
 
 import org.ctrl.DeviceImp;
@@ -38,18 +36,12 @@ import org.ctrl.DeviceRegisterImp;
 import org.ctrl.IData;
 import org.ctrl.IDevice;
 import org.ctrl.IDeviceRegister;
-import org.ctrl.comm.IComControl;
-import org.ctrl.comm.serial.SerialParameters;
 import org.ctrl.comm.serial.SerialPortAbstract;
-import org.ctrl.comm.serial.SerialPortFactoryJSerialComm;
-import org.ctrl.comm.serial.SerialPortHandlerImp;
-import org.ctrl.comm.serial.SerialUtils;
 import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.db.service.TagService;
 import org.ctrl.extras.Tag;
-import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -94,7 +86,7 @@ public class CollectorGuiApplication {
 
     private volatile boolean monitoring;
     private Thread monitorThread;
-    private SerialPortHandlerImp comHandler;
+    private final SharedSerial sharedSerial = new SharedSerial();
     private AnnotationConfigApplicationContext dbContext;
     private DmValueService dmValueService;
     private TagService tagService;
@@ -287,29 +279,22 @@ public class CollectorGuiApplication {
         }
 
         try {
-            SerialParameters sp = new SerialParameters();
-            sp.setDevice(requestedPort);
-            sp.setBaudRate(SerialPortAbstract.BaudRate.getBaudRate(Integer.parseInt(baudCombo.getSelectedItem().toString())));
-            sp.setDataBits(Integer.parseInt(dataBitsField.getText().trim()));
-            sp.setStopBits(Integer.parseInt(stopBitsField.getText().trim()));
-            sp.setParity(SerialPortAbstract.Parity.valueOf(parityCombo.getSelectedItem().toString()));
-
-            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
-            comHandler = new SerialPortHandlerImp(SerialUtils.createSerial(sp));
-            comHandler.setProtocolHandler(new ToolbusProtocol());
-            if (comHandler instanceof IComControl) {
-                int timeout = Integer.parseInt(timeoutField.getText().trim());
-                ((IComControl) comHandler).setCommunicationTimeOut(timeout);
-            }
-
-            comHandler.initialize();
-            comHandler.start();
+            SharedSerial.Config config = new SharedSerial.Config(
+                    requestedPort,
+                    Integer.parseInt(baudCombo.getSelectedItem().toString()),
+                    Integer.parseInt(dataBitsField.getText().trim()),
+                    Integer.parseInt(stopBitsField.getText().trim()),
+                    SerialPortAbstract.Parity.valueOf(parityCombo.getSelectedItem().toString()),
+                    Integer.parseInt(timeoutField.getText().trim()),
+                    null,
+                    null);
+            sharedSerial.connect(config);
 
             ensureDevice();
             ensureDb();
 
             setCommStatus("CONECTADO");
-            log("Conectado ao CLP na porta " + sp.getDevice() + ".");
+            log("Conectado ao CLP na porta " + requestedPort + ".");
         } catch (Exception ex) {
             if (isSerialPortInUse(ex)) {
                 setCommStatus("PORTA EM USO");
@@ -375,7 +360,12 @@ public class CollectorGuiApplication {
                         break;
                     }
                     AreaReadDM read = new AreaReadDM(plc, tag.toMemoryVariable());
-                    comHandler.send(read);
+                    synchronized (sharedSerial.getIoLock()) {
+                        if (!isConnected()) {
+                            throw new IllegalStateException("Serial desconectada.");
+                        }
+                        sharedSerial.getHandler().send(read);
+                    }
 
                     int[] values = parseReply(read.getReply(), tag.getLengthWords());
                     if (values == null) {
@@ -465,18 +455,12 @@ public class CollectorGuiApplication {
     }
 
     private boolean isConnected() {
-        return comHandler != null && comHandler.isStarted();
+        return sharedSerial.isConnected();
     }
 
     private void safeStopHandler() {
-        if (comHandler != null) {
-            try {
-                comHandler.stop();
-            } catch (Exception ex) {
-                log("Erro ao parar comunicacao: " + ex.getMessage());
-            } finally {
-                comHandler = null;
-            }
+        if (isConnected()) {
+            sharedSerial.disconnect();
         }
     }
 
@@ -605,24 +589,7 @@ public class CollectorGuiApplication {
     private void refreshAvailablePorts(String preferredPort) {
         String selected = (preferredPort == null || preferredPort.trim().isEmpty()) ? getSelectedPortName() : preferredPort.trim();
         try {
-            SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
-            List<String> ports = SerialUtils.getPortIdentifiers();
-            portCombo.removeAllItems();
-            for (String port : ports) {
-                portCombo.addItem(port);
-            }
-            if (selected == null || selected.isEmpty()) {
-                if (ports.contains("COM2")) {
-                    selected = "COM2";
-                } else if (!ports.isEmpty()) {
-                    selected = ports.get(0);
-                }
-            } else if (!ports.contains(selected)) {
-                portCombo.addItem(selected);
-            }
-            if (selected != null && !selected.isEmpty()) {
-                portCombo.setSelectedItem(selected);
-            }
+            SharedSerial.refreshAvailablePorts(portCombo, selected, "COM2");
         } catch (Exception ex) {
             if (selected != null && !selected.isEmpty()) {
                 portCombo.removeAllItems();
@@ -639,40 +606,11 @@ public class CollectorGuiApplication {
     }
 
     private String getSelectedPortName() {
-        if (portCombo == null) {
-            return "";
-        }
-        Object selectedItem = portCombo.getSelectedItem();
-        if (selectedItem == null) {
-            return "";
-        }
-        String value = selectedItem.toString().trim();
-        if (value.isEmpty() && portCombo.getEditor() != null) {
-            java.awt.Component editorComponent = portCombo.getEditor().getEditorComponent();
-            if (editorComponent instanceof JTextComponent) {
-                value = ((JTextComponent) editorComponent).getText().trim();
-            }
-        }
-        return value;
+        return SharedSerial.getSelectedPortName(portCombo);
     }
 
     private boolean isSerialPortInUse(Throwable error) {
-        Throwable current = error;
-        while (current != null) {
-            String className = current.getClass().getSimpleName();
-            if ("PortInUseException".equals(className)) {
-                return true;
-            }
-            String message = current.getMessage();
-            if (message != null) {
-                String normalized = message.toLowerCase();
-                if (normalized.contains("in use") || normalized.contains("em uso")) {
-                    return true;
-                }
-            }
-            current = current.getCause();
-        }
-        return false;
+        return SharedSerial.isSerialPortInUse(error);
     }
 
     private void showPortInUseDialog(String portName) {
