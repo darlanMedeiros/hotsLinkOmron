@@ -9300,3 +9300,228 @@ Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM
 [2026-02-21 15:02:36] [PLC 1] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [0, 0].
 [2026-02-21 15:02:37] [PLC 1] Alteracao salva: TAG QUALIDADE42 (DM 20..21) = [0, 0].
 [2026-02-21 15:02:37] [PLC 1] Monitor finalizado.
+[2026-02-21 15:03:22] Comunicacao serial compartilhada encerrada.
+[2026-02-21 15:03:26] Porta serial COM5 em uso por outro processo: IllegalStateException - Unable to open serial connection
+java.lang.IllegalStateException: Unable to open serial connection
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:133)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:285)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$1(CollectorMultPlcAplication.java:215)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.ctrl.comm.serial.SerialPortException: Serial port in use COM5
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:285)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:78)
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:109)
+	... 37 more
+Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM5 (port busy, access denied, or unavailable)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:289)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:54)
+	... 38 more
+
+[2026-02-21 15:03:51] Porta serial COM5 em uso por outro processo: IllegalStateException - Unable to open serial connection
+java.lang.IllegalStateException: Unable to open serial connection
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:133)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:285)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$1(CollectorMultPlcAplication.java:215)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.ctrl.comm.serial.SerialPortException: Serial port in use COM5
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:285)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:78)
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:109)
+	... 37 more
+Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM5 (port busy, access denied, or unavailable)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:289)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:54)
+	... 38 more
+
+[2026-02-21 15:10:09] Comunicacao serial compartilhada encerrada.
+[2026-02-21 15:10:15] Encerramento solicitado pelo usuario.
+[2026-02-21 15:10:15] Comunicacao serial compartilhada encerrada.
+[2026-02-21 15:11:17] Porta serial COM5 em uso por outro processo: IllegalStateException - Unable to open serial connection
+java.lang.IllegalStateException: Unable to open serial connection
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:133)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:285)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$1(CollectorMultPlcAplication.java:215)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.ctrl.comm.serial.SerialPortException: Serial port in use COM5
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:285)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:78)
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:109)
+	... 37 more
+Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM5 (port busy, access denied, or unavailable)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:289)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:54)
+	... 38 more
+
+[2026-02-21 15:11:25] [PLC 1] Conecte a serial compartilhada antes de iniciar o monitor.
+[2026-02-21 15:11:32] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-21 15:11:38] [PLC 1] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:11:38] [PLC 1] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-21 15:11:40] [PLC 1] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16417, 0].
+[2026-02-21 15:11:41] [PLC 1] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10166, 0].
+[2026-02-21 15:11:42] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [14492, 0].
+[2026-02-21 15:11:44] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-21 15:11:44] [PLC 1] Monitor finalizado.
+[2026-02-21 15:11:45] Comunicacao serial compartilhada encerrada.
+[2026-02-21 15:12:32] Porta serial COM5 em uso por outro processo: IllegalStateException - Unable to open serial connection
+java.lang.IllegalStateException: Unable to open serial connection
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:133)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:285)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$1(CollectorMultPlcAplication.java:215)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.ctrl.comm.serial.SerialPortException: Serial port in use COM5
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:285)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:78)
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:109)
+	... 37 more
+Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM5 (port busy, access denied, or unavailable)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:289)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:54)
+	... 38 more
+
+[2026-02-21 15:12:40] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-21 15:12:45] [PLC 2] Monitor iniciado para 12 TAGs.
+[2026-02-21 15:12:45] [PLC 2] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-21 15:12:47] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16551, 0].
+[2026-02-21 15:12:48] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10298, 0].
+[2026-02-21 15:12:49] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [14559, 0].
+[2026-02-21 15:12:51] [PLC 2] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-21 15:12:51] [PLC 2] Monitor finalizado.
+[2026-02-21 15:12:58] Comunicacao serial compartilhada encerrada.
+[2026-02-21 15:13:01] Encerramento solicitado pelo usuario.
+[2026-02-21 15:13:01] Comunicacao serial compartilhada encerrada.

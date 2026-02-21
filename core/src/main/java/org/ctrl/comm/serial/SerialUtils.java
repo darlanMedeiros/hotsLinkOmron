@@ -23,7 +23,7 @@ public class SerialUtils {
 
     static public void trySelectConnector() throws SerialPortException {
         Iterator<ValidatorSerialPortFactory> iterator = validatorSet.iterator();
-        while (iterator.hasNext() && getSerialPortFactory() == null) {
+        while (iterator.hasNext() && SerialUtils.factory == null) {
             ValidatorSerialPortFactory validator = iterator.next();
             if (validator.validate()) {
                 try {
@@ -33,7 +33,7 @@ public class SerialUtils {
                 }
             }
         }
-        if (getSerialPortFactory() == null) {
+        if (SerialUtils.factory == null) {
             throw new SerialPortException("There are no available connectors");
         }
     }
