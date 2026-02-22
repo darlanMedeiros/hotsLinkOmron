@@ -82,11 +82,12 @@ Lista completa em `GET_ENDPOINTS.md`.
 
 Exemplos:
 
-1. `GET http://localhost:8080/api/devices/PLC/dm?start=0&end=10`
-2. `GET http://localhost:8080/api/devices/PLC/dm/0/current`
-3. `GET http://localhost:8080/api/devices/PLC/rr/10/bit/0`
-4. `GET http://localhost:8080/api/devices/PLC/tag/PECAPH29`
-5. `POST http://localhost:8080/api/devices/PLC/tags/dm/29?name=PECAPH29`
+1. `GET http://localhost:8080/api/devices/PLC1CARGA/dm?start=0&end=10`
+2. `GET http://localhost:8080/api/devices/PLC1CARGA/dm/0/current`
+3. `GET http://localhost:8080/api/devices/PLC1CARGA/rr/10/bit/0`
+4. `GET http://localhost:8080/api/devices/tag/PECAPH29`
+5. `GET http://localhost:8080/api/devices/PLC1CARGA/tag/PECAPH29`
+6. `POST http://localhost:8080/api/devices/PLC1CARGA/tags/dm/29?name=PECAPH29`
 
 ## Documentacao adicional
 

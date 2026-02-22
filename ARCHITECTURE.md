@@ -56,6 +56,7 @@ O projeto esta dividido em quatro modulos com responsabilidades separadas:
 ### Consulta via API
 
 1. `web` chama endpoints `GET/POST /api/...`.
+2. Para TAG por nome global, usa `GET /api/devices/tag/{name}`.
 2. `api` delega para servicos/repositorios do `core`.
 3. Dados sao lidos de Postgres e retornados para o frontend.
 

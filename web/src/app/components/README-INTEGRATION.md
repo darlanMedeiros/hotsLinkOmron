@@ -29,31 +29,34 @@ npm run dev
 
 `App.tsx` consulta:
 
-1. `GET /api/devices/PLC/tag/PECAPH29`
-2. `GET /api/devices/PLC/tag/PECAROLLERCARGA41`
-3. `GET /api/devices/PLC/tag/QUALIDADE41`
+1. `GET /api/devices/tag/PECAPH29`
+2. `GET /api/devices/tag/PECAROLLERCARGA41`
+3. `GET /api/devices/tag/QUALIDADE41`
 4. E equivalentes para linhas 42 e 43.
 
 Se uma TAG nao existir, o backend retorna `404` e o frontend tenta fallback definido no array de tags da linha.
 
 ## 4. Estrutura de dados esperada
 
-Resposta do endpoint de TAG:
+Resposta do endpoint de TAG por nome global:
 
 ```json
-{
-  "tagName": "PECAPH29",
-  "memoryName": "DM29",
-  "deviceMnemonic": "PLC",
-  "value": 123,
-  "updatedAt": "2026-02-15T10:30:00"
-}
+[
+  {
+    "tagName": "PECAPH29",
+    "memoryName": "DM29",
+    "deviceMnemonic": "PLC4PRENSA",
+    "value": 123,
+    "updatedAt": "2026-02-15T10:30:00"
+  }
+]
 ```
 
 Campos usados no frontend:
 
 1. `value` -> metrica exibida no card.
 2. `updatedAt` -> calculo de ultimo update da linha.
+3. Quando vier lista, o App usa o registro com `updatedAt` mais recente.
 
 ## 5. Dependencias do pipeline completo
 
@@ -67,9 +70,9 @@ Para o dashboard mostrar valores reais:
 ## 6. Cadastro de TAGs (exemplo)
 
 ```bash
-curl -X POST "http://localhost:8080/api/devices/PLC/tags/dm/29?name=PECAPH29"
-curl -X POST "http://localhost:8080/api/devices/PLC/tags/dm/100?name=PECAROLLERCARGA41"
-curl -X POST "http://localhost:8080/api/devices/PLC/tags/dm/200?name=QUALIDADE41"
+curl -X POST "http://localhost:8080/api/devices/PLC1CARGA/tags/dm/29?name=PECAPH29"
+curl -X POST "http://localhost:8080/api/devices/PLC1CARGA/tags/dm/100?name=PECAROLLERCARGA41"
+curl -X POST "http://localhost:8080/api/devices/PLC3ESC41/tags/dm/200?name=QUALIDADE41"
 ```
 
 Repita para as demais linhas.
