@@ -137,9 +137,9 @@ public class Tag {
     public static final Tag PECAPH29 = dmDWord("PECAPH29", 100);
     public static final Tag PECAPH30 = dmDWord("PECAPH30", 102);
     public static final Tag PECAPH31 = dmDWord("PECAPH31", 104);
-    public static final Tag PECAROLLERCARGA41 = dmDWord("PECAROLLERCARGA41", 106);
-    public static final Tag PECAROLLERDESC41 = dmDWord("PECAROLLERDESC41", 8);
-    public static final Tag PECAROLLERCARGA42 = dmDWord("PECAROLLERCARGA42", 108);
+    public static final Tag PECAROLLERCARGA41 = dmDWord("PECAROLLERCARGA41", 100);
+    public static final Tag PECAROLLERDESC41 = dmDWord("PECAROLLERDESC41", 102);
+    public static final Tag PECAROLLERCARGA42 = dmDWord("PECAROLLERCARGA42", 104);
     public static final Tag PECAROLLERDESC42 = dmDWord("PECAROLLERDESC42", 12);
     public static final Tag PECAROLLERCARGA43 = dmDWord("PECAROLLERCARGA43", 110);
     public static final Tag PECAROLLERDESC43 = dmDWord("PECAROLLERDESC43", 16);

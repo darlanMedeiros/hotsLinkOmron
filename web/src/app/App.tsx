@@ -96,11 +96,27 @@ export default function App() {
     let backendOffline = false;
 
     const fetchTagValue = async (tagNames: string[]): Promise<TagValueResponse> => {
+      const pickMostRecent = (items: TagValueResponse[]): TagValueResponse => {
+        const sorted = [...items].sort((a, b) => {
+          const aTime = a.updatedAt ? Date.parse(a.updatedAt) : 0;
+          const bTime = b.updatedAt ? Date.parse(b.updatedAt) : 0;
+          return bTime - aTime;
+        });
+        return sorted[0];
+      };
+
       let lastStatus = 0;
       for (const tagName of tagNames) {
-        const response = await fetch(`/api/devices/PLC/tag/${encodeURIComponent(tagName)}`);
+        const response = await fetch(`/api/devices/tag/${encodeURIComponent(tagName)}`);
         if (response.ok) {
-          return (await response.json()) as TagValueResponse;
+          const body = (await response.json()) as TagValueResponse | TagValueResponse[];
+          if (Array.isArray(body)) {
+            if (body.length === 0) {
+              continue;
+            }
+            return pickMostRecent(body);
+          }
+          return body;
         }
         lastStatus = response.status;
         if (response.status !== 404) {
@@ -140,7 +156,7 @@ export default function App() {
 
     const probeBackend = async (): Promise<boolean> => {
       try {
-        const response = await fetch(`/api/devices/PLC/tag/${encodeURIComponent(OFFLINE_PROBE_TAG)}`);
+        const response = await fetch(`/api/devices/tag/${encodeURIComponent(OFFLINE_PROBE_TAG)}`);
         return response.ok || response.status >= 400;
       } catch (err) {
         return !(err instanceof TypeError);
