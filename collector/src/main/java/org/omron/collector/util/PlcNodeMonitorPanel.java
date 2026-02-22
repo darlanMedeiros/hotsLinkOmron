@@ -1,4 +1,4 @@
-package org.omron.collector;
+package org.omron.collector.util;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -30,7 +30,7 @@ import org.ctrl.db.service.TagService;
 import org.ctrl.extras.Tag;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 
-final class PlcNodeMonitorPanel {
+public class PlcNodeMonitorPanel {
 
     private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm:ss");
     private static final int INTER_TAG_DELAY_MS = 1000;
@@ -42,6 +42,8 @@ final class PlcNodeMonitorPanel {
     private static final long MAX_RETRIES_STOP_MONITOR_MS = 3000L;
 
     private final int nodeIndex;
+    private final String plcTitle;
+    private final String plcMnemonic;
     private final Tag[] monitoredTags;
     private final Object comLock;
     private final Supplier<Boolean> sharedConnectedSupplier;
@@ -63,7 +65,9 @@ final class PlcNodeMonitorPanel {
     private IDevice plc;
     private DeviceInfo deviceInfo;
 
-    PlcNodeMonitorPanel(int nodeIndex,
+    public PlcNodeMonitorPanel(int nodeIndex,
+            String plcTitle,
+            String plcMnemonic,
             int defaultNodeId,
             Tag[] monitoredTags,
             Object comLock,
@@ -75,6 +79,8 @@ final class PlcNodeMonitorPanel {
             Consumer<String> globalLogger,
             Runnable sharedDisconnectAction) {
         this.nodeIndex = nodeIndex;
+        this.plcTitle = plcTitle;
+        this.plcMnemonic = plcMnemonic;
         this.monitoredTags = monitoredTags;
         this.comLock = comLock;
         this.sharedConnectedSupplier = sharedConnectedSupplier;
@@ -87,7 +93,7 @@ final class PlcNodeMonitorPanel {
         this.panel = buildNodePanel(defaultNodeId);
     }
 
-    JPanel getPanel() {
+    public JPanel getPanel() {
         return panel;
     }
 
@@ -122,7 +128,7 @@ final class PlcNodeMonitorPanel {
         monitorThread.start();
     }
 
-    void stopMonitor() {
+    public void stopMonitor() {
         monitoring = false;
         Thread localThread = monitorThread;
         if (localThread != null) {
@@ -142,13 +148,13 @@ final class PlcNodeMonitorPanel {
         setMonitorStatus("PARADO");
     }
 
-    void setCommStatus(String text) {
+    public void setCommStatus(String text) {
         runOnEdt(() -> commStatusLabel.setText(text));
     }
 
     private JPanel buildNodePanel(int defaultNodeId) {
         JPanel nodePanel = new JPanel(new GridBagLayout());
-        nodePanel.setBorder(BorderFactory.createTitledBorder("PLC " + nodeIndex));
+        nodePanel.setBorder(BorderFactory.createTitledBorder(plcTitle));
         nodePanel.setPreferredSize(new Dimension(0, 88));
 
         GridBagConstraints c = new GridBagConstraints();
@@ -336,10 +342,10 @@ final class PlcNodeMonitorPanel {
     private void ensureDevice() {
         int nodeId = Integer.parseInt(nodeField.getText().trim());
         if (plc == null || plc.getId() != nodeId) {
-            plc = new DeviceImp(nodeId, "PLC-" + nodeIndex, "PLC", "Omron PLC node " + nodeIndex);
+            plc = new DeviceImp(nodeId, plcMnemonic, plcTitle, "Omron " + plcTitle);
             IDeviceRegister deviceRegister = DeviceRegisterImp.getInstance();
             deviceRegister.addDevice(plc);
-            deviceInfo = new DeviceInfo("PLC", plc.getName(), plc.getDescription());
+            deviceInfo = new DeviceInfo(plcMnemonic, plc.getName(), plc.getDescription());
         }
     }
 

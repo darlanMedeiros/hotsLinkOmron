@@ -1,4 +1,4 @@
-package org.omron.collector;
+package org.omron.collector.util;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import org.ctrl.comm.serial.SerialPortHandlerImp;
 import org.ctrl.comm.serial.SerialUtils;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
 
-final class SharedSerial {
+public class SharedSerial {
 
-    static final class Config {
+    public static final class Config {
         private final String device;
         private final int baudRate;
         private final int dataBits;
@@ -25,7 +25,7 @@ final class SharedSerial {
         private final Boolean rtsEnabled;
         private final Boolean dtrEnabled;
 
-        Config(String device,
+        public Config(String device,
                 int baudRate,
                 int dataBits,
                 int stopBits,
@@ -47,19 +47,19 @@ final class SharedSerial {
     private final Object ioLock = new Object();
     private SerialPortHandlerImp handler;
 
-    Object getIoLock() {
+    public Object getIoLock() {
         return ioLock;
     }
 
-    synchronized SerialPortHandlerImp getHandler() {
+    public synchronized SerialPortHandlerImp getHandler() {
         return handler;
     }
 
-    synchronized boolean isConnected() {
+    public synchronized boolean isConnected() {
         return handler != null && handler.isStarted();
     }
 
-    synchronized void connect(Config config) throws Exception {
+    public synchronized void connect(Config config) throws Exception {
         SerialParameters params = new SerialParameters();
         params.setDevice(config.device);
         params.setBaudRate(SerialPortAbstract.BaudRate.getBaudRate(config.baudRate));
@@ -100,7 +100,7 @@ final class SharedSerial {
         handler = newHandler;
     }
 
-    synchronized void disconnect() {
+    public synchronized void disconnect() {
         if (handler == null) {
             return;
         }
@@ -115,7 +115,7 @@ final class SharedSerial {
         }
     }
 
-    static void refreshAvailablePorts(JComboBox<String> portCombo, String preferredPort, String fallbackPort) throws Exception {
+    public static void refreshAvailablePorts(JComboBox<String> portCombo, String preferredPort, String fallbackPort) throws Exception {
         String selected = (preferredPort == null || preferredPort.trim().isEmpty())
                 ? getSelectedPortName(portCombo)
                 : preferredPort.trim();
@@ -142,7 +142,7 @@ final class SharedSerial {
         }
     }
 
-    static String getSelectedPortName(JComboBox<String> portCombo) {
+    public static String getSelectedPortName(JComboBox<String> portCombo) {
         if (portCombo == null) {
             return "";
         }
@@ -160,7 +160,7 @@ final class SharedSerial {
         return value;
     }
 
-    static boolean isPortAvailable(String portName) throws Exception {
+    public static boolean isPortAvailable(String portName) throws Exception {
         SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
         List<String> ports = SerialUtils.getPortIdentifiers();
         for (String port : ports) {
@@ -171,7 +171,7 @@ final class SharedSerial {
         return false;
     }
 
-    static boolean isSerialPortInUse(Throwable error) {
+    public static boolean isSerialPortInUse(Throwable error) {
         Throwable current = error;
         while (current != null) {
             String className = current.getClass().getSimpleName();

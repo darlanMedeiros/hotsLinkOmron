@@ -38,6 +38,8 @@ import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.db.service.TagService;
 import org.ctrl.extras.Tag;
+import org.omron.collector.util.PlcNodeMonitorPanel;
+import org.omron.collector.util.SharedSerial;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class CollectorMultPlcAplication {
@@ -49,20 +51,31 @@ public class CollectorMultPlcAplication {
     private static final Path LOG_FILE = Path.of("collector-mult-plc.log");
     private static volatile CollectorMultPlcAplication activeInstance;
 
-    private static final Tag[] MONITORED_TAGS = new Tag[] {
-            Tag.PECAPH29,
-            Tag.PECAPH30,
-            Tag.PECAPH31,
+    private static final Tag[] PLC_1_TAGS = new Tag[] {
             Tag.PECAROLLERCARGA41,
             Tag.PECAROLLERDESC41,
             Tag.PECAROLLERCARGA42,
             Tag.PECAROLLERDESC42,
             Tag.PECAROLLERCARGA43,
-            Tag.PECAROLLERDESC43,
+            Tag.PECAROLLERDESC43
+    };
+
+    private static final Tag[] PLC_3_TAGS = new Tag[] {
             Tag.QUALIDADE41,
-            Tag.QUALIDADE42,
+            Tag.QUALIDADE42
+    };
+
+    private static final Tag[] PLC_4_TAGS = new Tag[] {
+            Tag.PECAPH29,
+            Tag.PECAPH30,
+            Tag.PECAPH31
+    };
+
+    private static final Tag[] PLC_5_TAGS = new Tag[] {
             Tag.QUALIDADE43
     };
+
+    private static final Tag[] NO_TAGS = new Tag[0];
 
     private JFrame frame;
     private JTextArea logArea;
@@ -118,8 +131,10 @@ public class CollectorMultPlcAplication {
             int nodeNumber = i + 1;
             PlcNodeMonitorPanel panel = new PlcNodeMonitorPanel(
                     nodeNumber,
-                    i,
-                    MONITORED_TAGS,
+                    getPlcTitle(nodeNumber),
+                    getPlcMnemonic(nodeNumber),
+                    nodeNumber,
+                    getTagsForPlc(nodeNumber),
                     sharedSerial.getIoLock(),
                     this::isSharedConnected,
                     sharedSerial::getHandler,
@@ -134,6 +149,55 @@ public class CollectorMultPlcAplication {
 
         frame.add(container, BorderLayout.CENTER);
         frame.add(buildLogPanel(), BorderLayout.EAST);
+    }
+
+    private static Tag[] getTagsForPlc(int plcId) {
+        switch (plcId) {
+            case 1:
+                return PLC_1_TAGS;
+            case 3:
+                return PLC_3_TAGS;
+            case 4:
+                return PLC_4_TAGS;
+            case 5:
+                return PLC_5_TAGS;
+            default:
+                return NO_TAGS;
+        }
+    }
+
+    private static String getPlcTitle(int plcId) {
+        switch (plcId) {
+            case 1:
+                return "PLC 1 CARGA";
+            case 2:
+                return "PLC 2 VENTOSA";
+            case 3:
+                return "PLC 3 ESCOLHA 41";
+            case 4:
+                return "PLC 4 PRENSA";
+            case 5:
+                return "PLC 5 ESCOLHA 43";
+            default:
+                return "PLC " + plcId;
+        }
+    }
+
+    private static String getPlcMnemonic(int plcId) {
+        switch (plcId) {
+            case 1:
+                return "PLC1CARGA";
+            case 2:
+                return "PLC2VENT";
+            case 3:
+                return "PLC3ESC41";
+            case 4:
+                return "PLC4PRENSA";
+            case 5:
+                return "PLC5ESC43";
+            default:
+                return "PLC" + plcId;
+        }
     }
 
     private JPanel buildSharedSerialPanel() {

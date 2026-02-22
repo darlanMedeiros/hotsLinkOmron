@@ -9937,3 +9937,1158 @@ Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM
 [2026-02-21 16:01:24] [PLC 2] Monitor finalizado.
 [2026-02-21 16:01:31] Encerramento solicitado pelo usuario.
 [2026-02-21 16:01:31] Comunicacao serial compartilhada encerrada.
+[2026-02-22 08:36:51] Porta serial COM5 em uso por outro processo: IllegalStateException - Unable to open serial connection
+java.lang.IllegalStateException: Unable to open serial connection
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:133)
+	at org.omron.collector.util.SharedSerial.connect(SharedSerial.java:85)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:269)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$8(CollectorMultPlcAplication.java:207)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.ctrl.comm.serial.SerialPortException: Serial port in use COM5
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:285)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:78)
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:109)
+	... 38 more
+Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM5 (port busy, access denied, or unavailable)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:289)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:54)
+	... 39 more
+
+[2026-02-22 08:36:58] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-22 08:37:07] [PLC 2] Monitor iniciado para 12 TAGs.
+[2026-02-22 08:37:07] [PLC 2] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-22 08:37:09] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [10537, 0].
+[2026-02-22 08:37:10] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [3496, 0].
+[2026-02-22 08:37:12] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [11688, 0].
+[2026-02-22 08:37:13] [PLC 2] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-22 08:37:14] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [11694, 0].
+[2026-02-22 08:37:16] [PLC 2] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-22 08:37:17] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [11697, 0].
+[2026-02-22 08:37:19] [PLC 2] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-22 08:37:20] [PLC 2] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [0, 0].
+[2026-02-22 08:37:22] [PLC 2] Alteracao salva: TAG QUALIDADE42 (DM 20..21) = [0, 0].
+[2026-02-22 08:37:23] [PLC 2] Alteracao salva: TAG QUALIDADE43 (DM 22..23) = [0, 0].
+[2026-02-22 08:37:28] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [10575, 0].
+[2026-02-22 08:37:29] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [3534, 0].
+[2026-02-22 08:37:30] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [11707, 0].
+[2026-02-22 08:37:32] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [11712, 0].
+[2026-02-22 08:37:35] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [11714, 0].
+[2026-02-22 08:37:44] [PLC 2] Alteracao salva: TAG PECAPH30 (DM 102..103) = [10607, 0].
+[2026-02-22 08:37:45] [PLC 2] Alteracao salva: TAG PECAPH31 (DM 104..105) = [3566, 0].
+[2026-02-22 08:37:46] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [11722, 0].
+[2026-02-22 08:37:48] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [11728, 0].
+[2026-02-22 08:37:51] [PLC 2] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [11730, 0].
+[2026-02-22 08:37:52] [PLC 2] Monitor finalizado.
+[2026-02-22 08:37:56] Comunicacao serial compartilhada encerrada.
+[2026-02-22 08:37:58] Encerramento solicitado pelo usuario.
+[2026-02-22 08:37:58] Comunicacao serial compartilhada encerrada.
+[2026-02-22 08:44:18] Porta serial COM5 em uso por outro processo: IllegalStateException - Unable to open serial connection
+java.lang.IllegalStateException: Unable to open serial connection
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:133)
+	at org.omron.collector.util.SharedSerial.connect(SharedSerial.java:85)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:295)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$buildSharedSerialPanel$4(CollectorMultPlcAplication.java:233)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.ctrl.comm.serial.SerialPortException: Serial port in use COM5
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:285)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:78)
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:109)
+	... 38 more
+Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM5 (port busy, access denied, or unavailable)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:289)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:54)
+	... 39 more
+
+[2026-02-22 08:44:26] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-22 08:44:31] [PLC 2] Monitor iniciado para 0 TAGs.
+[2026-02-22 08:45:26] Encerramento cancelado.
+[2026-02-22 08:45:27] [PLC 2] Monitor finalizado.
+[2026-02-22 08:45:27] Comunicacao serial compartilhada encerrada.
+[2026-02-22 08:45:30] Encerramento solicitado pelo usuario.
+[2026-02-22 08:45:30] Comunicacao serial compartilhada encerrada.
+[2026-02-22 08:47:06] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-22 08:47:14] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-02-22 08:47:14] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [12291, 0].
+[2026-02-22 08:47:16] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-22 08:47:17] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [12297, 0].
+[2026-02-22 08:47:19] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-22 08:47:20] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [12300, 0].
+[2026-02-22 08:47:22] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-22 08:47:25] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [12302, 0].
+[2026-02-22 08:47:27] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [12307, 0].
+[2026-02-22 08:47:30] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [12309, 0].
+[2026-02-22 08:47:34] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [12311, 0].
+[2026-02-22 08:47:36] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [12316, 0].
+[2026-02-22 08:47:39] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [12318, 0].
+[2026-02-22 08:47:43] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [12320, 0].
+[2026-02-22 08:47:46] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [12325, 0].
+[2026-02-22 08:47:48] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [12327, 0].
+[2026-02-22 08:47:52] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [12329, 0].
+[2026-02-22 08:47:55] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [12334, 0].
+[2026-02-22 08:47:55] [PLC 1] Monitor finalizado.
+[2026-02-22 08:47:55] Comunicacao serial compartilhada encerrada.
+[2026-02-22 09:01:22] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-22 09:01:31] [PLC 2] Monitor iniciado para 0 TAGs.
+[2026-02-22 09:01:56] [PLC 5] Monitor iniciado para 1 TAGs.
+[2026-02-22 09:01:57] [PLC 5] Alteracao salva: TAG QUALIDADE43 (DM 22..23) = [0, 0].
+[2026-02-22 09:02:45] [PLC 5] Monitor finalizado.
+[2026-02-22 09:03:31] [PLC 4] Monitor iniciado para 3 TAGs.
+[2026-02-22 09:03:31] [PLC 4] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-22 09:03:33] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [12295, 0].
+[2026-02-22 09:03:34] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [5234, 0].
+[2026-02-22 09:04:39] [PLC 2] Monitor finalizado.
+[2026-02-22 09:04:47] [PLC 4] Monitor finalizado.
+[2026-02-22 09:05:17] Encerramento solicitado pelo usuario.
+[2026-02-22 09:05:17] Comunicacao serial compartilhada encerrada.
+[2026-02-22 09:09:45] Encerramento cancelado.
+[2026-02-22 09:09:48] Encerramento solicitado pelo usuario.
+[2026-02-22 09:09:48] Comunicacao serial compartilhada encerrada.
+[2026-02-22 09:11:37] Comunicacao serial compartilhada conectada na porta COM3.
+[2026-02-22 09:11:43] Comunicacao serial compartilhada encerrada.
+[2026-02-22 09:11:48] Porta serial COM5 em uso por outro processo: IllegalStateException - Unable to open serial connection
+java.lang.IllegalStateException: Unable to open serial connection
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:133)
+	at org.omron.collector.util.SharedSerial.connect(SharedSerial.java:85)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:313)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$8(CollectorMultPlcAplication.java:251)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.ctrl.comm.serial.SerialPortException: Serial port in use COM5
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:285)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:78)
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:109)
+	... 38 more
+Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM5 (port busy, access denied, or unavailable)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:289)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:54)
+	... 39 more
+
+[2026-02-22 09:11:58] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-22 09:12:04] [PLC 4] Monitor iniciado para 3 TAGs.
+[2026-02-22 09:12:05] [PLC 4] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-22 09:12:07] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [12295, 0].
+[2026-02-22 09:12:08] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [5234, 0].
+[2026-02-22 09:12:21] [PLC 4] Monitor finalizado.
+[2026-02-22 09:12:39] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-02-22 09:12:39] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [12564, 0].
+[2026-02-22 09:12:41] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-22 09:12:42] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [12567, 0].
+[2026-02-22 09:12:44] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-22 09:12:45] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [12567, 0].
+[2026-02-22 09:12:47] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-22 09:15:18] [PLC 1] Monitor finalizado.
+[2026-02-22 09:15:18] Comunicacao serial compartilhada encerrada.
+[2026-02-22 09:17:15] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-22 09:17:27] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-02-22 09:17:48] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC id: 1 cmd: RD val: [48, 49, 48, 54, 48, 48, 48, 50] / 01060002
+[2026-02-22 09:17:49] [PLC 1] Monitor finalizado.
+[2026-02-22 09:17:58] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-02-22 09:17:58] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [12627, 0].
+[2026-02-22 09:17:59] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-22 09:18:01] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [12633, 0].
+[2026-02-22 09:18:02] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-22 09:18:03] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [12635, 0].
+[2026-02-22 09:18:03] [PLC 1] Monitor finalizado.
+[2026-02-22 09:18:20] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-02-22 09:18:20] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [12649, 0].
+[2026-02-22 09:18:22] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-22 09:18:23] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [12655, 0].
+[2026-02-22 09:18:24] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-22 09:18:25] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [12657, 0].
+[2026-02-22 09:18:27] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-22 09:18:30] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [12659, 0].
+[2026-02-22 09:18:32] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [12664, 0].
+[2026-02-22 09:18:35] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [12666, 0].
+[2026-02-22 09:18:39] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [12668, 0].
+[2026-02-22 09:18:41] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [12673, 0].
+[2026-02-22 09:18:44] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [12676, 0].
+[2026-02-22 09:18:48] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [12677, 0].
+[2026-02-22 09:18:48] [PLC 1] Monitor finalizado.
+[2026-02-22 09:19:23] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-02-22 09:19:23] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 106..107) = [0, 0].
+[2026-02-22 09:19:24] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 8..9) = [0, 0].
+[2026-02-22 09:19:26] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 108..109) = [0, 0].
+[2026-02-22 09:19:27] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-22 09:19:28] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [0, 0].
+[2026-02-22 09:19:29] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-22 09:19:35] [PLC 1] Monitor finalizado.
+[2026-02-22 09:23:51] [PLC 4] Monitor iniciado para 3 TAGs.
+[2026-02-22 09:23:51] [PLC 4] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-22 09:23:52] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13113, 0].
+[2026-02-22 09:23:53] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6064, 0].
+[2026-02-22 09:23:58] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13123, 0].
+[2026-02-22 09:23:59] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6074, 0].
+[2026-02-22 09:24:03] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13135, 0].
+[2026-02-22 09:24:05] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6086, 0].
+[2026-02-22 09:24:09] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13145, 0].
+[2026-02-22 09:24:10] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6098, 0].
+[2026-02-22 09:24:15] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13157, 0].
+[2026-02-22 09:24:16] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6108, 0].
+[2026-02-22 09:24:20] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13169, 0].
+[2026-02-22 09:24:22] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6120, 0].
+[2026-02-22 09:24:26] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13179, 0].
+[2026-02-22 09:24:27] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6132, 0].
+[2026-02-22 09:24:32] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13189, 0].
+[2026-02-22 09:24:33] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6142, 0].
+[2026-02-22 09:24:37] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13199, 0].
+[2026-02-22 09:24:38] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6154, 0].
+[2026-02-22 09:24:42] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13211, 0].
+[2026-02-22 09:24:44] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6164, 0].
+[2026-02-22 09:24:48] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13223, 0].
+[2026-02-22 09:24:50] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6176, 0].
+[2026-02-22 09:24:54] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13233, 0].
+[2026-02-22 09:24:55] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6188, 0].
+[2026-02-22 09:24:59] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13245, 0].
+[2026-02-22 09:25:01] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6198, 0].
+[2026-02-22 09:25:05] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13257, 0].
+[2026-02-22 09:25:07] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6210, 0].
+[2026-02-22 09:25:11] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13267, 0].
+[2026-02-22 09:25:12] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6222, 0].
+[2026-02-22 09:25:17] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13279, 0].
+[2026-02-22 09:25:18] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6232, 0].
+[2026-02-22 09:25:22] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13291, 0].
+[2026-02-22 09:25:24] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6244, 0].
+[2026-02-22 09:25:28] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13299, 0].
+[2026-02-22 09:25:29] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6256, 0].
+[2026-02-22 09:25:34] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13311, 0].
+[2026-02-22 09:25:35] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6264, 0].
+[2026-02-22 09:25:39] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13323, 0].
+[2026-02-22 09:25:41] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6276, 0].
+[2026-02-22 09:25:45] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13333, 0].
+[2026-02-22 09:25:46] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6288, 0].
+[2026-02-22 09:25:51] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13345, 0].
+[2026-02-22 09:25:52] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6298, 0].
+[2026-02-22 09:25:56] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13357, 0].
+[2026-02-22 09:25:57] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6310, 0].
+[2026-02-22 09:26:02] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13367, 0].
+[2026-02-22 09:26:03] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6320, 0].
+[2026-02-22 09:26:07] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13379, 0].
+[2026-02-22 09:26:09] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6332, 0].
+[2026-02-22 09:26:13] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13389, 0].
+[2026-02-22 09:26:14] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6344, 0].
+[2026-02-22 09:26:19] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13401, 0].
+[2026-02-22 09:26:20] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6354, 0].
+[2026-02-22 09:26:24] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13413, 0].
+[2026-02-22 09:26:26] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6366, 0].
+[2026-02-22 09:26:30] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13425, 0].
+[2026-02-22 09:26:31] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6378, 0].
+[2026-02-22 09:26:36] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13435, 0].
+[2026-02-22 09:26:37] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6388, 0].
+[2026-02-22 09:26:41] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13447, 0].
+[2026-02-22 09:26:43] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6400, 0].
+[2026-02-22 09:26:47] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13457, 0].
+[2026-02-22 09:26:48] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6412, 0].
+[2026-02-22 09:26:52] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13469, 0].
+[2026-02-22 09:26:54] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6422, 0].
+[2026-02-22 09:26:58] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13481, 0].
+[2026-02-22 09:27:00] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6434, 0].
+[2026-02-22 09:27:04] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13491, 0].
+[2026-02-22 09:27:05] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6446, 0].
+[2026-02-22 09:27:10] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13503, 0].
+[2026-02-22 09:27:11] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6456, 0].
+[2026-02-22 09:27:15] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13515, 0].
+[2026-02-22 09:27:16] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6468, 0].
+[2026-02-22 09:27:21] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13525, 0].
+[2026-02-22 09:27:22] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6480, 0].
+[2026-02-22 09:27:27] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13537, 0].
+[2026-02-22 09:27:28] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6490, 0].
+[2026-02-22 09:27:32] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13549, 0].
+[2026-02-22 09:27:34] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6502, 0].
+[2026-02-22 09:27:38] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13561, 0].
+[2026-02-22 09:27:39] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6514, 0].
+[2026-02-22 09:27:44] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13571, 0].
+[2026-02-22 09:27:45] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6524, 0].
+[2026-02-22 09:27:49] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13583, 0].
+[2026-02-22 09:27:51] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6536, 0].
+[2026-02-22 09:27:55] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13593, 0].
+[2026-02-22 09:27:56] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6548, 0].
+[2026-02-22 09:28:01] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13605, 0].
+[2026-02-22 09:28:02] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6558, 0].
+[2026-02-22 09:28:06] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13617, 0].
+[2026-02-22 09:28:08] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6570, 0].
+[2026-02-22 09:28:12] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13627, 0].
+[2026-02-22 09:28:13] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6582, 0].
+[2026-02-22 09:28:18] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13639, 0].
+[2026-02-22 09:28:19] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6592, 0].
+[2026-02-22 09:28:23] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13651, 0].
+[2026-02-22 09:28:25] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6604, 0].
+[2026-02-22 09:28:29] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13661, 0].
+[2026-02-22 09:28:30] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6616, 0].
+[2026-02-22 09:28:35] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13673, 0].
+[2026-02-22 09:28:36] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6626, 0].
+[2026-02-22 09:28:40] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13685, 0].
+[2026-02-22 09:28:42] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6638, 0].
+[2026-02-22 09:28:46] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13695, 0].
+[2026-02-22 09:28:47] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6650, 0].
+[2026-02-22 09:28:52] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13707, 0].
+[2026-02-22 09:28:53] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6660, 0].
+[2026-02-22 09:28:57] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13719, 0].
+[2026-02-22 09:28:59] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6672, 0].
+[2026-02-22 09:29:03] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13731, 0].
+[2026-02-22 09:29:04] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6684, 0].
+[2026-02-22 09:29:09] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13741, 0].
+[2026-02-22 09:29:10] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6694, 0].
+[2026-02-22 09:29:14] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13751, 0].
+[2026-02-22 09:29:15] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6706, 0].
+[2026-02-22 09:29:20] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13761, 0].
+[2026-02-22 09:29:21] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6716, 0].
+[2026-02-22 09:29:25] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13773, 0].
+[2026-02-22 09:29:27] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6728, 0].
+[2026-02-22 09:29:31] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13785, 0].
+[2026-02-22 09:29:33] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6740, 0].
+[2026-02-22 09:29:37] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13797, 0].
+[2026-02-22 09:29:38] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6752, 0].
+[2026-02-22 09:29:43] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13807, 0].
+[2026-02-22 09:29:44] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6764, 0].
+[2026-02-22 09:29:48] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13817, 0].
+[2026-02-22 09:29:50] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6774, 0].
+[2026-02-22 09:29:54] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13827, 0].
+[2026-02-22 09:29:55] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6786, 0].
+[2026-02-22 09:30:00] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13839, 0].
+[2026-02-22 09:30:01] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6796, 0].
+[2026-02-22 09:30:05] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13851, 0].
+[2026-02-22 09:30:06] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6808, 0].
+[2026-02-22 09:30:11] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13861, 0].
+[2026-02-22 09:30:12] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6818, 0].
+[2026-02-22 09:30:16] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13873, 0].
+[2026-02-22 09:30:18] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6830, 0].
+[2026-02-22 09:30:22] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13883, 0].
+[2026-02-22 09:30:23] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6842, 0].
+[2026-02-22 09:30:28] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13893, 0].
+[2026-02-22 09:30:29] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6852, 0].
+[2026-02-22 09:30:33] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13905, 0].
+[2026-02-22 09:30:35] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6864, 0].
+[2026-02-22 09:30:39] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13915, 0].
+[2026-02-22 09:30:40] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6876, 0].
+[2026-02-22 09:30:45] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13927, 0].
+[2026-02-22 09:30:46] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6886, 0].
+[2026-02-22 09:30:50] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13939, 0].
+[2026-02-22 09:30:52] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6898, 0].
+[2026-02-22 09:30:56] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13949, 0].
+[2026-02-22 09:30:57] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6910, 0].
+[2026-02-22 09:31:02] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13961, 0].
+[2026-02-22 09:31:03] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6920, 0].
+[2026-02-22 09:31:07] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13973, 0].
+[2026-02-22 09:31:09] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6932, 0].
+[2026-02-22 09:31:13] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13983, 0].
+[2026-02-22 09:31:14] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6944, 0].
+[2026-02-22 09:31:19] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [13995, 0].
+[2026-02-22 09:31:20] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6954, 0].
+[2026-02-22 09:31:24] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14007, 0].
+[2026-02-22 09:31:26] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6966, 0].
+[2026-02-22 09:31:30] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14017, 0].
+[2026-02-22 09:31:31] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6978, 0].
+[2026-02-22 09:31:36] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14029, 0].
+[2026-02-22 09:31:37] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [6988, 0].
+[2026-02-22 09:31:41] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14041, 0].
+[2026-02-22 09:31:43] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7000, 0].
+[2026-02-22 09:31:47] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14049, 0].
+[2026-02-22 09:31:48] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7012, 0].
+[2026-02-22 09:31:53] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14061, 0].
+[2026-02-22 09:31:54] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7022, 0].
+[2026-02-22 09:31:58] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14073, 0].
+[2026-02-22 09:32:00] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7034, 0].
+[2026-02-22 09:32:04] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14083, 0].
+[2026-02-22 09:32:05] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7046, 0].
+[2026-02-22 09:32:10] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14095, 0].
+[2026-02-22 09:32:11] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7058, 0].
+[2026-02-22 09:32:16] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14107, 0].
+[2026-02-22 09:32:17] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7068, 0].
+[2026-02-22 09:32:22] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14119, 0].
+[2026-02-22 09:32:23] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7080, 0].
+[2026-02-22 09:32:27] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14131, 0].
+[2026-02-22 09:32:29] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7092, 0].
+[2026-02-22 09:32:33] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14143, 0].
+[2026-02-22 09:32:34] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7104, 0].
+[2026-02-22 09:32:39] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14153, 0].
+[2026-02-22 09:32:40] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7114, 0].
+[2026-02-22 09:32:45] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14165, 0].
+[2026-02-22 09:32:46] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7126, 0].
+[2026-02-22 09:32:50] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14177, 0].
+[2026-02-22 09:32:51] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7138, 0].
+[2026-02-22 09:32:56] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14187, 0].
+[2026-02-22 09:32:57] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7148, 0].
+[2026-02-22 09:33:01] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14199, 0].
+[2026-02-22 09:33:03] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7160, 0].
+[2026-02-22 09:33:07] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14211, 0].
+[2026-02-22 09:33:08] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7172, 0].
+[2026-02-22 09:33:13] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14221, 0].
+[2026-02-22 09:33:14] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7184, 0].
+[2026-02-22 09:33:18] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14233, 0].
+[2026-02-22 09:33:20] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7194, 0].
+[2026-02-22 09:33:24] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14243, 0].
+[2026-02-22 09:33:25] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7206, 0].
+[2026-02-22 09:33:30] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14255, 0].
+[2026-02-22 09:33:31] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7216, 0].
+[2026-02-22 09:33:35] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14267, 0].
+[2026-02-22 09:33:36] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7228, 0].
+[2026-02-22 09:33:41] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14277, 0].
+[2026-02-22 09:33:42] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7238, 0].
+[2026-02-22 09:33:46] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14289, 0].
+[2026-02-22 09:33:48] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7250, 0].
+[2026-02-22 09:33:52] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14301, 0].
+[2026-02-22 09:33:53] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7262, 0].
+[2026-02-22 09:33:58] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14311, 0].
+[2026-02-22 09:33:59] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7272, 0].
+[2026-02-22 09:34:03] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14323, 0].
+[2026-02-22 09:34:04] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7284, 0].
+[2026-02-22 09:34:09] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14333, 0].
+[2026-02-22 09:34:10] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7294, 0].
+[2026-02-22 09:34:15] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14345, 0].
+[2026-02-22 09:34:16] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7306, 0].
+[2026-02-22 09:34:20] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14357, 0].
+[2026-02-22 09:34:21] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7318, 0].
+[2026-02-22 09:34:26] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14367, 0].
+[2026-02-22 09:34:27] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7328, 0].
+[2026-02-22 09:34:31] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14379, 0].
+[2026-02-22 09:34:33] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7340, 0].
+[2026-02-22 09:34:37] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14391, 0].
+[2026-02-22 09:34:38] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7352, 0].
+[2026-02-22 09:34:43] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14401, 0].
+[2026-02-22 09:34:44] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7362, 0].
+[2026-02-22 09:34:48] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14413, 0].
+[2026-02-22 09:34:49] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7374, 0].
+[2026-02-22 09:34:54] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14423, 0].
+[2026-02-22 09:34:55] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7384, 0].
+[2026-02-22 09:35:00] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14435, 0].
+[2026-02-22 09:35:01] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7396, 0].
+[2026-02-22 09:35:05] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14447, 0].
+[2026-02-22 09:35:06] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7406, 0].
+[2026-02-22 09:35:11] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14457, 0].
+[2026-02-22 09:35:12] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7416, 0].
+[2026-02-22 09:35:16] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14469, 0].
+[2026-02-22 09:35:18] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7428, 0].
+[2026-02-22 09:35:22] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14479, 0].
+[2026-02-22 09:35:23] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7440, 0].
+[2026-02-22 09:35:28] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14489, 0].
+[2026-02-22 09:35:29] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7452, 0].
+[2026-02-22 09:35:34] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14501, 0].
+[2026-02-22 09:35:35] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7462, 0].
+[2026-02-22 09:35:40] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14513, 0].
+[2026-02-22 09:35:41] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7474, 0].
+[2026-02-22 09:35:45] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14525, 0].
+[2026-02-22 09:35:46] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7486, 0].
+[2026-02-22 09:35:51] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14535, 0].
+[2026-02-22 09:35:52] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7498, 0].
+[2026-02-22 09:35:56] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14547, 0].
+[2026-02-22 09:35:58] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7508, 0].
+[2026-02-22 09:36:02] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14559, 0].
+[2026-02-22 09:36:03] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7520, 0].
+[2026-02-22 09:36:08] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14569, 0].
+[2026-02-22 09:36:09] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7530, 0].
+[2026-02-22 09:36:13] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14581, 0].
+[2026-02-22 09:36:15] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7542, 0].
+[2026-02-22 09:36:19] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14591, 0].
+[2026-02-22 09:36:21] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7554, 0].
+[2026-02-22 09:36:25] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14601, 0].
+[2026-02-22 09:36:26] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7566, 0].
+[2026-02-22 09:36:31] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14613, 0].
+[2026-02-22 09:36:32] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7576, 0].
+[2026-02-22 09:36:36] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14625, 0].
+[2026-02-22 09:36:37] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7588, 0].
+[2026-02-22 09:36:42] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14635, 0].
+[2026-02-22 09:36:43] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7598, 0].
+[2026-02-22 09:36:47] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14647, 0].
+[2026-02-22 09:36:49] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7610, 0].
+[2026-02-22 09:36:53] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14657, 0].
+[2026-02-22 09:36:54] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7622, 0].
+[2026-02-22 09:36:58] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14669, 0].
+[2026-02-22 09:37:00] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7632, 0].
+[2026-02-22 09:37:04] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14681, 0].
+[2026-02-22 09:37:05] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7644, 0].
+[2026-02-22 09:37:10] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14691, 0].
+[2026-02-22 09:37:11] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7656, 0].
+[2026-02-22 09:37:15] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14703, 0].
+[2026-02-22 09:37:17] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7666, 0].
+[2026-02-22 09:37:21] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14715, 0].
+[2026-02-22 09:37:22] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7678, 0].
+[2026-02-22 09:37:27] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14725, 0].
+[2026-02-22 09:37:28] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7690, 0].
+[2026-02-22 09:37:32] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14737, 0].
+[2026-02-22 09:37:34] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7700, 0].
+[2026-02-22 09:37:38] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14747, 0].
+[2026-02-22 09:37:39] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7712, 0].
+[2026-02-22 09:37:44] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14759, 0].
+[2026-02-22 09:37:45] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7722, 0].
+[2026-02-22 09:37:49] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14771, 0].
+[2026-02-22 09:37:51] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7734, 0].
+[2026-02-22 09:37:55] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14781, 0].
+[2026-02-22 09:37:56] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7746, 0].
+[2026-02-22 09:38:01] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14793, 0].
+[2026-02-22 09:38:02] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7758, 0].
+[2026-02-22 09:38:06] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14803, 0].
+[2026-02-22 09:38:08] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7768, 0].
+[2026-02-22 09:38:12] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14815, 0].
+[2026-02-22 09:38:13] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7780, 0].
+[2026-02-22 09:38:18] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14825, 0].
+[2026-02-22 09:38:19] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7790, 0].
+[2026-02-22 09:38:23] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14837, 0].
+[2026-02-22 09:38:25] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7802, 0].
+[2026-02-22 09:38:29] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14849, 0].
+[2026-02-22 09:38:30] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7814, 0].
+[2026-02-22 09:38:35] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14859, 0].
+[2026-02-22 09:38:36] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7824, 0].
+[2026-02-22 09:38:40] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14871, 0].
+[2026-02-22 09:38:41] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7836, 0].
+[2026-02-22 09:38:46] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14881, 0].
+[2026-02-22 09:38:47] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7848, 0].
+[2026-02-22 09:38:52] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14893, 0].
+[2026-02-22 09:38:53] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7858, 0].
+[2026-02-22 09:38:57] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14905, 0].
+[2026-02-22 09:38:59] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7870, 0].
+[2026-02-22 09:39:03] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14915, 0].
+[2026-02-22 09:39:04] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7882, 0].
+[2026-02-22 09:39:08] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14927, 0].
+[2026-02-22 09:39:10] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7892, 0].
+[2026-02-22 09:39:14] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14939, 0].
+[2026-02-22 09:39:15] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7904, 0].
+[2026-02-22 09:39:20] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14949, 0].
+[2026-02-22 09:39:21] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7914, 0].
+[2026-02-22 09:39:25] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14961, 0].
+[2026-02-22 09:39:27] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7926, 0].
+[2026-02-22 09:39:31] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14973, 0].
+[2026-02-22 09:39:32] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7938, 0].
+[2026-02-22 09:39:37] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14983, 0].
+[2026-02-22 09:39:38] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7948, 0].
+[2026-02-22 09:39:42] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [14995, 0].
+[2026-02-22 09:39:44] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7960, 0].
+[2026-02-22 09:39:48] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15005, 0].
+[2026-02-22 09:39:49] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7972, 0].
+[2026-02-22 09:39:53] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15017, 0].
+[2026-02-22 09:39:55] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7982, 0].
+[2026-02-22 09:39:59] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15027, 0].
+[2026-02-22 09:40:00] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [7994, 0].
+[2026-02-22 09:40:05] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15039, 0].
+[2026-02-22 09:40:06] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8004, 0].
+[2026-02-22 09:40:10] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15051, 0].
+[2026-02-22 09:40:12] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8016, 0].
+[2026-02-22 09:40:16] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15063, 0].
+[2026-02-22 09:40:17] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8028, 0].
+[2026-02-22 09:40:22] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15073, 0].
+[2026-02-22 09:40:23] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8040, 0].
+[2026-02-22 09:40:27] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15085, 0].
+[2026-02-22 09:40:29] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8050, 0].
+[2026-02-22 09:40:33] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15095, 0].
+[2026-02-22 09:40:34] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8062, 0].
+[2026-02-22 09:40:39] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15107, 0].
+[2026-02-22 09:40:40] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8072, 0].
+[2026-02-22 09:40:44] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15119, 0].
+[2026-02-22 09:40:46] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8084, 0].
+[2026-02-22 09:40:50] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15129, 0].
+[2026-02-22 09:40:51] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8096, 0].
+[2026-02-22 09:40:55] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15141, 0].
+[2026-02-22 09:40:57] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8106, 0].
+[2026-02-22 09:41:01] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15151, 0].
+[2026-02-22 09:41:02] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8118, 0].
+[2026-02-22 09:41:06] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15161, 0].
+[2026-02-22 09:41:08] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8128, 0].
+[2026-02-22 09:41:12] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15173, 0].
+[2026-02-22 09:41:13] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8140, 0].
+[2026-02-22 09:41:18] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15183, 0].
+[2026-02-22 09:41:19] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8150, 0].
+[2026-02-22 09:41:23] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15193, 0].
+[2026-02-22 09:41:25] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8162, 0].
+[2026-02-22 09:41:29] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15205, 0].
+[2026-02-22 09:41:30] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8174, 0].
+[2026-02-22 09:41:35] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15215, 0].
+[2026-02-22 09:41:36] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8186, 0].
+[2026-02-22 09:41:40] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15227, 0].
+[2026-02-22 09:41:42] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8196, 0].
+[2026-02-22 09:41:46] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15239, 0].
+[2026-02-22 09:41:47] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8208, 0].
+[2026-02-22 09:41:52] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15249, 0].
+[2026-02-22 09:41:53] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8218, 0].
+[2026-02-22 09:41:57] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15261, 0].
+[2026-02-22 09:41:58] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8230, 0].
+[2026-02-22 09:42:03] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15271, 0].
+[2026-02-22 09:42:04] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8242, 0].
+[2026-02-22 09:42:09] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15283, 0].
+[2026-02-22 09:42:10] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8252, 0].
+[2026-02-22 09:42:14] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15295, 0].
+[2026-02-22 09:42:16] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8264, 0].
+[2026-02-22 09:42:20] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15305, 0].
+[2026-02-22 09:42:21] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8276, 0].
+[2026-02-22 09:42:26] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15317, 0].
+[2026-02-22 09:42:27] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8286, 0].
+[2026-02-22 09:42:31] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15329, 0].
+[2026-02-22 09:42:32] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8298, 0].
+[2026-02-22 09:42:37] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15339, 0].
+[2026-02-22 09:42:38] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8310, 0].
+[2026-02-22 09:42:43] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15351, 0].
+[2026-02-22 09:42:44] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8320, 0].
+[2026-02-22 09:42:48] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15363, 0].
+[2026-02-22 09:42:49] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8332, 0].
+[2026-02-22 09:42:54] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15373, 0].
+[2026-02-22 09:42:55] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8344, 0].
+[2026-02-22 09:43:00] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15385, 0].
+[2026-02-22 09:43:01] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8354, 0].
+[2026-02-22 09:43:05] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15397, 0].
+[2026-02-22 09:43:07] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8366, 0].
+[2026-02-22 09:43:11] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15407, 0].
+[2026-02-22 09:43:12] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8378, 0].
+[2026-02-22 09:43:16] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15419, 0].
+[2026-02-22 09:43:18] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8388, 0].
+[2026-02-22 09:43:22] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15431, 0].
+[2026-02-22 09:43:23] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8400, 0].
+[2026-02-22 09:43:28] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15441, 0].
+[2026-02-22 09:43:29] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8412, 0].
+[2026-02-22 09:43:33] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15453, 0].
+[2026-02-22 09:43:35] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8422, 0].
+[2026-02-22 09:43:39] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15463, 0].
+[2026-02-22 09:43:40] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8434, 0].
+[2026-02-22 09:43:45] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15475, 0].
+[2026-02-22 09:43:46] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8444, 0].
+[2026-02-22 09:43:50] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15487, 0].
+[2026-02-22 09:43:51] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8456, 0].
+[2026-02-22 09:43:56] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15497, 0].
+[2026-02-22 09:43:57] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8466, 0].
+[2026-02-22 09:44:01] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15509, 0].
+[2026-02-22 09:44:03] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8478, 0].
+[2026-02-22 09:44:07] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15519, 0].
+[2026-02-22 09:44:08] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8490, 0].
+[2026-02-22 09:44:13] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15529, 0].
+[2026-02-22 09:44:14] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8500, 0].
+[2026-02-22 09:44:18] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15541, 0].
+[2026-02-22 09:44:20] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8512, 0].
+[2026-02-22 09:44:24] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15553, 0].
+[2026-02-22 09:44:25] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8524, 0].
+[2026-02-22 09:44:29] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15563, 0].
+[2026-02-22 09:44:31] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8534, 0].
+[2026-02-22 09:44:35] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15573, 0].
+[2026-02-22 09:44:36] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8546, 0].
+[2026-02-22 09:44:41] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15583, 0].
+[2026-02-22 09:44:42] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8556, 0].
+[2026-02-22 09:44:46] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15595, 0].
+[2026-02-22 09:44:48] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8568, 0].
+[2026-02-22 09:44:52] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15605, 0].
+[2026-02-22 09:44:54] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8580, 0].
+[2026-02-22 09:44:58] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15617, 0].
+[2026-02-22 09:44:59] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8592, 0].
+[2026-02-22 09:45:04] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15629, 0].
+[2026-02-22 09:45:05] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8602, 0].
+[2026-02-22 09:45:09] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15641, 0].
+[2026-02-22 09:45:11] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8614, 0].
+[2026-02-22 09:45:15] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15653, 0].
+[2026-02-22 09:45:16] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8626, 0].
+[2026-02-22 09:45:21] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15663, 0].
+[2026-02-22 09:45:22] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8638, 0].
+[2026-02-22 09:45:27] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15675, 0].
+[2026-02-22 09:45:28] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8650, 0].
+[2026-02-22 09:45:32] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15687, 0].
+[2026-02-22 09:45:34] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8660, 0].
+[2026-02-22 09:45:38] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15699, 0].
+[2026-02-22 09:45:39] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8672, 0].
+[2026-02-22 09:45:44] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15709, 0].
+[2026-02-22 09:45:45] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8682, 0].
+[2026-02-22 09:45:49] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15721, 0].
+[2026-02-22 09:45:51] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8694, 0].
+[2026-02-22 09:45:55] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15729, 0].
+[2026-02-22 09:45:56] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8706, 0].
+[2026-02-22 09:46:01] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15741, 0].
+[2026-02-22 09:46:02] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8716, 0].
+[2026-02-22 09:46:06] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15753, 0].
+[2026-02-22 09:46:07] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8728, 0].
+[2026-02-22 09:46:12] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15763, 0].
+[2026-02-22 09:46:14] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8740, 0].
+[2026-02-22 09:46:18] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15775, 0].
+[2026-02-22 09:46:19] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8752, 0].
+[2026-02-22 09:46:24] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15785, 0].
+[2026-02-22 09:46:25] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8762, 0].
+[2026-02-22 09:46:29] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15797, 0].
+[2026-02-22 09:46:31] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8774, 0].
+[2026-02-22 09:46:35] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15807, 0].
+[2026-02-22 09:46:36] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8786, 0].
+[2026-02-22 09:46:41] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15819, 0].
+[2026-02-22 09:46:42] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8796, 0].
+[2026-02-22 09:46:46] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15831, 0].
+[2026-02-22 09:46:47] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8808, 0].
+[2026-02-22 09:46:52] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15841, 0].
+[2026-02-22 09:46:53] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8820, 0].
+[2026-02-22 09:46:57] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15853, 0].
+[2026-02-22 09:46:59] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8830, 0].
+[2026-02-22 09:47:03] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15863, 0].
+[2026-02-22 09:47:04] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8842, 0].
+[2026-02-22 09:47:09] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15873, 0].
+[2026-02-22 09:47:10] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8854, 0].
+[2026-02-22 09:47:14] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15885, 0].
+[2026-02-22 09:47:15] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8864, 0].
+[2026-02-22 09:47:20] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15895, 0].
+[2026-02-22 09:47:21] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8876, 0].
+[2026-02-22 09:47:26] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15907, 0].
+[2026-02-22 09:47:27] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8886, 0].
+[2026-02-22 09:47:31] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15917, 0].
+[2026-02-22 09:47:32] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8898, 0].
+[2026-02-22 09:47:37] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15927, 0].
+[2026-02-22 09:47:38] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8910, 0].
+[2026-02-22 09:47:42] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15939, 0].
+[2026-02-22 09:47:44] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8920, 0].
+[2026-02-22 09:47:48] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15951, 0].
+[2026-02-22 09:47:49] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8932, 0].
+[2026-02-22 09:47:54] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [15961, 0].
+[2026-02-22 09:47:55] Encerramento cancelado.
+[2026-02-22 09:47:55] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [8942, 0].
+[2026-02-22 09:47:58] Encerramento solicitado pelo usuario.
+[2026-02-22 09:47:58] [PLC 4] Monitor finalizado.
+[2026-02-22 09:47:58] Comunicacao serial compartilhada encerrada.
+[2026-02-22 09:49:05] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-22 09:49:16] Uncaught exception thread=AWT-EventQueue-0: DataIntegrityViolationException - PreparedStatementCallback; SQL [INSERT INTO public.device (mnemonic, name, description) VALUES (?, ?, ?) ON CONFLICT (mnemonic) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description RETURNING id]; ERRO: valor é muito longo para tipo character varying(10); nested exception is org.postgresql.util.PSQLException: ERRO: valor é muito longo para tipo character varying(10)
+org.springframework.dao.DataIntegrityViolationException: PreparedStatementCallback; SQL [INSERT INTO public.device (mnemonic, name, description) VALUES (?, ?, ?) ON CONFLICT (mnemonic) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description RETURNING id]; ERRO: valor é muito longo para tipo character varying(10); nested exception is org.postgresql.util.PSQLException: ERRO: valor é muito longo para tipo character varying(10)
+	at org.springframework.jdbc.support.SQLStateSQLExceptionTranslator.doTranslate(SQLStateSQLExceptionTranslator.java:104)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:73)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:82)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:82)
+	at org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1577)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:669)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:715)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:740)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:796)
+	at org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate.queryForObject(NamedParameterJdbcTemplate.java:246)
+	at org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate.queryForObject(NamedParameterJdbcTemplate.java:263)
+	at org.ctrl.db.service.TagService.ensureDevice(TagService.java:128)
+	at org.ctrl.db.service.TagService.getOrCreateTag(TagService.java:80)
+	at org.ctrl.db.service.TagService.getOrCreateDmTag(TagService.java:91)
+	at org.omron.collector.util.PlcNodeMonitorPanel.ensureTagBindings(PlcNodeMonitorPanel.java:366)
+	at org.omron.collector.util.PlcNodeMonitorPanel.startMonitor(PlcNodeMonitorPanel.java:112)
+	at org.omron.collector.util.PlcNodeMonitorPanel.lambda$buildNodePanel$2(PlcNodeMonitorPanel.java:186)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.postgresql.util.PSQLException: ERRO: valor é muito longo para tipo character varying(10)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2675)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2365)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:355)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:490)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:408)
+	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:167)
+	at org.postgresql.jdbc.PgPreparedStatement.executeQuery(PgPreparedStatement.java:119)
+	at org.springframework.jdbc.core.JdbcTemplate$1.doInPreparedStatement(JdbcTemplate.java:724)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:650)
+	... 46 more
+
+[2026-02-22 09:49:16] Erro nao tratado: DataIntegrityViolationException - PreparedStatementCallback; SQL [INSERT INTO public.device (mnemonic, name, description) VALUES (?, ?, ?) ON CONFLICT (mnemonic) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description RETURNING id]; ERRO: valor é muito longo para tipo character varying(10); nested exception is org.postgresql.util.PSQLException: ERRO: valor é muito longo para tipo character varying(10)
+org.springframework.dao.DataIntegrityViolationException: PreparedStatementCallback; SQL [INSERT INTO public.device (mnemonic, name, description) VALUES (?, ?, ?) ON CONFLICT (mnemonic) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description RETURNING id]; ERRO: valor é muito longo para tipo character varying(10); nested exception is org.postgresql.util.PSQLException: ERRO: valor é muito longo para tipo character varying(10)
+	at org.springframework.jdbc.support.SQLStateSQLExceptionTranslator.doTranslate(SQLStateSQLExceptionTranslator.java:104)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:73)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:82)
+	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:82)
+	at org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1577)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:669)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:715)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:740)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:796)
+	at org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate.queryForObject(NamedParameterJdbcTemplate.java:246)
+	at org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate.queryForObject(NamedParameterJdbcTemplate.java:263)
+	at org.ctrl.db.service.TagService.ensureDevice(TagService.java:128)
+	at org.ctrl.db.service.TagService.getOrCreateTag(TagService.java:80)
+	at org.ctrl.db.service.TagService.getOrCreateDmTag(TagService.java:91)
+	at org.omron.collector.util.PlcNodeMonitorPanel.ensureTagBindings(PlcNodeMonitorPanel.java:366)
+	at org.omron.collector.util.PlcNodeMonitorPanel.startMonitor(PlcNodeMonitorPanel.java:112)
+	at org.omron.collector.util.PlcNodeMonitorPanel.lambda$buildNodePanel$2(PlcNodeMonitorPanel.java:186)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.postgresql.util.PSQLException: ERRO: valor é muito longo para tipo character varying(10)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2675)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2365)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:355)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:490)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:408)
+	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:167)
+	at org.postgresql.jdbc.PgPreparedStatement.executeQuery(PgPreparedStatement.java:119)
+	at org.springframework.jdbc.core.JdbcTemplate$1.doInPreparedStatement(JdbcTemplate.java:724)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:650)
+	... 46 more
+
+[2026-02-22 09:51:38] Encerramento solicitado pelo usuario.
+[2026-02-22 09:51:38] Comunicacao serial compartilhada encerrada.
+[2026-02-22 09:51:53] Comunicacao serial compartilhada conectada na porta COM3.
+[2026-02-22 09:51:57] Comunicacao serial compartilhada encerrada.
+[2026-02-22 09:52:02] Porta serial COM5 em uso por outro processo: IllegalStateException - Unable to open serial connection
+java.lang.IllegalStateException: Unable to open serial connection
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:133)
+	at org.omron.collector.util.SharedSerial.connect(SharedSerial.java:85)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:331)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$8(CollectorMultPlcAplication.java:269)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.ctrl.comm.serial.SerialPortException: Serial port in use COM5
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:285)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:78)
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:109)
+	... 38 more
+Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM5 (port busy, access denied, or unavailable)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:289)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:54)
+	... 39 more
+
+[2026-02-22 09:52:09] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-22 09:52:14] [PLC 4] Monitor iniciado para 3 TAGs.
+[2026-02-22 09:52:14] [PLC 4] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-02-22 09:52:16] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16477, 0].
+[2026-02-22 09:52:17] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9464, 0].
+[2026-02-22 09:52:21] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16489, 0].
+[2026-02-22 09:52:23] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9476, 0].
+[2026-02-22 09:52:27] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16499, 0].
+[2026-02-22 09:52:28] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9488, 0].
+[2026-02-22 09:52:32] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16511, 0].
+[2026-02-22 09:52:34] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9498, 0].
+[2026-02-22 09:52:38] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16523, 0].
+[2026-02-22 09:52:40] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9510, 0].
+[2026-02-22 09:52:44] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16531, 0].
+[2026-02-22 09:52:45] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9522, 0].
+[2026-02-22 09:52:49] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16543, 0].
+[2026-02-22 09:52:51] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9532, 0].
+[2026-02-22 09:52:55] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16555, 0].
+[2026-02-22 09:52:56] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9544, 0].
+[2026-02-22 09:53:01] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16565, 0].
+[2026-02-22 09:53:02] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9556, 0].
+[2026-02-22 09:53:06] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16577, 0].
+[2026-02-22 09:53:08] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9566, 0].
+[2026-02-22 09:53:12] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16587, 0].
+[2026-02-22 09:53:13] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9578, 0].
+[2026-02-22 09:53:17] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16599, 0].
+[2026-02-22 09:53:19] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9588, 0].
+[2026-02-22 09:53:23] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16611, 0].
+[2026-02-22 09:53:24] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9600, 0].
+[2026-02-22 09:53:29] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16621, 0].
+[2026-02-22 09:53:30] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9612, 0].
+[2026-02-22 09:53:35] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16633, 0].
+[2026-02-22 09:53:36] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9622, 0].
+[2026-02-22 09:53:40] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16645, 0].
+[2026-02-22 09:53:42] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9634, 0].
+[2026-02-22 09:53:46] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16657, 0].
+[2026-02-22 09:53:47] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9646, 0].
+[2026-02-22 09:53:52] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16667, 0].
+[2026-02-22 09:53:53] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9656, 0].
+[2026-02-22 09:53:57] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16679, 0].
+[2026-02-22 09:53:59] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9668, 0].
+[2026-02-22 09:54:03] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16689, 0].
+[2026-02-22 09:54:04] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9680, 0].
+[2026-02-22 09:54:09] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16699, 0].
+[2026-02-22 09:54:10] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9690, 0].
+[2026-02-22 09:54:14] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16711, 0].
+[2026-02-22 09:54:16] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9702, 0].
+[2026-02-22 09:54:20] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16721, 0].
+[2026-02-22 09:54:21] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9714, 0].
+[2026-02-22 09:54:26] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16733, 0].
+[2026-02-22 09:54:27] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9724, 0].
+[2026-02-22 09:54:31] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16745, 0].
+[2026-02-22 09:54:32] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9736, 0].
+[2026-02-22 09:54:37] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16755, 0].
+[2026-02-22 09:54:38] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9748, 0].
+[2026-02-22 09:54:43] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16767, 0].
+[2026-02-22 09:54:44] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9758, 0].
+[2026-02-22 09:54:48] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16779, 0].
+[2026-02-22 09:54:49] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9770, 0].
+[2026-02-22 09:54:54] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16789, 0].
+[2026-02-22 09:54:55] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9782, 0].
+[2026-02-22 09:55:00] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16801, 0].
+[2026-02-22 09:55:01] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9792, 0].
+[2026-02-22 09:55:05] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16811, 0].
+[2026-02-22 09:55:07] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9804, 0].
+[2026-02-22 09:55:11] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16821, 0].
+[2026-02-22 09:55:12] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9816, 0].
+[2026-02-22 09:55:17] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16831, 0].
+[2026-02-22 09:55:18] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9826, 0].
+[2026-02-22 09:55:22] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16843, 0].
+[2026-02-22 09:55:24] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9838, 0].
+[2026-02-22 09:55:28] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16855, 0].
+[2026-02-22 09:55:29] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9850, 0].
+[2026-02-22 09:55:34] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16863, 0].
+[2026-02-22 09:55:35] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9860, 0].
+[2026-02-22 09:55:39] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16875, 0].
+[2026-02-22 09:55:40] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9872, 0].
+[2026-02-22 09:55:45] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16885, 0].
+[2026-02-22 09:55:46] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9882, 0].
+[2026-02-22 09:55:50] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16897, 0].
+[2026-02-22 09:55:52] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9894, 0].
+[2026-02-22 09:55:56] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16909, 0].
+[2026-02-22 09:55:57] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9906, 0].
+[2026-02-22 09:56:02] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16919, 0].
+[2026-02-22 09:56:03] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9918, 0].
+[2026-02-22 09:56:07] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16931, 0].
+[2026-02-22 09:56:09] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9928, 0].
+[2026-02-22 09:56:13] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16943, 0].
+[2026-02-22 09:56:15] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9940, 0].
+[2026-02-22 09:56:19] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16953, 0].
+[2026-02-22 09:56:20] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9952, 0].
+[2026-02-22 09:56:24] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16965, 0].
+[2026-02-22 09:56:26] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9962, 0].
+[2026-02-22 09:56:30] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16977, 0].
+[2026-02-22 09:56:32] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9974, 0].
+[2026-02-22 09:56:36] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16989, 0].
+[2026-02-22 09:56:37] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9986, 0].
+[2026-02-22 09:56:42] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [16999, 0].
+[2026-02-22 09:56:43] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [9996, 0].
+[2026-02-22 09:56:47] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17011, 0].
+[2026-02-22 09:56:48] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10008, 0].
+[2026-02-22 09:56:53] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17021, 0].
+[2026-02-22 09:56:54] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10020, 0].
+[2026-02-22 09:56:58] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17031, 0].
+[2026-02-22 09:57:00] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10030, 0].
+[2026-02-22 09:57:04] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17043, 0].
+[2026-02-22 09:57:05] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10042, 0].
+[2026-02-22 09:57:10] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17053, 0].
+[2026-02-22 09:57:11] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10054, 0].
+[2026-02-22 09:57:15] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17065, 0].
+[2026-02-22 09:57:17] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10064, 0].
+[2026-02-22 09:57:21] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17077, 0].
+[2026-02-22 09:57:22] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10076, 0].
+[2026-02-22 09:57:27] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17087, 0].
+[2026-02-22 09:57:28] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10086, 0].
+[2026-02-22 09:57:32] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17099, 0].
+[2026-02-22 09:57:34] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10098, 0].
+[2026-02-22 09:57:38] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17109, 0].
+[2026-02-22 09:57:39] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10110, 0].
+[2026-02-22 09:57:44] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17121, 0].
+[2026-02-22 09:57:45] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10122, 0].
+[2026-02-22 09:57:50] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17133, 0].
+[2026-02-22 09:57:51] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10132, 0].
+[2026-02-22 09:57:55] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17145, 0].
+[2026-02-22 09:57:57] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10144, 0].
+[2026-02-22 09:58:01] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17155, 0].
+[2026-02-22 09:58:02] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10156, 0].
+[2026-02-22 09:58:07] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17167, 0].
+[2026-02-22 09:58:08] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10166, 0].
+[2026-02-22 09:58:13] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17179, 0].
+[2026-02-22 09:58:14] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10178, 0].
+[2026-02-22 09:58:18] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17191, 0].
+[2026-02-22 09:58:20] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10190, 0].
+[2026-02-22 09:58:24] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17203, 0].
+[2026-02-22 09:58:26] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10202, 0].
+[2026-02-22 09:58:30] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17215, 0].
+[2026-02-22 09:58:33] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10214, 0].
+[2026-02-22 09:58:37] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17229, 0].
+[2026-02-22 09:58:38] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10228, 0].
+[2026-02-22 09:58:43] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17239, 0].
+[2026-02-22 09:58:44] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10240, 0].
+[2026-02-22 09:58:48] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17251, 0].
+[2026-02-22 09:58:50] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10250, 0].
+[2026-02-22 09:58:54] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17263, 0].
+[2026-02-22 09:58:55] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10262, 0].
+[2026-02-22 09:59:00] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17273, 0].
+[2026-02-22 09:59:01] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10272, 0].
+[2026-02-22 09:59:05] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17285, 0].
+[2026-02-22 09:59:07] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10284, 0].
+[2026-02-22 09:59:11] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17295, 0].
+[2026-02-22 09:59:12] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10296, 0].
+[2026-02-22 09:59:17] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17307, 0].
+[2026-02-22 09:59:18] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10306, 0].
+[2026-02-22 09:59:22] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17317, 0].
+[2026-02-22 09:59:23] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10318, 0].
+[2026-02-22 09:59:28] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17327, 0].
+[2026-02-22 09:59:29] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10330, 0].
+[2026-02-22 09:59:34] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17339, 0].
+[2026-02-22 09:59:35] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10340, 0].
+[2026-02-22 09:59:39] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17351, 0].
+[2026-02-22 09:59:41] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10352, 0].
+[2026-02-22 09:59:45] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17361, 0].
+[2026-02-22 09:59:46] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10364, 0].
+[2026-02-22 09:59:51] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17373, 0].
+[2026-02-22 09:59:52] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10376, 0].
+[2026-02-22 09:59:56] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17385, 0].
+[2026-02-22 09:59:58] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10386, 0].
+[2026-02-22 10:00:02] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [17397, 0].
+[2026-02-22 10:00:03] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [10398, 0].
+[2026-02-22 10:00:05] [PLC 4] Monitor finalizado.
+[2026-02-22 10:00:05] Comunicacao serial compartilhada encerrada.
+[2026-02-22 10:00:12] Encerramento solicitado pelo usuario.
+[2026-02-22 10:00:12] Comunicacao serial compartilhada encerrada.

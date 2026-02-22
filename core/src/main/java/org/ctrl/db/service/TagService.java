@@ -5,8 +5,10 @@ import java.lang.reflect.Modifier;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -45,6 +47,16 @@ public class TagService {
             "JOIN public.memory m ON m.id = t.memory_id " +
             "JOIN public.memory_value_current mvc ON mvc.memory_id = m.id " +
             "WHERE d.mnemonic = :mnemonic AND t.name = :tagName";
+
+    private static final String SQL_FIND_CURRENT_BY_TAG_NAME =
+            "SELECT t.name AS tag_name, m.name AS memory_name, d.mnemonic AS device_mnemonic, " +
+            "mvc.value, mvc.updated_at " +
+            "FROM public.tag t " +
+            "JOIN public.device d ON d.id = t.device_id " +
+            "JOIN public.memory m ON m.id = t.memory_id " +
+            "LEFT JOIN public.memory_value_current mvc ON mvc.memory_id = m.id " +
+            "WHERE t.name = :tagName " +
+            "ORDER BY d.mnemonic";
 
     private static final String SQL_FIND_CURRENT_BY_MEMORY_NAME =
             "SELECT mvc.value, mvc.updated_at " +
@@ -115,6 +127,25 @@ public class TagService {
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
+    }
+
+    public List<TagValue> findCurrentByTagName(String tagName) {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("tagName", tagName);
+        List<TagValue> rows = namedTemplate.query(SQL_FIND_CURRENT_BY_TAG_NAME, params, tagValueMapper);
+        if (rows.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<TagValue> out = new ArrayList<>(rows.size());
+        for (TagValue base : rows) {
+            if (!isDmDwordTag(base.getTagName(), base.getMemoryName())) {
+                out.add(base);
+            } else {
+                out.add(buildDwordValue(base));
+            }
+        }
+        return out;
     }
 
     private int ensureDevice(String mnemonic, String name, String description) {

@@ -10,6 +10,7 @@ import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
+import org.omron.collector.util.SharedSerial;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class DmMonitorApplication {

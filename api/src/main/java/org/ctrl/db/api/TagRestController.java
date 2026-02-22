@@ -4,6 +4,7 @@ import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.model.Tag;
 import org.ctrl.db.model.TagValue;
 import org.ctrl.db.service.TagService;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,6 +51,16 @@ public class TagRestController {
         return service.findCurrentByTag(mnemonic, name)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/devices/tag/{name}")
+    public ResponseEntity<List<TagValue>> getTagValueByName(
+            @PathVariable String name) {
+        List<TagValue> values = service.findCurrentByTagName(name);
+        if (values.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(values);
     }
 
 }
