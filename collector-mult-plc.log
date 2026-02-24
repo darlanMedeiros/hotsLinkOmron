@@ -11352,3 +11352,255 @@ Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM
 [2026-02-22 10:21:08] Comunicacao serial compartilhada encerrada.
 [2026-02-22 10:21:11] Encerramento solicitado pelo usuario.
 [2026-02-22 10:21:11] Comunicacao serial compartilhada encerrada.
+[2026-02-23 08:03:49] Encerramento solicitado pelo usuario.
+[2026-02-23 08:03:49] Comunicacao serial compartilhada encerrada.
+[2026-02-23 08:04:04] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-23 08:04:10] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-02-23 08:04:24] [PLC 4] Monitor iniciado para 3 TAGs.
+[2026-02-23 08:04:30] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 1 CARGA id: 1 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-23 08:04:50] [PLC 4] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 4 PRENSA id: 4 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-23 08:05:10] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 1 CARGA id: 1 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-23 08:05:10] [PLC 1] MaximumNumberOfRetriesReachedException por 40s. Parando monitor deste PLC.
+[2026-02-23 08:05:10] [PLC 1] Monitor finalizado.
+[2026-02-23 08:05:30] [PLC 4] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 4 PRENSA id: 4 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-23 08:05:30] [PLC 4] MaximumNumberOfRetriesReachedException por 40s. Parando monitor deste PLC.
+[2026-02-23 08:05:30] [PLC 4] Monitor finalizado.
+[2026-02-23 08:05:31] [PLC 2] Monitor iniciado para 0 TAGs.
+[2026-02-23 08:06:20] [PLC 2] Monitor finalizado.
+[2026-02-23 08:06:24] [PLC 3] Monitor iniciado para 2 TAGs.
+[2026-02-23 08:06:44] [PLC 3] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 3 ESCOLHA 41 id: 3 cmd: RD val: [48, 48, 49, 56, 48, 48, 48, 50] / 00180002
+[2026-02-23 08:07:06] [PLC 3] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 3 ESCOLHA 41 id: 3 cmd: RD val: [48, 48, 49, 56, 48, 48, 48, 50] / 00180002
+[2026-02-23 08:07:06] [PLC 3] MaximumNumberOfRetriesReachedException por 21s. Parando monitor deste PLC.
+[2026-02-23 08:07:06] [PLC 3] Monitor finalizado.
+[2026-02-23 08:10:45] Comunicacao serial compartilhada ja esta ativa.
+[2026-02-23 08:10:58] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-02-23 08:10:58] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 1 CARGA id: 1 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-23 08:10:59] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 1 CARGA id: 1 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-23 08:11:02] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 1 CARGA id: 1 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-23 08:11:02] [PLC 1] MaximumNumberOfRetriesReachedException por 4s. Parando monitor deste PLC.
+[2026-02-23 08:11:02] [PLC 1] Monitor finalizado.
+[2026-02-23 08:11:08] [PLC 3] Monitor iniciado para 2 TAGs.
+[2026-02-23 08:11:08] [PLC 3] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 3 ESCOLHA 41 id: 3 cmd: RD val: [48, 48, 49, 56, 48, 48, 48, 50] / 00180002
+[2026-02-23 08:11:10] [PLC 3] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 3 ESCOLHA 41 id: 3 cmd: RD val: [48, 48, 49, 56, 48, 48, 48, 50] / 00180002
+[2026-02-23 08:11:13] [PLC 3] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 3 ESCOLHA 41 id: 3 cmd: RD val: [48, 48, 49, 56, 48, 48, 48, 50] / 00180002
+[2026-02-23 08:11:13] [PLC 3] MaximumNumberOfRetriesReachedException por 4s. Parando monitor deste PLC.
+[2026-02-23 08:11:13] [PLC 3] Monitor finalizado.
+[2026-02-23 08:11:27] Encerramento solicitado pelo usuario.
+[2026-02-23 08:11:27] Comunicacao serial compartilhada encerrada.
+[2026-02-23 08:11:44] Comunicacao serial compartilhada conectada na porta COM3.
+[2026-02-23 08:11:47] Comunicacao serial compartilhada encerrada.
+[2026-02-23 08:11:52] Comunicacao serial compartilhada conectada na porta COM5.
+[2026-02-23 08:11:59] [PLC 4] Monitor iniciado para 3 TAGs.
+[2026-02-23 08:12:19] [PLC 4] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 4 PRENSA id: 4 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-23 08:12:40] [PLC 4] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 4 PRENSA id: 4 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-23 08:12:40] [PLC 4] MaximumNumberOfRetriesReachedException por 21s. Parando monitor deste PLC.
+[2026-02-23 08:12:40] [PLC 4] Monitor finalizado.
+[2026-02-23 08:12:41] Comunicacao serial compartilhada encerrada.
+[2026-02-23 08:13:50] Encerramento cancelado.
+[2026-02-23 19:37:43] Porta serial COM1 em uso por outro processo: IllegalStateException - Unable to open serial connection
+java.lang.IllegalStateException: Unable to open serial connection
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:133)
+	at org.omron.collector.util.SharedSerial.connect(SharedSerial.java:85)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:331)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$8(CollectorMultPlcAplication.java:269)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+Caused by: org.ctrl.comm.serial.SerialPortException: Serial port in use COM1
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:285)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:78)
+	at org.ctrl.comm.serial.SerialPortHandlerImp.start(SerialPortHandlerImp.java:109)
+	... 38 more
+Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM1 (port busy, access denied, or unavailable)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.buildOpenFailure(SerialPortJSerialComm.java:289)
+	at org.ctrl.comm.serial.SerialPortJSerialComm.open(SerialPortJSerialComm.java:54)
+	... 39 more
+
+[2026-02-23 19:37:58] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-23 19:38:08] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-02-23 19:38:29] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 1 CARGA id: 1 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-23 19:38:50] [PLC 1] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 1 CARGA id: 1 cmd: RD val: [48, 49, 48, 48, 48, 48, 48, 50] / 01000002
+[2026-02-23 19:38:50] [PLC 1] MaximumNumberOfRetriesReachedException por 21s. Parando monitor deste PLC.
+[2026-02-23 19:38:50] [PLC 1] Monitor finalizado.
+[2026-02-23 20:40:04] Comunicacao serial compartilhada conectada na porta COM7.
+[2026-02-23 20:40:11] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-02-23 20:40:12] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 100..101) = [0, 0].
+[2026-02-23 20:40:14] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 102..103) = [0, 0].
+[2026-02-23 20:40:15] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 104..105) = [0, 0].
+[2026-02-23 20:40:17] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-23 20:40:19] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [0, 0].
+[2026-02-23 20:40:20] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-23 20:41:08] [PLC 1] Monitor finalizado.
+[2026-02-23 20:41:08] Comunicacao serial compartilhada encerrada.
+[2026-02-23 20:41:26] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-23 20:41:29] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-02-23 20:41:29] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 100..101) = [0, 0].
+[2026-02-23 20:41:30] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 102..103) = [0, 0].
+[2026-02-23 20:41:32] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 104..105) = [0, 0].
+[2026-02-23 20:41:33] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-23 20:41:34] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [0, 0].
+[2026-02-23 20:41:35] [PLC 1] Monitor finalizado.
+[2026-02-23 20:41:35] Comunicacao serial compartilhada encerrada.
+[2026-02-23 21:22:53] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-23 21:23:01] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-02-23 21:23:02] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 100..101) = [0, 0].
+[2026-02-23 21:23:03] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 102..103) = [0, 0].
+[2026-02-23 21:23:05] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 104..105) = [0, 0].
+[2026-02-23 21:23:06] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-02-23 21:23:07] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [0, 0].
+[2026-02-23 21:23:09] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-02-23 21:25:10] [PLC 1] Monitor finalizado.
+[2026-02-23 21:25:10] Comunicacao serial compartilhada encerrada.
+[2026-02-24 08:14:14] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-02-24 08:14:19] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-02-24 08:14:19] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 100..101) = [0, 0].
+[2026-02-24 08:14:20] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 102..103) = [0, 0].
+[2026-02-24 08:14:22] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 104..105) = [0, 0].
+[2026-02-24 08:14:23] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [30602, 0].
+[2026-02-24 08:14:24] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3342].
+[2026-02-24 08:14:26] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [84, 0].
+[2026-02-24 08:14:34] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3347].
+[2026-02-24 08:14:42] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3352].
+[2026-02-24 08:14:44] [PLC 3] Monitor iniciado para 2 TAGs.
+[2026-02-24 08:14:45] [PLC 3] Alteracao salva: TAG QUALIDADE41 (DM 18..19) = [2, 0].
+[2026-02-24 08:14:47] [PLC 3] Alteracao salva: TAG QUALIDADE42 (DM 20..21) = [920, 0].
+[2026-02-24 08:14:52] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3357].
+[2026-02-24 08:14:57] [PLC 4] Monitor iniciado para 3 TAGs.
+[2026-02-24 08:14:57] [PLC 4] Alteracao salva: TAG PECAPH29 (DM 100..101) = [0, 0].
+[2026-02-24 08:14:59] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3554, 0].
+[2026-02-24 08:15:01] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2319, 0].
+[2026-02-24 08:15:01] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3362].
+[2026-02-24 08:15:06] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3556, 0].
+[2026-02-24 08:15:07] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2320, 0].
+[2026-02-24 08:15:11] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3367].
+[2026-02-24 08:15:14] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2322, 0].
+[2026-02-24 08:15:15] [PLC 5] Monitor iniciado para 1 TAGs.
+[2026-02-24 08:15:35] [PLC 5] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 5 ESCOLHA 43 id: 5 cmd: RD val: [48, 48, 50, 50, 48, 48, 48, 50] / 00220002
+[2026-02-24 08:15:37] [PLC 5] Monitor finalizado.
+[2026-02-24 08:15:38] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2327, 0].
+[2026-02-24 08:15:40] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3382].
+[2026-02-24 08:15:44] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2328, 0].
+[2026-02-24 08:15:49] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3387].
+[2026-02-24 08:15:50] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2329, 0].
+[2026-02-24 08:15:55] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2331, 0].
+[2026-02-24 08:15:58] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3392].
+[2026-02-24 08:16:02] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2332, 0].
+[2026-02-24 08:16:08] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3397].
+[2026-02-24 08:16:09] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2333, 0].
+[2026-02-24 08:16:14] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2335, 0].
+[2026-02-24 08:16:17] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3402].
+[2026-02-24 08:16:20] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2336, 0].
+[2026-02-24 08:16:26] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2337, 0].
+[2026-02-24 08:16:27] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3408].
+[2026-02-24 08:16:32] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2338, 0].
+[2026-02-24 08:16:36] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3413].
+[2026-02-24 08:16:38] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2340, 0].
+[2026-02-24 08:16:44] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2341, 0].
+[2026-02-24 08:16:45] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3418].
+[2026-02-24 08:16:49] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3558, 0].
+[2026-02-24 08:16:51] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2342, 0].
+[2026-02-24 08:16:54] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3423].
+[2026-02-24 08:16:56] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3562, 0].
+[2026-02-24 08:16:57] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2344, 0].
+[2026-02-24 08:17:02] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3564, 0].
+[2026-02-24 08:17:03] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2345, 0].
+[2026-02-24 08:17:03] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3428].
+[2026-02-24 08:17:08] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3568, 0].
+[2026-02-24 08:17:10] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2346, 0].
+[2026-02-24 08:17:12] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3432].
+[2026-02-24 08:17:14] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3572, 0].
+[2026-02-24 08:17:16] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [2347, 0].
+[2026-02-24 08:17:21] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3574, 0].
+[2026-02-24 08:17:21] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3437].
+[2026-02-24 08:17:26] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3578, 0].
+[2026-02-24 08:17:30] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3442].
+[2026-02-24 08:17:33] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3580, 0].
+[2026-02-24 08:17:38] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3584, 0].
+[2026-02-24 08:17:40] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3447].
+[2026-02-24 08:17:44] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3588, 0].
+[2026-02-24 08:17:49] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3452].
+[2026-02-24 08:17:50] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3590, 0].
+[2026-02-24 08:17:56] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3594, 0].
+[2026-02-24 08:17:58] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3457].
+[2026-02-24 08:18:02] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3596, 0].
+[2026-02-24 08:18:07] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3462].
+[2026-02-24 08:18:08] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3600, 0].
+[2026-02-24 08:18:13] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3604, 0].
+[2026-02-24 08:18:16] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3467].
+[2026-02-24 08:18:20] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3606, 0].
+[2026-02-24 08:18:25] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3610, 0].
+[2026-02-24 08:18:26] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3472].
+[2026-02-24 08:18:31] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3612, 0].
+[2026-02-24 08:18:35] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3477].
+[2026-02-24 08:18:37] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3616, 0].
+[2026-02-24 08:18:43] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3618, 0].
+[2026-02-24 08:18:44] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3482].
+[2026-02-24 08:18:48] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3622, 0].
+[2026-02-24 08:18:53] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3487].
+[2026-02-24 08:18:55] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3626, 0].
+[2026-02-24 08:19:00] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3628, 0].
+[2026-02-24 08:19:03] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3492].
+[2026-02-24 08:19:06] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3632, 0].
+[2026-02-24 08:19:12] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3497].
+[2026-02-24 08:19:12] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3634, 0].
+[2026-02-24 08:19:18] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3638, 0].
+[2026-02-24 08:19:21] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3502].
+[2026-02-24 08:19:24] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3640, 0].
+[2026-02-24 08:19:29] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3644, 0].
+[2026-02-24 08:19:31] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3504].
+[2026-02-24 08:19:35] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3648, 0].
+[2026-02-24 08:19:41] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3650, 0].
+[2026-02-24 08:19:44] [PLC 2] Monitor iniciado para 0 TAGs.
+[2026-02-24 08:19:46] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3654, 0].
+[2026-02-24 08:19:52] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3656, 0].
+[2026-02-24 08:19:53] [PLC 5] Monitor iniciado para 1 TAGs.
+[2026-02-24 08:20:13] [PLC 5] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 5 ESCOLHA 43 id: 5 cmd: RD val: [48, 48, 50, 50, 48, 48, 48, 50] / 00220002
+[2026-02-24 08:20:15] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3668, 0].
+[2026-02-24 08:20:35] [PLC 5] Erro no monitoramento: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 1 for:  dev:PLC 5 ESCOLHA 43 id: 5 cmd: RD val: [48, 48, 50, 50, 48, 48, 48, 50] / 00220002
+[2026-02-24 08:20:35] [PLC 5] MaximumNumberOfRetriesReachedException por 21s. Parando monitor deste PLC.
+[2026-02-24 08:20:35] [PLC 5] Monitor finalizado.
+[2026-02-24 08:20:40] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3682, 0].
+[2026-02-24 08:20:45] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3684, 0].
+[2026-02-24 08:20:51] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3688, 0].
+[2026-02-24 08:20:56] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3690, 0].
+[2026-02-24 08:21:02] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3694, 0].
+[2026-02-24 08:21:08] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3696, 0].
+[2026-02-24 08:21:11] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [2, 3506].
+[2026-02-24 08:21:14] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [3700, 0].
+[2026-02-24 08:21:17] [PLC 1] Monitor finalizado.
+[2026-02-24 08:21:17] [PLC 2] Monitor finalizado.
+[2026-02-24 08:21:17] [PLC 3] Monitor finalizado.
+[2026-02-24 08:21:17] [PLC 4] Monitor finalizado.
+[2026-02-24 08:21:17] Comunicacao serial compartilhada encerrada.
