@@ -68,15 +68,15 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 
 		getLog().info(getName() + " thread run");
 
-		while (!stopRequired) {
+		while (stopRequired != true) {
 			try {
 				Thread.sleep(SLEEP_TIME);
 				if (protocolHandler instanceof ISpontaneousEventListener) {
 					((ISpontaneousEventListener) protocolHandler).checkEvent();
 				}
 			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();
-				break;
+
+				System.out.println("Erro run " + ex);
 			}
 		}
 
@@ -103,24 +103,24 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 	}
 
 	@Override
-	public void start() {
+	public void start() throws SerialPortException {
+
 		stopRequired = false;
+
 		try {
 			this.serialPort.open();
 
-			// setInputStream(this.serialPort.getInputStream());
-			// setOutputStream(this.serialPort.getOutputStream());
-
-			// connection.serialPort.addEventListener(reader);
 			workerThread = new Thread(this, NAME + "-worker");
 			workerThread.setDaemon(true);
 			workerThread.start();
 
 			out = serialPort.getOutputStream();
 			in = serialPort.getInputStream();
+
 			if (protocolHandler != null) {
 				protocolHandler.setComControl(this);
 			}
+
 			getLog().info("Serial Comunication Handler Started");
 
 			this.isStarted = true;
@@ -130,27 +130,22 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 			this.isStarted = false;
 			ACTIVE_HANDLERS.remove(this);
 			getLog().error("Unable to open connection", ex);
-			throw new IllegalStateException("Unable to open serial connection", ex);
-		}
 
+		}
 	}
 
 	@Override
-	public void stop() {
+	public synchronized void stop() {
+
+		if (!isStarted) {
+			return;
+		}
+
 		stopRequired = true;
 		ACTIVE_HANDLERS.remove(this);
-		Thread localWorker = workerThread;
-		if (localWorker != null) {
-			localWorker.interrupt();
-			try {
-				localWorker.join(2000);
-			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();
-			} finally {
-				if (workerThread == localWorker) {
-					workerThread = null;
-				}
-			}
+		if (workerThread != null) {
+			workerThread.interrupt();
+			workerThread = null;
 		}
 		if (out != null) {
 			try {
@@ -173,9 +168,11 @@ public class SerialPortHandlerImp extends AbstractComHandler implements ISerialC
 		if (this.serialPort != null) {
 			this.serialPort.close();
 		}
-		this.isStarted = false;
-		getLog().info("Serial Comunication Handler Stoped");
 
+		isStarted = false;
+		ACTIVE_HANDLERS.remove(this);
+
+		getLog().info("Serial Communication Handler stopped");
 	}
 
 	protected void terminate() {

@@ -1,21 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.ctrl.comm;
 
 import org.ctrl.comm.serial.SerialParameters;
+import org.ctrl.comm.serial.SerialPortException;
 
-/**
- *
- * @author darla
- */
+
 public interface ISerialComHandler extends Runnable {
 
     String NAME = "Serial Communication Handler";
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.pereni.ctrl.comm.ComHandler#getName()
      */
     String getName();
@@ -25,12 +21,16 @@ public interface ISerialComHandler extends Runnable {
      */
     SerialParameters getSerialComParameters();
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.pereni.ctrl.comm.ComHandler#initialize()
      */
     void initialize();
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Runnable#run()
      */
     void run();
@@ -44,14 +44,18 @@ public interface ISerialComHandler extends Runnable {
      */
     void setSerialComParameters(SerialParameters serialComParameters);
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.pereni.ctrl.comm.ComHandler#start()
      */
-    void start();
+    void start() throws SerialPortException;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.pereni.ctrl.comm.ComHandler#stop()
      */
     void stop();
-    
+
 }
