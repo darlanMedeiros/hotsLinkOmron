@@ -11604,3 +11604,20 @@ Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM
 [2026-02-24 08:21:17] [PLC 3] Monitor finalizado.
 [2026-02-24 08:21:17] [PLC 4] Monitor finalizado.
 [2026-02-24 08:21:17] Comunicacao serial compartilhada encerrada.
+[2026-03-02 22:36:55] Comunicacao serial compartilhada conectada na porta COM7.
+[2026-03-02 22:37:02] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-03-02 22:37:02] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 100..101) = [0, 0].
+[2026-03-02 22:37:04] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 102..103) = [0, 0].
+[2026-03-02 22:37:05] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 104..105) = [0, 0].
+[2026-03-02 22:37:07] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-03-02 22:37:07] [PLC 4] Monitor iniciado para 3 TAGs.
+[2026-03-02 22:37:07] [PLC 4] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-03-02 22:37:08] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [0, 0].
+[2026-03-02 22:37:09] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [18779, 0].
+[2026-03-02 22:37:10] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-03-02 22:37:11] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [11030, 0].
+[2026-03-02 22:37:16] [PLC 4] Monitor finalizado.
+[2026-03-02 22:37:18] [PLC 1] Monitor finalizado.
+[2026-03-02 22:37:20] Comunicacao serial compartilhada encerrada.
+[2026-03-02 22:37:23] Encerramento solicitado pelo usuario.
+[2026-03-02 22:37:23] Comunicacao serial compartilhada encerrada.
