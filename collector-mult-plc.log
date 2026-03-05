@@ -11621,3 +11621,53 @@ Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM
 [2026-03-02 22:37:20] Comunicacao serial compartilhada encerrada.
 [2026-03-02 22:37:23] Encerramento solicitado pelo usuario.
 [2026-03-02 22:37:23] Comunicacao serial compartilhada encerrada.
+[2026-03-04 22:20:24] Comunicacao serial compartilhada conectada na porta COM7.
+[2026-03-04 22:20:29] [PLC 4] Monitor iniciado para 3 TAGs.
+[2026-03-04 22:20:30] [PLC 4] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-03-04 22:20:32] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20075, 0].
+[2026-03-04 22:20:33] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12332, 0].
+[2026-03-04 22:20:37] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20087, 0].
+[2026-03-04 22:20:39] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12344, 0].
+[2026-03-04 22:20:43] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20099, 0].
+[2026-03-04 22:20:44] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12356, 0].
+[2026-03-04 22:20:47] [PLC 4] Monitor finalizado.
+[2026-03-04 22:21:19] Comunicacao serial compartilhada ja esta ativa.
+[2026-03-04 22:21:25] Comunicacao serial compartilhada encerrada.
+[2026-03-04 22:21:28] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-04 22:21:32] [PLC 4] Monitor iniciado para 3 TAGs.
+[2026-03-04 22:21:33] [PLC 4] Alteracao salva: TAG PECAPH29 (DM 100..101) = [65535, 0].
+[2026-03-04 22:21:34] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20201, 0].
+[2026-03-04 22:21:35] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12458, 0].
+[2026-03-04 22:21:39] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20211, 0].
+[2026-03-04 22:21:41] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12468, 0].
+[2026-03-04 22:21:45] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20223, 0].
+[2026-03-04 22:21:46] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12480, 0].
+[2026-03-04 22:21:50] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20233, 0].
+[2026-03-04 22:21:52] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12490, 0].
+[2026-03-04 22:21:56] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20245, 0].
+[2026-03-04 22:21:57] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12502, 0].
+[2026-03-04 22:22:02] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20255, 0].
+[2026-03-04 22:22:03] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12514, 0].
+[2026-03-04 22:22:03] [PLC 1] Monitor iniciado para 6 TAGs.
+[2026-03-04 22:22:04] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA41 (DM 100..101) = [0, 0].
+[2026-03-04 22:22:05] [PLC 1] Alteracao salva: TAG PECAROLLERDESC41 (DM 102..103) = [0, 0].
+[2026-03-04 22:22:06] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA42 (DM 104..105) = [0, 0].
+[2026-03-04 22:22:07] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20267, 0].
+[2026-03-04 22:22:08] [PLC 1] Alteracao salva: TAG PECAROLLERDESC42 (DM 12..13) = [0, 0].
+[2026-03-04 22:22:09] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12524, 0].
+[2026-03-04 22:22:09] [PLC 1] Alteracao salva: TAG PECAROLLERCARGA43 (DM 110..111) = [0, 0].
+[2026-03-04 22:22:11] [PLC 1] Alteracao salva: TAG PECAROLLERDESC43 (DM 16..17) = [0, 0].
+[2026-03-04 22:22:13] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20279, 0].
+[2026-03-04 22:22:15] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12536, 0].
+[2026-03-04 22:22:20] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20291, 0].
+[2026-03-04 22:22:21] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12548, 0].
+[2026-03-04 22:22:25] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20303, 0].
+[2026-03-04 22:22:26] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12560, 0].
+[2026-03-04 22:22:31] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20313, 0].
+[2026-03-04 22:22:32] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12572, 0].
+[2026-03-04 22:22:36] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20325, 0].
+[2026-03-04 22:22:38] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12582, 0].
+[2026-03-04 22:22:42] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20337, 0].
+[2026-03-04 22:22:43] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12594, 0].
+[2026-03-04 22:22:48] [PLC 4] Alteracao salva: TAG PECAPH30 (DM 102..103) = [20347, 0].
+[2026-03-04 22:22:49] [PLC 4] Alteracao salva: TAG PECAPH31 (DM 104..105) = [12604, 0].
