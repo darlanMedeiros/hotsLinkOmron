@@ -17,7 +17,11 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -36,46 +40,20 @@ import javax.swing.text.BadLocationException;
 import org.ctrl.comm.serial.SerialPortAbstract;
 import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.service.DmValueService;
-import org.ctrl.db.service.TagService;
 import org.ctrl.extras.Tag;
 import org.omron.collector.util.PlcNodeMonitorPanel;
 import org.omron.collector.util.SharedSerial;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 public class CollectorMultPlcAplication {
 
-    private static final int PLC_NODES = 5;
     private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm:ss");
     private static final DateTimeFormatter FILE_TIME_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final int MAX_LOG_LINES = 4000;
     private static final Path LOG_FILE = Path.of("collector-mult-plc.log");
+    private static final Pattern PLC_NODE_PATTERN = Pattern.compile("PLC\\s*([0-9]+).*");
     private static volatile CollectorMultPlcAplication activeInstance;
-
-    private static final Tag[] PLC_1_TAGS = new Tag[] {
-            Tag.PECAROLLERCARGA41,
-            Tag.PECAROLLERDESC41,
-            Tag.PECAROLLERCARGA42,
-            Tag.PECAROLLERDESC42,
-            Tag.PECAROLLERCARGA43,
-            Tag.PECAROLLERDESC43
-    };
-
-    private static final Tag[] PLC_3_TAGS = new Tag[] {
-            Tag.QUALIDADE41,
-            Tag.QUALIDADE42
-    };
-
-    private static final Tag[] PLC_4_TAGS = new Tag[] {
-            Tag.PECAPH29,
-            Tag.PECAPH30,
-            Tag.PECAPH31
-    };
-
-    private static final Tag[] PLC_5_TAGS = new Tag[] {
-            Tag.QUALIDADE43
-    };
-
-    private static final Tag[] NO_TAGS = new Tag[0];
 
     private JFrame frame;
     private JTextArea logArea;
@@ -94,7 +72,6 @@ public class CollectorMultPlcAplication {
     private final SharedSerial sharedSerial = new SharedSerial();
     private AnnotationConfigApplicationContext dbContext;
     private DmValueService dmValueService;
-    private TagService tagService;
     private volatile boolean shuttingDown;
     private volatile boolean forcedDisconnectInProgress;
 
@@ -125,24 +102,31 @@ public class CollectorMultPlcAplication {
 
         frame.add(buildSharedSerialPanel(), BorderLayout.NORTH);
 
-        JPanel container = new JPanel(new GridLayout(PLC_NODES, 1, 4, 4));
+        List<PlcConfig> configs = loadPlcConfigsFromDb();
+        JPanel container = new JPanel(new GridLayout(Math.max(1, configs.size()), 1, 4, 4));
         container.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
-        for (int i = 0; i < PLC_NODES; i++) {
-            int nodeNumber = i + 1;
+
+        if (configs.isEmpty()) {
+            log("Nenhum device/tag DM encontrado no banco. Cadastre devices e tags para iniciar monitoramento.");
+        }
+
+        for (int i = 0; i < configs.size(); i++) {
+            PlcConfig cfg = configs.get(i);
+            final int panelIndex = i + 1;
             PlcNodeMonitorPanel panel = new PlcNodeMonitorPanel(
-                    nodeNumber,
-                    getPlcTitle(nodeNumber),
-                    getPlcMnemonic(nodeNumber),
-                    nodeNumber,
-                    getTagsForPlc(nodeNumber),
+                    panelIndex,
+                    cfg.title,
+                    cfg.mnemonic,
+                    cfg.description,
+                    cfg.nodeId,
+                    cfg.tags,
                     sharedSerial.getIoLock(),
                     this::isSharedConnected,
                     sharedSerial::getHandler,
                     this::ensureDb,
                     () -> dmValueService,
-                    () -> tagService,
                     this::log,
-                    () -> requestDisconnectByUnresponsiveNode(nodeNumber));
+                    () -> requestDisconnectByUnresponsiveNode(panelIndex));
             plcPanels.add(panel);
             container.add(panel.getPanel());
         }
@@ -151,52 +135,111 @@ public class CollectorMultPlcAplication {
         frame.add(buildLogPanel(), BorderLayout.EAST);
     }
 
-    private static Tag[] getTagsForPlc(int plcId) {
-        switch (plcId) {
-            case 1:
-                return PLC_1_TAGS;
-            case 3:
-                return PLC_3_TAGS;
-            case 4:
-                return PLC_4_TAGS;
-            case 5:
-                return PLC_5_TAGS;
-            default:
-                return NO_TAGS;
+    private List<PlcConfig> loadPlcConfigsFromDb() {
+        ensureDb();
+        JdbcTemplate jdbc = dbContext.getBean(JdbcTemplate.class);
+        Map<String, Tag> catalog = buildTagCatalog();
+
+        List<Map<String, Object>> rows = jdbc.queryForList(
+                "SELECT d.id AS device_id, d.mnemonic, d.name AS device_name, d.description AS device_description, " +
+                        "t.name AS tag_name, m.address AS memory_address, m.name AS memory_name " +
+                        "FROM public.device d " +
+                        "LEFT JOIN public.tag t ON t.device_id = d.id " +
+                        "LEFT JOIN public.memory m ON m.id = t.memory_id " +
+                        "ORDER BY d.id, t.id");
+
+        Map<String, PlcConfig> grouped = new HashMap<>();
+        for (Map<String, Object> row : rows) {
+            String mnemonic = asString(row.get("mnemonic"));
+            if (mnemonic == null || mnemonic.trim().isEmpty()) {
+                continue;
+            }
+            PlcConfig cfg = grouped.get(mnemonic);
+            if (cfg == null) {
+                int nodeId = inferNodeId(mnemonic, grouped.size() + 1);
+                cfg = new PlcConfig(
+                        asString(row.get("device_name"), mnemonic),
+                        mnemonic,
+                        asString(row.get("device_description"), "Omron " + mnemonic),
+                        nodeId,
+                        new ArrayList<>());
+                grouped.put(mnemonic, cfg);
+            }
+
+            String tagName = asString(row.get("tag_name"));
+            Integer address = asInt(row.get("memory_address"));
+            String memoryName = asString(row.get("memory_name"));
+            if (tagName == null || address == null || address.intValue() < 0) {
+                continue;
+            }
+            if (memoryName != null && !memoryName.startsWith("DM_")) {
+                continue;
+            }
+
+            Tag known = catalog.get(tagName);
+            int lengthWords = known == null || known.isBit() ? 1 : known.getLengthWords();
+            cfg.tags.add(new PlcNodeMonitorPanel.MonitoredTag(tagName, address.intValue(), lengthWords));
         }
+
+        return new ArrayList<>(grouped.values());
     }
 
-    private static String getPlcTitle(int plcId) {
-        switch (plcId) {
-            case 1:
-                return "PLC 1 CARGA";
-            case 2:
-                return "PLC 2 VENTOSA";
-            case 3:
-                return "PLC 3 ESCOLHA 41";
-            case 4:
-                return "PLC 4 PRENSA";
-            case 5:
-                return "PLC 5 ESCOLHA 43";
-            default:
-                return "PLC " + plcId;
+    private Map<String, Tag> buildTagCatalog() {
+        Map<String, Tag> out = new HashMap<>();
+        java.lang.reflect.Field[] fields = Tag.class.getDeclaredFields();
+        for (java.lang.reflect.Field field : fields) {
+            if (!java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                continue;
+            }
+            if (field.getType() != Tag.class) {
+                continue;
+            }
+            try {
+                Object raw = field.get(null);
+                if (raw instanceof Tag) {
+                    Tag tag = (Tag) raw;
+                    out.put(tag.getName(), tag);
+                }
+            } catch (IllegalAccessException ignored) {
+                // ignore and continue
+            }
         }
+        return out;
     }
 
-    private static String getPlcMnemonic(int plcId) {
-        switch (plcId) {
-            case 1:
-                return "PLC1CARGA";
-            case 2:
-                return "PLC2VENT";
-            case 3:
-                return "PLC3ESC41";
-            case 4:
-                return "PLC4PRENSA";
-            case 5:
-                return "PLC5ESC43";
-            default:
-                return "PLC" + plcId;
+    private int inferNodeId(String mnemonic, int fallback) {
+        Matcher matcher = PLC_NODE_PATTERN.matcher(mnemonic == null ? "" : mnemonic.toUpperCase());
+        if (matcher.matches()) {
+            try {
+                int node = Integer.parseInt(matcher.group(1));
+                return node > 0 ? node : fallback;
+            } catch (NumberFormatException ignored) {
+                return fallback;
+            }
+        }
+        return fallback;
+    }
+
+    private static String asString(Object raw) {
+        return raw == null ? null : String.valueOf(raw);
+    }
+
+    private static String asString(Object raw, String fallback) {
+        String value = asString(raw);
+        return (value == null || value.trim().isEmpty()) ? fallback : value;
+    }
+
+    private static Integer asInt(Object raw) {
+        if (raw == null) {
+            return null;
+        }
+        if (raw instanceof Number) {
+            return Integer.valueOf(((Number) raw).intValue());
+        }
+        try {
+            return Integer.valueOf(String.valueOf(raw));
+        } catch (NumberFormatException ex) {
+            return null;
         }
     }
 
@@ -404,7 +447,6 @@ public class CollectorMultPlcAplication {
         if (dbContext == null) {
             dbContext = new AnnotationConfigApplicationContext(DbConfig.class);
             dmValueService = dbContext.getBean(DmValueService.class);
-            tagService = dbContext.getBean(TagService.class);
         }
     }
 
@@ -413,7 +455,6 @@ public class CollectorMultPlcAplication {
             dbContext.close();
             dbContext = null;
             dmValueService = null;
-            tagService = null;
         }
     }
 
@@ -581,6 +622,23 @@ public class CollectorMultPlcAplication {
                     StandardOpenOption.APPEND);
         } catch (Exception ignored) {
             // Logging should not break the application flow.
+        }
+    }
+
+    private static final class PlcConfig {
+        private final String title;
+        private final String mnemonic;
+        private final String description;
+        private final int nodeId;
+        private final List<PlcNodeMonitorPanel.MonitoredTag> tags;
+
+        private PlcConfig(String title, String mnemonic, String description, int nodeId,
+                List<PlcNodeMonitorPanel.MonitoredTag> tags) {
+            this.title = title;
+            this.mnemonic = mnemonic;
+            this.description = description;
+            this.nodeId = nodeId;
+            this.tags = tags;
         }
     }
 }

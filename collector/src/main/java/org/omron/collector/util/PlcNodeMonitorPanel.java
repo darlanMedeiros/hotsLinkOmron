@@ -6,7 +6,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -26,8 +28,7 @@ import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.serial.SerialPortHandlerImp;
 import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.service.DmValueService;
-import org.ctrl.db.service.TagService;
-import org.ctrl.extras.Tag;
+import org.ctrl.extras.MemoryVariable;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 
 public class PlcNodeMonitorPanel {
@@ -44,13 +45,13 @@ public class PlcNodeMonitorPanel {
     private final int nodeIndex;
     private final String plcTitle;
     private final String plcMnemonic;
-    private final Tag[] monitoredTags;
+    private final String plcDescription;
+    private final List<MonitoredTag> monitoredTags;
     private final Object comLock;
     private final Supplier<Boolean> sharedConnectedSupplier;
     private final Supplier<SerialPortHandlerImp> sharedComHandlerSupplier;
     private final Runnable ensureDbAction;
     private final Supplier<DmValueService> dmValueServiceSupplier;
-    private final Supplier<TagService> tagServiceSupplier;
     private final Consumer<String> globalLogger;
     private final Runnable sharedDisconnectAction;
     private final JPanel panel;
@@ -68,26 +69,26 @@ public class PlcNodeMonitorPanel {
     public PlcNodeMonitorPanel(int nodeIndex,
             String plcTitle,
             String plcMnemonic,
+            String plcDescription,
             int defaultNodeId,
-            Tag[] monitoredTags,
+            List<MonitoredTag> monitoredTags,
             Object comLock,
             Supplier<Boolean> sharedConnectedSupplier,
             Supplier<SerialPortHandlerImp> sharedComHandlerSupplier,
             Runnable ensureDbAction,
             Supplier<DmValueService> dmValueServiceSupplier,
-            Supplier<TagService> tagServiceSupplier,
             Consumer<String> globalLogger,
             Runnable sharedDisconnectAction) {
         this.nodeIndex = nodeIndex;
         this.plcTitle = plcTitle;
         this.plcMnemonic = plcMnemonic;
-        this.monitoredTags = monitoredTags;
+        this.plcDescription = plcDescription == null ? "" : plcDescription;
+        this.monitoredTags = monitoredTags == null ? new ArrayList<>() : new ArrayList<>(monitoredTags);
         this.comLock = comLock;
         this.sharedConnectedSupplier = sharedConnectedSupplier;
         this.sharedComHandlerSupplier = sharedComHandlerSupplier;
         this.ensureDbAction = ensureDbAction;
         this.dmValueServiceSupplier = dmValueServiceSupplier;
-        this.tagServiceSupplier = tagServiceSupplier;
         this.globalLogger = globalLogger;
         this.sharedDisconnectAction = sharedDisconnectAction;
         this.panel = buildNodePanel(defaultNodeId);
@@ -109,7 +110,6 @@ public class PlcNodeMonitorPanel {
 
         ensureDbAction.run();
         ensureDevice();
-        ensureTagBindings();
 
         final int pollMs;
         try {
@@ -221,7 +221,7 @@ public class PlcNodeMonitorPanel {
 
     private void runMonitorLoop(int pollMs) {
         setMonitorStatus("RODANDO");
-        logPrefix("Monitor iniciado para " + monitoredTags.length + " TAGs.");
+        logPrefix("Monitor iniciado para " + monitoredTags.size() + " TAGs.");
 
         Map<String, int[]> lastValues = new LinkedHashMap<>();
         int cycleCount = 0;
@@ -237,12 +237,17 @@ public class PlcNodeMonitorPanel {
                     throw new IllegalStateException("Serial compartilhada desconectada.");
                 }
 
-                for (Tag tag : monitoredTags) {
+                for (MonitoredTag tag : monitoredTags) {
                     if (!monitoring) {
                         break;
                     }
 
-                    AreaReadDM read = new AreaReadDM(plc, tag.toMemoryVariable());
+                    MemoryVariable memory = new MemoryVariable(
+                            tag.getName(),
+                            "DM",
+                            tag.getAddress(),
+                            tag.getLengthWords());
+                    AreaReadDM read = new AreaReadDM(plc, memory);
                     synchronized (comLock) {
                         if (!isSharedConnected()) {
                             throw new IllegalStateException("Serial compartilhada desconectada.");
@@ -342,7 +347,7 @@ public class PlcNodeMonitorPanel {
     private void ensureDevice() {
         int nodeId = Integer.parseInt(nodeField.getText().trim());
         if (plc == null || plc.getId() != nodeId) {
-            plc = new DeviceImp(nodeId, plcMnemonic, plcTitle, "Omron " + plcTitle);
+            plc = new DeviceImp(nodeId, plcMnemonic, plcTitle, plcDescription);
             IDeviceRegister deviceRegister = DeviceRegisterImp.getInstance();
             deviceRegister.addDevice(plc);
             deviceInfo = new DeviceInfo(plcMnemonic, plc.getName(), plc.getDescription());
@@ -355,16 +360,6 @@ public class PlcNodeMonitorPanel {
 
     private void logPrefix(String message) {
         globalLogger.accept("[PLC " + nodeIndex + "] " + message);
-    }
-
-    private void ensureTagBindings() {
-        TagService tagService = tagServiceSupplier.get();
-        if (tagService == null || deviceInfo == null) {
-            return;
-        }
-        for (Tag tag : monitoredTags) {
-            tagService.getOrCreateDmTag(deviceInfo, tag.getName(), tag.getAddress());
-        }
     }
 
     private boolean isSharedConnected() {
@@ -487,5 +482,29 @@ public class PlcNodeMonitorPanel {
             current = current.getCause();
         }
         return false;
+    }
+
+    public static final class MonitoredTag {
+        private final String name;
+        private final int address;
+        private final int lengthWords;
+
+        public MonitoredTag(String name, int address, int lengthWords) {
+            this.name = name;
+            this.address = address;
+            this.lengthWords = Math.max(1, lengthWords);
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getAddress() {
+            return address;
+        }
+
+        public int getLengthWords() {
+            return lengthWords;
+        }
     }
 }
