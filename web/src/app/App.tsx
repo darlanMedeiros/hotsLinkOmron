@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Factory, Activity, AlertTriangle } from 'lucide-react';
 import { ProductionLine } from './components/ProductionLine';
+import { AdminCrudScreen } from './components/AdminCrudScreen';
+import { PlcTagCrudScreen } from './components/PlcTagCrudScreen';
 
 interface TagValueResponse {
   tagName: string;
@@ -79,6 +81,7 @@ const BACKEND_TARGET = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const OFFLINE_PROBE_TAG = 'PECAPH29';
 
 export default function App() {
+  const [viewMode, setViewMode] = useState<'dashboard' | 'cadastros' | 'plc-tag'>('dashboard');
   const [linesData, setLinesData] = useState<Record<string, LineData>>(() => {
     return LINE_CONFIG.reduce<Record<string, LineData>>((acc, line) => {
       acc[line.key] = { ...DEFAULT_LINE_DATA };
@@ -90,6 +93,10 @@ export default function App() {
   const [isBackendOffline, setIsBackendOffline] = useState(false);
 
   useEffect(() => {
+    if (viewMode !== 'dashboard') {
+      return;
+    }
+
     let active = true;
     let timer: number | null = null;
     let nextDelayMs = POLL_INTERVAL_OK_MS;
@@ -260,7 +267,7 @@ export default function App() {
         window.clearTimeout(timer);
       }
     };
-  }, []);
+  }, [viewMode]);
 
   return (
     <div className="min-h-screen lg:h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col overflow-x-hidden">
@@ -271,55 +278,101 @@ export default function App() {
               <Factory className="w-7 h-7 text-white" />
               <div>
                 <h1 className="text-xl font-bold text-white">Dashboard PB 4</h1>
-                <p className="text-blue-100 text-xs">Monitoramento em tempo real - 3 linhas</p>
+                <p className="text-blue-100 text-xs">
+                  {viewMode === 'dashboard'
+                    ? 'Monitoramento em tempo real - 3 linhas'
+                    : viewMode === 'cadastros'
+                      ? 'Cadastro e manutencao de estrutura'
+                      : 'Cadastro PLC, memory e tags'}
+                </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-lg">
-              {isBackendOffline ? (
-                <AlertTriangle className="w-4 h-4 text-red-300" />
-              ) : (
-                <Activity className="w-4 h-4 text-green-300 animate-pulse" />
-              )}
-              <span className="text-white text-sm font-medium">
-                {isLoading ? 'Carregando' : isBackendOffline ? 'Servidor Offline' : 'Sistema Ativo'}
-              </span>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center rounded-lg border border-white/20 bg-white/10 p-1">
+                <button
+                  onClick={() => setViewMode('dashboard')}
+                  className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${
+                    viewMode === 'dashboard'
+                      ? 'bg-white text-blue-700'
+                      : 'text-white hover:bg-white/10'
+                  }`}
+                >
+                  Dashboard
+                </button>
+                <button
+                  onClick={() => setViewMode('cadastros')}
+                  className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${
+                    viewMode === 'cadastros'
+                      ? 'bg-white text-blue-700'
+                      : 'text-white hover:bg-white/10'
+                  }`}
+                >
+                  Cadastros
+                </button>
+                <button
+                  onClick={() => setViewMode('plc-tag')}
+                  className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${
+                    viewMode === 'plc-tag'
+                      ? 'bg-white text-blue-700'
+                      : 'text-white hover:bg-white/10'
+                  }`}
+                >
+                  PLC/TAG
+                </button>
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-lg">
+                {isBackendOffline ? (
+                  <AlertTriangle className="w-4 h-4 text-red-300" />
+                ) : (
+                  <Activity className="w-4 h-4 text-green-300 animate-pulse" />
+                )}
+                <span className="text-white text-sm font-medium">
+                  {isLoading ? 'Carregando' : isBackendOffline ? 'Servidor Offline' : 'Sistema Ativo'}
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
       <main className="flex-1 overflow-y-auto p-3 sm:p-4">
-        {error && (
+        {viewMode === 'dashboard' && error && (
           <div className="mb-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 flex items-center gap-2">
             <AlertTriangle className="h-4 w-4" />
             <span>{error}</span>
           </div>
         )}
-        {isBackendOffline && (
+        {viewMode === 'dashboard' && isBackendOffline && (
           <div className="mb-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
             Backend esperado: <strong>{BACKEND_TARGET}</strong>
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
-          {LINE_CONFIG.map((line) => {
-            const data = linesData[line.key] ?? DEFAULT_LINE_DATA;
-            return (
-              <ProductionLine
-                key={line.key}
-                lineNumber={line.lineNumber}
-                lineName={line.lineName}
-                pecasPrensa={data.pecasPrensa}
-                pecasRoller={data.pecasRoller}
-                qualidade={data.qualidade}
-                lastUpdatedAt={data.lastUpdatedAt}
-                trendPrensa={0}
-                trendRoller={0}
-                color={line.color}
-              />
-            );
-          })}
-        </div>
+        {viewMode === 'dashboard' ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
+            {LINE_CONFIG.map((line) => {
+              const data = linesData[line.key] ?? DEFAULT_LINE_DATA;
+              return (
+                <ProductionLine
+                  key={line.key}
+                  lineNumber={line.lineNumber}
+                  lineName={line.lineName}
+                  pecasPrensa={data.pecasPrensa}
+                  pecasRoller={data.pecasRoller}
+                  qualidade={data.qualidade}
+                  lastUpdatedAt={data.lastUpdatedAt}
+                  trendPrensa={0}
+                  trendRoller={0}
+                  color={line.color}
+                />
+              );
+            })}
+          </div>
+        ) : viewMode === 'cadastros' ? (
+          <AdminCrudScreen />
+        ) : (
+          <PlcTagCrudScreen />
+        )}
       </main>
     </div>
   );

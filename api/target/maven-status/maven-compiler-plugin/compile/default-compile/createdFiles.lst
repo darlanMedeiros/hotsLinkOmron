@@ -1,4 +1,4 @@
 org\ctrl\db\api\DmValueRestController.class
 org\ctrl\db\ApiApplication.class
-org\ctrl\db\api\RrValueRestController.class
 org\ctrl\db\api\TagRestController.class
+org\ctrl\db\api\RrValueRestController.class
