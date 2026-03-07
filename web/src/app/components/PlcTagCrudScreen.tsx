@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { Cpu, HardDrive, Tag, Pencil, Save, Trash2, X } from 'lucide-react';
 
 type ViewMessage = {
@@ -17,6 +17,7 @@ type Memory = {
   id: number;
   deviceId: number;
   name: string;
+  address: number;
 };
 
 type TagCrud = {
@@ -62,6 +63,7 @@ export function PlcTagCrudScreen() {
 
   const [newMemoryDeviceId, setNewMemoryDeviceId] = useState<number | ''>('');
   const [newMemoryName, setNewMemoryName] = useState('');
+  const [newMemoryAddress, setNewMemoryAddress] = useState<number | ''>('');
 
   const [newTagName, setNewTagName] = useState('');
   const [newTagDeviceId, setNewTagDeviceId] = useState<number | ''>('');
@@ -70,6 +72,13 @@ export function PlcTagCrudScreen() {
   const [editingDevice, setEditingDevice] = useState<Device | null>(null);
   const [editingMemory, setEditingMemory] = useState<Memory | null>(null);
   const [editingTag, setEditingTag] = useState<TagCrud | null>(null);
+
+  const availableMemoriesForNewTag = useMemo(() => {
+    if (newTagDeviceId === '') {
+      return [] as Memory[];
+    }
+    return memories.filter((m) => m.deviceId === Number(newTagDeviceId));
+  }, [memories, newTagDeviceId]);
 
   const loadAll = async (): Promise<string[]> => {
     const failures: string[] = [];
@@ -261,24 +270,30 @@ export function PlcTagCrudScreen() {
                   await requestApi<Memory>('/api/memories', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ deviceId: Number(newMemoryDeviceId), name: newMemoryName }),
+                    body: JSON.stringify({
+                      deviceId: Number(newMemoryDeviceId),
+                      name: newMemoryName,
+                      address: Number(newMemoryAddress),
+                    }),
                   });
                   setNewMemoryDeviceId('');
                   setNewMemoryName('');
+                  setNewMemoryAddress('');
                 }, 'Memory criada');
               }}
-              className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-2"
+              className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3"
             >
               <select value={newMemoryDeviceId} onChange={(e) => setNewMemoryDeviceId(e.target.value ? Number(e.target.value) : '')} className="rounded-md border border-slate-300 px-3 py-2 text-sm">
                 <option value="">Selecione Device</option>
                 {devices.map((d) => <option key={d.id} value={d.id}>{d.mnemonic} ({d.id})</option>)}
               </select>
               <input value={newMemoryName} onChange={(e) => setNewMemoryName(e.target.value)} placeholder="Nome da memory (ex: DM_29)" className="rounded-md border border-slate-300 px-3 py-2 text-sm" />
-              <button disabled={isSaving} className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white sm:col-span-2">Criar</button>
+              <input type="number" min={0} value={newMemoryAddress} onChange={(e) => setNewMemoryAddress(e.target.value ? Number(e.target.value) : '')} placeholder="Address" className="rounded-md border border-slate-300 px-3 py-2 text-sm" />
+              <button disabled={isSaving} className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white sm:col-span-3">Criar</button>
             </form>
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
-                <thead><tr className="text-left text-slate-600"><th className="pb-2 pr-2">ID</th><th className="pb-2 pr-2">Device</th><th className="pb-2 pr-2">Nome</th><th className="pb-2 text-right">Acoes</th></tr></thead>
+                <thead><tr className="text-left text-slate-600"><th className="pb-2 pr-2">ID</th><th className="pb-2 pr-2">Device</th><th className="pb-2 pr-2">Nome</th><th className="pb-2 pr-2">Address</th><th className="pb-2 text-right">Acoes</th></tr></thead>
                 <tbody>
                   {memories.map((row) => {
                     const editing = editingMemory?.id === row.id;
@@ -293,6 +308,7 @@ export function PlcTagCrudScreen() {
                           ) : deviceLabel(row.deviceId)}
                         </td>
                         <td className="py-2 pr-2">{editing ? <input value={editingMemory.name} onChange={(e) => setEditingMemory({ ...editingMemory, name: e.target.value })} className="w-36 rounded border border-slate-300 px-2 py-1" /> : row.name}</td>
+                        <td className="py-2 pr-2">{editing ? <input type="number" min={0} value={editingMemory.address} onChange={(e) => setEditingMemory({ ...editingMemory, address: Number(e.target.value || 0) })} className="w-24 rounded border border-slate-300 px-2 py-1" /> : row.address}</td>
                         <td className="py-2 text-right">
                           <div className="inline-flex gap-1">
                             {editing ? (
@@ -338,13 +354,20 @@ export function PlcTagCrudScreen() {
               className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3"
             >
               <input value={newTagName} onChange={(e) => setNewTagName(e.target.value)} placeholder="Nome da tag" className="rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-3" />
-              <select value={newTagDeviceId} onChange={(e) => setNewTagDeviceId(e.target.value ? Number(e.target.value) : '')} className="rounded-md border border-slate-300 px-3 py-2 text-sm">
+              <select
+                value={newTagDeviceId}
+                onChange={(e) => {
+                  setNewTagDeviceId(e.target.value ? Number(e.target.value) : '');
+                  setNewTagMemoryId('');
+                }}
+                className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+              >
                 <option value="">Device</option>
                 {devices.map((d) => <option key={d.id} value={d.id}>{d.mnemonic} ({d.id})</option>)}
               </select>
               <select value={newTagMemoryId} onChange={(e) => setNewTagMemoryId(e.target.value ? Number(e.target.value) : '')} className="rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-2">
-                <option value="">Memory</option>
-                {memories.map((m) => <option key={m.id} value={m.id}>{m.name} ({m.id})</option>)}
+                <option value="">{newTagDeviceId === '' ? 'Selecione o device antes' : 'Memory'}</option>
+                {availableMemoriesForNewTag.map((m) => <option key={m.id} value={m.id}>{m.name} ({m.id})</option>)}
               </select>
               <button disabled={isSaving} className="rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white sm:col-span-3">Criar</button>
             </form>
@@ -368,7 +391,9 @@ export function PlcTagCrudScreen() {
                         <td className="py-2 pr-2">
                           {editing ? (
                             <select value={editingTag.memoryId} onChange={(e) => setEditingTag({ ...editingTag, memoryId: Number(e.target.value) })} className="rounded border border-slate-300 px-2 py-1">
-                              {memories.map((m) => <option key={m.id} value={m.id}>{m.name} ({m.id})</option>)}
+                              {memories
+                                .filter((m) => m.deviceId === editingTag.deviceId)
+                                .map((m) => <option key={m.id} value={m.id}>{m.name} ({m.id})</option>)}
                             </select>
                           ) : memoryLabel(row.memoryId)}
                         </td>

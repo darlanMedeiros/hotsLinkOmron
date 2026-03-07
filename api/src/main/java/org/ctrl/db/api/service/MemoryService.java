@@ -24,13 +24,20 @@ public class MemoryService {
         return repository.findById(id);
     }
 
-    public Memory create(Integer deviceId, String name) {
-        return repository.create(requireId(deviceId, "deviceId"), requireName(name));
+    public Memory create(Integer deviceId, String name, Integer address) {
+        return repository.create(
+                requireId(deviceId, "deviceId"),
+                requireName(name),
+                requireAddress(address));
     }
 
-    public Optional<Memory> update(int id, Integer deviceId, String name) {
+    public Optional<Memory> update(int id, Integer deviceId, String name, Integer address) {
         validateId(id, "id");
-        return repository.update(id, requireId(deviceId, "deviceId"), requireName(name));
+        return repository.update(
+                id,
+                requireId(deviceId, "deviceId"),
+                requireName(name),
+                requireAddress(address));
     }
 
     public boolean delete(int id) {
@@ -50,6 +57,13 @@ public class MemoryService {
             throw new IllegalArgumentException(field + " must be greater than zero");
         }
         return id.intValue();
+    }
+
+    private int requireAddress(Integer address) {
+        if (address == null || address.intValue() < 0) {
+            throw new IllegalArgumentException("address must be zero or greater");
+        }
+        return address.intValue();
     }
 
     private void validateId(int id, String field) {

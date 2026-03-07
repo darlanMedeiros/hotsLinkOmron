@@ -4,6 +4,7 @@ public class MemoryRequest {
 
     private Integer deviceId;
     private String name;
+    private Integer address;
 
     public Integer getDeviceId() {
         return deviceId;
@@ -19,5 +20,13 @@ public class MemoryRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getAddress() {
+        return address;
+    }
+
+    public void setAddress(Integer address) {
+        this.address = address;
     }
 }

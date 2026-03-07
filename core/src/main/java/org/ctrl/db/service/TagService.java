@@ -33,10 +33,10 @@ public class TagService {
             "RETURNING id";
 
     private static final String SQL_UPSERT_MEMORY =
-            "INSERT INTO public.memory (device_id, name) " +
-            "VALUES (:deviceId, :name) " +
+            "INSERT INTO public.memory (device_id, name, address) " +
+            "VALUES (:deviceId, :name, :address) " +
             "ON CONFLICT (device_id, name) DO UPDATE " +
-            "SET name = EXCLUDED.name " +
+            "SET name = EXCLUDED.name, address = EXCLUDED.address " +
             "RETURNING id";
 
     private static final String SQL_FIND_CURRENT_BY_TAG =
@@ -171,15 +171,30 @@ public class TagService {
         if (cached != null) {
             return cached;
         }
+        int address = extractAddress(name);
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("deviceId", deviceId)
-                .addValue("name", name);
+                .addValue("name", name)
+                .addValue("address", address);
         Integer id = namedTemplate.queryForObject(SQL_UPSERT_MEMORY, params, Integer.class);
         if (id == null) {
             throw new IllegalStateException("Memory id was null for name " + name);
         }
         memoryIdCache.put(name, id);
         return id.intValue();
+    }
+
+    private int extractAddress(String memoryName) {
+        if (memoryName == null) {
+            return 0;
+        }
+        if (memoryName.startsWith("DM_")) {
+            return DmValueService.parseDmAddress(memoryName);
+        }
+        if (memoryName.startsWith("RR_")) {
+            return RrValueService.parseRrName(memoryName).getAddress();
+        }
+        return 0;
     }
 
     private TagValue mapTagValue(ResultSet rs, int rowNum) throws SQLException {

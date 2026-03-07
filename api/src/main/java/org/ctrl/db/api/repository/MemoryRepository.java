@@ -14,13 +14,13 @@ import org.springframework.stereotype.Repository;
 public class MemoryRepository {
 
     private static final String SQL_FIND_ALL =
-            "SELECT id, device_id, name FROM public.memory ORDER BY id";
+            "SELECT id, device_id, name, address FROM public.memory ORDER BY id";
     private static final String SQL_FIND_BY_ID =
-            "SELECT id, device_id, name FROM public.memory WHERE id = ?";
+            "SELECT id, device_id, name, address FROM public.memory WHERE id = ?";
     private static final String SQL_INSERT =
-            "INSERT INTO public.memory (device_id, name) VALUES (?, ?) RETURNING id, device_id, name";
+            "INSERT INTO public.memory (device_id, name, address) VALUES (?, ?, ?) RETURNING id, device_id, name, address";
     private static final String SQL_UPDATE =
-            "UPDATE public.memory SET device_id = ?, name = ? WHERE id = ? RETURNING id, device_id, name";
+            "UPDATE public.memory SET device_id = ?, name = ?, address = ? WHERE id = ? RETURNING id, device_id, name, address";
     private static final String SQL_DELETE =
             "DELETE FROM public.memory WHERE id = ?";
 
@@ -39,12 +39,12 @@ public class MemoryRepository {
         return queryOptional(SQL_FIND_BY_ID, id);
     }
 
-    public Memory create(int deviceId, String name) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, rowMapper, deviceId, name);
+    public Memory create(int deviceId, String name, int address) {
+        return jdbcTemplate.queryForObject(SQL_INSERT, rowMapper, deviceId, name, address);
     }
 
-    public Optional<Memory> update(int id, int deviceId, String name) {
-        return queryOptional(SQL_UPDATE, deviceId, name, id);
+    public Optional<Memory> update(int id, int deviceId, String name, int address) {
+        return queryOptional(SQL_UPDATE, deviceId, name, address, id);
     }
 
     public boolean delete(int id) {
@@ -60,6 +60,10 @@ public class MemoryRepository {
     }
 
     private Memory mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new Memory(rs.getInt("id"), rs.getInt("device_id"), rs.getString("name"));
+        return new Memory(
+                rs.getInt("id"),
+                rs.getInt("device_id"),
+                rs.getString("name"),
+                rs.getInt("address"));
     }
 }

@@ -13640,3 +13640,5 @@ Caused by: org.ctrl.comm.serial.SerialPortException: Cannot open serial port COM
 [2026-03-06 17:01:29] [PLC 4] Monitor iniciado para 3 TAGs.
 [2026-03-06 17:02:37] [PLC 1] Monitor iniciado para 6 TAGs.
 [2026-03-06 20:21:41] Encerramento solicitado pelo usuario.
+[2026-03-07 11:14:21] Encerramento solicitado pelo usuario.
+[2026-03-07 11:14:21] Comunicacao serial compartilhada encerrada.

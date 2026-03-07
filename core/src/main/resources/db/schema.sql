@@ -38,7 +38,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_device_mnemonic ON device(mnemonic);
 CREATE TABLE IF NOT EXISTS memory (
     id SERIAL PRIMARY KEY,
     device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE CASCADE,
-    name VARCHAR(50) NOT NULL
+    name VARCHAR(50) NOT NULL,
+    address INTEGER NOT NULL DEFAULT 0 CHECK (address >= 0)
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_memory_device_name ON memory(device_id, name);
@@ -62,7 +63,11 @@ CREATE TABLE IF NOT EXISTS tag (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE CASCADE,
-    memory_id INTEGER NOT NULL REFERENCES memory(id) ON DELETE CASCADE
+    memory_id INTEGER NOT NULL REFERENCES memory(id) ON DELETE CASCADE,
+    CONSTRAINT fk_tag_memory_same_device
+        FOREIGN KEY (memory_id, device_id)
+        REFERENCES memory(id, device_id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS machine (
@@ -130,9 +135,32 @@ CREATE TABLE IF NOT EXISTS producao_por_turno_machine (
     PRIMARY KEY (producao_por_turno_id, machine_id)
 );
 
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'memory'
+          AND column_name = 'address'
+    ) THEN
+        ALTER TABLE public.memory
+            ADD COLUMN address INTEGER NOT NULL DEFAULT 0;
+    END IF;
+END $$;
+
+UPDATE public.memory
+SET address = COALESCE(
+    NULLIF(SUBSTRING(name FROM '^DM_0*([0-9]+)$'), '')::INTEGER,
+    NULLIF(SUBSTRING(name FROM '^RR_0*([0-9]+)\\.[0-9]+$'), '')::INTEGER,
+    0
+);
+
 CREATE INDEX IF NOT EXISTS idx_mini_fabrica_fabrica ON mini_fabrica(fabrica_id);
 CREATE INDEX IF NOT EXISTS idx_setor_mini_fabrica ON setor(mini_fabrica_id);
 CREATE INDEX IF NOT EXISTS idx_memory_device ON memory(device_id);
+CREATE INDEX IF NOT EXISTS idx_memory_device_address ON memory(device_id, address);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_memory_id_device ON memory(id, device_id);
 CREATE INDEX IF NOT EXISTS idx_memory_value_memory ON memory_value(memory_id);
 CREATE INDEX IF NOT EXISTS idx_memory_value_updated_at ON memory_value(updated_at);
 CREATE INDEX IF NOT EXISTS idx_memory_value_current_updated_at ON memory_value_current(updated_at);
@@ -155,3 +183,19 @@ CREATE INDEX IF NOT EXISTS idx_ppt_producao ON producao_por_turno(producao_id);
 CREATE INDEX IF NOT EXISTS idx_ppt_mini_fabrica ON producao_por_turno(mini_fabrica_id);
 CREATE INDEX IF NOT EXISTS idx_ppt_data ON producao_por_turno(data);
 CREATE INDEX IF NOT EXISTS idx_pptm_machine ON producao_por_turno_machine(machine_id);
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'fk_tag_memory_same_device'
+    ) THEN
+        ALTER TABLE public.tag
+            ADD CONSTRAINT fk_tag_memory_same_device
+            FOREIGN KEY (memory_id, device_id)
+            REFERENCES public.memory(id, device_id)
+            ON DELETE CASCADE
+            NOT VALID;
+    END IF;
+END $$;

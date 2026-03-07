@@ -26,10 +26,10 @@ public class JdbcMemoryValueRepository implements MemoryValueRepository {
             "RETURNING id";
 
     private static final String SQL_UPSERT_MEMORY =
-            "INSERT INTO public.memory (device_id, name) " +
-            "VALUES (:deviceId, :name) " +
+            "INSERT INTO public.memory (device_id, name, address) " +
+            "VALUES (:deviceId, :name, :address) " +
             "ON CONFLICT (device_id, name) DO UPDATE " +
-            "SET name = EXCLUDED.name " +
+            "SET name = EXCLUDED.name, address = EXCLUDED.address " +
             "RETURNING id";
 
     private static final String SQL_INSERT_VALUE =
@@ -221,14 +221,40 @@ public class JdbcMemoryValueRepository implements MemoryValueRepository {
         if (cached != null) {
             return cached;
         }
+        int address = extractAddress(name);
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("deviceId", deviceId)
-                .addValue("name", name);
+                .addValue("name", name)
+                .addValue("address", address);
         Integer id = namedTemplate.queryForObject(SQL_UPSERT_MEMORY, params, Integer.class);
         if (id == null) {
             throw new IllegalStateException("Memory id was null for name " + name);
         }
         memoryIdCache.put(name, id);
         return id.intValue();
+    }
+
+    private int extractAddress(String memoryName) {
+        if (memoryName == null) {
+            return 0;
+        }
+        if (memoryName.startsWith("DM_")) {
+            try {
+                return Integer.parseInt(memoryName.substring(3));
+            } catch (NumberFormatException ex) {
+                return 0;
+            }
+        }
+        if (memoryName.startsWith("RR_")) {
+            int dot = memoryName.indexOf('.');
+            if (dot > 3) {
+                try {
+                    return Integer.parseInt(memoryName.substring(3, dot));
+                } catch (NumberFormatException ex) {
+                    return 0;
+                }
+            }
+        }
+        return 0;
     }
 }

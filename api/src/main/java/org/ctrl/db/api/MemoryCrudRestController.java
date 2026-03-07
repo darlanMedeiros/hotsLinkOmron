@@ -38,7 +38,8 @@ public class MemoryCrudRestController {
     public ResponseEntity<Memory> create(@RequestBody MemoryRequest request) {
         Memory created = service.create(
                 request == null ? null : request.getDeviceId(),
-                request == null ? null : request.getName());
+                request == null ? null : request.getName(),
+                request == null ? null : request.getAddress());
         return ResponseEntity.ok(created);
     }
 
@@ -47,7 +48,8 @@ public class MemoryCrudRestController {
         return service.update(
                 id,
                 request == null ? null : request.getDeviceId(),
-                request == null ? null : request.getName())
+                request == null ? null : request.getName(),
+                request == null ? null : request.getAddress())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

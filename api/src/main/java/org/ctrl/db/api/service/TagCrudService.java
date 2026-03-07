@@ -2,7 +2,9 @@ package org.ctrl.db.api.service;
 
 import java.util.List;
 import java.util.Optional;
+import org.ctrl.db.api.model.Memory;
 import org.ctrl.db.api.model.TagCrud;
+import org.ctrl.db.api.repository.MemoryRepository;
 import org.ctrl.db.api.repository.TagCrudRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +12,11 @@ import org.springframework.stereotype.Service;
 public class TagCrudService {
 
     private final TagCrudRepository repository;
+    private final MemoryRepository memoryRepository;
 
-    public TagCrudService(TagCrudRepository repository) {
+    public TagCrudService(TagCrudRepository repository, MemoryRepository memoryRepository) {
         this.repository = repository;
+        this.memoryRepository = memoryRepository;
     }
 
     public List<TagCrud> findAll() {
@@ -25,12 +29,18 @@ public class TagCrudService {
     }
 
     public TagCrud create(String name, Integer deviceId, Integer memoryId) {
-        return repository.create(requireName(name), requireId(deviceId, "deviceId"), requireId(memoryId, "memoryId"));
+        int validatedDeviceId = requireId(deviceId, "deviceId");
+        int validatedMemoryId = requireId(memoryId, "memoryId");
+        ensureMemoryBelongsToDevice(validatedMemoryId, validatedDeviceId);
+        return repository.create(requireName(name), validatedDeviceId, validatedMemoryId);
     }
 
     public Optional<TagCrud> update(int id, String name, Integer deviceId, Integer memoryId) {
         validateId(id, "id");
-        return repository.update(id, requireName(name), requireId(deviceId, "deviceId"), requireId(memoryId, "memoryId"));
+        int validatedDeviceId = requireId(deviceId, "deviceId");
+        int validatedMemoryId = requireId(memoryId, "memoryId");
+        ensureMemoryBelongsToDevice(validatedMemoryId, validatedDeviceId);
+        return repository.update(id, requireName(name), validatedDeviceId, validatedMemoryId);
     }
 
     public boolean delete(int id) {
@@ -55,6 +65,14 @@ public class TagCrudService {
     private void validateId(int id, String field) {
         if (id <= 0) {
             throw new IllegalArgumentException(field + " must be greater than zero");
+        }
+    }
+
+    private void ensureMemoryBelongsToDevice(int memoryId, int deviceId) {
+        Memory memory = memoryRepository.findById(memoryId)
+                .orElseThrow(() -> new IllegalArgumentException("memoryId does not exist"));
+        if (memory.getDeviceId().intValue() != deviceId) {
+            throw new IllegalArgumentException("memoryId must belong to the informed deviceId");
         }
     }
 }
