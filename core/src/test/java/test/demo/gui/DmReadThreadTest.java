@@ -59,7 +59,7 @@ class DmReadThreadTest {
         comHandler.start();
 
         // ===== Device =====
-        IDevice plc = new DeviceImp(0, "PLC", "PLC", "Omron PLC");
+        IDevice plc = new DeviceImp(4, "PLC", "PLC", "Omron PLC");
         IDeviceRegister deviceRegister = DeviceRegisterImp.getInstance();
         deviceRegister.addDevice(plc);
 

@@ -5,6 +5,7 @@ public class DeviceRequest {
     private String mnemonic;
     private String name;
     private String description;
+    private Integer nodeId;
 
     public String getMnemonic() {
         return mnemonic;
@@ -28,5 +29,13 @@ public class DeviceRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getNodeId() {
+        return nodeId;
+    }
+
+    public void setNodeId(Integer nodeId) {
+        this.nodeId = nodeId;
     }
 }

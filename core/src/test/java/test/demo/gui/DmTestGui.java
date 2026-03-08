@@ -122,12 +122,12 @@ public class DmTestGui {
         c.insets = new Insets(4, 6, 4, 6);
         c.fill = GridBagConstraints.HORIZONTAL;
 
-        portField = new JTextField("COM2");
+        portField = new JTextField("COM1");
         baudField = new JTextField("9600");
         dataBitsField = new JTextField("7");
         stopBitsField = new JTextField("2");
         timeoutField = new JTextField("10000");
-        nodeField = new JTextField("0");
+        nodeField = new JTextField("4");
         parityCombo = new JComboBox<>(new String[] { "EVEN", "NONE", "ODD" });
 
         c.gridx = 0;

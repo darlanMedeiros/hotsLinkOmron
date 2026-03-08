@@ -29,11 +29,12 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  */
 public class DmDbSyncMain {
 
-    private static final int START_ADDR = 0;
+    private static final int START_ADDR = 100;
     private static final int END_ADDR = 10;
     private static final int DEFAULT_CHUNK = 1;
     private static final int DEFAULT_POLL_MS = 1000;
     private static final int DEFAULT_TIMEOUT_MS = 10000;
+    private static final int NODE_ID = 4;
 
     public static void main(String[] args) {
         SerialPortHandlerImp comHandler = null;
@@ -41,7 +42,7 @@ public class DmDbSyncMain {
 
         try {
             SerialParameters sp = buildSerialParams(args);
-            int nodeId = getIntArg(args, 5, 0);
+            int nodeId = getIntArg(args, 5, NODE_ID);
             int timeoutMs = getIntArg(args, 6, DEFAULT_TIMEOUT_MS);
             int pollMs = getIntArg(args, 7, DEFAULT_POLL_MS);
             int chunkSize = getIntArg(args, 8, DEFAULT_CHUNK);
@@ -165,7 +166,7 @@ public class DmDbSyncMain {
     }
 
     private static SerialParameters buildSerialParams(String[] args) {
-        String port = getArg(args, 0, "COM2");
+        String port = getArg(args, 0, "COM1");
         int baud = getIntArg(args, 1, 9600);
         int dataBits = getIntArg(args, 2, 7);
         int stopBits = getIntArg(args, 3, 2);

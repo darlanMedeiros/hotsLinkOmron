@@ -11,6 +11,7 @@ type Device = {
   mnemonic: string;
   name: string;
   description: string | null;
+  nodeId: number | null;
 };
 
 type Memory = {
@@ -60,6 +61,7 @@ export function PlcTagCrudScreen() {
   const [newDeviceMnemonic, setNewDeviceMnemonic] = useState('');
   const [newDeviceName, setNewDeviceName] = useState('');
   const [newDeviceDescription, setNewDeviceDescription] = useState('');
+  const [newDeviceNodeId, setNewDeviceNodeId] = useState<number | ''>('');
 
   const [newMemoryDeviceId, setNewMemoryDeviceId] = useState<number | ''>('');
   const [newMemoryName, setNewMemoryName] = useState('');
@@ -209,11 +211,13 @@ export function PlcTagCrudScreen() {
                       mnemonic: newDeviceMnemonic,
                       name: newDeviceName,
                       description: newDeviceDescription,
+                      nodeId: newDeviceNodeId === '' ? null : Number(newDeviceNodeId),
                     }),
                   });
                   setNewDeviceMnemonic('');
                   setNewDeviceName('');
                   setNewDeviceDescription('');
+                  setNewDeviceNodeId('');
                 }, 'Device criado');
               }}
               className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-2"
@@ -221,11 +225,12 @@ export function PlcTagCrudScreen() {
               <input value={newDeviceMnemonic} onChange={(e) => setNewDeviceMnemonic(e.target.value)} placeholder="Mnemonic" className="rounded-md border border-slate-300 px-3 py-2 text-sm" />
               <input value={newDeviceName} onChange={(e) => setNewDeviceName(e.target.value)} placeholder="Nome" className="rounded-md border border-slate-300 px-3 py-2 text-sm" />
               <input value={newDeviceDescription} onChange={(e) => setNewDeviceDescription(e.target.value)} placeholder="Descricao" className="rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-2" />
+              <input type="number" min={0} value={newDeviceNodeId} onChange={(e) => setNewDeviceNodeId(e.target.value ? Number(e.target.value) : '')} placeholder="No ID" className="rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-2" />
               <button disabled={isSaving} className="rounded-md bg-blue-600 px-3 py-2 text-sm font-medium text-white sm:col-span-2">Criar</button>
             </form>
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
-                <thead><tr className="text-left text-slate-600"><th className="pb-2 pr-2">ID</th><th className="pb-2 pr-2">Mnemonic</th><th className="pb-2 pr-2">Nome</th><th className="pb-2 pr-2">Descricao</th><th className="pb-2 text-right">Acoes</th></tr></thead>
+                <thead><tr className="text-left text-slate-600"><th className="pb-2 pr-2">ID</th><th className="pb-2 pr-2">Mnemonic</th><th className="pb-2 pr-2">Nome</th><th className="pb-2 pr-2">Descricao</th><th className="pb-2 pr-2">No ID</th><th className="pb-2 text-right">Acoes</th></tr></thead>
                 <tbody>
                   {devices.map((row) => {
                     const editing = editingDevice?.id === row.id;
@@ -235,6 +240,7 @@ export function PlcTagCrudScreen() {
                         <td className="py-2 pr-2">{editing ? <input value={editingDevice.mnemonic} onChange={(e) => setEditingDevice({ ...editingDevice, mnemonic: e.target.value })} className="w-24 rounded border border-slate-300 px-2 py-1" /> : row.mnemonic}</td>
                         <td className="py-2 pr-2">{editing ? <input value={editingDevice.name} onChange={(e) => setEditingDevice({ ...editingDevice, name: e.target.value })} className="w-28 rounded border border-slate-300 px-2 py-1" /> : row.name}</td>
                         <td className="py-2 pr-2">{editing ? <input value={editingDevice.description ?? ''} onChange={(e) => setEditingDevice({ ...editingDevice, description: e.target.value })} className="w-36 rounded border border-slate-300 px-2 py-1" /> : (row.description ?? '')}</td>
+                        <td className="py-2 pr-2">{editing ? <input type="number" min={0} value={editingDevice.nodeId ?? ''} onChange={(e) => setEditingDevice({ ...editingDevice, nodeId: e.target.value ? Number(e.target.value) : null })} className="w-24 rounded border border-slate-300 px-2 py-1" /> : (row.nodeId ?? '')}</td>
                         <td className="py-2 text-right">
                           <div className="inline-flex gap-1">
                             {editing ? (

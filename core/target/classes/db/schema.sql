@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS device (
     id SERIAL PRIMARY KEY,
     mnemonic VARCHAR(10) NOT NULL,
     name VARCHAR(100) NOT NULL,
-    description VARCHAR(255)
+    description VARCHAR(255),
+    no_id INTEGER UNIQUE CHECK (no_id >= 0)
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_device_mnemonic ON device(mnemonic);
@@ -141,6 +142,50 @@ BEGIN
         SELECT 1
         FROM information_schema.columns
         WHERE table_schema = 'public'
+          AND table_name = 'device'
+          AND column_name = 'no_id'
+    ) THEN
+        ALTER TABLE public.device
+            ADD COLUMN no_id INTEGER;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM information_schema.tables
+        WHERE table_schema = 'public'
+          AND table_name = 'no_id'
+    ) THEN
+        UPDATE public.device d
+        SET no_id = n.no_id
+        FROM public.no_id n
+        WHERE n.device_id = d.id
+          AND d.no_id IS NULL;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'chk_device_no_id_non_negative'
+    ) THEN
+        ALTER TABLE public.device
+            ADD CONSTRAINT chk_device_no_id_non_negative
+            CHECK (no_id IS NULL OR no_id >= 0)
+            NOT VALID;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
           AND table_name = 'memory'
           AND column_name = 'address'
     ) THEN
@@ -158,6 +203,7 @@ SET address = COALESCE(
 
 CREATE INDEX IF NOT EXISTS idx_mini_fabrica_fabrica ON mini_fabrica(fabrica_id);
 CREATE INDEX IF NOT EXISTS idx_setor_mini_fabrica ON setor(mini_fabrica_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_device_no_id ON device(no_id) WHERE no_id IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_memory_device ON memory(device_id);
 CREATE INDEX IF NOT EXISTS idx_memory_device_address ON memory(device_id, address);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_memory_id_device ON memory(id, device_id);

@@ -140,7 +140,7 @@ public class CollectorGuiApplication {
         stopBitsField = new JTextField("2");
         parityCombo = new JComboBox<>(new String[] { "EVEN", "NONE", "ODD", "MARK", "SPACE" });
         parityCombo.setSelectedItem("EVEN");
-        nodeField = new JTextField("0");
+        nodeField = new JTextField("4");
         timeoutField = new JTextField("10000");
         pollMsField = new JTextField("2000");
 
@@ -588,9 +588,10 @@ public class CollectorGuiApplication {
     }
 
     private void refreshAvailablePorts(String preferredPort) {
-        String selected = (preferredPort == null || preferredPort.trim().isEmpty()) ? getSelectedPortName() : preferredPort.trim();
+        String selected = (preferredPort == null || preferredPort.trim().isEmpty()) ? getSelectedPortName()
+                : preferredPort.trim();
         try {
-            SharedSerial.refreshAvailablePorts(portCombo, selected, "COM2");
+            SharedSerial.refreshAvailablePorts(portCombo, selected, "COM1");
         } catch (Exception ex) {
             if (selected != null && !selected.isEmpty()) {
                 portCombo.removeAllItems();

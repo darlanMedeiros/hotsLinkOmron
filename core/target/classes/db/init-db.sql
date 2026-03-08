@@ -38,6 +38,14 @@ CREATE TABLE device (
 
 CREATE UNIQUE INDEX idx_device_mnemonic ON device(mnemonic);
 
+CREATE TABLE no_id (
+    id SERIAL PRIMARY KEY,
+    device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE CASCADE,
+    no_id INTEGER NOT NULL CHECK (no_id >= 0),
+    CONSTRAINT uq_no_id_device UNIQUE (device_id),
+    CONSTRAINT uq_no_id_value UNIQUE (no_id)
+);
+
 CREATE TABLE memory (
     id SERIAL PRIMARY KEY,
     device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE CASCADE,
@@ -140,6 +148,7 @@ CREATE TABLE producao_por_turno_machine (
 
 CREATE INDEX idx_mini_fabrica_fabrica ON mini_fabrica(fabrica_id);
 CREATE INDEX idx_setor_mini_fabrica ON setor(mini_fabrica_id);
+CREATE INDEX idx_no_id_device ON no_id(device_id);
 CREATE INDEX idx_memory_device ON memory(device_id);
 CREATE INDEX idx_memory_device_address ON memory(device_id, address);
 CREATE UNIQUE INDEX idx_memory_id_device ON memory(id, device_id);

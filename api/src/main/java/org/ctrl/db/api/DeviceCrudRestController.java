@@ -39,7 +39,8 @@ public class DeviceCrudRestController {
         Device created = service.create(
                 request == null ? null : request.getMnemonic(),
                 request == null ? null : request.getName(),
-                request == null ? null : request.getDescription());
+                request == null ? null : request.getDescription(),
+                request == null ? null : request.getNodeId());
         return ResponseEntity.ok(created);
     }
 
@@ -49,7 +50,8 @@ public class DeviceCrudRestController {
                 id,
                 request == null ? null : request.getMnemonic(),
                 request == null ? null : request.getName(),
-                request == null ? null : request.getDescription())
+                request == null ? null : request.getDescription(),
+                request == null ? null : request.getNodeId())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

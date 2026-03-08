@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TestWriteDM",
+            "request": "launch",
+            "mainClass": "test.demo.TestWriteDM",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
+            "name": "TestDM",
+            "request": "launch",
+            "mainClass": "test.demo.TestDM",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
+            "name": "TestDmMonitor",
+            "request": "launch",
+            "mainClass": "test.demo.TestDmMonitor",
+            "projectName": "core"
+        },
+        {
+            "type": "java",
             "name": "CollectorMultPlcAplication",
             "request": "launch",
             "mainClass": "org.omron.collector.CollectorMultPlcAplication",

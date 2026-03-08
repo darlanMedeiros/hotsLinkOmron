@@ -23,7 +23,7 @@ public class TestWriteDM {
         SerialPortHandlerImp comHandler = null;
         try {
             SerialParameters sp = buildSerialParams(args);
-            int nodeId = getIntArg(args, 5, 0);
+            int nodeId = getIntArg(args, 5, 4);
             int timeoutMs = getIntArg(args, 6, 10000);
 
             SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
@@ -40,7 +40,7 @@ public class TestWriteDM {
             IDeviceRegister deviceRegister = DeviceRegisterImp.getInstance();
             deviceRegister.addDevice(plc);
 
-            for (int addr = 0; addr <= 100; addr++) {
+            for (int addr = 0 ; addr <= 10; addr++) {
                 int randomValue = java.util.concurrent.ThreadLocalRandom.current().nextInt(0, 101);
                 int[] value = new int[] { randomValue };
                 AreaWriteDM write = new AreaWriteDM(plc, addr, value, MemoryWrite.BCD);
@@ -58,7 +58,7 @@ public class TestWriteDM {
     }
 
     private static SerialParameters buildSerialParams(String[] args) {
-        String port = getArg(args, 0, "COM2");
+        String port = getArg(args, 0, "COM1");
         int baud = getIntArg(args, 1, 9600);
         int dataBits = getIntArg(args, 2, 7);
         int stopBits = getIntArg(args, 3, 2);

@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -52,7 +50,6 @@ public class CollectorMultPlcAplication {
     private static final DateTimeFormatter FILE_TIME_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final int MAX_LOG_LINES = 4000;
     private static final Path LOG_FILE = Path.of("collector-mult-plc.log");
-    private static final Pattern PLC_NODE_PATTERN = Pattern.compile("PLC\\s*([0-9]+).*");
     private static volatile CollectorMultPlcAplication activeInstance;
 
     private JFrame frame;
@@ -112,21 +109,22 @@ public class CollectorMultPlcAplication {
 
         for (int i = 0; i < configs.size(); i++) {
             PlcConfig cfg = configs.get(i);
-            final int panelIndex = i + 1;
+            final int nodeId = cfg.nodeId;
             PlcNodeMonitorPanel panel = new PlcNodeMonitorPanel(
-                    panelIndex,
+                    nodeId,
                     cfg.title,
                     cfg.mnemonic,
                     cfg.description,
                     cfg.nodeId,
                     cfg.tags,
+                    () -> loadTagsForDevice(cfg.mnemonic),
                     sharedSerial.getIoLock(),
                     this::isSharedConnected,
                     sharedSerial::getHandler,
                     this::ensureDb,
                     () -> dmValueService,
                     this::log,
-                    () -> requestDisconnectByUnresponsiveNode(panelIndex));
+                    () -> requestDisconnectByUnresponsiveNode(nodeId));
             plcPanels.add(panel);
             container.add(panel.getPanel());
         }
@@ -138,15 +136,12 @@ public class CollectorMultPlcAplication {
     private List<PlcConfig> loadPlcConfigsFromDb() {
         ensureDb();
         JdbcTemplate jdbc = dbContext.getBean(JdbcTemplate.class);
-        Map<String, Tag> catalog = buildTagCatalog();
 
         List<Map<String, Object>> rows = jdbc.queryForList(
                 "SELECT d.id AS device_id, d.mnemonic, d.name AS device_name, d.description AS device_description, " +
-                        "t.name AS tag_name, m.address AS memory_address, m.name AS memory_name " +
+                        "d.no_id AS device_node_id " +
                         "FROM public.device d " +
-                        "LEFT JOIN public.tag t ON t.device_id = d.id " +
-                        "LEFT JOIN public.memory m ON m.id = t.memory_id " +
-                        "ORDER BY d.id, t.id");
+                        "ORDER BY d.id");
 
         Map<String, PlcConfig> grouped = new HashMap<>();
         for (Map<String, Object> row : rows) {
@@ -156,16 +151,40 @@ public class CollectorMultPlcAplication {
             }
             PlcConfig cfg = grouped.get(mnemonic);
             if (cfg == null) {
-                int nodeId = inferNodeId(mnemonic, grouped.size() + 1);
+                Integer configuredNodeId = asInt(row.get("device_node_id"));
+                int nodeId = configuredNodeId == null ? 0 : configuredNodeId.intValue();
                 cfg = new PlcConfig(
                         asString(row.get("device_name"), mnemonic),
                         mnemonic,
                         asString(row.get("device_description"), "Omron " + mnemonic),
                         nodeId,
-                        new ArrayList<>());
+                        loadTagsForDevice(mnemonic));
                 grouped.put(mnemonic, cfg);
             }
+        }
 
+        return new ArrayList<>(grouped.values());
+    }
+
+    private List<PlcNodeMonitorPanel.MonitoredTag> loadTagsForDevice(String deviceMnemonic) {
+        ensureDb();
+        if (deviceMnemonic == null || deviceMnemonic.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        JdbcTemplate jdbc = dbContext.getBean(JdbcTemplate.class);
+        Map<String, Tag> catalog = buildTagCatalog();
+        List<Map<String, Object>> rows = jdbc.queryForList(
+                "SELECT t.name AS tag_name, m.address AS memory_address, m.name AS memory_name " +
+                        "FROM public.device d " +
+                        "JOIN public.tag t ON t.device_id = d.id " +
+                        "JOIN public.memory m ON m.id = t.memory_id " +
+                        "WHERE d.mnemonic = ? " +
+                        "ORDER BY t.id",
+                deviceMnemonic);
+
+        List<PlcNodeMonitorPanel.MonitoredTag> tags = new ArrayList<>();
+        for (Map<String, Object> row : rows) {
             String tagName = asString(row.get("tag_name"));
             Integer address = asInt(row.get("memory_address"));
             String memoryName = asString(row.get("memory_name"));
@@ -175,13 +194,11 @@ public class CollectorMultPlcAplication {
             if (memoryName != null && !memoryName.startsWith("DM_")) {
                 continue;
             }
-
             Tag known = catalog.get(tagName);
             int lengthWords = known == null || known.isBit() ? 1 : known.getLengthWords();
-            cfg.tags.add(new PlcNodeMonitorPanel.MonitoredTag(tagName, address.intValue(), lengthWords));
+            tags.add(new PlcNodeMonitorPanel.MonitoredTag(tagName, address.intValue(), lengthWords));
         }
-
-        return new ArrayList<>(grouped.values());
+        return tags;
     }
 
     private Map<String, Tag> buildTagCatalog() {
@@ -205,19 +222,6 @@ public class CollectorMultPlcAplication {
             }
         }
         return out;
-    }
-
-    private int inferNodeId(String mnemonic, int fallback) {
-        Matcher matcher = PLC_NODE_PATTERN.matcher(mnemonic == null ? "" : mnemonic.toUpperCase());
-        if (matcher.matches()) {
-            try {
-                int node = Integer.parseInt(matcher.group(1));
-                return node > 0 ? node : fallback;
-            } catch (NumberFormatException ignored) {
-                return fallback;
-            }
-        }
-        return fallback;
     }
 
     private static String asString(Object raw) {
@@ -400,7 +404,7 @@ public class CollectorMultPlcAplication {
         log("Comunicacao serial compartilhada encerrada.");
     }
 
-    private void requestDisconnectByUnresponsiveNode(int nodeIndex) {
+    private void requestDisconnectByUnresponsiveNode(int nodeId) {
         if (shuttingDown || !isSharedConnected()) {
             return;
         }
@@ -412,7 +416,7 @@ public class CollectorMultPlcAplication {
         }
         Thread disconnectThread = new Thread(() -> {
             try {
-                log("[PLC " + nodeIndex + "] Sem resposta prolongada. Desconectando serial compartilhada para liberar a porta.");
+                log("[Node " + nodeId + "] Sem resposta prolongada. Desconectando serial compartilhada para liberar a porta.");
                 disconnectSharedSerial();
             } finally {
                 forcedDisconnectInProgress = false;

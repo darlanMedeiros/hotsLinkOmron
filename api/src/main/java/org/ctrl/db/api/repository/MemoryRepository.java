@@ -14,7 +14,10 @@ import org.springframework.stereotype.Repository;
 public class MemoryRepository {
 
     private static final String SQL_FIND_ALL =
-            "SELECT id, device_id, name, address FROM public.memory ORDER BY id";
+            "SELECT m.id, m.device_id, m.name, m.address " +
+                    "FROM public.memory m " +
+                    "JOIN public.device d ON d.id = m.device_id " +
+                    "ORDER BY d.mnemonic, m.device_id, m.name, m.id";
     private static final String SQL_FIND_BY_ID =
             "SELECT id, device_id, name, address FROM public.memory WHERE id = ?";
     private static final String SQL_INSERT =

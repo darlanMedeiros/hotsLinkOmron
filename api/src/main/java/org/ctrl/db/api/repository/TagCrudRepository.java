@@ -14,7 +14,11 @@ import org.springframework.stereotype.Repository;
 public class TagCrudRepository {
 
     private static final String SQL_FIND_ALL =
-            "SELECT id, name, device_id, memory_id FROM public.tag ORDER BY id";
+            "SELECT t.id, t.name, t.device_id, t.memory_id " +
+                    "FROM public.tag t " +
+                    "JOIN public.device d ON d.id = t.device_id " +
+                    "JOIN public.memory m ON m.id = t.memory_id " +
+                    "ORDER BY d.mnemonic, t.device_id, m.name, t.name, t.id";
     private static final String SQL_FIND_BY_ID =
             "SELECT id, name, device_id, memory_id FROM public.tag WHERE id = ?";
     private static final String SQL_INSERT =

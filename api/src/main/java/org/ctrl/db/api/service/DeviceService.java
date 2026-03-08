@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.ctrl.db.api.model.Device;
 import org.ctrl.db.api.repository.DeviceRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DeviceService {
@@ -24,13 +25,24 @@ public class DeviceService {
         return repository.findById(id);
     }
 
-    public Device create(String mnemonic, String name, String description) {
-        return repository.create(requireMnemonic(mnemonic), requireName(name), normalizeText(description));
+    @Transactional
+    public Device create(String mnemonic, String name, String description, Integer nodeId) {
+        return repository.create(
+                requireMnemonic(mnemonic),
+                requireName(name),
+                normalizeText(description),
+                normalizeNodeId(nodeId));
     }
 
-    public Optional<Device> update(int id, String mnemonic, String name, String description) {
+    @Transactional
+    public Optional<Device> update(int id, String mnemonic, String name, String description, Integer nodeId) {
         validateId(id, "id");
-        return repository.update(id, requireMnemonic(mnemonic), requireName(name), normalizeText(description));
+        return repository.update(
+                id,
+                requireMnemonic(mnemonic),
+                requireName(name),
+                normalizeText(description),
+                normalizeNodeId(nodeId));
     }
 
     public boolean delete(int id) {
@@ -54,6 +66,16 @@ public class DeviceService {
 
     private String normalizeText(String value) {
         return value == null ? null : value.trim();
+    }
+
+    private Integer normalizeNodeId(Integer nodeId) {
+        if (nodeId == null) {
+            return null;
+        }
+        if (nodeId.intValue() < 0) {
+            throw new IllegalArgumentException("nodeId must be greater than or equal to zero");
+        }
+        return nodeId;
     }
 
     private void validateId(int id, String field) {

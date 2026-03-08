@@ -5,4 +5,6 @@ org\omron\collector\util\SharedSerial$Config.class
 org\omron\collector\CollectorGuiApplication.class
 org\omron\collector\CollectorMultPlcAplication$1.class
 org\omron\collector\DmMonitorApplication.class
+org\omron\collector\CollectorMultPlcAplication$PlcConfig.class
+org\omron\collector\util\PlcNodeMonitorPanel$MonitoredTag.class
 org\omron\collector\util\SharedSerial.class

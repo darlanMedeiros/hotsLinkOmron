@@ -77,7 +77,10 @@ public class SharedSerial {
         SerialPortHandlerImp newHandler = new SerialPortHandlerImp(SerialUtils.createSerial(params));
         newHandler.setProtocolHandler(new ToolbusProtocol());
         if (newHandler instanceof IComControl) {
-            ((IComControl) newHandler).setCommunicationTimeOut(config.timeoutMs);
+            IComControl control = (IComControl) newHandler;
+            control.setCommunicationTimeOut(config.timeoutMs);
+            // Default library retry is 1 attempt, which is too low for shared multi-node polling.
+            control.setNumberOfRetries(3);
         }
 
         try {

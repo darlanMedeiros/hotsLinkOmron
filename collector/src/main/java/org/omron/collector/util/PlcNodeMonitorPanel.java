@@ -43,10 +43,12 @@ public class PlcNodeMonitorPanel {
     private static final long MAX_RETRIES_STOP_MONITOR_MS = 3000L;
 
     private final int nodeIndex;
+    private final int configuredNodeId;
     private final String plcTitle;
     private final String plcMnemonic;
     private final String plcDescription;
-    private final List<MonitoredTag> monitoredTags;
+    private final List<MonitoredTag> monitoredTags = new ArrayList<>();
+    private final Supplier<List<MonitoredTag>> monitoredTagsSupplier;
     private final Object comLock;
     private final Supplier<Boolean> sharedConnectedSupplier;
     private final Supplier<SerialPortHandlerImp> sharedComHandlerSupplier;
@@ -70,8 +72,9 @@ public class PlcNodeMonitorPanel {
             String plcTitle,
             String plcMnemonic,
             String plcDescription,
-            int defaultNodeId,
+            int configuredNodeId,
             List<MonitoredTag> monitoredTags,
+            Supplier<List<MonitoredTag>> monitoredTagsSupplier,
             Object comLock,
             Supplier<Boolean> sharedConnectedSupplier,
             Supplier<SerialPortHandlerImp> sharedComHandlerSupplier,
@@ -80,10 +83,14 @@ public class PlcNodeMonitorPanel {
             Consumer<String> globalLogger,
             Runnable sharedDisconnectAction) {
         this.nodeIndex = nodeIndex;
+        this.configuredNodeId = Math.max(0, configuredNodeId);
         this.plcTitle = plcTitle;
         this.plcMnemonic = plcMnemonic;
         this.plcDescription = plcDescription == null ? "" : plcDescription;
-        this.monitoredTags = monitoredTags == null ? new ArrayList<>() : new ArrayList<>(monitoredTags);
+        if (monitoredTags != null) {
+            this.monitoredTags.addAll(monitoredTags);
+        }
+        this.monitoredTagsSupplier = monitoredTagsSupplier;
         this.comLock = comLock;
         this.sharedConnectedSupplier = sharedConnectedSupplier;
         this.sharedComHandlerSupplier = sharedComHandlerSupplier;
@@ -91,7 +98,7 @@ public class PlcNodeMonitorPanel {
         this.dmValueServiceSupplier = dmValueServiceSupplier;
         this.globalLogger = globalLogger;
         this.sharedDisconnectAction = sharedDisconnectAction;
-        this.panel = buildNodePanel(defaultNodeId);
+        this.panel = buildNodePanel(this.configuredNodeId);
     }
 
     public JPanel getPanel() {
@@ -109,6 +116,7 @@ public class PlcNodeMonitorPanel {
         }
 
         ensureDbAction.run();
+        reloadTagsFromDb();
         ensureDevice();
 
         final int pollMs;
@@ -162,6 +170,7 @@ public class PlcNodeMonitorPanel {
         c.fill = GridBagConstraints.HORIZONTAL;
 
         nodeField = new JTextField(Integer.toString(defaultNodeId));
+        nodeField.setEditable(true);
         pollMsField = new JTextField("2000");
         nodeField.setColumns(6);
         pollMsField.setColumns(6);
@@ -220,8 +229,9 @@ public class PlcNodeMonitorPanel {
     }
 
     private void runMonitorLoop(int pollMs) {
+        List<MonitoredTag> activeTags = snapshotMonitoredTags();
         setMonitorStatus("RODANDO");
-        logPrefix("Monitor iniciado para " + monitoredTags.size() + " TAGs.");
+        logPrefix("Monitor iniciado para " + activeTags.size() + " TAGs.");
 
         Map<String, int[]> lastValues = new LinkedHashMap<>();
         int cycleCount = 0;
@@ -237,7 +247,7 @@ public class PlcNodeMonitorPanel {
                     throw new IllegalStateException("Serial compartilhada desconectada.");
                 }
 
-                for (MonitoredTag tag : monitoredTags) {
+                for (MonitoredTag tag : activeTags) {
                     if (!monitoring) {
                         break;
                     }
@@ -345,12 +355,45 @@ public class PlcNodeMonitorPanel {
     }
 
     private void ensureDevice() {
-        int nodeId = Integer.parseInt(nodeField.getText().trim());
-        if (plc == null || plc.getId() != nodeId) {
-            plc = new DeviceImp(nodeId, plcMnemonic, plcTitle, plcDescription);
+        int activeNodeId = resolveActiveNodeId();
+        if (plc == null || plc.getId() != activeNodeId) {
+            plc = new DeviceImp(activeNodeId, plcMnemonic, plcTitle, plcDescription);
             IDeviceRegister deviceRegister = DeviceRegisterImp.getInstance();
             deviceRegister.addDevice(plc);
             deviceInfo = new DeviceInfo(plcMnemonic, plc.getName(), plc.getDescription());
+        }
+    }
+
+    private int resolveActiveNodeId() {
+        String raw = nodeField == null ? null : nodeField.getText();
+        if (raw == null || raw.trim().isEmpty()) {
+            return configuredNodeId;
+        }
+        try {
+            int parsed = Integer.parseInt(raw.trim());
+            return parsed < 0 ? configuredNodeId : parsed;
+        } catch (NumberFormatException ex) {
+            return configuredNodeId;
+        }
+    }
+
+    private void reloadTagsFromDb() {
+        if (monitoredTagsSupplier == null) {
+            return;
+        }
+        List<MonitoredTag> loaded = monitoredTagsSupplier.get();
+        synchronized (monitoredTags) {
+            monitoredTags.clear();
+            if (loaded != null) {
+                monitoredTags.addAll(loaded);
+            }
+        }
+        logPrefix("Lista de TAG atualizada do banco: " + monitoredTags.size() + " item(ns).");
+    }
+
+    private List<MonitoredTag> snapshotMonitoredTags() {
+        synchronized (monitoredTags) {
+            return new ArrayList<>(monitoredTags);
         }
     }
 

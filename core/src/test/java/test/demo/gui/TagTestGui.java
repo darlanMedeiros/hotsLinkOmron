@@ -30,28 +30,16 @@ import org.ctrl.comm.serial.SerialPortAbstract;
 import org.ctrl.comm.serial.SerialPortFactoryJSerialComm;
 import org.ctrl.comm.serial.SerialPortHandlerImp;
 import org.ctrl.comm.serial.SerialUtils;
-import org.ctrl.db.config.DbConfig;
-import org.ctrl.db.model.DeviceInfo;
-import org.ctrl.db.service.DmValueService;
-import org.ctrl.db.service.RrValueService;
-import org.ctrl.db.service.TagService;
 import org.ctrl.extras.Tag;
-import org.ctrl.utils.OmronUtils;
 import org.ctrl.vend.omron.toolbus.ToolbusProtocol;
-import org.ctrl.vend.omron.toolbus.ToolbusWordBit;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
-import org.ctrl.vend.omron.toolbus.commands.area.AreaReadRR;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteDM;
-import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteWR;
 import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class TagTestGui {
 
     private static final String DEVICE_MNEMONIC = "PLC";
-    private static final Tag LAMPADA_TAG = Tag.rrBit("lampada", 10, 0);
-    private static final int PRODUCAO_ADDR = 0;
-    private static final Tag PRODUCAO_TAG = Tag.dmWord("producao", PRODUCAO_ADDR);
+    private static final Tag TEST_TAG = Tag.dmWord("TEST_TAG", 100);
 
     private JFrame frame;
     private JTextField portField;
@@ -62,24 +50,11 @@ public class TagTestGui {
     private JTextField nodeField;
     private JTextField timeoutField;
 
-    private JLabel lampadaStatus;
-    private JTextField producaoValueField;
+    private JTextField tagValueField;
     private JLabel statusLabel;
-    private JLabel dbStatusLabel;
 
     private SerialPortHandlerImp comHandler;
-    private ToolbusProtocol protocol;
     private IDevice plc;
-    private IDeviceRegister deviceRegister;
-    private AnnotationConfigApplicationContext ctx;
-    private RrValueService rrValueService;
-    private DmValueService dmValueService;
-    private TagService tagService;
-    private org.ctrl.db.model.Tag lampadaTagDb;
-    private org.ctrl.db.model.Tag producaoTagDb;
-
-    private final OmronUtils utils = new OmronUtils();
-    private final ToolbusWordBit wordBit = new ToolbusWordBit();
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
@@ -93,18 +68,14 @@ public class TagTestGui {
     }
 
     private void initialize() {
-        frame = new JFrame("Tag Test GUI (lampada 10.00 / producao DM)");
+        frame = new JFrame("Tag Test GUI - Ler/Escrever");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(new Dimension(720, 320));
+        frame.setSize(new Dimension(720, 260));
         frame.setLayout(new BorderLayout(10, 10));
 
-        JPanel configPanel = buildConfigPanel();
-        JPanel tagPanel = buildTagPanel();
-        JPanel statusPanel = buildStatusPanel();
-
-        frame.add(configPanel, BorderLayout.NORTH);
-        frame.add(tagPanel, BorderLayout.CENTER);
-        frame.add(statusPanel, BorderLayout.SOUTH);
+        frame.add(buildConfigPanel(), BorderLayout.NORTH);
+        frame.add(buildTagPanel(), BorderLayout.CENTER);
+        frame.add(buildStatusPanel(), BorderLayout.SOUTH);
     }
 
     private JPanel buildConfigPanel() {
@@ -115,12 +86,12 @@ public class TagTestGui {
         c.insets = new Insets(4, 6, 4, 6);
         c.fill = GridBagConstraints.HORIZONTAL;
 
-        portField = new JTextField("COM2");
+        portField = new JTextField("COM1");
         baudField = new JTextField("9600");
         dataBitsField = new JTextField("7");
         stopBitsField = new JTextField("2");
         timeoutField = new JTextField("10000");
-        nodeField = new JTextField("0");
+        nodeField = new JTextField("4");
         parityCombo = new JComboBox<>(new String[] { "EVEN", "NONE", "ODD" });
 
         c.gridx = 0;
@@ -171,43 +142,31 @@ public class TagTestGui {
 
     private JPanel buildTagPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Tags"));
+        panel.setBorder(BorderFactory.createTitledBorder("Tag DM"));
 
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(4, 6, 4, 6);
         c.fill = GridBagConstraints.HORIZONTAL;
 
-        // Lampada
         c.gridx = 0;
         c.gridy = 0;
-        panel.add(new JLabel("TAG lampada (" + LAMPADA_TAG.getAddressBit() + ")"), c);
-        lampadaStatus = new JLabel("OFF");
-        c.gridx = 1;
-        panel.add(lampadaStatus, c);
-        JButton readLampada = new JButton("Ler");
-        readLampada.addActionListener(e -> readLampada());
-        c.gridx = 2;
-        panel.add(readLampada, c);
-        JButton toggleLampada = new JButton("Alternar");
-        toggleLampada.addActionListener(e -> toggleLampada());
-        c.gridx = 3;
-        panel.add(toggleLampada, c);
+        panel.add(new JLabel("TAG " + TEST_TAG.getName() + " (DM " + TEST_TAG.getAddress() + ")"), c);
 
-        // Producao
-        c.gridx = 0;
-        c.gridy = 1;
-        panel.add(new JLabel("TAG producao (DM " + PRODUCAO_ADDR + ")"), c);
-        producaoValueField = new JTextField("0");
+        tagValueField = new JTextField("0");
+        tagValueField.setColumns(16);
+        tagValueField.setPreferredSize(new Dimension(220, 30));
         c.gridx = 1;
-        panel.add(producaoValueField, c);
-        JButton readProducao = new JButton("Ler");
-        readProducao.addActionListener(e -> readProducao());
+        panel.add(tagValueField, c);
+
+        JButton readButton = new JButton("Ler");
+        readButton.addActionListener(e -> readTag());
         c.gridx = 2;
-        panel.add(readProducao, c);
-        JButton writeProducao = new JButton("Escrever");
-        writeProducao.addActionListener(e -> writeProducao());
+        panel.add(readButton, c);
+
+        JButton writeButton = new JButton("Escrever");
+        writeButton.addActionListener(e -> writeTag());
         c.gridx = 3;
-        panel.add(writeProducao, c);
+        panel.add(writeButton, c);
 
         return panel;
     }
@@ -215,19 +174,8 @@ public class TagTestGui {
     private JPanel buildStatusPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Status"));
-
-        GridBagConstraints c = new GridBagConstraints();
-        c.insets = new Insets(4, 6, 4, 6);
-        c.fill = GridBagConstraints.HORIZONTAL;
-
         statusLabel = new JLabel("Status: parado");
-        dbStatusLabel = new JLabel("DB: sem grava\u00e7\u00e3o");
-        c.gridx = 0;
-        c.gridy = 0;
-        panel.add(statusLabel, c);
-        c.gridx = 1;
-        panel.add(dbStatusLabel, c);
-
+        panel.add(statusLabel);
         return panel;
     }
 
@@ -254,13 +202,10 @@ public class TagTestGui {
             }
 
             comHandler.initialize();
-            protocol = new ToolbusProtocol();
-            comHandler.setProtocolHandler(protocol);
+            comHandler.setProtocolHandler(new ToolbusProtocol());
             comHandler.start();
 
             ensureDevice();
-            ensureDb();
-            ensureTags();
             setStatus("Conectado em " + sp.getDevice() + ".");
         } catch (Exception ex) {
             setStatus("Erro ao conectar: " + ex.getMessage());
@@ -271,135 +216,48 @@ public class TagTestGui {
         int nodeId = Integer.parseInt(nodeField.getText().trim());
         if (plc == null || plc.getId() != nodeId) {
             plc = new DeviceImp(nodeId, DEVICE_MNEMONIC, "PLC", "Omron PLC");
-            deviceRegister = DeviceRegisterImp.getInstance();
+            IDeviceRegister deviceRegister = DeviceRegisterImp.getInstance();
             deviceRegister.addDevice(plc);
         }
     }
 
-    private void ensureDb() {
-        if (ctx == null) {
-            ctx = new AnnotationConfigApplicationContext(DbConfig.class);
-            rrValueService = ctx.getBean(RrValueService.class);
-            dmValueService = ctx.getBean(DmValueService.class);
-            tagService = ctx.getBean(TagService.class);
-        }
-    }
-
-    private void ensureTags() {
-        if (tagService == null || plc == null) {
-            return;
-        }
-        DeviceInfo device = new DeviceInfo(DEVICE_MNEMONIC, plc.getName(), plc.getDescription());
-        if (lampadaTagDb == null) {
-            lampadaTagDb = tagService.getOrCreateRrTag(device, "lampada",
-                    LAMPADA_TAG.getAddress(), LAMPADA_TAG.getBit());
-        }
-        if (producaoTagDb == null) {
-            producaoTagDb = tagService.getOrCreateDmTag(device, "producao", PRODUCAO_ADDR);
-        }
-    }
-
-    private void readLampada() {
-        try {
-            connect();
-            ensureDevice();
-            ensureDb();
-            ensureTags();
-
-            int wordValue = readWordRr(LAMPADA_TAG.getAddress());
-            String baseHex = utils.getFormateHexWrite(wordValue);
-            wordBit.setWorldBits(LAMPADA_TAG.getAddress(), baseHex);
-            boolean on = wordBit.getWordBit(LAMPADA_TAG.getBit());
-            updateLampada(on);
-            saveLampada(on);
-            setStatus("Leitura lampada OK");
-        } catch (ComException ex) {
-            setStatus("Erro leitura lampada: " + ex.getMessage());
-        } catch (Exception ex) {
-            setStatus("Erro leitura lampada: " + ex.getMessage());
-        }
-    }
-
-    private void toggleLampada() {
+    private void readTag() {
         try {
             connect();
             ensureDevice();
 
-            int baseValue = readWordRr(LAMPADA_TAG.getAddress());
-            String baseHex = utils.getFormateHexWrite(baseValue);
-            wordBit.setWorldBits(LAMPADA_TAG.getAddress(), baseHex);
-            boolean current = wordBit.getWordBit(LAMPADA_TAG.getBit());
-            boolean newValue = !current;
-            wordBit.setBit(LAMPADA_TAG.getBit(), newValue);
-
-            int newWordValue = Integer.parseInt(wordBit.getBitToWorld(), 2);
-            AreaWriteWR write = new AreaWriteWR(plc, LAMPADA_TAG.getAddress(),
-                    new int[] { newWordValue }, MemoryWrite.HEX);
-            comHandler.send(write);
-
-            updateLampada(newValue);
-            saveLampada(newValue);
-            setStatus("Escrito WR " + LAMPADA_TAG.getAddressBit());
-        } catch (ComException ex) {
-            setStatus("Erro escrita lampada: " + ex.getMessage());
-        } catch (Exception ex) {
-            setStatus("Erro escrita lampada: " + ex.getMessage());
-        }
-    }
-
-    private void readProducao() {
-        try {
-            connect();
-            ensureDevice();
-            ensureDb();
-            ensureTags();
-
-            AreaReadDM read = new AreaReadDM(plc, PRODUCAO_TAG.toMemoryVariable());
+            AreaReadDM read = new AreaReadDM(plc, TEST_TAG.toMemoryVariable());
             comHandler.send(read);
 
-            int[] values = parseReply(read.getReply(), PRODUCAO_TAG.getLengthWords());
+            int[] values = parseReply(read.getReply(), TEST_TAG.getLengthWords());
             if (values != null && values.length > 0) {
-                producaoValueField.setText(Integer.toString(values[0]));
-                saveProducao(values[0]);
+                tagValueField.setText(Integer.toString(values[0]));
             }
-
             IStatusCode status = read.getResponseStatusCode();
-            setStatus("Leitura producao OK (" + (status == null ? "null" : status.getCode()) + ")");
+            setStatus("Leitura OK (" + (status == null ? "null" : status.getCode()) + ")");
         } catch (ComException ex) {
-            setStatus("Erro leitura producao: " + ex.getMessage());
+            setStatus("Erro leitura: " + ex.getMessage());
         } catch (Exception ex) {
-            setStatus("Erro leitura producao: " + ex.getMessage());
+            setStatus("Erro leitura: " + ex.getMessage());
         }
     }
 
-    private void writeProducao() {
+    private void writeTag() {
         try {
             connect();
             ensureDevice();
 
-            int value = Integer.parseInt(Objects.requireNonNull(producaoValueField.getText()).trim());
-            AreaWriteDM write = new AreaWriteDM(plc, PRODUCAO_TAG.toMemoryVariable(), new int[] { value },
-                    MemoryWrite.HEX);
+            int value = Integer.parseInt(Objects.requireNonNull(tagValueField.getText()).trim());
+            AreaWriteDM write = new AreaWriteDM(plc, TEST_TAG.toMemoryVariable(), new int[] { value }, MemoryWrite.HEX);
             comHandler.send(write);
 
-            saveProducao(value);
             IStatusCode status = write.getResponseStatusCode();
-            setStatus("Escrito producao OK (" + (status == null ? "null" : status.getCode()) + ")");
+            setStatus("Escrita OK (" + (status == null ? "null" : status.getCode()) + ")");
         } catch (ComException ex) {
-            setStatus("Erro escrita producao: " + ex.getMessage());
+            setStatus("Erro escrita: " + ex.getMessage());
         } catch (Exception ex) {
-            setStatus("Erro escrita producao: " + ex.getMessage());
+            setStatus("Erro escrita: " + ex.getMessage());
         }
-    }
-
-    private int readWordRr(int address) throws ComException {
-        AreaReadRR read = new AreaReadRR(plc, address, 1);
-        comHandler.send(read);
-        String reply = read.getReply() == null ? null : read.getReply().toString();
-        if (reply == null) {
-            throw new IllegalStateException("RR read returned null reply for address " + address);
-        }
-        return utils.convertToHexDec16(reply);
     }
 
     private int[] parseReply(IData reply, int length) {
@@ -428,35 +286,7 @@ public class TagTestGui {
         return out;
     }
 
-    private void updateLampada(boolean on) {
-        SwingUtilities.invokeLater(() -> lampadaStatus.setText(on ? "ON" : "OFF"));
-    }
-
-    private void saveLampada(boolean value) {
-        if (rrValueService == null) {
-            return;
-        }
-        ensureTags();
-        DeviceInfo device = new DeviceInfo(DEVICE_MNEMONIC, plc.getName(), plc.getDescription());
-        rrValueService.saveValue(device, LAMPADA_TAG.getAddress(), LAMPADA_TAG.getBit(), value);
-        setDbStatus("gravado lampada=" + (value ? "1" : "0"));
-    }
-
-    private void saveProducao(int value) {
-        if (dmValueService == null) {
-            return;
-        }
-        ensureTags();
-        DeviceInfo device = new DeviceInfo(DEVICE_MNEMONIC, plc.getName(), plc.getDescription());
-        dmValueService.saveValue(device, PRODUCAO_ADDR, value);
-        setDbStatus("gravado producao=" + value);
-    }
-
     private void setStatus(String msg) {
         SwingUtilities.invokeLater(() -> statusLabel.setText("Status: " + msg));
-    }
-
-    private void setDbStatus(String msg) {
-        SwingUtilities.invokeLater(() -> dbStatusLabel.setText("DB: " + msg));
     }
 }

@@ -99,7 +99,7 @@ public class TestDM {
 
         sp = new SerialParameters();
 
-        sp.setDevice("COM2");
+        sp.setDevice("COM1");
         // these parameters are set by default
         sp.setBaudRate(SerialPortAbstract.BaudRate.BAUD_RATE_9600);
         sp.setDataBits(7);
@@ -113,7 +113,7 @@ public class TestDM {
 
     private void setCommHandler() throws SerialPortException {
 
-        plc = new DeviceImp(0, "CPM2A", "Test PLC", "PLC for communications test");
+        plc = new DeviceImp(4, "CPM2A", "Test PLC", "PLC for communications test");
 
         deviceRegister = DeviceRegisterImp.getInstance();
         deviceRegister.addDevice(plc);

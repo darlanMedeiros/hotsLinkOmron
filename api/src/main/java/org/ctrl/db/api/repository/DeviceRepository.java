@@ -14,15 +14,19 @@ import org.springframework.stereotype.Repository;
 public class DeviceRepository {
 
     private static final String SQL_FIND_ALL =
-            "SELECT id, mnemonic, name, description FROM public.device ORDER BY id";
+            "SELECT d.id, d.mnemonic, d.name, d.description, d.no_id AS node_id " +
+                    "FROM public.device d " +
+                    "ORDER BY d.id";
     private static final String SQL_FIND_BY_ID =
-            "SELECT id, mnemonic, name, description FROM public.device WHERE id = ?";
+            "SELECT d.id, d.mnemonic, d.name, d.description, d.no_id AS node_id " +
+                    "FROM public.device d " +
+                    "WHERE d.id = ?";
     private static final String SQL_INSERT =
-            "INSERT INTO public.device (mnemonic, name, description) VALUES (?, ?, ?) " +
-            "RETURNING id, mnemonic, name, description";
+            "INSERT INTO public.device (mnemonic, name, description, no_id) VALUES (?, ?, ?, ?) " +
+                    "RETURNING id, mnemonic, name, description, no_id AS node_id";
     private static final String SQL_UPDATE =
-            "UPDATE public.device SET mnemonic = ?, name = ?, description = ? WHERE id = ? " +
-            "RETURNING id, mnemonic, name, description";
+            "UPDATE public.device SET mnemonic = ?, name = ?, description = ?, no_id = ? WHERE id = ? " +
+                    "RETURNING id, mnemonic, name, description, no_id AS node_id";
     private static final String SQL_DELETE =
             "DELETE FROM public.device WHERE id = ?";
 
@@ -41,12 +45,12 @@ public class DeviceRepository {
         return queryOptional(SQL_FIND_BY_ID, id);
     }
 
-    public Device create(String mnemonic, String name, String description) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, rowMapper, mnemonic, name, description);
+    public Device create(String mnemonic, String name, String description, Integer nodeId) {
+        return jdbcTemplate.queryForObject(SQL_INSERT, rowMapper, mnemonic, name, description, nodeId);
     }
 
-    public Optional<Device> update(int id, String mnemonic, String name, String description) {
-        return queryOptional(SQL_UPDATE, mnemonic, name, description, id);
+    public Optional<Device> update(int id, String mnemonic, String name, String description, Integer nodeId) {
+        return queryOptional(SQL_UPDATE, mnemonic, name, description, nodeId, id);
     }
 
     public boolean delete(int id) {
@@ -66,6 +70,8 @@ public class DeviceRepository {
                 rs.getInt("id"),
                 rs.getString("mnemonic"),
                 rs.getString("name"),
-                rs.getString("description"));
+                rs.getString("description"),
+                (Integer) rs.getObject("node_id"));
     }
+
 }
