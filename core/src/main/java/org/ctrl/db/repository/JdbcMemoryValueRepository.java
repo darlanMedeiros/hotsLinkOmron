@@ -181,6 +181,35 @@ public class JdbcMemoryValueRepository implements MemoryValueRepository {
     }
 
     @Override
+    public void upsertCurrent(String deviceMnemonic, String deviceName, String deviceDescription, MemoryValue value) {
+        int deviceId = ensureDevice(deviceMnemonic, deviceName, deviceDescription);
+        int memoryId = ensureMemory(deviceId, value.getName());
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("memoryId", memoryId)
+                .addValue("value", value.getValue())
+                .addValue("status", true)
+                .addValue("updatedAt", Timestamp.valueOf(value.getUpdatedAt()));
+        namedTemplate.update(SQL_UPSERT_CURRENT, params);
+    }
+
+    @Override
+    public void upsertBatchCurrent(String deviceMnemonic, String deviceName, String deviceDescription,
+            List<MemoryValue> values) {
+        int deviceId = ensureDevice(deviceMnemonic, deviceName, deviceDescription);
+        MapSqlParameterSource[] batch = new MapSqlParameterSource[values.size()];
+        for (int i = 0; i < values.size(); i++) {
+            MemoryValue value = values.get(i);
+            int memoryId = ensureMemory(deviceId, value.getName());
+            batch[i] = new MapSqlParameterSource()
+                    .addValue("memoryId", memoryId)
+                    .addValue("value", value.getValue())
+                    .addValue("status", true)
+                    .addValue("updatedAt", Timestamp.valueOf(value.getUpdatedAt()));
+        }
+        namedTemplate.batchUpdate(SQL_UPSERT_CURRENT, batch);
+    }
+
+    @Override
     public int pruneHistoryOlderThanDays(int days) {
         if (days <= 0) {
             return 0;

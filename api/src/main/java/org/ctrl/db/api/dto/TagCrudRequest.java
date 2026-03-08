@@ -5,6 +5,7 @@ public class TagCrudRequest {
     private String name;
     private Integer deviceId;
     private Integer memoryId;
+    private Boolean persistHistory;
 
     public String getName() {
         return name;
@@ -28,5 +29,13 @@ public class TagCrudRequest {
 
     public void setMemoryId(Integer memoryId) {
         this.memoryId = memoryId;
+    }
+
+    public Boolean getPersistHistory() {
+        return persistHistory;
+    }
+
+    public void setPersistHistory(Boolean persistHistory) {
+        this.persistHistory = persistHistory;
     }
 }

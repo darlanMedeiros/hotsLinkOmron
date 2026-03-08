@@ -175,7 +175,8 @@ public class CollectorMultPlcAplication {
         JdbcTemplate jdbc = dbContext.getBean(JdbcTemplate.class);
         Map<String, Tag> catalog = buildTagCatalog();
         List<Map<String, Object>> rows = jdbc.queryForList(
-                "SELECT t.name AS tag_name, m.address AS memory_address, m.name AS memory_name " +
+                "SELECT t.name AS tag_name, t.persist_history AS persist_history, " +
+                        "m.address AS memory_address, m.name AS memory_name " +
                         "FROM public.device d " +
                         "JOIN public.tag t ON t.device_id = d.id " +
                         "JOIN public.memory m ON m.id = t.memory_id " +
@@ -188,6 +189,7 @@ public class CollectorMultPlcAplication {
             String tagName = asString(row.get("tag_name"));
             Integer address = asInt(row.get("memory_address"));
             String memoryName = asString(row.get("memory_name"));
+            boolean persistHistory = asBoolean(row.get("persist_history"), true);
             if (tagName == null || address == null || address.intValue() < 0) {
                 continue;
             }
@@ -196,7 +198,7 @@ public class CollectorMultPlcAplication {
             }
             Tag known = catalog.get(tagName);
             int lengthWords = known == null || known.isBit() ? 1 : known.getLengthWords();
-            tags.add(new PlcNodeMonitorPanel.MonitoredTag(tagName, address.intValue(), lengthWords));
+            tags.add(new PlcNodeMonitorPanel.MonitoredTag(tagName, address.intValue(), lengthWords, persistHistory));
         }
         return tags;
     }
@@ -245,6 +247,26 @@ public class CollectorMultPlcAplication {
         } catch (NumberFormatException ex) {
             return null;
         }
+    }
+
+    private static boolean asBoolean(Object raw, boolean fallback) {
+        if (raw == null) {
+            return fallback;
+        }
+        if (raw instanceof Boolean) {
+            return ((Boolean) raw).booleanValue();
+        }
+        String text = String.valueOf(raw).trim();
+        if (text.isEmpty()) {
+            return fallback;
+        }
+        if ("1".equals(text)) {
+            return true;
+        }
+        if ("0".equals(text)) {
+            return false;
+        }
+        return Boolean.parseBoolean(text);
     }
 
     private JPanel buildSharedSerialPanel() {

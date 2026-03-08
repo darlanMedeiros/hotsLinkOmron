@@ -271,8 +271,14 @@ public class PlcNodeMonitorPanel {
                     } else {
                         int[] previous = lastValues.get(tag.getName());
                         if (hasChanged(previous, values)) {
-                            dmValueServiceSupplier.get().saveRange(deviceInfo, tag.getAddress(), values);
-                            logPrefix("Alteracao salva: TAG " + tag.getName() + " (DM " + tag.getAddress()
+                            if (tag.isPersistHistory()) {
+                                dmValueServiceSupplier.get().saveRange(deviceInfo, tag.getAddress(), values);
+                            } else {
+                                dmValueServiceSupplier.get().saveRangeCurrentOnly(deviceInfo, tag.getAddress(),
+                                        values);
+                            }
+                            logPrefix("Alteracao salva (" + (tag.isPersistHistory() ? "historico+current" : "current")
+                                    + "): TAG " + tag.getName() + " (DM " + tag.getAddress()
                                     + ".." + (tag.getAddress() + tag.getLengthWords() - 1) + ") = "
                                     + formatWords(values) + ".");
                             lastValues.put(tag.getName(), copyWords(values));
@@ -531,11 +537,13 @@ public class PlcNodeMonitorPanel {
         private final String name;
         private final int address;
         private final int lengthWords;
+        private final boolean persistHistory;
 
-        public MonitoredTag(String name, int address, int lengthWords) {
+        public MonitoredTag(String name, int address, int lengthWords, boolean persistHistory) {
             this.name = name;
             this.address = address;
             this.lengthWords = Math.max(1, lengthWords);
+            this.persistHistory = persistHistory;
         }
 
         public String getName() {
@@ -548,6 +556,10 @@ public class PlcNodeMonitorPanel {
 
         public int getLengthWords() {
             return lengthWords;
+        }
+
+        public boolean isPersistHistory() {
+            return persistHistory;
         }
     }
 }

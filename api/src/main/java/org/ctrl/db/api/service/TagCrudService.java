@@ -28,19 +28,20 @@ public class TagCrudService {
         return repository.findById(id);
     }
 
-    public TagCrud create(String name, Integer deviceId, Integer memoryId) {
+    public TagCrud create(String name, Integer deviceId, Integer memoryId, Boolean persistHistory) {
         int validatedDeviceId = requireId(deviceId, "deviceId");
         int validatedMemoryId = requireId(memoryId, "memoryId");
         ensureMemoryBelongsToDevice(validatedMemoryId, validatedDeviceId);
-        return repository.create(requireName(name), validatedDeviceId, validatedMemoryId);
+        return repository.create(requireName(name), validatedDeviceId, validatedMemoryId, resolvePersistHistory(persistHistory));
     }
 
-    public Optional<TagCrud> update(int id, String name, Integer deviceId, Integer memoryId) {
+    public Optional<TagCrud> update(int id, String name, Integer deviceId, Integer memoryId, Boolean persistHistory) {
         validateId(id, "id");
         int validatedDeviceId = requireId(deviceId, "deviceId");
         int validatedMemoryId = requireId(memoryId, "memoryId");
         ensureMemoryBelongsToDevice(validatedMemoryId, validatedDeviceId);
-        return repository.update(id, requireName(name), validatedDeviceId, validatedMemoryId);
+        return repository.update(id, requireName(name), validatedDeviceId, validatedMemoryId,
+                resolvePersistHistory(persistHistory));
     }
 
     public boolean delete(int id) {
@@ -74,5 +75,9 @@ public class TagCrudService {
         if (memory.getDeviceId().intValue() != deviceId) {
             throw new IllegalArgumentException("memoryId must belong to the informed deviceId");
         }
+    }
+
+    private boolean resolvePersistHistory(Boolean persistHistory) {
+        return persistHistory == null ? true : persistHistory.booleanValue();
     }
 }

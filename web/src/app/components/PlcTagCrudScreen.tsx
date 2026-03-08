@@ -26,6 +26,7 @@ type TagCrud = {
   name: string;
   deviceId: number;
   memoryId: number;
+  persistHistory: boolean;
 };
 
 async function requestApi<T>(url: string, init?: RequestInit): Promise<T> {
@@ -70,6 +71,7 @@ export function PlcTagCrudScreen() {
   const [newTagName, setNewTagName] = useState('');
   const [newTagDeviceId, setNewTagDeviceId] = useState<number | ''>('');
   const [newTagMemoryId, setNewTagMemoryId] = useState<number | ''>('');
+  const [newTagPersistHistory, setNewTagPersistHistory] = useState(true);
 
   const [editingDevice, setEditingDevice] = useState<Device | null>(null);
   const [editingMemory, setEditingMemory] = useState<Memory | null>(null);
@@ -350,11 +352,17 @@ export function PlcTagCrudScreen() {
                   await requestApi<TagCrud>('/api/tags', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: newTagName, deviceId: Number(newTagDeviceId), memoryId: Number(newTagMemoryId) }),
+                    body: JSON.stringify({
+                      name: newTagName,
+                      deviceId: Number(newTagDeviceId),
+                      memoryId: Number(newTagMemoryId),
+                      persistHistory: newTagPersistHistory,
+                    }),
                   });
                   setNewTagName('');
                   setNewTagDeviceId('');
                   setNewTagMemoryId('');
+                  setNewTagPersistHistory(true);
                 }, 'Tag criada');
               }}
               className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3"
@@ -375,11 +383,19 @@ export function PlcTagCrudScreen() {
                 <option value="">{newTagDeviceId === '' ? 'Selecione o device antes' : 'Memory'}</option>
                 {availableMemoriesForNewTag.map((m) => <option key={m.id} value={m.id}>{m.name} ({m.id})</option>)}
               </select>
+              <label className="flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-3">
+                <input
+                  type="checkbox"
+                  checked={newTagPersistHistory}
+                  onChange={(e) => setNewTagPersistHistory(e.target.checked)}
+                />
+                Persistir historico (memory_value)
+              </label>
               <button disabled={isSaving} className="rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white sm:col-span-3">Criar</button>
             </form>
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
-                <thead><tr className="text-left text-slate-600"><th className="pb-2 pr-2">ID</th><th className="pb-2 pr-2">Nome</th><th className="pb-2 pr-2">Device</th><th className="pb-2 pr-2">Memory</th><th className="pb-2 text-right">Acoes</th></tr></thead>
+                <thead><tr className="text-left text-slate-600"><th className="pb-2 pr-2">ID</th><th className="pb-2 pr-2">Nome</th><th className="pb-2 pr-2">Device</th><th className="pb-2 pr-2">Memory</th><th className="pb-2 pr-2">Persist.</th><th className="pb-2 text-right">Acoes</th></tr></thead>
                 <tbody>
                   {tags.map((row) => {
                     const editing = editingTag?.id === row.id;
@@ -402,6 +418,18 @@ export function PlcTagCrudScreen() {
                                 .map((m) => <option key={m.id} value={m.id}>{m.name} ({m.id})</option>)}
                             </select>
                           ) : memoryLabel(row.memoryId)}
+                        </td>
+                        <td className="py-2 pr-2">
+                          {editing ? (
+                            <label className="flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                checked={editingTag.persistHistory}
+                                onChange={(e) => setEditingTag({ ...editingTag, persistHistory: e.target.checked })}
+                              />
+                              {editingTag.persistHistory ? 'Historico' : 'Current'}
+                            </label>
+                          ) : (row.persistHistory ? 'Historico' : 'Current')}
                         </td>
                         <td className="py-2 text-right">
                           <div className="inline-flex gap-1">

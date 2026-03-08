@@ -39,7 +39,8 @@ public class TagCrudRestController {
         TagCrud created = service.create(
                 request == null ? null : request.getName(),
                 request == null ? null : request.getDeviceId(),
-                request == null ? null : request.getMemoryId());
+                request == null ? null : request.getMemoryId(),
+                request == null ? null : request.getPersistHistory());
         return ResponseEntity.ok(created);
     }
 
@@ -49,7 +50,8 @@ public class TagCrudRestController {
                 id,
                 request == null ? null : request.getName(),
                 request == null ? null : request.getDeviceId(),
-                request == null ? null : request.getMemoryId())
+                request == null ? null : request.getMemoryId(),
+                request == null ? null : request.getPersistHistory())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

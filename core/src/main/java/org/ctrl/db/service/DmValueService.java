@@ -56,6 +56,18 @@ public class DmValueService {
         repository.upsertBatch(device.getMnemonic(), device.getName(), device.getDescription(), batch);
     }
 
+    public void saveRangeCurrentOnly(DeviceInfo device, int startAddress, int[] values) {
+        if (values == null || values.length == 0) {
+            return;
+        }
+        List<MemoryValue> batch = new ArrayList<>(values.length);
+        for (int i = 0; i < values.length; i++) {
+            int addr = startAddress + i;
+            batch.add(new MemoryValue(formatDmName(addr), values[i], LocalDateTime.now()));
+        }
+        repository.upsertBatchCurrent(device.getMnemonic(), device.getName(), device.getDescription(), batch);
+    }
+
     public void saveBatch(DeviceInfo device, List<MemoryValue> values) {
         if (values == null || values.isEmpty()) {
             return;

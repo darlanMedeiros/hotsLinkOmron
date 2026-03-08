@@ -14,17 +14,17 @@ import org.springframework.stereotype.Repository;
 public class TagCrudRepository {
 
     private static final String SQL_FIND_ALL =
-            "SELECT t.id, t.name, t.device_id, t.memory_id " +
+            "SELECT t.id, t.name, t.device_id, t.memory_id, t.persist_history " +
                     "FROM public.tag t " +
                     "JOIN public.device d ON d.id = t.device_id " +
                     "JOIN public.memory m ON m.id = t.memory_id " +
                     "ORDER BY d.mnemonic, t.device_id, m.name, t.name, t.id";
     private static final String SQL_FIND_BY_ID =
-            "SELECT id, name, device_id, memory_id FROM public.tag WHERE id = ?";
+            "SELECT id, name, device_id, memory_id, persist_history FROM public.tag WHERE id = ?";
     private static final String SQL_INSERT =
-            "INSERT INTO public.tag (name, device_id, memory_id) VALUES (?, ?, ?) RETURNING id, name, device_id, memory_id";
+            "INSERT INTO public.tag (name, device_id, memory_id, persist_history) VALUES (?, ?, ?, ?) RETURNING id, name, device_id, memory_id, persist_history";
     private static final String SQL_UPDATE =
-            "UPDATE public.tag SET name = ?, device_id = ?, memory_id = ? WHERE id = ? RETURNING id, name, device_id, memory_id";
+            "UPDATE public.tag SET name = ?, device_id = ?, memory_id = ?, persist_history = ? WHERE id = ? RETURNING id, name, device_id, memory_id, persist_history";
     private static final String SQL_DELETE =
             "DELETE FROM public.tag WHERE id = ?";
 
@@ -43,12 +43,12 @@ public class TagCrudRepository {
         return queryOptional(SQL_FIND_BY_ID, id);
     }
 
-    public TagCrud create(String name, int deviceId, int memoryId) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, rowMapper, name, deviceId, memoryId);
+    public TagCrud create(String name, int deviceId, int memoryId, boolean persistHistory) {
+        return jdbcTemplate.queryForObject(SQL_INSERT, rowMapper, name, deviceId, memoryId, persistHistory);
     }
 
-    public Optional<TagCrud> update(int id, String name, int deviceId, int memoryId) {
-        return queryOptional(SQL_UPDATE, name, deviceId, memoryId, id);
+    public Optional<TagCrud> update(int id, String name, int deviceId, int memoryId, boolean persistHistory) {
+        return queryOptional(SQL_UPDATE, name, deviceId, memoryId, persistHistory, id);
     }
 
     public boolean delete(int id) {
@@ -68,6 +68,7 @@ public class TagCrudRepository {
                 rs.getInt("id"),
                 rs.getString("name"),
                 rs.getInt("device_id"),
-                rs.getInt("memory_id"));
+                rs.getInt("memory_id"),
+                rs.getBoolean("persist_history"));
     }
 }

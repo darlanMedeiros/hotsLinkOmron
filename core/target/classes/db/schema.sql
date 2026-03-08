@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS tag (
     name VARCHAR(100) NOT NULL,
     device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE CASCADE,
     memory_id INTEGER NOT NULL REFERENCES memory(id) ON DELETE CASCADE,
+    persist_history BOOLEAN NOT NULL DEFAULT true,
     CONSTRAINT fk_tag_memory_same_device
         FOREIGN KEY (memory_id, device_id)
         REFERENCES memory(id, device_id)
@@ -177,6 +178,20 @@ BEGIN
             ADD CONSTRAINT chk_device_no_id_non_negative
             CHECK (no_id IS NULL OR no_id >= 0)
             NOT VALID;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'tag'
+          AND column_name = 'persist_history'
+    ) THEN
+        ALTER TABLE public.tag
+            ADD COLUMN persist_history BOOLEAN NOT NULL DEFAULT true;
     END IF;
 END $$;
 
