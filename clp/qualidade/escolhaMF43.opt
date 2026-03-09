@@ -54,7 +54,7 @@ BEGIN
   Pos:="1 5";
   Docking:=1;
   MRUDockID:=59422;
-  MRUDockPos:="1 5 1366 123";
+  MRUDockPos:="1 5 1366 185";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
@@ -63,7 +63,7 @@ BEGIN
   MDIChild:=0;
   PctWidth:="1000000";
   MRUFloat:="300 180";
-  MRUHorzDock:="1365 118";
+  MRUHorzDock:="1365 180";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -76,19 +76,19 @@ BEGIN
  BEGIN
   BarID:=59412;
   Visible:=0;
-  Pos:="859 5";
+  Pos:="760 5";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="859 5 1366 199";
+  MRUDockPos:="760 5 1009 185";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="374877";
+  PctWidth:="250000";
   MRUFloat:="300 180";
-  MRUHorzDock:="507 118";
+  MRUHorzDock:="249 105";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -111,9 +111,9 @@ BEGIN
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="1448300";
+  PctWidth:="2108088";
   MRUFloat:="300 180";
-  MRUHorzDock:="1961 118";
+  MRUHorzDock:="2867 55";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -128,7 +128,7 @@ BEGIN
   Pos:="0 -2";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="0 -2 204 421";
+  MRUDockPos:="0 -2 349 359";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=8084;
@@ -138,7 +138,7 @@ BEGIN
   PctWidth:="1000000";
   MRUFloat:="300 180";
   MRUHorzDock:="300 180";
-  MRUVertDock:="204 423";
+  MRUVertDock:="349 361";
   MRUDockingState:=0;
   DockingStyle:=61440;
   TypeID:=0;
@@ -153,16 +153,16 @@ BEGIN
   Pos:="1 5";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="1 5 645 199";
+  MRUDockPos:="1 5 502 185";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="473995";
+  PctWidth:="500000";
   MRUFloat:="300 180";
-  MRUHorzDock:="644 118";
+  MRUHorzDock:="501 180";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -179,7 +179,8 @@ BEGIN
  Item[0]:=0;
  Item[1]:=2;
  Item[2]:=12;
- ItemCount:=3;
+ Item[3]:=13;
+ ItemCount:=4;
  Sumcheck:=43;
  Selected:=3;
 END;
@@ -198,6 +199,34 @@ BEGIN
  END;
 END;
 Frame[1]:=
+BEGIN
+ Norm:="0052 0052 0998 0307";
+ Min:="-001 -001";
+ Access:="PROGRAM:NewProject.Resources.NewResource1.Programs.NewProgram1!NewProgram1.Symbols";
+ Type:=3;
+ Views:=
+ BEGIN
+  View[0]:=
+  BEGIN
+   Mag:=1;
+   Extra:=
+   BEGIN
+    Type:="CSymbolTableListCtrlState";
+    Style:=1;
+    NumCols:=7;
+    Width[0]:=150;
+    Width[1]:=90;
+    Width[2]:=100;
+    Width[3]:=1;
+    Width[4]:=84;
+    Width[5]:=48;
+    Width[6]:=200;
+   END;
+  END;
+  nViews:=1;
+ END;
+END;
+Frame[2]:=
 BEGIN
  Max:=true;
  Norm:="0104 0104 1172 0439";
@@ -222,12 +251,14 @@ BEGIN
     Width[4]:=84;
     Width[5]:=48;
     Width[6]:=200;
+    SortCol:=1;
+    SortAscending:=false;
    END;
   END;
   nViews:=1;
  END;
 END;
-nFrames:=2;
+nFrames:=3;
 WatchWindow:=
 BEGIN
  NumWatch:=3;

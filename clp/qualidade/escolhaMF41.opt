@@ -51,19 +51,19 @@ BEGIN
  Bar[2]:=
  BEGIN
   BarID:=59414;
-  Pos:="230 5";
+  Pos:="909 5";
   Docking:=1;
-  MRUDockID:=0;
-  MRUDockPos:="230 5 1041 68";
+  MRUDockID:=59422;
+  MRUDockPos:="909 5 1209 185";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="599320";
+  PctWidth:="222222";
   MRUFloat:="300 180";
-  MRUHorzDock:="811 63";
+  MRUHorzDock:="300 180";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -75,19 +75,19 @@ BEGIN
  Bar[3]:=
  BEGIN
   BarID:=59412;
-  Pos:="1047 5";
+  Pos:="1215 5";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="1047 5 1366 68";
+  MRUDockPos:="1215 5 1366 185";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="235767";
+  PctWidth:="111111";
   MRUFloat:="300 180";
-  MRUHorzDock:="319 63";
+  MRUHorzDock:="151 180";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -110,9 +110,9 @@ BEGIN
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="771786";
+  PctWidth:="2108088";
   MRUFloat:="300 180";
-  MRUHorzDock:="1045 63";
+  MRUHorzDock:="2867 55";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -127,7 +127,7 @@ BEGIN
   Pos:="0 -2";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="0 -2 231 476";
+  MRUDockPos:="0 -2 310 359";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=8084;
@@ -137,7 +137,7 @@ BEGIN
   PctWidth:="1000000";
   MRUFloat:="300 180";
   MRUHorzDock:="300 180";
-  MRUVertDock:="231 478";
+  MRUVertDock:="310 361";
   MRUDockingState:=0;
   DockingStyle:=61440;
   TypeID:=0;
@@ -151,16 +151,16 @@ BEGIN
   Pos:="1 5";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="1 5 224 68";
+  MRUDockPos:="1 5 903 185";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="164912";
+  PctWidth:="666666";
   MRUFloat:="300 180";
-  MRUHorzDock:="223 63";
+  MRUHorzDock:="902 180";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -180,7 +180,7 @@ BEGIN
  Item[3]:=13;
  ItemCount:=4;
  Sumcheck:=43;
- Selected:=6;
+ Selected:=13;
 END;
 Frame[0]:=
 BEGIN
