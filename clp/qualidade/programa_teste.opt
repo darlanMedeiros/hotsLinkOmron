@@ -126,8 +126,8 @@ BEGIN
   BarID:=59413;
   Pos:="0 -2";
   Docking:=1;
-  MRUDockID:=0;
-  MRUDockPos:="0 -2 412 401";
+  MRUDockID:=59420;
+  MRUDockPos:="0 -2 400 401";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=8084;
@@ -137,7 +137,7 @@ BEGIN
   PctWidth:="1000000";
   MRUFloat:="300 180";
   MRUHorzDock:="300 180";
-  MRUVertDock:="412 403";
+  MRUVertDock:="400 403";
   MRUDockingState:=0;
   DockingStyle:=61440;
   TypeID:=0;
@@ -177,13 +177,55 @@ BEGIN
  Item[0]:=0;
  Item[1]:=2;
  Item[2]:=54;
- ItemCount:=3;
+ Item[3]:=67;
+ ItemCount:=4;
  Sumcheck:=190;
- Selected:=0;
+ Selected:=78;
+ ScrollPos:="0 3";
 END;
 Frame[0]:=
 BEGIN
- Norm:="0026 0026 0975 0277";
+ Norm:="0026 0026 0916 0297";
+ Min:="-001 -001";
+ Access:="PROGRAM:NewProject.Resources.FB source program.Function Blocks.Contador_de_Peças_RC42!Contador_de_Peças_RC42";
+ Type:=10;
+ Ysplit:=166;
+ Views:=
+ BEGIN
+  View[0]:=
+  BEGIN
+   Mag:=1;
+  END;
+  View[1]:=
+  BEGIN
+   Mag:=1;
+  END;
+  nViews:=2;
+ END;
+END;
+Frame[1]:=
+BEGIN
+ Norm:="0052 0052 0942 0323";
+ Min:="-001 -001";
+ Access:="PROGRAM:NewProject.Resources.FB source program.Function Blocks.Contador_de_Peças_RC43!Contador_de_Peças_RC43";
+ Type:=10;
+ Ysplit:=149;
+ Views:=
+ BEGIN
+  View[0]:=
+  BEGIN
+   Mag:=1;
+  END;
+  View[1]:=
+  BEGIN
+   Mag:=1;
+  END;
+  nViews:=2;
+ END;
+END;
+Frame[2]:=
+BEGIN
+ Norm:="0078 0078 0968 0349";
  Min:="-001 -001";
  Access:="PROGRAM:NewProject.Resources.FB source program.Programs.Prensa!Prensa.Symbols";
  Type:=3;
@@ -191,7 +233,6 @@ BEGIN
  BEGIN
   View[0]:=
   BEGIN
-   Yscroll:=31;
    Mag:=1;
    Extra:=
    BEGIN
@@ -210,56 +251,27 @@ BEGIN
   nViews:=1;
  END;
 END;
-Frame[1]:=
-BEGIN
- Norm:="0125 0125 0962 0423";
- Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.Prensa.Sections.PH29!PH29";
- Type:=1;
- Views:=
- BEGIN
-  View[0]:=
-  BEGIN
-   Yscroll:=1;
-  END;
-  nViews:=1;
- END;
-END;
-Frame[2]:=
-BEGIN
- Norm:="0052 0052 0955 0272";
- Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.Escolha41.Sections.Controle_Qualidade!Controle_Qualidade";
- Type:=1;
- Views:=
- BEGIN
-  View[0]:=
-  BEGIN
-   Yscroll:=21;
-  END;
-  nViews:=1;
- END;
-END;
 Frame[3]:=
 BEGIN
- Norm:="0078 0078 0981 0298";
+ Norm:="0078 0078 0908 0349";
  Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.Escolha43.Sections.Controle_Qualidade!Controle_Qualidade";
- Type:=1;
+ Path:="C:\dev\hostLinkOmron\hotsLinkOmron\clp\qualidade\programa_teste.cxp";
+ Access:="PROJECT:!NewProject.Resources.FB source program";
+ Type:=6;
  Views:=
  BEGIN
   View[0]:=
   BEGIN
-   Yscroll:=28;
+   Mag:=1;
   END;
   nViews:=1;
  END;
 END;
 Frame[4]:=
 BEGIN
- Norm:="0078 0078 0981 0298";
+ Norm:="0130 0130 0960 0401";
  Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.Carga.Sections.Transferencia_excel!Transferencia_excel";
+ Access:="PROGRAM:NewProject.Resources.FB source program.Programs.Carga.Sections.Principal!Principal";
  Type:=1;
  Views:=
  BEGIN
@@ -271,22 +283,7 @@ BEGIN
 END;
 Frame[5]:=
 BEGIN
- Norm:="0000 0000 0903 0220";
- Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.Carga.Sections.Banco_de_Dados!Banco_de_Dados";
- Type:=1;
- Views:=
- BEGIN
-  View[0]:=
-  BEGIN
-   Yscroll:=41;
-  END;
-  nViews:=1;
- END;
-END;
-Frame[6]:=
-BEGIN
- Norm:="0130 0130 0948 0401";
+ Norm:="0026 0026 0856 0297";
  Min:="-001 -001";
  Access:="PROGRAM:NewProject.Resources.FB source program.Programs.Carga!Carga.Symbols";
  Type:=3;
@@ -307,7 +304,22 @@ BEGIN
     Width[4]:=84;
     Width[5]:=48;
     Width[6]:=200;
+    SortCol:=2;
    END;
+  END;
+  nViews:=1;
+ END;
+END;
+Frame[6]:=
+BEGIN
+ Norm:="0000 0000 0830 0271";
+ Min:="-001 -001";
+ Access:="PROGRAM:NewProject.Resources.FB source program.Programs.Carga.Sections.MF41!MF41";
+ Type:=1;
+ Views:=
+ BEGIN
+  View[0]:=
+  BEGIN
   END;
   nViews:=1;
  END;
@@ -315,9 +327,9 @@ END;
 Frame[7]:=
 BEGIN
  Max:=true;
- Norm:="0000 0000 0818 0271";
+ Norm:="0052 0052 0882 0323";
  Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.Carga.Sections.Relogio!Relogio";
+ Access:="PROGRAM:NewProject.Resources.FB source program.Programs.Carga.Sections.Banco_de_Dados!Banco_de_Dados";
  Type:=1;
  Views:=
  BEGIN
