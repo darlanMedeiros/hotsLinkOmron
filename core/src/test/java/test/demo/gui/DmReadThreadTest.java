@@ -1,9 +1,11 @@
 package test.demo.gui;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.Test;
+import org.ctrl.comm.serial.SerialPortException;
 
 import org.ctrl.DeviceImp;
 import org.ctrl.DeviceRegisterImp;
@@ -38,6 +40,14 @@ class DmReadThreadTest {
 
         // ===== Serial =====
         SerialUtils.setSerialPortFactory(new SerialPortFactoryJSerialComm());
+
+        try {
+            assumeTrue(SerialUtils.getPortIdentifiers().stream().anyMatch(
+                    name -> name.equalsIgnoreCase("COM1")),
+                    "COM1 não disponível para testes de integração");
+        } catch (SerialPortException ex) {
+            assumeTrue(false, "Não foi possível listar portas seriais: " + ex.getMessage());
+        }
 
         SerialParameters sp = new SerialParameters();
         sp.setDevice("COM1"); // ajuste se necessário
