@@ -1,4 +1,4 @@
-DROP SCHEMA public CASCADE;
+﻿DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 
 CREATE TABLE turno (
@@ -33,27 +33,17 @@ CREATE TABLE device (
     id SERIAL PRIMARY KEY,
     mnemonic VARCHAR(10) NOT NULL,
     name VARCHAR(100) NOT NULL,
-    description VARCHAR(255)
-);
-
-CREATE UNIQUE INDEX idx_device_mnemonic ON device(mnemonic);
-
-CREATE TABLE no_id (
-    id SERIAL PRIMARY KEY,
-    device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE CASCADE,
-    no_id INTEGER NOT NULL CHECK (no_id >= 0),
-    CONSTRAINT uq_no_id_device UNIQUE (device_id),
-    CONSTRAINT uq_no_id_value UNIQUE (no_id)
+    description VARCHAR(255),
+    no_id INTEGER CHECK (no_id >= 0)
 );
 
 CREATE TABLE memory (
     id SERIAL PRIMARY KEY,
     device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE CASCADE,
     name VARCHAR(50) NOT NULL,
-    address INTEGER NOT NULL DEFAULT 0 CHECK (address >= 0)
+    address INTEGER NOT NULL DEFAULT 0 CHECK (address >= 0),
+    UNIQUE (id, device_id)
 );
-
-CREATE UNIQUE INDEX idx_memory_device_name ON memory(device_id, name);
 
 CREATE TABLE memory_value (
     id SERIAL PRIMARY KEY,
@@ -75,6 +65,7 @@ CREATE TABLE tag (
     name VARCHAR(100) NOT NULL,
     device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE CASCADE,
     memory_id INTEGER NOT NULL REFERENCES memory(id) ON DELETE CASCADE,
+    persist_history BOOLEAN NOT NULL DEFAULT true,
     CONSTRAINT fk_tag_memory_same_device
         FOREIGN KEY (memory_id, device_id)
         REFERENCES memory(id, device_id)
@@ -146,9 +137,9 @@ CREATE TABLE producao_por_turno_machine (
     PRIMARY KEY (producao_por_turno_id, machine_id)
 );
 
-CREATE INDEX idx_mini_fabrica_fabrica ON mini_fabrica(fabrica_id);
-CREATE INDEX idx_setor_mini_fabrica ON setor(mini_fabrica_id);
-CREATE INDEX idx_no_id_device ON no_id(device_id);
+CREATE UNIQUE INDEX idx_device_mnemonic ON device(mnemonic);
+CREATE UNIQUE INDEX idx_device_no_id ON device(no_id) WHERE no_id IS NOT NULL;
+CREATE UNIQUE INDEX idx_memory_device_name ON memory(device_id, name);
 CREATE INDEX idx_memory_device ON memory(device_id);
 CREATE INDEX idx_memory_device_address ON memory(device_id, address);
 CREATE UNIQUE INDEX idx_memory_id_device ON memory(id, device_id);
@@ -159,6 +150,8 @@ CREATE UNIQUE INDEX idx_tag_device_name ON tag(device_id, name);
 CREATE UNIQUE INDEX idx_tag_memory_unique ON tag(memory_id);
 CREATE INDEX idx_tag_device ON tag(device_id);
 CREATE INDEX idx_tag_memory ON tag(memory_id);
+CREATE INDEX idx_mini_fabrica_fabrica ON mini_fabrica(fabrica_id);
+CREATE INDEX idx_setor_mini_fabrica ON setor(mini_fabrica_id);
 CREATE INDEX idx_machine_device ON machine(device_id);
 CREATE INDEX idx_machine_setor ON machine(setor_id);
 CREATE INDEX idx_producao_machine ON producao(machine_id);
