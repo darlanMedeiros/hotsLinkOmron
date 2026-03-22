@@ -1,6 +1,7 @@
 package org.ctrl.db;
 
 import java.time.ZoneId;
+import java.util.Objects;
 import java.util.TimeZone;
 import org.ctrl.db.config.DbConfig;
 import org.springframework.boot.SpringApplication;
@@ -23,6 +24,6 @@ public class ApiApplication {
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jacksonTimeZoneCustomizer() {
-        return builder -> builder.timeZone(TIME_ZONE);
+        return builder -> builder.timeZone(Objects.requireNonNull(TIME_ZONE, "TIME_ZONE"));
     }
 }

@@ -3,6 +3,7 @@ package org.ctrl.db.api.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.ctrl.db.api.model.Memory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -35,7 +36,7 @@ public class MemoryRepository {
     }
 
     public List<Memory> findAll() {
-        return jdbcTemplate.query(SQL_FIND_ALL, rowMapper);
+        return jdbcTemplate.query(SQL_FIND_ALL, Objects.requireNonNull(rowMapper, "rowMapper"));
     }
 
     public Optional<Memory> findById(int id) {
@@ -43,7 +44,7 @@ public class MemoryRepository {
     }
 
     public Memory create(int deviceId, String name, int address) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, rowMapper, deviceId, name, address);
+        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), deviceId, name, address);
     }
 
     public Optional<Memory> update(int id, int deviceId, String name, int address) {
@@ -56,7 +57,7 @@ public class MemoryRepository {
 
     private Optional<Memory> queryOptional(String sql, Object... args) {
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, args));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(Objects.requireNonNull(sql, "sql"), Objects.requireNonNull(rowMapper, "rowMapper"), args));
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
@@ -70,3 +71,4 @@ public class MemoryRepository {
                 rs.getInt("address"));
     }
 }
+

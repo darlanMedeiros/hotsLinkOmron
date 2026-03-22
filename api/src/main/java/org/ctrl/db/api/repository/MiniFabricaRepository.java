@@ -3,6 +3,7 @@ package org.ctrl.db.api.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.ctrl.db.api.model.MiniFabrica;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -32,7 +33,7 @@ public class MiniFabricaRepository {
     }
 
     public List<MiniFabrica> findAll() {
-        return jdbcTemplate.query(SQL_FIND_ALL, rowMapper);
+        return jdbcTemplate.query(SQL_FIND_ALL, Objects.requireNonNull(rowMapper, "rowMapper"));
     }
 
     public Optional<MiniFabrica> findById(long id) {
@@ -40,7 +41,7 @@ public class MiniFabricaRepository {
     }
 
     public MiniFabrica create(String name, long fabricaId) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, rowMapper, name, fabricaId);
+        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), name, fabricaId);
     }
 
     public Optional<MiniFabrica> update(long id, String name, long fabricaId) {
@@ -53,7 +54,7 @@ public class MiniFabricaRepository {
 
     private Optional<MiniFabrica> queryOptional(String sql, Object... args) {
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, args));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(Objects.requireNonNull(sql, "sql"), Objects.requireNonNull(rowMapper, "rowMapper"), args));
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
@@ -63,3 +64,4 @@ public class MiniFabricaRepository {
         return new MiniFabrica(rs.getLong("id"), rs.getString("name"), rs.getLong("fabrica_id"));
     }
 }
+

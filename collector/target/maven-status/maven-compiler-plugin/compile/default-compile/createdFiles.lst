@@ -1,3 +1,4 @@
+org\omron\collector\CollectorMultPlcAplication$ManualProductionTagBinding.class
 org\omron\collector\CollectorMultPlcAplication.class
 org\omron\collector\util\PlcNodeMonitorPanel.class
 org\omron\collector\CollectorGuiApplication$1.class

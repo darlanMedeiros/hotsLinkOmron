@@ -3,6 +3,7 @@ package org.ctrl.db.api.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.ctrl.db.api.model.TagCrud;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -36,7 +37,7 @@ public class TagCrudRepository {
     }
 
     public List<TagCrud> findAll() {
-        return jdbcTemplate.query(SQL_FIND_ALL, rowMapper);
+        return jdbcTemplate.query(SQL_FIND_ALL, Objects.requireNonNull(rowMapper, "rowMapper"));
     }
 
     public Optional<TagCrud> findById(int id) {
@@ -44,7 +45,7 @@ public class TagCrudRepository {
     }
 
     public TagCrud create(String name, int deviceId, int memoryId, boolean persistHistory) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, rowMapper, name, deviceId, memoryId, persistHistory);
+        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), name, deviceId, memoryId, persistHistory);
     }
 
     public Optional<TagCrud> update(int id, String name, int deviceId, int memoryId, boolean persistHistory) {
@@ -57,7 +58,7 @@ public class TagCrudRepository {
 
     private Optional<TagCrud> queryOptional(String sql, Object... args) {
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, args));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(Objects.requireNonNull(sql, "sql"), Objects.requireNonNull(rowMapper, "rowMapper"), args));
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
@@ -72,3 +73,4 @@ public class TagCrudRepository {
                 rs.getBoolean("persist_history"));
     }
 }
+

@@ -26,6 +26,7 @@
         <spring.boot.version>2.7.18</spring.boot.version>
         <junit.jupiter.version>5.10.1</junit.jupiter.version>
         <maven.surefire.version>3.2.5</maven.surefire.version>
+        <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
     </properties>
 
     <!-- Dependency versions centralizadas -->
@@ -81,6 +82,13 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>${maven.surefire.version}</version>
+                </plugin>
+
+                <!-- Jar -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven.jar.plugin.version}</version>
                 </plugin>
 
                 <!-- Spring Boot Plugin (usado só no módulo api) -->

@@ -36,11 +36,6 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/darla/Downloads/comm-2.0.3.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="src" path="target/generated-sources/annotations">
 		<attributes>
 			<attribute name="optional" value="true"/>
@@ -60,3 +55,4 @@
 	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
+

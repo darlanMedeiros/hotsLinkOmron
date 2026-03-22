@@ -28509,3 +28509,4 @@ Caused by: org.postgresql.util.PSQLException: ERRO: duplicar valor da chave viol
 
 [2026-03-21 20:39:52] Comunicacao encerrada.
 [2026-03-21 20:39:57] Encerramento solicitado pelo usuario.
+[2026-03-22 17:08:50] Encerramento solicitado pelo usuario.

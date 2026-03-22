@@ -3,6 +3,7 @@ package org.ctrl.db.api.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.ctrl.db.api.model.Fabrica;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -32,7 +33,7 @@ public class FabricaRepository {
     }
 
     public List<Fabrica> findAll() {
-        return jdbcTemplate.query(SQL_FIND_ALL, rowMapper);
+        return jdbcTemplate.query(SQL_FIND_ALL, Objects.requireNonNull(rowMapper, "rowMapper"));
     }
 
     public Optional<Fabrica> findById(long id) {
@@ -40,7 +41,7 @@ public class FabricaRepository {
     }
 
     public Fabrica create(String name) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, rowMapper, name);
+        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), name);
     }
 
     public Optional<Fabrica> update(long id, String name) {
@@ -53,7 +54,7 @@ public class FabricaRepository {
 
     private Optional<Fabrica> queryOptional(String sql, Object... args) {
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, args));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(Objects.requireNonNull(sql, "sql"), Objects.requireNonNull(rowMapper, "rowMapper"), args));
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
@@ -63,3 +64,4 @@ public class FabricaRepository {
         return new Fabrica(rs.getLong("id"), rs.getString("name"));
     }
 }
+

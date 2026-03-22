@@ -3,15 +3,25 @@ DockManager:=
 BEGIN
  Bar[0]:=
  BEGIN
-  BarID:=59422;
-  Bars:=7;
+  BarID:=59419;
+  Bars:=17;
   Bar[0]:=0;
-  Bar[1]:=59415;
-  Bar[2]:=59412;
+  Bar[1]:=59396;
+  Bar[2]:=59402;
   Bar[3]:=0;
-  Bar[4]:=59414;
-  Bar[5]:=59416;
+  Bar[4]:=59397;
+  Bar[5]:=59403;
   Bar[6]:=0;
+  Bar[7]:=59398;
+  Bar[8]:=59405;
+  Bar[9]:=59401;
+  Bar[10]:=59400;
+  Bar[11]:=59406;
+  Bar[12]:=0;
+  Bar[13]:=59407;
+  Bar[14]:=0;
+  Bar[15]:=59415;
+  Bar[16]:=0;
   Style:=0;
   ExStyle:=0;
   PrevFloating:=0;
@@ -28,6 +38,31 @@ BEGIN
   ResourceID:=0;
  END;
  Bar[1]:=
+ BEGIN
+  BarID:=59422;
+  Bars:=6;
+  Bar[0]:=0;
+  Bar[1]:=59414;
+  Bar[2]:=0;
+  Bar[3]:=59416;
+  Bar[4]:=59412;
+  Bar[5]:=0;
+  Style:=0;
+  ExStyle:=0;
+  PrevFloating:=0;
+  MDIChild:=0;
+  PctWidth:="0";
+  MRUFloat:="0 0";
+  MRUHorzDock:="0 0";
+  MRUVertDock:="0 0";
+  MRUDockingState:=0;
+  DockingStyle:=0;
+  TypeID:=0;
+  ClassName:="";
+  WindowName:="";
+  ResourceID:=0;
+ END;
+ Bar[2]:=
  BEGIN
   BarID:=59420;
   Bars:=3;
@@ -49,13 +84,14 @@ BEGIN
   WindowName:="";
   ResourceID:=0;
  END;
- Bar[2]:=
+ Bar[3]:=
  BEGIN
   BarID:=59414;
-  Pos:="1 248";
+  Visible:=0;
+  Pos:="1 5";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="1 248 1366 286";
+  MRUDockPos:="1 5 1009 185";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
@@ -64,7 +100,7 @@ BEGIN
   MDIChild:=0;
   PctWidth:="1000000";
   MRUFloat:="300 180";
-  MRUHorzDock:="1365 38";
+  MRUHorzDock:="1008 180";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -73,23 +109,23 @@ BEGIN
   WindowName:="Output";
   ResourceID:=0;
  END;
- Bar[3]:=
+ Bar[4]:=
  BEGIN
   BarID:=59412;
-  Pos:="352 5";
+  Pos:="1 5";
   Docking:=1;
   MRUDockID:=59422;
-  MRUDockPos:="352 5 1366 242";
+  MRUDockPos:="1 5 1600 185";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="746136";
+  PctWidth:="1000000";
   MRUFloat:="300 180";
-  MRUHorzDock:="1014 237";
-  MRUVertDock:="300 399";
+  MRUHorzDock:="1599 180";
+  MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
   TypeID:=0;
@@ -97,7 +133,7 @@ BEGIN
   WindowName:="Watch Window";
   ResourceID:=0;
  END;
- Bar[4]:=
+ Bar[5]:=
  BEGIN
   BarID:=59416;
   Visible:=0;
@@ -113,7 +149,7 @@ BEGIN
   MDIChild:=0;
   PctWidth:="1649186";
   MRUFloat:="300 180";
-  MRUHorzDock:="2233 46";
+  MRUHorzDock:="2233 89";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -122,13 +158,13 @@ BEGIN
   WindowName:="FB/Structure Instance Viewer";
   ResourceID:=0;
  END;
- Bar[5]:=
+ Bar[6]:=
  BEGIN
   BarID:=59413;
   Pos:="0 -2";
   Docking:=1;
-  MRUDockID:=59420;
-  MRUDockPos:="0 -2 304 250";
+  MRUDockID:=0;
+  MRUDockPos:="0 -2 199 483";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=8084;
@@ -138,7 +174,7 @@ BEGIN
   PctWidth:="1000000";
   MRUFloat:="300 180";
   MRUHorzDock:="300 180";
-  MRUVertDock:="304 252";
+  MRUVertDock:="199 485";
   MRUDockingState:=0;
   DockingStyle:=61440;
   TypeID:=0;
@@ -146,23 +182,24 @@ BEGIN
   WindowName:="Project Workspace";
   ResourceID:=0;
  END;
- Bar[6]:=
+ Bar[7]:=
  BEGIN
   BarID:=59415;
-  Pos:="1 5";
+  Visible:=0;
+  Pos:="1 121";
   MRUWidth:=300;
   Docking:=1;
-  MRUDockID:=59422;
-  MRUDockPos:="1 5 346 242";
+  MRUDockID:=59419;
+  MRUDockPos:="1 121 1600 240";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
-  Style:=36756;
+  Style:=12180;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="253863";
+  PctWidth:="1000000";
   MRUFloat:="300 180";
-  MRUHorzDock:="345 237";
+  MRUHorzDock:="1599 119";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -171,7 +208,7 @@ BEGIN
   WindowName:="Address Reference Tool";
   ResourceID:=0;
  END;
- Bars:=7;
+ Bars:=8;
  Screen:="1366 768";
 END;
 ProjectTree:=
@@ -182,39 +219,9 @@ BEGIN
  Item[3]:=37;
  ItemCount:=4;
  Sumcheck:=110;
- Selected:=30;
+ Selected:=48;
 END;
 Frame[0]:=
-BEGIN
- Norm:="0078 0078 0946 0326";
- Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NuovoProgramma1.Sections.PH30!PH30";
- Type:=1;
- Views:=
- BEGIN
-  View[0]:=
-  BEGIN
-   Yscroll:=5;
-  END;
-  nViews:=1;
- END;
-END;
-Frame[1]:=
-BEGIN
- Norm:="0052 0052 0953 0316";
- Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NuovoProgramma1.Sections.Reset!Reset";
- Type:=1;
- Views:=
- BEGIN
-  View[0]:=
-  BEGIN
-   Yscroll:=8;
-  END;
-  nViews:=1;
- END;
-END;
-Frame[2]:=
 BEGIN
  Norm:="0104 0104 1042 0337";
  Min:="-001 -001";
@@ -228,7 +235,7 @@ BEGIN
   nViews:=1;
  END;
 END;
-Frame[3]:=
+Frame[1]:=
 BEGIN
  Norm:="0104 0104 1011 0380";
  Min:="-001 -001";
@@ -238,12 +245,12 @@ BEGIN
  BEGIN
   View[0]:=
   BEGIN
-   Yscroll:=50;
+   Yscroll:=1;
   END;
   nViews:=1;
  END;
 END;
-Frame[4]:=
+Frame[2]:=
 BEGIN
  Norm:="0052 0052 1005 0225";
  Min:="-001 -001";
@@ -259,24 +266,53 @@ BEGIN
   nViews:=1;
  END;
 END;
-Frame[5]:=
+Frame[3]:=
 BEGIN
- Norm:="0026 0026 0952 0304";
+ Norm:="0052 0052 0953 0316";
  Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NuovoProgramma1.Sections.ProducaoBD!ProducaoBD";
+ Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NuovoProgramma1.Sections.Reset!Reset";
  Type:=1;
  Views:=
  BEGIN
   View[0]:=
   BEGIN
-   Yscroll:=80;
+   Yscroll:=14;
+  END;
+  nViews:=1;
+ END;
+END;
+Frame[4]:=
+BEGIN
+ Norm:="0078 0078 0946 0326";
+ Min:="-001 -001";
+ Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NuovoProgramma1.Sections.PH30!PH30";
+ Type:=1;
+ Views:=
+ BEGIN
+  View[0]:=
+  BEGIN
+   Yscroll:=1;
+  END;
+  nViews:=1;
+ END;
+END;
+Frame[5]:=
+BEGIN
+ Norm:="0156 0156 1359 0483";
+ Min:="-001 -001";
+ Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NuovoProgramma1.Sections.PH31!PH31";
+ Type:=1;
+ Views:=
+ BEGIN
+  View[0]:=
+  BEGIN
+   Yscroll:=1;
   END;
   nViews:=1;
  END;
 END;
 Frame[6]:=
 BEGIN
- Max:=true;
  Norm:="0104 0104 1005 0329";
  Min:="-001 -001";
  Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NuovoProgramma1.Sections.PH29!PH29";
@@ -285,12 +321,28 @@ BEGIN
  BEGIN
   View[0]:=
   BEGIN
-   Yscroll:=5;
+   Yscroll:=1;
   END;
   nViews:=1;
  END;
 END;
-nFrames:=7;
+Frame[7]:=
+BEGIN
+ Max:=true;
+ Norm:="0026 0026 0952 0304";
+ Min:="-001 -001";
+ Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NuovoProgramma1.Sections.ProducaoBD!ProducaoBD";
+ Type:=1;
+ Views:=
+ BEGIN
+  View[0]:=
+  BEGIN
+   Yscroll:=47;
+  END;
+  nViews:=1;
+ END;
+END;
+nFrames:=8;
 WatchWindow:=
 BEGIN
  NumWatch:=3;
@@ -303,19 +355,19 @@ BEGIN
   ColumnWidth[3]:=60;
   ColumnWidth[4]:=60;
   ColumnWidth[5]:=260;
-  NumWatches:=11;
+  NumWatches:=16;
   Watch[0]:=
   BEGIN
    PLC:="NewPLC1";
-   Reference:="pecaPH29";
+   Reference:="D300";
    TypeKnown:=true;
-   Path:="PROGRAM:NewProject.Resources.FB source program.Programs.NuovoProgramma1!NuovoProgramma1.Symbols";
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
    Type:=200;
   END;
   Watch[1]:=
   BEGIN
    PLC:="NewPLC1";
-   Reference:="D3051";
+   Reference:="ano_bd";
    TypeKnown:=true;
    Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
    Type:=200;
@@ -339,7 +391,7 @@ BEGIN
   Watch[4]:=
   BEGIN
    PLC:="NewPLC1";
-   Reference:="D3000";
+   Reference:="hora_bd";
    TypeKnown:=true;
    Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
    Type:=200;
@@ -347,7 +399,7 @@ BEGIN
   Watch[5]:=
   BEGIN
    PLC:="NewPLC1";
-   Reference:="D3010";
+   Reference:="min_bd";
    TypeKnown:=true;
    Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
    Type:=200;
@@ -355,7 +407,7 @@ BEGIN
   Watch[6]:=
   BEGIN
    PLC:="NewPLC1";
-   Reference:="D3020";
+   Reference:="seg_bd";
    TypeKnown:=true;
    Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
    Type:=200;
@@ -363,7 +415,7 @@ BEGIN
   Watch[7]:=
   BEGIN
    PLC:="NewPLC1";
-   Reference:="D3030";
+   Reference:="turno_bd";
    TypeKnown:=true;
    Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
    Type:=200;
@@ -371,7 +423,7 @@ BEGIN
   Watch[8]:=
   BEGIN
    PLC:="NewPLC1";
-   Reference:="D3041";
+   Reference:="D308";
    TypeKnown:=true;
    Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
    Type:=200;
@@ -379,12 +431,52 @@ BEGIN
   Watch[9]:=
   BEGIN
    PLC:="NewPLC1";
-   Reference:="NuovoProgramma1.minutosRelogio";
+   Reference:="D309";
    TypeKnown:=true;
-   Path:="PROGRAM:NewProject.Resources.FB source program.Programs.NuovoProgramma1!NuovoProgramma1.Symbols";
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
    Type:=200;
   END;
   Watch[10]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D310";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[11]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D311";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[12]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D312";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[13]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D313";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[14]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D314";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[15]:=
   BEGIN
   END;
  END;
@@ -397,8 +489,176 @@ BEGIN
   ColumnWidth[3]:=60;
   ColumnWidth[4]:=60;
   ColumnWidth[5]:=60;
-  NumWatches:=1;
+  NumWatches:=22;
   Watch[0]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3000";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[1]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3001";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[2]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3002";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[3]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3003";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[4]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3004";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[5]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3005";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[6]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3006";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[7]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3007";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[8]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3008";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[9]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3009";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[10]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3010";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[11]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3011";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[12]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3012";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[13]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3013";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[14]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3014";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[15]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3015";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[16]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3016";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[17]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3017";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[18]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3018";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[19]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3019";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[20]:=
+  BEGIN
+   PLC:="NewPLC1";
+   Reference:="D3020";
+   TypeKnown:=true;
+   Path:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+   Type:=200;
+  END;
+  Watch[21]:=
   BEGIN
   END;
  END;

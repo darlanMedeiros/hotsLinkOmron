@@ -70,6 +70,7 @@ CREATE TABLE tag (
         FOREIGN KEY (memory_id, device_id)
         REFERENCES memory(id, device_id)
         ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE machine (

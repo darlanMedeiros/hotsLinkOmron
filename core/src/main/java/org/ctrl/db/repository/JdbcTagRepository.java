@@ -79,7 +79,7 @@ public class JdbcTagRepository implements TagRepository {
 
     private Optional<Tag> queryOptional(String sql, Object... args) {
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, args));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(Objects.requireNonNull(sql, "sql"), rowMapper, args));
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
@@ -96,3 +96,4 @@ public class JdbcTagRepository implements TagRepository {
         return new Tag(id, name, deviceId, memoryId);
     }
 }
+

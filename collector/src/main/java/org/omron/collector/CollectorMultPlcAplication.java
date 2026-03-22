@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,8 @@ import org.ctrl.IData;
 import org.ctrl.IDevice;
 import org.ctrl.comm.serial.SerialPortAbstract;
 import org.ctrl.db.config.DbConfig;
+import org.ctrl.db.model.DeviceInfo;
+import org.ctrl.db.model.MemoryValue;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.extras.MemoryVariable;
 import org.ctrl.extras.Tag;
@@ -86,7 +89,17 @@ public class CollectorMultPlcAplication {
     private static final int DM_TERMINATOR_VALUE = 0xFFFF;
     private static final int MANUAL_DM_DATE_PART_COUNT = 6;
     private static final DateTimeFormatter MANUAL_DM_DATE_TIME_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
+    private static final int MANUAL_DM_GROUP_SIZE = 13;
+    private static final int MANUAL_DM_TIMESTAMP_OFFSET = 2;
+    private static final int MANUAL_DM_TAG_VALUES_OFFSET = 8;
+    private static final String[] MANUAL_PRODUCTION_TAG_NAMES = new String[] {
+            "PRODUCAO_PH29",
+            "PRODUCAO_PH30",
+            "PRODUCAO_PH31",
+            "PRODUCAO_SEC25",
+            "PRODUCAO_SEC26",
+            "PRODUCAO_SEC33"
+    };
     private List<PlcConfig> plcConfigs = new ArrayList<>();
     private final Map<String, Integer> manualNodeLookup = new HashMap<>();
     private JComboBox<String> manualNodeCombo;
@@ -660,7 +673,7 @@ public class CollectorMultPlcAplication {
                 }
 
                 if (!addressesRead.isEmpty()) {
-                    logManualDmDatesByMarker(addressesRead, valuesByAddress);
+                    persistManualProductionFromManualRead(nodeId, addressesRead, valuesByAddress);
                     writeZeroToReadAddresses(plc, addressesRead);
                     appendManualResult("#0000 escrito em " + addressesRead.size() + " endereco(s) lido(s).");
                 }
@@ -760,6 +773,328 @@ public class CollectorMultPlcAplication {
         return String.format("%04X", Integer.valueOf(value & 0xFFFF));
     }
 
+    private void persistManualProductionFromManualRead(int nodeId, List<Integer> addressesRead,
+            Map<Integer, Integer> valuesByAddress) {
+        if (addressesRead == null || addressesRead.isEmpty() || valuesByAddress == null || valuesByAddress.isEmpty()) {
+            return;
+        }
+
+        PlcConfig cfg = resolveManualPlcConfig(nodeId);
+        if (cfg == null) {
+            appendManualResult("Nao foi possivel identificar o device do node " + nodeId
+                    + " para salvar os valores da leitura manual.");
+            log("Leitura DM manual: node " + nodeId + " sem device configurado para persistencia.");
+            return;
+        }
+
+        Map<String, ManualProductionTagBinding> tagBindings = loadManualProductionTagBindings(cfg.mnemonic);
+        if (tagBindings.isEmpty()) {
+            appendManualResult("Nenhuma TAG de producao encontrada no banco para o device " + cfg.mnemonic + ".");
+            log("Leitura DM manual: tags de producao nao encontradas para device " + cfg.mnemonic + ".");
+            return;
+        }
+
+        List<Integer> valuesInOrder = new ArrayList<>(addressesRead.size());
+        for (Integer rawAddress : addressesRead) {
+            Integer value = valuesByAddress.get(rawAddress);
+            if (value != null) {
+                valuesInOrder.add(value);
+            }
+        }
+
+        if (valuesInOrder.size() < MANUAL_DM_GROUP_SIZE) {
+            appendManualResult("Leitura insuficiente para bloco de producao (" + valuesInOrder.size() + " palavra(s)).");
+            return;
+        }
+
+        DeviceInfo deviceInfo = new DeviceInfo(cfg.mnemonic, cfg.title, cfg.description);
+        List<MemoryValue> historyBatch = new ArrayList<>();
+        List<MemoryValue> currentOnlyBatch = new ArrayList<>();
+
+        int parsedBlocks = 0;
+        for (int offset = 0; offset + MANUAL_DM_GROUP_SIZE - 1 < valuesInOrder.size();) {
+            int markerAddress = addressesRead.get(offset).intValue();
+            int markerValue = valuesInOrder.get(offset).intValue();
+            if (!matchesManualDateMarker(markerAddress, markerValue)
+                    && !matchesManualRelativeMarker(offset, markerValue)) {
+                offset++;
+                continue;
+            }
+
+            try {
+                LocalDateTime timestamp = tryBuildManualTimestamp(valuesInOrder, offset);
+                if (timestamp == null) {
+                    offset++;
+                    continue;
+                }
+                String concatenated = String.format(
+                        "%04d%02d%02d%02d%02d%02d",
+                        Integer.valueOf(timestamp.getYear()),
+                        Integer.valueOf(timestamp.getMonthValue()),
+                        Integer.valueOf(timestamp.getDayOfMonth()),
+                        Integer.valueOf(timestamp.getHour()),
+                        Integer.valueOf(timestamp.getMinute()),
+                        Integer.valueOf(timestamp.getSecond()));
+
+                appendManualResult("Bloco de producao detectado (offset " + offset + "): timestamp "
+                        + timestamp.format(MANUAL_DM_DATE_TIME_FMT) + " [" + concatenated + "]");
+
+                for (int i = 0; i < MANUAL_PRODUCTION_TAG_NAMES.length; i++) {
+                    int valueIndex = offset + MANUAL_DM_TAG_VALUES_OFFSET + i;
+                    if (valueIndex >= valuesInOrder.size()) {
+                        break;
+                    }
+                    String tagName = MANUAL_PRODUCTION_TAG_NAMES[i];
+                    int value = valuesInOrder.get(valueIndex).intValue() & 0xFFFF;
+                    if (i == MANUAL_PRODUCTION_TAG_NAMES.length - 1
+                            && valueIndex + 1 < valuesInOrder.size()) {
+                        int possibleMarkerAddress = addressesRead.get(valueIndex).intValue();
+                        int possibleMarkerValue = valuesInOrder.get(valueIndex).intValue();
+                        if (matchesManualDateMarker(possibleMarkerAddress, possibleMarkerValue)
+                                || matchesManualRelativeMarker(valueIndex, possibleMarkerValue)) {
+                            continue;
+                        }
+                    }
+                    ManualProductionTagBinding binding = tagBindings.get(tagName);
+                    if (binding == null) {
+                        appendManualResult("TAG " + tagName + " nao encontrada no banco para device " + cfg.mnemonic
+                                + ". Valor lido=" + value + " ignorado.");
+                        continue;
+                    }
+
+                    MemoryValue dbValue = new MemoryValue(binding.memoryName, value, timestamp);
+                    if (binding.persistHistory) {
+                        historyBatch.add(dbValue);
+                    } else {
+                        currentOnlyBatch.add(dbValue);
+                    }
+
+                    appendManualResult("TAG " + tagName + " -> DM " + binding.address + " = " + value
+                            + " @ " + timestamp.format(MANUAL_DM_DATE_TIME_FMT));
+                }
+
+                parsedBlocks++;
+                offset += MANUAL_DM_GROUP_SIZE;
+            } catch (Exception ex) {
+                offset++;
+            }
+        }
+
+        if (parsedBlocks == 0) {
+            appendManualResult("Nenhum bloco de producao valido encontrado pela regra de indices manuais.");
+            log("Leitura DM manual: nenhum bloco de producao valido encontrado.");
+            return;
+        }
+
+        ensureDb();
+        if (!historyBatch.isEmpty()) {
+            dmValueService.saveBatch(deviceInfo, historyBatch);
+        }
+        if (!currentOnlyBatch.isEmpty()) {
+            dmValueService.saveBatchCurrentOnly(deviceInfo, currentOnlyBatch);
+        }
+
+        int totalSaved = historyBatch.size() + currentOnlyBatch.size();
+        appendManualResult("Persistencia concluida: " + parsedBlocks + " bloco(s), " + totalSaved
+                + " valor(es) salvo(s) em TAG/memory.");
+        log("Leitura DM manual salva em banco para device " + cfg.mnemonic + ": blocos=" + parsedBlocks
+                + ", historico=" + historyBatch.size() + ", current-only=" + currentOnlyBatch.size() + ".");
+    }
+
+    private Map<String, ManualProductionTagBinding> loadManualProductionTagBindings(String deviceMnemonic) {
+        ensureDb();
+        JdbcTemplate jdbc = dbContext.getBean(JdbcTemplate.class);
+
+        StringBuilder placeholders = new StringBuilder();
+        for (int i = 0; i < MANUAL_PRODUCTION_TAG_NAMES.length; i++) {
+            if (i > 0) {
+                placeholders.append(',');
+            }
+            placeholders.append('?');
+        }
+
+        Object[] params = new Object[MANUAL_PRODUCTION_TAG_NAMES.length + 1];
+        params[0] = deviceMnemonic;
+        for (int i = 0; i < MANUAL_PRODUCTION_TAG_NAMES.length; i++) {
+            params[i + 1] = MANUAL_PRODUCTION_TAG_NAMES[i];
+        }
+
+        List<Map<String, Object>> rows = jdbc.queryForList(
+                "SELECT t.name AS tag_name, m.name AS memory_name, m.address AS memory_address, " +
+                        "t.persist_history AS persist_history " +
+                        "FROM public.device d " +
+                        "JOIN public.tag t ON t.device_id = d.id " +
+                        "JOIN public.memory m ON m.id = t.memory_id " +
+                        "WHERE d.mnemonic = ? AND t.name IN (" + placeholders + ")",
+                params);
+
+        Map<String, ManualProductionTagBinding> out = new LinkedHashMap<>();
+        for (Map<String, Object> row : rows) {
+            String tagName = asString(row.get("tag_name"));
+            String memoryName = asString(row.get("memory_name"));
+            Integer address = asInt(row.get("memory_address"));
+            boolean persistHistory = asBoolean(row.get("persist_history"), true);
+            if (tagName == null || memoryName == null || memoryName.trim().isEmpty()
+                    || address == null || address.intValue() < 0) {
+                continue;
+            }
+            out.put(tagName, new ManualProductionTagBinding(memoryName, address.intValue(), persistHistory));
+        }
+        return out;
+    }
+
+    private PlcConfig resolveManualPlcConfig(int nodeId) {
+        if (plcConfigs == null || plcConfigs.isEmpty()) {
+            return null;
+        }
+
+        if (manualNodeCombo != null) {
+            Object selected = manualNodeCombo.getSelectedItem();
+            if (selected != null) {
+                String label = selected.toString().trim();
+                int marker = label.indexOf(" (node ");
+                if (marker > 0) {
+                    String mnemonic = label.substring(0, marker).trim();
+                    for (PlcConfig cfg : plcConfigs) {
+                        if (cfg.mnemonic.equalsIgnoreCase(mnemonic)) {
+                            return cfg;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (PlcConfig cfg : plcConfigs) {
+            if (cfg.nodeId == nodeId) {
+                return cfg;
+            }
+        }
+        return null;
+    }
+
+    private static LocalDateTime tryBuildManualTimestamp(List<Integer> valuesInOrder, int offset) {
+        LocalDateTime candidatePrimary = tryBuildManualTimestampCandidate(
+                valuesInOrder,
+                offset + 2,
+                offset + 3,
+                offset + 4,
+                offset + 5,
+                offset + 6,
+                offset + 7);
+        LocalDateTime candidateSecondary = tryBuildManualTimestampCandidate(
+                valuesInOrder,
+                offset + 1,
+                offset + 2,
+                offset + 3,
+                offset + 4,
+                offset + 5,
+                offset + 6);
+        return pickBestManualTimestamp(candidatePrimary, candidateSecondary);
+    }
+
+    private static LocalDateTime tryBuildManualTimestampCandidate(
+            List<Integer> valuesInOrder,
+            int yearIndex,
+            int monthIndex,
+            int dayIndex,
+            int hourIndex,
+            int minuteIndex,
+            int secondIndex) {
+        if (yearIndex < 0 || secondIndex >= valuesInOrder.size()) {
+            return null;
+        }
+
+        int year = valuesInOrder.get(yearIndex).intValue();
+        int month = valuesInOrder.get(monthIndex).intValue();
+        int day = valuesInOrder.get(dayIndex).intValue();
+        int hour = valuesInOrder.get(hourIndex).intValue();
+        int minute = valuesInOrder.get(minuteIndex).intValue();
+        int second = valuesInOrder.get(secondIndex).intValue();
+
+        try {
+            return buildManualTimestamp(year, month, day, hour, minute, second);
+        } catch (Exception ignored) {
+            // try BCD decoded values
+        }
+
+        int bcdYear = decodeBcdWord(year);
+        int bcdMonth = decodeBcdWord(month);
+        int bcdDay = decodeBcdWord(day);
+        int bcdHour = decodeBcdWord(hour);
+        int bcdMinute = decodeBcdWord(minute);
+        int bcdSecond = decodeBcdWord(second);
+        try {
+            return buildManualTimestamp(bcdYear, bcdMonth, bcdDay, bcdHour, bcdMinute, bcdSecond);
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+    private static LocalDateTime pickBestManualTimestamp(LocalDateTime candidateA, LocalDateTime candidateB) {
+        if (candidateA == null) {
+            return candidateB;
+        }
+        if (candidateB == null) {
+            return candidateA;
+        }
+
+        int scoreA = scoreManualTimestamp(candidateA);
+        int scoreB = scoreManualTimestamp(candidateB);
+        return scoreB > scoreA ? candidateB : candidateA;
+    }
+
+    private static int scoreManualTimestamp(LocalDateTime value) {
+        int year = value.getYear();
+        int score = 0;
+        if (year >= 2020 && year <= 2100) {
+            score += 1000;
+        }
+        score -= Math.abs(year - LocalDateTime.now().getYear());
+        return score;
+    }
+
+    private static int findNextManualMarkerOffset(
+            List<Integer> addressesRead,
+            List<Integer> valuesInOrder,
+            int startOffset) {
+        for (int i = Math.max(0, startOffset); i < valuesInOrder.size(); i++) {
+            int markerAddress = addressesRead.get(i).intValue();
+            int markerValue = valuesInOrder.get(i).intValue();
+            if (matchesManualDateMarker(markerAddress, markerValue)
+                    || matchesManualRelativeMarker(i, markerValue)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    private static LocalDateTime buildManualTimestamp(int yearRaw, int month, int day, int hour, int minute,
+            int second) {
+        int year = normalizeManualYear(yearRaw);
+        try {
+            return LocalDateTime.of(year, month, day, hour, minute, second);
+        } catch (Exception ex) {
+            if (day >= 1 && day <= 12 && month > 12) {
+                return LocalDateTime.of(year, day, month, hour, minute, second);
+            }
+            throw ex;
+        }
+    }
+    private static int decodeBcdWord(int raw) {
+        int value = raw & 0xFFFF;
+        int thousands = (value >> 12) & 0xF;
+        int hundreds = (value >> 8) & 0xF;
+        int tens = (value >> 4) & 0xF;
+        int ones = value & 0xF;
+        if (thousands > 9 || hundreds > 9 || tens > 9 || ones > 9) {
+            return raw;
+        }
+        return (thousands * 1000) + (hundreds * 100) + (tens * 10) + ones;
+    }
+    private static int normalizeManualYear(int yearRaw) {
+        if (yearRaw >= 0 && yearRaw < 100) {
+            return 2000 + yearRaw;
+        }
+        return yearRaw;
+    }
     private void logManualDmDatesByMarker(List<Integer> addressesRead, Map<Integer, Integer> valuesByAddress) {
         if (addressesRead == null || addressesRead.isEmpty() || valuesByAddress == null || valuesByAddress.isEmpty()) {
             return;
@@ -823,6 +1158,20 @@ public class CollectorMultPlcAplication {
         }
     }
 
+    private static boolean matchesManualRelativeMarker(int markerIndex, int markerValue) {
+        int normalizedValue = markerValue & 0xFFFF;
+        if (normalizedValue == markerIndex) {
+            return true;
+        }
+        String indexDigits = Integer.toString(markerIndex);
+        if (indexDigits.length() <= 4) {
+            int hexFromIndexDigits = Integer.parseInt(indexDigits, 16) & 0xFFFF;
+            if (normalizedValue == hexFromIndexDigits) {
+                return true;
+            }
+        }
+        return false;
+    }
     private static boolean matchesManualDateMarker(int markerAddress, int markerValue) {
         int normalizedValue = markerValue & 0xFFFF;
         if (normalizedValue == markerAddress) {
@@ -1054,6 +1403,17 @@ public class CollectorMultPlcAplication {
         }
     }
 
+    private static final class ManualProductionTagBinding {
+        private final String memoryName;
+        private final int address;
+        private final boolean persistHistory;
+
+        private ManualProductionTagBinding(String memoryName, int address, boolean persistHistory) {
+            this.memoryName = memoryName;
+            this.address = address;
+            this.persistHistory = persistHistory;
+        }
+    }
     private static final class PlcConfig {
         private final String title;
         private final String mnemonic;

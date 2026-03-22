@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS tag (
         FOREIGN KEY (memory_id, device_id)
         REFERENCES memory(id, device_id)
         ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS machine (
@@ -246,17 +247,34 @@ CREATE INDEX IF NOT EXISTS idx_ppt_data ON producao_por_turno(data);
 CREATE INDEX IF NOT EXISTS idx_pptm_machine ON producao_por_turno_machine(machine_id);
 
 DO $$
+DECLARE
+    fk_update_type "char";
 BEGIN
-    IF NOT EXISTS (
-        SELECT 1
-        FROM pg_constraint
-        WHERE conname = 'fk_tag_memory_same_device'
-    ) THEN
+    SELECT c.confupdtype
+      INTO fk_update_type
+      FROM pg_constraint c
+      JOIN pg_class t ON t.oid = c.conrelid
+      JOIN pg_namespace n ON n.oid = t.relnamespace
+     WHERE c.conname = 'fk_tag_memory_same_device'
+       AND n.nspname = 'public'
+       AND t.relname = 'tag';
+
+    IF fk_update_type IS NULL THEN
         ALTER TABLE public.tag
             ADD CONSTRAINT fk_tag_memory_same_device
             FOREIGN KEY (memory_id, device_id)
             REFERENCES public.memory(id, device_id)
             ON DELETE CASCADE
+            ON UPDATE CASCADE
+            NOT VALID;
+    ELSIF fk_update_type <> 'c' THEN
+        ALTER TABLE public.tag DROP CONSTRAINT fk_tag_memory_same_device;
+        ALTER TABLE public.tag
+            ADD CONSTRAINT fk_tag_memory_same_device
+            FOREIGN KEY (memory_id, device_id)
+            REFERENCES public.memory(id, device_id)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
             NOT VALID;
     END IF;
 END $$;

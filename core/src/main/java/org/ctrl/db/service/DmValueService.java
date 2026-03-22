@@ -75,6 +75,13 @@ public class DmValueService {
         repository.upsertBatch(device.getMnemonic(), device.getName(), device.getDescription(), values);
     }
 
+    public void saveBatchCurrentOnly(DeviceInfo device, List<MemoryValue> values) {
+        if (values == null || values.isEmpty()) {
+            return;
+        }
+        repository.upsertBatchCurrent(device.getMnemonic(), device.getName(), device.getDescription(), values);
+    }
+
     public int pruneHistoryOlderThanDays(int days) {
         return repository.pruneHistoryOlderThanDays(days);
     }

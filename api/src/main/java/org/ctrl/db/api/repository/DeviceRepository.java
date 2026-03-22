@@ -3,6 +3,7 @@ package org.ctrl.db.api.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.ctrl.db.api.model.Device;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -38,7 +39,7 @@ public class DeviceRepository {
     }
 
     public List<Device> findAll() {
-        return jdbcTemplate.query(SQL_FIND_ALL, rowMapper);
+        return jdbcTemplate.query(SQL_FIND_ALL, Objects.requireNonNull(rowMapper, "rowMapper"));
     }
 
     public Optional<Device> findById(int id) {
@@ -46,7 +47,7 @@ public class DeviceRepository {
     }
 
     public Device create(String mnemonic, String name, String description, Integer nodeId) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, rowMapper, mnemonic, name, description, nodeId);
+        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), mnemonic, name, description, nodeId);
     }
 
     public Optional<Device> update(int id, String mnemonic, String name, String description, Integer nodeId) {
@@ -59,7 +60,7 @@ public class DeviceRepository {
 
     private Optional<Device> queryOptional(String sql, Object... args) {
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, args));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(Objects.requireNonNull(sql, "sql"), Objects.requireNonNull(rowMapper, "rowMapper"), args));
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
@@ -75,3 +76,4 @@ public class DeviceRepository {
     }
 
 }
+

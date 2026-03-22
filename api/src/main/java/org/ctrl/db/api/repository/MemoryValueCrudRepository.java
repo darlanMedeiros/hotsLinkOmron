@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.ctrl.db.api.model.MemoryValueCrud;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -39,7 +40,7 @@ public class MemoryValueCrudRepository {
     }
 
     public List<MemoryValueCrud> findAll() {
-        return jdbcTemplate.query(SQL_FIND_ALL, rowMapper);
+        return jdbcTemplate.query(SQL_FIND_ALL, Objects.requireNonNull(rowMapper, "rowMapper"));
     }
 
     public Optional<MemoryValueCrud> findById(int id) {
@@ -48,7 +49,7 @@ public class MemoryValueCrudRepository {
 
     public MemoryValueCrud create(int memoryId, int value, boolean status, LocalDateTime updatedAt) {
         Timestamp ts = updatedAt == null ? null : Timestamp.valueOf(updatedAt);
-        return jdbcTemplate.queryForObject(SQL_INSERT, rowMapper, memoryId, value, status, ts);
+        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), memoryId, value, status, ts);
     }
 
     public Optional<MemoryValueCrud> update(int id, int memoryId, int value, boolean status, LocalDateTime updatedAt) {
@@ -62,7 +63,7 @@ public class MemoryValueCrudRepository {
 
     private Optional<MemoryValueCrud> queryOptional(String sql, Object... args) {
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, args));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(Objects.requireNonNull(sql, "sql"), Objects.requireNonNull(rowMapper, "rowMapper"), args));
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
@@ -78,3 +79,4 @@ public class MemoryValueCrudRepository {
                 ts == null ? null : ts.toLocalDateTime());
     }
 }
+

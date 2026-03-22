@@ -3,6 +3,7 @@ package org.ctrl.db.api.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.ctrl.db.api.model.Setor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -32,7 +33,7 @@ public class SetorRepository {
     }
 
     public List<Setor> findAll() {
-        return jdbcTemplate.query(SQL_FIND_ALL, rowMapper);
+        return jdbcTemplate.query(SQL_FIND_ALL, Objects.requireNonNull(rowMapper, "rowMapper"));
     }
 
     public Optional<Setor> findById(long id) {
@@ -40,7 +41,7 @@ public class SetorRepository {
     }
 
     public Setor create(String name, long miniFabricaId) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, rowMapper, name, miniFabricaId);
+        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), name, miniFabricaId);
     }
 
     public Optional<Setor> update(long id, String name, long miniFabricaId) {
@@ -53,7 +54,7 @@ public class SetorRepository {
 
     private Optional<Setor> queryOptional(String sql, Object... args) {
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, args));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(Objects.requireNonNull(sql, "sql"), Objects.requireNonNull(rowMapper, "rowMapper"), args));
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
@@ -63,3 +64,4 @@ public class SetorRepository {
         return new Setor(rs.getLong("id"), rs.getString("name"), rs.getLong("mini_fabrica_id"));
     }
 }
+

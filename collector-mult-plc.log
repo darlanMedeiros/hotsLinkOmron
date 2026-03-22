@@ -23864,3 +23864,198 @@ org.ctrl.comm.MaximumNumberOfRetriesReachedException:  Maximum number of retries
 [2026-03-22 10:35:19] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 100.
 [2026-03-22 10:35:32] Encerramento solicitado pelo usuario.
 [2026-03-22 10:35:32] Comunicacao serial compartilhada encerrada.
+[2026-03-22 16:52:17] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 16:52:32] [PLC 4] Lista de TAG atualizada do banco: 9 item(ns).
+[2026-03-22 16:52:32] [PLC 4] Monitor iniciado para 9 TAGs.
+[2026-03-22 16:52:32] [PLC 4] Alteracao salva (current): TAG PECAPH29 (DM 100..101) = [12154, 0].
+[2026-03-22 16:52:34] [PLC 4] Alteracao salva (current): TAG PECAPH30 (DM 102..103) = [15210, 0].
+[2026-03-22 16:52:35] [PLC 4] Alteracao salva (current): TAG PECAPH31 (DM 104..105) = [7347, 0].
+[2026-03-22 16:52:37] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [12158].
+[2026-03-22 16:52:38] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [15220].
+[2026-03-22 16:52:39] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [7351].
+[2026-03-22 16:52:41] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC25 (DM 311..311) = [6].
+[2026-03-22 16:52:42] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC26 (DM 312..312) = [0].
+[2026-03-22 16:52:43] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC33 (DM 313..313) = [0].
+[2026-03-22 16:52:47] [PLC 4] Alteracao salva (current): TAG PECAPH29 (DM 100..101) = [12168, 0].
+[2026-03-22 16:52:48] [PLC 4] Alteracao salva (current): TAG PECAPH30 (DM 102..103) = [15238, 0].
+[2026-03-22 16:52:49] [PLC 4] Alteracao salva (current): TAG PECAPH31 (DM 104..105) = [7361, 0].
+[2026-03-22 16:52:50] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [12172].
+[2026-03-22 16:52:51] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [15246].
+[2026-03-22 16:52:53] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [7364].
+[2026-03-22 16:52:59] [PLC 4] Alteracao salva (current): TAG PECAPH29 (DM 100..101) = [12181, 0].
+[2026-03-22 16:53:00] [PLC 4] Alteracao salva (current): TAG PECAPH30 (DM 102..103) = [15264, 0].
+[2026-03-22 16:53:01] [PLC 4] Alteracao salva (current): TAG PECAPH31 (DM 104..105) = [7373, 0].
+[2026-03-22 16:53:03] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [12184].
+[2026-03-22 16:53:04] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [15272].
+[2026-03-22 16:53:04] [PLC 4] Monitor finalizado.
+[2026-03-22 16:53:22] Uncaught exception thread=collector-manual-dm-scan: Error - Unresolved compilation problems: 
+	ManualProductionTagBinding cannot be resolved to a type
+	The method loadManualProductionTagBindings(String) from the type CollectorMultPlcAplication refers to the missing type ManualProductionTagBinding
+	DeviceInfo cannot be resolved to a type
+	DeviceInfo cannot be resolved to a type
+	MemoryValue cannot be resolved to a type
+	MemoryValue cannot be resolved to a type
+	ManualProductionTagBinding cannot be resolved to a type
+	MemoryValue cannot be resolved to a type
+
+java.lang.Error: Unresolved compilation problems: 
+	ManualProductionTagBinding cannot be resolved to a type
+	The method loadManualProductionTagBindings(String) from the type CollectorMultPlcAplication refers to the missing type ManualProductionTagBinding
+	DeviceInfo cannot be resolved to a type
+	DeviceInfo cannot be resolved to a type
+	MemoryValue cannot be resolved to a type
+	MemoryValue cannot be resolved to a type
+	ManualProductionTagBinding cannot be resolved to a type
+	MemoryValue cannot be resolved to a type
+
+	at org.omron.collector.CollectorMultPlcAplication.persistManualProductionFromManualRead(CollectorMultPlcAplication.java:787)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$14(CollectorMultPlcAplication.java:673)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+
+[2026-03-22 16:53:22] Erro nao tratado: Error - Unresolved compilation problems: 
+	ManualProductionTagBinding cannot be resolved to a type
+	The method loadManualProductionTagBindings(String) from the type CollectorMultPlcAplication refers to the missing type ManualProductionTagBinding
+	DeviceInfo cannot be resolved to a type
+	DeviceInfo cannot be resolved to a type
+	MemoryValue cannot be resolved to a type
+	MemoryValue cannot be resolved to a type
+	ManualProductionTagBinding cannot be resolved to a type
+	MemoryValue cannot be resolved to a type
+
+java.lang.Error: Unresolved compilation problems: 
+	ManualProductionTagBinding cannot be resolved to a type
+	The method loadManualProductionTagBindings(String) from the type CollectorMultPlcAplication refers to the missing type ManualProductionTagBinding
+	DeviceInfo cannot be resolved to a type
+	DeviceInfo cannot be resolved to a type
+	MemoryValue cannot be resolved to a type
+	MemoryValue cannot be resolved to a type
+	ManualProductionTagBinding cannot be resolved to a type
+	MemoryValue cannot be resolved to a type
+
+	at org.omron.collector.CollectorMultPlcAplication.persistManualProductionFromManualRead(CollectorMultPlcAplication.java:787)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$14(CollectorMultPlcAplication.java:673)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+
+[2026-03-22 16:54:28] Encerramento solicitado pelo usuario.
+[2026-03-22 16:54:29] Comunicacao serial compartilhada encerrada.
+[2026-03-22 17:09:10] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 17:09:25] Leitura DM manual: bloco invalido no offset 0: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:09:25] Leitura DM manual: nenhum bloco de producao valido encontrado.
+[2026-03-22 17:09:26] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 15.
+[2026-03-22 17:11:15] Leitura DM manual: bloco invalido no offset 0: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:11:15] Leitura DM manual: bloco invalido no offset 13: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:11:15] Leitura DM manual: bloco invalido no offset 26: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:11:15] Leitura DM manual: nenhum bloco de producao valido encontrado.
+[2026-03-22 17:11:18] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 41.
+[2026-03-22 17:18:10] Encerramento solicitado pelo usuario.
+[2026-03-22 17:18:10] Comunicacao serial compartilhada encerrada.
+[2026-03-22 17:18:15] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 17:18:53] Leitura DM manual: bloco invalido no offset 0: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:18:53] Leitura DM manual: bloco invalido no offset 13: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:18:53] Leitura DM manual: bloco invalido no offset 26: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:18:53] Leitura DM manual: bloco invalido no offset 39: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:18:53] Leitura DM manual: bloco invalido no offset 52: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:18:53] Leitura DM manual: bloco invalido no offset 65: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:18:53] Leitura DM manual: nenhum bloco de producao valido encontrado.
+[2026-03-22 17:19:00] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 100.
+[2026-03-22 17:20:44] Encerramento solicitado pelo usuario.
+[2026-03-22 17:20:44] Comunicacao serial compartilhada encerrada.
+[2026-03-22 17:23:37] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 17:24:07] Leitura DM manual: bloco invalido no offset 0: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:24:07] Leitura DM manual: bloco invalido no offset 13: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:24:07] Leitura DM manual: bloco invalido no offset 26: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:24:07] Leitura DM manual: bloco invalido no offset 39: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:24:07] Leitura DM manual: bloco invalido no offset 52: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:24:07] Leitura DM manual: bloco invalido no offset 65: DateTimeException - Invalid value for MonthOfYear (valid values 1 - 12): 22
+[2026-03-22 17:24:07] Leitura DM manual: nenhum bloco de producao valido encontrado.
+[2026-03-22 17:24:14] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 100.
+[2026-03-22 17:29:19] Encerramento solicitado pelo usuario.
+[2026-03-22 17:29:19] Comunicacao serial compartilhada encerrada.
+[2026-03-22 17:29:24] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 17:30:03] Leitura DM manual salva em banco para device PRENSA: blocos=3, historico=18, current-only=0.
+[2026-03-22 17:30:10] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 100.
+[2026-03-22 17:41:37] Leitura DM manual salva em banco para device PRENSA: blocos=2, historico=12, current-only=0.
+[2026-03-22 17:41:44] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 100.
+[2026-03-22 17:50:39] Encerramento solicitado pelo usuario.
+[2026-03-22 17:50:39] Comunicacao serial compartilhada encerrada.
+[2026-03-22 17:51:09] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 17:51:49] Leitura DM manual salva em banco para device PRENSA: blocos=3, historico=18, current-only=0.
+[2026-03-22 17:51:56] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 100.
+[2026-03-22 17:55:34] Leitura DM manual salva em banco para device PRENSA: blocos=2, historico=12, current-only=0.
+[2026-03-22 17:55:37] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 54.
+[2026-03-22 17:58:05] Leitura DM manual salva em banco para device PRENSA: blocos=2, historico=12, current-only=0.
+[2026-03-22 17:58:09] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 54.
+[2026-03-22 17:58:44] Encerramento solicitado pelo usuario.
+[2026-03-22 17:58:44] Comunicacao serial compartilhada encerrada.
+[2026-03-22 18:04:03] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 18:04:38] Leitura DM manual: nenhum bloco de producao valido encontrado.
+[2026-03-22 18:04:45] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 100.
+[2026-03-22 18:05:29] Leitura DM manual salva em banco para device PRENSA: blocos=2, historico=12, current-only=0.
+[2026-03-22 18:05:32] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 54.
+[2026-03-22 18:09:31] Falha na conexao serial: IllegalStateException - Nao foi possivel iniciar a comunicacao serial na porta COM1.
+java.lang.IllegalStateException: Nao foi possivel iniciar a comunicacao serial na porta COM1.
+	at org.omron.collector.util.SharedSerial.connect(SharedSerial.java:90)
+	at org.omron.collector.CollectorMultPlcAplication.connectSharedSerial(CollectorMultPlcAplication.java:439)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$8(CollectorMultPlcAplication.java:377)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+[2026-03-22 18:09:39] Encerramento solicitado pelo usuario.
+[2026-03-22 18:09:39] Comunicacao serial compartilhada encerrada.
+[2026-03-22 18:09:41] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 18:10:06] Leitura DM manual salva em banco para device PRENSA: blocos=2, historico=12, current-only=0.
+[2026-03-22 18:10:10] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 54.
+[2026-03-22 18:14:38] Encerramento solicitado pelo usuario.
+[2026-03-22 18:14:38] Comunicacao serial compartilhada encerrada.
+[2026-03-22 18:14:53] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 18:15:38] Falha no scanner DM manual: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 3 for:  dev:Manual DM id: 0 cmd: RD val: [51, 48, 48, 48, 48, 48, 48, 49] / 30000001
+org.ctrl.comm.MaximumNumberOfRetriesReachedException:  Maximum number of retries reached: 3 for:  dev:Manual DM id: 0 cmd: RD val: [51, 48, 48, 48, 48, 48, 48, 49] / 30000001
+	at org.ctrl.vend.omron.toolbus.ToolbusProtocol.write(ToolbusProtocol.java:160)
+	at org.ctrl.comm.AbstractComHandler.send(AbstractComHandler.java:159)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$14(CollectorMultPlcAplication.java:654)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+
+[2026-03-22 18:15:38] Comunicacao serial compartilhada encerrada.
+[2026-03-22 18:15:41] Encerramento cancelado.
+[2026-03-22 18:15:45] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 18:16:16] Leitura DM manual: nenhum bloco de producao valido encontrado.
+[2026-03-22 18:16:23] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 100.
+[2026-03-22 18:17:01] Leitura DM manual salva em banco para device PRENSA: blocos=4, historico=21, current-only=0.
+[2026-03-22 18:17:05] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 54.
+[2026-03-22 18:18:32] Leitura DM manual salva em banco para device PRENSA: blocos=6, historico=31, current-only=0.
+[2026-03-22 18:18:37] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 80.
+[2026-03-22 18:24:01] Leitura DM manual salva em banco para device PRENSA: blocos=6, historico=31, current-only=0.
+[2026-03-22 18:24:06] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 80.
