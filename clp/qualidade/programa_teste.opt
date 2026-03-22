@@ -3,11 +3,47 @@ DockManager:=
 BEGIN
  Bar[0]:=
  BEGIN
+  BarID:=59419;
+  Bars:=17;
+  Bar[0]:=0;
+  Bar[1]:=59396;
+  Bar[2]:=59402;
+  Bar[3]:=0;
+  Bar[4]:=59397;
+  Bar[5]:=59403;
+  Bar[6]:=0;
+  Bar[7]:=59398;
+  Bar[8]:=59405;
+  Bar[9]:=59401;
+  Bar[10]:=59400;
+  Bar[11]:=59406;
+  Bar[12]:=0;
+  Bar[13]:=59407;
+  Bar[14]:=0;
+  Bar[15]:=59415;
+  Bar[16]:=0;
+  Style:=0;
+  ExStyle:=0;
+  PrevFloating:=0;
+  MDIChild:=0;
+  PctWidth:="0";
+  MRUFloat:="0 0";
+  MRUHorzDock:="0 0";
+  MRUVertDock:="0 0";
+  MRUDockingState:=0;
+  DockingStyle:=0;
+  TypeID:=0;
+  ClassName:="";
+  WindowName:="";
+  ResourceID:=0;
+ END;
+ Bar[1]:=
+ BEGIN
   BarID:=59422;
   Bars:=6;
   Bar[0]:=0;
   Bar[1]:=59414;
-  Bar[2]:=59415;
+  Bar[2]:=0;
   Bar[3]:=59416;
   Bar[4]:=59412;
   Bar[5]:=0;
@@ -26,7 +62,7 @@ BEGIN
   WindowName:="";
   ResourceID:=0;
  END;
- Bar[1]:=
+ Bar[2]:=
  BEGIN
   BarID:=59420;
   Bars:=3;
@@ -48,22 +84,22 @@ BEGIN
   WindowName:="";
   ResourceID:=0;
  END;
- Bar[2]:=
+ Bar[3]:=
  BEGIN
   BarID:=59414;
   Pos:="1 5";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="1 5 533 124";
+  MRUDockPos:="1 5 798 185";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="393373";
+  PctWidth:="500000";
   MRUFloat:="300 180";
-  MRUHorzDock:="532 119";
+  MRUHorzDock:="797 180";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -72,22 +108,22 @@ BEGIN
   WindowName:="Output";
   ResourceID:=0;
  END;
- Bar[3]:=
+ Bar[4]:=
  BEGIN
   BarID:=59412;
-  Pos:="715 5";
+  Pos:="804 5";
   Docking:=1;
   MRUDockID:=59422;
-  MRUDockPos:="715 5 1366 124";
+  MRUDockPos:="804 5 1600 185";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="480924";
+  PctWidth:="500000";
   MRUFloat:="300 180";
-  MRUHorzDock:="651 119";
+  MRUHorzDock:="796 180";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -96,7 +132,7 @@ BEGIN
   WindowName:="Watch Window";
   ResourceID:=0;
  END;
- Bar[4]:=
+ Bar[5]:=
  BEGIN
   BarID:=59416;
   Visible:=0;
@@ -110,9 +146,9 @@ BEGIN
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="1524999";
+  PctWidth:="1649186";
   MRUFloat:="300 180";
-  MRUHorzDock:="2074 127";
+  MRUHorzDock:="2233 89";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -121,13 +157,13 @@ BEGIN
   WindowName:="FB/Structure Instance Viewer";
   ResourceID:=0;
  END;
- Bar[5]:=
+ Bar[6]:=
  BEGIN
   BarID:=59413;
   Pos:="0 -2";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="0 -2 262 412";
+  MRUDockPos:="0 -2 235 356";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=8084;
@@ -137,7 +173,7 @@ BEGIN
   PctWidth:="1000000";
   MRUFloat:="300 180";
   MRUHorzDock:="300 180";
-  MRUVertDock:="262 414";
+  MRUVertDock:="235 358";
   MRUDockingState:=0;
   DockingStyle:=61440;
   TypeID:=0;
@@ -145,22 +181,23 @@ BEGIN
   WindowName:="Project Workspace";
   ResourceID:=0;
  END;
- Bar[6]:=
+ Bar[7]:=
  BEGIN
   BarID:=59415;
-  Pos:="539 5";
+  Pos:="1 121";
+  MRUWidth:=300;
   Docking:=1;
-  MRUDockID:=0;
-  MRUDockPos:="539 5 709 124";
+  MRUDockID:=59419;
+  MRUDockPos:="1 121 1600 240";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
-  Style:=36756;
+  Style:=12180;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="125702";
+  PctWidth:="1000000";
   MRUFloat:="300 180";
-  MRUHorzDock:="170 119";
+  MRUHorzDock:="1599 119";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -169,7 +206,7 @@ BEGIN
   WindowName:="Address Reference Tool";
   ResourceID:=0;
  END;
- Bars:=7;
+ Bars:=8;
  Screen:="1366 768";
 END;
 ProjectTree:=
@@ -177,13 +214,10 @@ BEGIN
  Item[0]:=0;
  Item[1]:=2;
  Item[2]:=51;
- Item[3]:=64;
- Item[4]:=79;
- Item[5]:=85;
- ItemCount:=6;
+ Item[3]:=79;
+ ItemCount:=4;
  Sumcheck:=187;
  Selected:=83;
- ScrollPos:="0 9";
 END;
 Frame[0]:=
 BEGIN

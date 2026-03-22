@@ -515,7 +515,7 @@ public class CollectorMultPlcAplication {
 
         manualNodeCombo = new JComboBox<>();
         manualNodeCombo.setEditable(true);
-        manualStartAddressField = new JTextField("0");
+        manualStartAddressField = new JTextField("3000");
         manualStartAddressField.setColumns(8);
         manualScanButton = new JButton("Ler e limpar DM");
         manualScanButton.addActionListener(e -> startManualDmScan());
@@ -526,7 +526,7 @@ public class CollectorMultPlcAplication {
         int row = 0;
         c.gridx = 0;
         c.gridy = row;
-        controls.add(new JLabel("Node ID"), c);
+        controls.add(new JLabel("4"), c);
         c.gridx = 1;
         controls.add(manualNodeCombo, c);
 
