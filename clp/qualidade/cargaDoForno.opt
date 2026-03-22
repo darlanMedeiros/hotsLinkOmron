@@ -6,8 +6,8 @@ BEGIN
   BarID:=59422;
   Bars:=6;
   Bar[0]:=0;
-  Bar[1]:=59415;
-  Bar[2]:=59414;
+  Bar[1]:=59414;
+  Bar[2]:=59415;
   Bar[3]:=59416;
   Bar[4]:=59412;
   Bar[5]:=0;
@@ -51,19 +51,19 @@ BEGIN
  Bar[2]:=
  BEGIN
   BarID:=59414;
-  Pos:="684 5";
+  Pos:="1 5";
   Docking:=1;
-  MRUDockID:=59422;
-  MRUDockPos:="684 5 1039 84";
+  MRUDockID:=0;
+  MRUDockPos:="1 5 1366 105";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="262517";
+  PctWidth:="1000000";
   MRUFloat:="300 180";
-  MRUHorzDock:="355 79";
+  MRUHorzDock:="1365 100";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -75,19 +75,20 @@ BEGIN
  Bar[3]:=
  BEGIN
   BarID:=59412;
-  Pos:="1045 5";
+  Visible:=0;
+  Pos:="486 5";
   Docking:=1;
-  MRUDockID:=0;
-  MRUDockPos:="1045 5 1366 84";
+  MRUDockID:=59422;
+  MRUDockPos:="486 5 1009 177";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="237482";
+  PctWidth:="524505";
   MRUFloat:="300 180";
-  MRUHorzDock:="321 79";
+  MRUHorzDock:="523 100";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -110,9 +111,9 @@ BEGIN
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="2108088";
+  PctWidth:="1524999";
   MRUFloat:="300 180";
-  MRUHorzDock:="2867 -46";
+  MRUHorzDock:="2074 108";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -127,7 +128,7 @@ BEGIN
   Pos:="0 -2";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="0 -2 452 460";
+  MRUDockPos:="0 -2 267 431";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=8084;
@@ -137,7 +138,7 @@ BEGIN
   PctWidth:="1000000";
   MRUFloat:="300 180";
   MRUHorzDock:="300 180";
-  MRUVertDock:="452 462";
+  MRUVertDock:="267 433";
   MRUDockingState:=0;
   DockingStyle:=61440;
   TypeID:=0;
@@ -148,19 +149,20 @@ BEGIN
  Bar[6]:=
  BEGIN
   BarID:=59415;
-  Pos:="1 5";
+  Visible:=0;
+  Pos:="256 5";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="1 5 678 84";
+  MRUDockPos:="256 5 480 177";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
   ExStyle:=3889;
   PrevFloating:=0;
   MDIChild:=0;
-  PctWidth:="500000";
+  PctWidth:="224879";
   MRUFloat:="300 180";
-  MRUHorzDock:="677 79";
+  MRUHorzDock:="224 100";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -180,51 +182,25 @@ BEGIN
  Item[3]:=40;
  ItemCount:=4;
  Sumcheck:=115;
- Selected:=45;
+ Selected:=51;
 END;
 Frame[0]:=
 BEGIN
- Norm:="0078 0078 0830 0411";
+ Norm:="0075 0075 0862 0447";
  Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Function Blocks.Contador_de_Peças_F17!Contador_de_Peças_F17";
- Type:=10;
- Ysplit:=170;
+ Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NewProgram1.Sections.Relogio!Relogio";
+ Type:=1;
  Views:=
  BEGIN
   View[0]:=
   BEGIN
-   Mag:=1;
   END;
-  View[1]:=
-  BEGIN
-   Mag:=1;
-  END;
-  nViews:=2;
+  nViews:=1;
  END;
 END;
 Frame[1]:=
 BEGIN
- Norm:="0104 0104 0856 0437";
- Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Function Blocks.Contador_de_Peças_F22!Contador_de_Peças_F22";
- Type:=10;
- Ysplit:=211;
- Views:=
- BEGIN
-  View[0]:=
-  BEGIN
-   Mag:=1;
-  END;
-  View[1]:=
-  BEGIN
-   Mag:=1;
-  END;
-  nViews:=2;
- END;
-END;
-Frame[2]:=
-BEGIN
- Norm:="0078 0078 0882 0303";
+ Norm:="0050 0050 0837 0422";
  Min:="-001 -001";
  Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NewProgram1.Sections.Transferencia_excel!Transferencia_excel";
  Type:=1;
@@ -232,28 +208,14 @@ BEGIN
  BEGIN
   View[0]:=
   BEGIN
+   Yscroll:=62;
   END;
   nViews:=1;
  END;
 END;
-Frame[3]:=
+Frame[2]:=
 BEGIN
- Norm:="0104 0104 0908 0329";
- Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NewProgram1.Sections.Banco_de_Dados!Banco_de_Dados";
- Type:=1;
- Views:=
- BEGIN
-  View[0]:=
-  BEGIN
-   Yscroll:=39;
-  END;
-  nViews:=1;
- END;
-END;
-Frame[4]:=
-BEGIN
- Norm:="0026 0026 0830 0251";
+ Norm:="0175 0175 0962 0547";
  Min:="-001 -001";
  Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NewProgram1.Sections.Principal!Principal";
  Type:=1;
@@ -261,14 +223,28 @@ BEGIN
  BEGIN
   View[0]:=
   BEGIN
-   Yscroll:=28;
+   Yscroll:=34;
   END;
   nViews:=1;
  END;
 END;
-Frame[5]:=
+Frame[3]:=
 BEGIN
- Norm:="0052 0052 0856 0277";
+ Norm:="0000 0000 0787 0372";
+ Min:="-001 -001";
+ Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NewProgram1.Sections.MF41!MF41";
+ Type:=1;
+ Views:=
+ BEGIN
+  View[0]:=
+  BEGIN
+  END;
+  nViews:=1;
+ END;
+END;
+Frame[4]:=
+BEGIN
+ Norm:="0156 0156 0983 0471";
  Min:="-001 -001";
  Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NewProgram1!NewProgram1.Symbols";
  Type:=3;
@@ -289,30 +265,62 @@ BEGIN
     Width[4]:=84;
     Width[5]:=48;
     Width[6]:=200;
+    SortCol:=2;
    END;
+  END;
+  nViews:=1;
+ END;
+END;
+Frame[5]:=
+BEGIN
+ Norm:="0026 0026 0889 0341";
+ Min:="-001 -001";
+ Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NewProgram1!NewProgram1";
+ Type:=7;
+ Views:=
+ BEGIN
+  View[0]:=
+  BEGIN
+   Mag:=1;
   END;
   nViews:=1;
  END;
 END;
 Frame[6]:=
 BEGIN
- Norm:="0000 0000 0804 0225";
+ Norm:="0000 0000 0764 0315";
  Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NewProgram1.Sections.MF42!MF42";
- Type:=1;
+ Path:="C:\dev\hostLinkOmron\hotsLinkOmron\clp\qualidade\cargaDoForno.cxp";
+ Access:="PROJECT:!NewProject.Resources.FB source program.Symbols";
+ Type:=3;
  Views:=
  BEGIN
   View[0]:=
   BEGIN
+   Yscroll:=11;
+   Mag:=1;
+   Extra:=
+   BEGIN
+    Type:="CSymbolTableListCtrlState";
+    Style:=1;
+    NumCols:=7;
+    Width[0]:=150;
+    Width[1]:=90;
+    Width[2]:=100;
+    Width[3]:=1;
+    Width[4]:=84;
+    Width[5]:=48;
+    Width[6]:=318;
+   END;
   END;
   nViews:=1;
  END;
 END;
 Frame[7]:=
 BEGIN
- Norm:="0130 0130 1306 0474";
+ Norm:="0078 0078 0992 0333";
  Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NewProgram1.Sections.MF43!MF43";
+ Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NewProgram1.Sections.MF41_ESPAÇO!MF41_ESPAÇO";
  Type:=1;
  Views:=
  BEGIN
@@ -324,25 +332,10 @@ BEGIN
 END;
 Frame[8]:=
 BEGIN
- Norm:="0052 0052 0856 0277";
- Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NewProgram1.Sections.MF41_ESPAÇO!MF41_ESPAÇO";
- Type:=1;
- Views:=
- BEGIN
-  View[0]:=
-  BEGIN
-   Yscroll:=1;
-  END;
-  nViews:=1;
- END;
-END;
-Frame[9]:=
-BEGIN
  Max:=true;
- Norm:="0000 0000 0787 0372";
+ Norm:="0025 0025 0812 0397";
  Min:="-001 -001";
- Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NewProgram1.Sections.MF41!MF41";
+ Access:="PROGRAM:NewProject.Resources.FB source program.Programs.NewProgram1.Sections.Banco_de_Dados!Banco_de_Dados";
  Type:=1;
  Views:=
  BEGIN
@@ -352,7 +345,7 @@ BEGIN
   nViews:=1;
  END;
 END;
-nFrames:=10;
+nFrames:=9;
 WatchWindow:=
 BEGIN
  NumWatch:=3;

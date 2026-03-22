@@ -23750,3 +23750,61 @@ Caused by: org.postgresql.util.PSQLException: FATAL: autentica��o do tipo se
 [2026-03-16 18:59:38] Nenhum device/tag DM encontrado no banco. Cadastre devices e tags para iniciar monitoramento.
 [2026-03-16 18:59:56] Encerramento solicitado pelo usuario.
 [2026-03-16 18:59:56] Comunicacao serial compartilhada encerrada.
+[2026-03-21 20:16:27] Nenhum device/tag DM encontrado no banco. Cadastre devices e tags para iniciar monitoramento.
+[2026-03-21 20:31:15] Encerramento solicitado pelo usuario.
+[2026-03-21 20:31:15] Comunicacao serial compartilhada encerrada.
+[2026-03-21 20:33:54] Nenhum device/tag DM encontrado no banco. Cadastre devices e tags para iniciar monitoramento.
+[2026-03-21 20:34:20] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-21 20:35:10] Falha no scanner DM manual: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 3 for:  dev:Manual DM id: 4 cmd: RD val: [51, 48, 48, 48, 48, 48, 48, 49] / 30000001
+org.ctrl.comm.MaximumNumberOfRetriesReachedException:  Maximum number of retries reached: 3 for:  dev:Manual DM id: 4 cmd: RD val: [51, 48, 48, 48, 48, 48, 48, 49] / 30000001
+	at org.ctrl.vend.omron.toolbus.ToolbusProtocol.write(ToolbusProtocol.java:159)
+	at org.ctrl.comm.AbstractComHandler.send(AbstractComHandler.java:159)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$14(CollectorMultPlcAplication.java:638)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+
+[2026-03-21 20:36:11] Falha no scanner DM manual: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 3 for:  dev:Manual DM id: 4 cmd: RD val: [51, 48, 48, 48, 48, 48, 48, 49] / 30000001
+org.ctrl.comm.MaximumNumberOfRetriesReachedException:  Maximum number of retries reached: 3 for:  dev:Manual DM id: 4 cmd: RD val: [51, 48, 48, 48, 48, 48, 48, 49] / 30000001
+	at org.ctrl.vend.omron.toolbus.ToolbusProtocol.write(ToolbusProtocol.java:159)
+	at org.ctrl.comm.AbstractComHandler.send(AbstractComHandler.java:159)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$14(CollectorMultPlcAplication.java:638)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+
+[2026-03-21 20:36:49] Encerramento solicitado pelo usuario.
+[2026-03-21 20:36:49] Comunicacao serial compartilhada encerrada.
+[2026-03-21 23:14:10] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-21 23:15:19] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 100.
+[2026-03-21 23:28:08] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 12.
+[2026-03-21 23:38:28] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 100.
+[2026-03-21 23:45:33] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 22.
+[2026-03-21 23:49:52] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 12.
+[2026-03-21 23:50:40] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 12.
+[2026-03-21 23:51:09] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 22.
+[2026-03-21 23:51:37] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 32.
+[2026-03-21 23:51:52] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 32.
+[2026-03-21 23:52:05] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 32.
+[2026-03-22 00:03:20] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 32.
+[2026-03-22 00:05:33] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 52.
+[2026-03-22 00:06:56] Encerramento solicitado pelo usuario.
+[2026-03-22 00:06:56] Comunicacao serial compartilhada encerrada.
+[2026-03-22 00:19:35] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 00:20:31] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 100.
+[2026-03-22 00:21:06] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 12.
+[2026-03-22 00:25:33] Encerramento solicitado pelo usuario.
+[2026-03-22 00:25:33] Comunicacao serial compartilhada encerrada.
+[2026-03-22 00:27:22] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 00:27:39] Teste DM data/hora concatenada: 20260322112026 | formatada: 2026-03-22 11:20:26
+[2026-03-22 00:27:40] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 12.
+[2026-03-22 00:28:37] Teste DM data/hora concatenada: 20260322112326 | formatada: 2026-03-22 11:23:26
+[2026-03-22 00:28:38] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 22.
+[2026-03-22 00:35:52] Encerramento solicitado pelo usuario.
+[2026-03-22 00:35:52] Comunicacao serial compartilhada encerrada.
+[2026-03-22 00:46:18] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 00:46:34] Teste DM data/hora: nenhum marcador DM X = X encontrado na leitura.
+[2026-03-22 00:46:37] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 42.
+[2026-03-22 00:53:51] Encerramento solicitado pelo usuario.
+[2026-03-22 00:53:51] Comunicacao serial compartilhada encerrada.
+[2026-03-22 00:54:03] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-22 00:54:49] Teste DM data/hora (inicio DM 3000): 20260322114926 | formatada: 2026-03-22 11:49:26
+[2026-03-22 00:54:49] Teste DM data/hora (inicio DM 3010): 20260322114926 | formatada: 2026-03-22 11:49:26
+[2026-03-22 00:54:49] Teste DM data/hora (inicio DM 3020): 20260322114926 | formatada: 2026-03-22 11:49:26
+[2026-03-22 00:54:51] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 32.

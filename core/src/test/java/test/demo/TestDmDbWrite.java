@@ -31,6 +31,7 @@ public class TestDmDbWrite {
     private static final int VALUE_MODE = MemoryWrite.HEX;
     private static final int RANDOM_MIN = 0;
     private static final int RANDOM_MAX = 100;
+    private static final int NODE_ID = 4;
 
     public static void main(String[] args) {
         SerialPortHandlerImp comHandler = null;
@@ -38,7 +39,7 @@ public class TestDmDbWrite {
 
         try {
             SerialParameters sp = buildSerialParams(args);
-            int nodeId = getIntArg(args, 5, 0);
+            int nodeId = getIntArg(args, 5, NODE_ID);
             int timeoutMs = getIntArg(args, 6, DEFAULT_TIMEOUT_MS);
             int chunkSize = getIntArg(args, 7, DEFAULT_CHUNK);
             int delayMs = getIntArg(args, 8, DEFAULT_DELAY_MS);
@@ -149,7 +150,7 @@ public class TestDmDbWrite {
     }
 
     private static SerialParameters buildSerialParams(String[] args) {
-        String port = getArg(args, 0, "COM2");
+        String port = getArg(args, 0, "COM1");
         int baud = getIntArg(args, 1, 9600);
         int dataBits = getIntArg(args, 2, 7);
         int stopBits = getIntArg(args, 3, 2);

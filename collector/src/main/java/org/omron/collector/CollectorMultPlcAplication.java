@@ -30,15 +30,24 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 
+import org.ctrl.DeviceImp;
+import org.ctrl.DeviceRegisterImp;
+import org.ctrl.IData;
+import org.ctrl.IDevice;
 import org.ctrl.comm.serial.SerialPortAbstract;
 import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.service.DmValueService;
+import org.ctrl.extras.MemoryVariable;
 import org.ctrl.extras.Tag;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteDM;
+import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
 import org.omron.collector.util.PlcNodeMonitorPanel;
 import org.omron.collector.util.SharedSerial;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -72,6 +81,21 @@ public class CollectorMultPlcAplication {
     private volatile boolean shuttingDown;
     private volatile boolean forcedDisconnectInProgress;
 
+    private static final int MANUAL_DM_MAX_ADDRESSES = 100;
+    private static final int MANUAL_READ_DELAY_MS = 200;
+    private static final int DM_TERMINATOR_VALUE = 0xFFFF;
+    private static final int MANUAL_DM_DATE_PART_COUNT = 6;
+    private static final DateTimeFormatter MANUAL_DM_DATE_TIME_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    private List<PlcConfig> plcConfigs = new ArrayList<>();
+    private final Map<String, Integer> manualNodeLookup = new HashMap<>();
+    private JComboBox<String> manualNodeCombo;
+    private JTextField manualStartAddressField;
+    private JButton manualScanButton;
+    private JTextArea manualResultArea;
+    private JLabel manualStatusLabel;
+    private Thread manualScanThread;
+
     public static void main(String[] args) {
         installGlobalExceptionHandler();
         SwingUtilities.invokeLater(() -> {
@@ -99,16 +123,16 @@ public class CollectorMultPlcAplication {
 
         frame.add(buildSharedSerialPanel(), BorderLayout.NORTH);
 
-        List<PlcConfig> configs = loadPlcConfigsFromDb();
-        JPanel container = new JPanel(new GridLayout(Math.max(1, configs.size()), 1, 4, 4));
+        plcConfigs = loadPlcConfigsFromDb();
+        JPanel container = new JPanel(new GridLayout(Math.max(1, plcConfigs.size()), 1, 4, 4));
         container.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
-        if (configs.isEmpty()) {
+        if (plcConfigs.isEmpty()) {
             log("Nenhum device/tag DM encontrado no banco. Cadastre devices e tags para iniciar monitoramento.");
         }
 
-        for (int i = 0; i < configs.size(); i++) {
-            PlcConfig cfg = configs.get(i);
+        for (int i = 0; i < plcConfigs.size(); i++) {
+            PlcConfig cfg = plcConfigs.get(i);
             final int nodeId = cfg.nodeId;
             PlcNodeMonitorPanel panel = new PlcNodeMonitorPanel(
                     nodeId,
@@ -128,8 +152,10 @@ public class CollectorMultPlcAplication {
             plcPanels.add(panel);
             container.add(panel.getPanel());
         }
-
-        frame.add(container, BorderLayout.CENTER);
+        JTabbedPane centerTabs = new JTabbedPane();
+        centerTabs.addTab("Monitoramento", container);
+        centerTabs.addTab("Leitura DM", buildManualDmPanel(plcConfigs));
+        frame.add(centerTabs, BorderLayout.CENTER);
         frame.add(buildLogPanel(), BorderLayout.EAST);
     }
 
@@ -417,6 +443,7 @@ public class CollectorMultPlcAplication {
     }
 
     private synchronized void disconnectSharedSerial() {
+        stopManualScanThread();
         for (PlcNodeMonitorPanel panel : plcPanels) {
             panel.stopMonitor();
         }
@@ -476,6 +503,381 @@ public class CollectorMultPlcAplication {
         }
     }
 
+
+    private JPanel buildManualDmPanel(List<PlcConfig> configs) {
+        JPanel panel = new JPanel(new BorderLayout(8, 8));
+        panel.setBorder(BorderFactory.createTitledBorder("Leitura DM manual"));
+
+        JPanel controls = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(4, 6, 4, 6);
+        c.fill = GridBagConstraints.HORIZONTAL;
+
+        manualNodeCombo = new JComboBox<>();
+        manualNodeCombo.setEditable(true);
+        manualStartAddressField = new JTextField("0");
+        manualStartAddressField.setColumns(8);
+        manualScanButton = new JButton("Ler e limpar DM");
+        manualScanButton.addActionListener(e -> startManualDmScan());
+        manualStatusLabel = new JLabel("PARADO");
+
+        rebuildManualNodeOptions(configs);
+
+        int row = 0;
+        c.gridx = 0;
+        c.gridy = row;
+        controls.add(new JLabel("Node ID"), c);
+        c.gridx = 1;
+        controls.add(manualNodeCombo, c);
+
+        c.gridx = 2;
+        controls.add(new JLabel("Endereco inicial DM"), c);
+        c.gridx = 3;
+        controls.add(manualStartAddressField, c);
+
+        row++;
+        c.gridx = 0;
+        c.gridy = row;
+        controls.add(new JLabel("Regra"), c);
+        c.gridx = 1;
+        c.gridwidth = 3;
+        controls.add(new JLabel("Le ate #FFFF ou maximo de 100 palavras; depois escreve #0000 nas lidas."), c);
+        c.gridwidth = 1;
+
+        row++;
+        c.gridx = 0;
+        c.gridy = row;
+        controls.add(manualScanButton, c);
+        c.gridx = 1;
+        controls.add(new JLabel("Status"), c);
+        c.gridx = 2;
+        c.gridwidth = 2;
+        controls.add(manualStatusLabel, c);
+
+        manualResultArea = new JTextArea(16, 70);
+        manualResultArea.setEditable(false);
+
+        panel.add(controls, BorderLayout.NORTH);
+        panel.add(new JScrollPane(manualResultArea), BorderLayout.CENTER);
+        return panel;
+    }
+
+    private void rebuildManualNodeOptions(List<PlcConfig> configs) {
+        manualNodeLookup.clear();
+        if (manualNodeCombo == null) {
+            return;
+        }
+
+        manualNodeCombo.removeAllItems();
+        if (configs != null) {
+            for (PlcConfig cfg : configs) {
+                String label = cfg.mnemonic + " (node " + cfg.nodeId + ")";
+                if (!manualNodeLookup.containsKey(label)) {
+                    manualNodeLookup.put(label, Integer.valueOf(cfg.nodeId));
+                    manualNodeCombo.addItem(label);
+                }
+            }
+        }
+
+        if (manualNodeCombo.getItemCount() == 0) {
+            manualNodeCombo.addItem("0");
+        }
+        manualNodeCombo.setSelectedIndex(0);
+    }
+
+    private void startManualDmScan() {
+        if (manualScanThread != null && manualScanThread.isAlive()) {
+            log("Scanner DM manual ja esta em execucao.");
+            return;
+        }
+        if (!isSharedConnected()) {
+            setManualStatus("DESCONECTADO");
+            log("Conecte a serial compartilhada antes de executar a leitura DM manual.");
+            return;
+        }
+
+        final int nodeId;
+        final int startAddress;
+        try {
+            nodeId = parseManualNodeId();
+            startAddress = Integer.parseInt(manualStartAddressField.getText().trim());
+            if (startAddress < 0) {
+                throw new NumberFormatException("Endereco inicial deve ser >= 0.");
+            }
+        } catch (Exception ex) {
+            setManualStatus("PARAMETRO INVALIDO");
+            log("Parametros invalidos para scanner DM manual: " + describeError(ex));
+            return;
+        }
+
+        runOnEdt(() -> {
+            manualScanButton.setEnabled(false);
+            if (manualResultArea != null) {
+                manualResultArea.setText("");
+            }
+        });
+        setManualStatus("LENDO");
+        appendManualResult("Inicio leitura DM: node=" + nodeId + ", endereco inicial=" + startAddress + ".");
+
+        manualScanThread = new Thread(() -> {
+            List<Integer> addressesRead = new ArrayList<>();
+            Map<Integer, Integer> valuesByAddress = new HashMap<>();
+            boolean terminatorFound = false;
+            try {
+                IDevice plc = new DeviceImp(nodeId, "MANUAL_DM_" + nodeId, "Manual DM", "Leitura manual DM");
+                DeviceRegisterImp.getInstance().addDevice(plc);
+
+                for (int i = 0; i < MANUAL_DM_MAX_ADDRESSES; i++) {
+                    if (Thread.currentThread().isInterrupted()) {
+                        throw new InterruptedException("Scanner interrompido");
+                    }
+                    int address = startAddress + i;
+                    MemoryVariable variable = new MemoryVariable("DM_SCAN_" + address, "DM", address, 1);
+                    AreaReadDM read = new AreaReadDM(plc, variable);
+                    synchronized (sharedSerial.getIoLock()) {
+                        if (!isSharedConnected()) {
+                            throw new IllegalStateException("Serial compartilhada desconectada durante leitura manual.");
+                        }
+                        sharedSerial.getHandler().send(read);
+                    }
+
+                    int value = parseSingleWord(read.getReply());
+                    addressesRead.add(Integer.valueOf(address));
+                    valuesByAddress.put(Integer.valueOf(address), Integer.valueOf(value));
+                    appendManualResult("DM " + address + " = #" + toHexWord(value));
+
+                    if (value == DM_TERMINATOR_VALUE) {
+                        terminatorFound = true;
+                        appendManualResult("Encontrado terminador #FFFF em DM " + address + ".");
+                        break;
+                    }
+
+                    Thread.sleep(MANUAL_READ_DELAY_MS);
+                }
+
+                if (!terminatorFound) {
+                    appendManualResult("Terminador #FFFF nao encontrado em " + MANUAL_DM_MAX_ADDRESSES + " palavras.");
+                }
+
+                if (!addressesRead.isEmpty()) {
+                    logManualDmDatesByMarker(addressesRead, valuesByAddress);
+                    writeZeroToReadAddresses(plc, addressesRead);
+                    appendManualResult("#0000 escrito em " + addressesRead.size() + " endereco(s) lido(s).");
+                }
+
+                setManualStatus("CONCLUIDO");
+                log("Scanner DM manual concluido. Node " + nodeId + ", inicio DM " + startAddress
+                        + ", total lido " + addressesRead.size() + ".");
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+                setManualStatus("INTERROMPIDO");
+                appendManualResult("Scanner DM manual interrompido.");
+            } catch (Exception ex) {
+                setManualStatus("ERRO");
+                logError("Falha no scanner DM manual", ex);
+                appendManualResult("Falha: " + describeError(ex));
+            } finally {
+                runOnEdt(() -> {
+                    if (manualScanButton != null) {
+                        manualScanButton.setEnabled(true);
+                    }
+                });
+                manualScanThread = null;
+            }
+        }, "collector-manual-dm-scan");
+        manualScanThread.setDaemon(true);
+        manualScanThread.start();
+    }
+
+    private void writeZeroToReadAddresses(IDevice plc, List<Integer> addresses) throws Exception {
+        synchronized (sharedSerial.getIoLock()) {
+            if (!isSharedConnected()) {
+                throw new IllegalStateException("Serial compartilhada desconectada antes da escrita de limpeza.");
+            }
+            for (Integer rawAddress : addresses) {
+                int address = rawAddress.intValue();
+                AreaWriteDM write = new AreaWriteDM(plc, address, new int[] { 0 }, MemoryWrite.HEX);
+                sharedSerial.getHandler().send(write);
+            }
+        }
+    }
+
+    private int parseManualNodeId() {
+        if (manualNodeCombo == null) {
+            return 0;
+        }
+        Object selected = manualNodeCombo.getSelectedItem();
+        String raw = selected == null ? "" : selected.toString().trim();
+        if (raw.isEmpty()) {
+            return 0;
+        }
+
+        Integer mapped = manualNodeLookup.get(raw);
+        if (mapped != null) {
+            return mapped.intValue();
+        }
+
+        StringBuilder digits = new StringBuilder();
+        for (int i = 0; i < raw.length(); i++) {
+            char ch = raw.charAt(i);
+            if (Character.isDigit(ch) || (ch == '-' && digits.length() == 0)) {
+                digits.append(ch);
+            } else if (digits.length() > 0) {
+                break;
+            }
+        }
+
+        if (digits.length() == 0) {
+            throw new NumberFormatException("Node ID invalido: " + raw);
+        }
+        int parsed = Integer.parseInt(digits.toString());
+        if (parsed < 0) {
+            throw new NumberFormatException("Node ID deve ser >= 0.");
+        }
+        return parsed;
+    }
+
+    private static int parseSingleWord(IData reply) {
+        if (reply == null) {
+            throw new IllegalStateException("Resposta vazia na leitura DM manual.");
+        }
+        int[] dataBuff = reply.toHexArray();
+        if (dataBuff == null || dataBuff.length < 4) {
+            throw new IllegalStateException("Resposta invalida na leitura DM manual.");
+        }
+        StringBuilder value = new StringBuilder(4);
+        for (int i = 0; i < 4; i++) {
+            value.append((char) dataBuff[i]);
+        }
+        String normalized = value.toString().trim();
+        if (normalized.isEmpty()) {
+            throw new IllegalStateException("Resposta sem conteudo na leitura DM manual.");
+        }
+        return Integer.parseInt(normalized, 16) & 0xFFFF;
+    }
+
+    private static String toHexWord(int value) {
+        return String.format("%04X", Integer.valueOf(value & 0xFFFF));
+    }
+
+    private void logManualDmDatesByMarker(List<Integer> addressesRead, Map<Integer, Integer> valuesByAddress) {
+        if (addressesRead == null || addressesRead.isEmpty() || valuesByAddress == null || valuesByAddress.isEmpty()) {
+            return;
+        }
+        boolean foundAny = false;
+        for (Integer rawAddress : addressesRead) {
+            int markerAddress = rawAddress.intValue();
+            Integer markerValue = valuesByAddress.get(Integer.valueOf(markerAddress));
+            if (markerValue == null || !matchesManualDateMarker(markerAddress, markerValue.intValue())) {
+                continue;
+            }
+            int yearAddress = markerAddress + 1;
+            int monthAddress = markerAddress + 2;
+            int dayAddress = markerAddress + 3;
+            int hourAddress = markerAddress + 4;
+            int minuteAddress = markerAddress + 5;
+            int secondAddress = markerAddress + 6;
+            Integer year = valuesByAddress.get(Integer.valueOf(yearAddress));
+            Integer month = valuesByAddress.get(Integer.valueOf(monthAddress));
+            Integer day = valuesByAddress.get(Integer.valueOf(dayAddress));
+            Integer hour = valuesByAddress.get(Integer.valueOf(hourAddress));
+            Integer minute = valuesByAddress.get(Integer.valueOf(minuteAddress));
+            Integer second = valuesByAddress.get(Integer.valueOf(secondAddress));
+            if (year == null || month == null || day == null || hour == null || minute == null || second == null) {
+                appendManualResult("Inicio de data detectado em DM " + markerAddress
+                        + ", mas faltam dados ate DM " + (markerAddress + MANUAL_DM_DATE_PART_COUNT) + ".");
+                log("Teste DM data/hora: inicio DM " + markerAddress + " incompleto para concatenacao.");
+                continue;
+            }
+            try {
+                LocalDateTime value = LocalDateTime.of(
+                        year.intValue(),
+                        month.intValue(),
+                        day.intValue(),
+                        hour.intValue(),
+                        minute.intValue(),
+                        second.intValue());
+                String concatenated = String.format(
+                        "%04d%02d%02d%02d%02d%02d",
+                        Integer.valueOf(value.getYear()),
+                        Integer.valueOf(value.getMonthValue()),
+                        Integer.valueOf(value.getDayOfMonth()),
+                        Integer.valueOf(value.getHour()),
+                        Integer.valueOf(value.getMinute()),
+                        Integer.valueOf(value.getSecond()));
+                appendManualResult("Inicio de data detectado: DM " + markerAddress + " = " + markerAddress + ".");
+                appendManualResult("Data/hora DM concatenada: " + concatenated);
+                appendManualResult("Data/hora formatada para teste: " + value.format(MANUAL_DM_DATE_TIME_FMT));
+                log("Teste DM data/hora (inicio DM " + markerAddress + "): " + concatenated
+                        + " | formatada: " + value.format(MANUAL_DM_DATE_TIME_FMT));
+                foundAny = true;
+            } catch (Exception ex) {
+                appendManualResult("Inicio de data em DM " + markerAddress + " com valores invalidos.");
+                log("Teste DM data/hora: valores invalidos apos inicio DM " + markerAddress + ": "
+                        + describeError(ex));
+            }
+        }
+        if (!foundAny) {
+            appendManualResult("Nenhum inicio de data encontrado pela regra DM X = X.");
+            log("Teste DM data/hora: nenhum marcador DM X = X encontrado na leitura.");
+        }
+    }
+
+    private static boolean matchesManualDateMarker(int markerAddress, int markerValue) {
+        int normalizedValue = markerValue & 0xFFFF;
+        if (normalizedValue == markerAddress) {
+            return true;
+        }
+
+        String addressDigits = Integer.toString(markerAddress);
+        if (addressDigits.length() <= 4) {
+            int hexFromAddressDigits = Integer.parseInt(addressDigits, 16) & 0xFFFF;
+            if (normalizedValue == hexFromAddressDigits) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    private void appendManualResult(String text) {
+        runOnEdt(() -> {
+            if (manualResultArea == null) {
+                return;
+            }
+            String time = LocalDateTime.now().format(TIME_FMT);
+            manualResultArea.append("[" + time + "] " + text + "\n");
+            manualResultArea.setCaretPosition(manualResultArea.getDocument().getLength());
+        });
+    }
+
+    private void setManualStatus(String text) {
+        runOnEdt(() -> {
+            if (manualStatusLabel != null) {
+                manualStatusLabel.setText(text);
+            }
+        });
+    }
+
+    private void stopManualScanThread() {
+        Thread running = manualScanThread;
+        if (running == null) {
+            return;
+        }
+        running.interrupt();
+        try {
+            running.join(1500);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+        manualScanThread = null;
+        runOnEdt(() -> {
+            if (manualScanButton != null) {
+                manualScanButton.setEnabled(true);
+            }
+        });
+        setManualStatus("PARADO");
+    }
+
     private synchronized void closeDb() {
         if (dbContext != null) {
             dbContext.close();
@@ -504,6 +906,7 @@ public class CollectorMultPlcAplication {
         }
         shuttingDown = true;
         activeInstance = null;
+        stopManualScanThread();
         disconnectSharedSerial();
         closeDb();
         if (frame != null) {
@@ -668,3 +1071,5 @@ public class CollectorMultPlcAplication {
         }
     }
 }
+
+
