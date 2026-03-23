@@ -90,7 +90,6 @@ public class CollectorMultPlcAplication {
     private static final int MANUAL_DM_DATE_PART_COUNT = 6;
     private static final DateTimeFormatter MANUAL_DM_DATE_TIME_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final int MANUAL_DM_GROUP_SIZE = 13;
-    private static final int MANUAL_DM_TIMESTAMP_OFFSET = 2;
     private static final int MANUAL_DM_TAG_VALUES_OFFSET = 8;
     private static final String[] MANUAL_PRODUCTION_TAG_NAMES = new String[] {
             "PRODUCAO_PH29",
@@ -478,7 +477,8 @@ public class CollectorMultPlcAplication {
         }
         Thread disconnectThread = new Thread(() -> {
             try {
-                log("[Node " + nodeId + "] Sem resposta prolongada. Desconectando serial compartilhada para liberar a porta.");
+                log("[Node " + nodeId
+                        + "] Sem resposta prolongada. Desconectando serial compartilhada para liberar a porta.");
                 disconnectSharedSerial();
             } finally {
                 forcedDisconnectInProgress = false;
@@ -516,7 +516,6 @@ public class CollectorMultPlcAplication {
         }
     }
 
-
     private JPanel buildManualDmPanel(List<PlcConfig> configs) {
         JPanel panel = new JPanel(new BorderLayout(8, 8));
         panel.setBorder(BorderFactory.createTitledBorder("Leitura DM manual"));
@@ -539,7 +538,7 @@ public class CollectorMultPlcAplication {
         int row = 0;
         c.gridx = 0;
         c.gridy = row;
-        controls.add(new JLabel("4"), c);
+        controls.add(new JLabel("Nodo ID"), c);
         c.gridx = 1;
         controls.add(manualNodeCombo, c);
 
@@ -598,6 +597,10 @@ public class CollectorMultPlcAplication {
         manualNodeCombo.setSelectedIndex(0);
     }
 
+    // =============================
+    // FALTA: persistencia da leitura manual, associando os valores lidos a tags de
+    // producao, usando timestamp do PLC
+    // =============================
     private void startManualDmScan() {
         if (manualScanThread != null && manualScanThread.isAlive()) {
             log("Scanner DM manual ja esta em execucao.");
@@ -649,7 +652,8 @@ public class CollectorMultPlcAplication {
                     AreaReadDM read = new AreaReadDM(plc, variable);
                     synchronized (sharedSerial.getIoLock()) {
                         if (!isSharedConnected()) {
-                            throw new IllegalStateException("Serial compartilhada desconectada durante leitura manual.");
+                            throw new IllegalStateException(
+                                    "Serial compartilhada desconectada durante leitura manual.");
                         }
                         sharedSerial.getHandler().send(read);
                     }
@@ -702,6 +706,12 @@ public class CollectorMultPlcAplication {
         manualScanThread.start();
     }
 
+    // =============================
+    // FALTA: persistencia da leitura manual, associando os valores lidos a tags de
+    // producao, usando timestamp do PLC
+    // =============================
+    // write Zero to read addresses to "clear" the DM values after reading, as per
+    // the defined rule
     private void writeZeroToReadAddresses(IDevice plc, List<Integer> addresses) throws Exception {
         synchronized (sharedSerial.getIoLock()) {
             if (!isSharedConnected()) {
@@ -773,6 +783,9 @@ public class CollectorMultPlcAplication {
         return String.format("%04X", Integer.valueOf(value & 0xFFFF));
     }
 
+    // persist the manual read values as production data, associating them to
+    // production tags based on the defined rules, and using the PLC timestamp if
+    // possible
     private void persistManualProductionFromManualRead(int nodeId, List<Integer> addressesRead,
             Map<Integer, Integer> valuesByAddress) {
         if (addressesRead == null || addressesRead.isEmpty() || valuesByAddress == null || valuesByAddress.isEmpty()) {
@@ -803,7 +816,8 @@ public class CollectorMultPlcAplication {
         }
 
         if (valuesInOrder.size() < MANUAL_DM_GROUP_SIZE) {
-            appendManualResult("Leitura insuficiente para bloco de producao (" + valuesInOrder.size() + " palavra(s)).");
+            appendManualResult(
+                    "Leitura insuficiente para bloco de producao (" + valuesInOrder.size() + " palavra(s)).");
             return;
         }
 
@@ -1029,6 +1043,7 @@ public class CollectorMultPlcAplication {
             return null;
         }
     }
+
     private static LocalDateTime pickBestManualTimestamp(LocalDateTime candidateA, LocalDateTime candidateB) {
         if (candidateA == null) {
             return candidateB;
@@ -1052,6 +1067,7 @@ public class CollectorMultPlcAplication {
         return score;
     }
 
+    @SuppressWarnings("unused")
     private static int findNextManualMarkerOffset(
             List<Integer> addressesRead,
             List<Integer> valuesInOrder,
@@ -1066,6 +1082,7 @@ public class CollectorMultPlcAplication {
         }
         return -1;
     }
+
     private static LocalDateTime buildManualTimestamp(int yearRaw, int month, int day, int hour, int minute,
             int second) {
         int year = normalizeManualYear(yearRaw);
@@ -1078,6 +1095,7 @@ public class CollectorMultPlcAplication {
             throw ex;
         }
     }
+
     private static int decodeBcdWord(int raw) {
         int value = raw & 0xFFFF;
         int thousands = (value >> 12) & 0xF;
@@ -1089,12 +1107,15 @@ public class CollectorMultPlcAplication {
         }
         return (thousands * 1000) + (hundreds * 100) + (tens * 10) + ones;
     }
+
     private static int normalizeManualYear(int yearRaw) {
         if (yearRaw >= 0 && yearRaw < 100) {
             return 2000 + yearRaw;
         }
         return yearRaw;
     }
+
+    @SuppressWarnings("unused")
     private void logManualDmDatesByMarker(List<Integer> addressesRead, Map<Integer, Integer> valuesByAddress) {
         if (addressesRead == null || addressesRead.isEmpty() || valuesByAddress == null || valuesByAddress.isEmpty()) {
             return;
@@ -1172,6 +1193,7 @@ public class CollectorMultPlcAplication {
         }
         return false;
     }
+
     private static boolean matchesManualDateMarker(int markerAddress, int markerValue) {
         int normalizedValue = markerValue & 0xFFFF;
         if (normalizedValue == markerAddress) {
@@ -1188,6 +1210,7 @@ public class CollectorMultPlcAplication {
 
         return false;
     }
+
     private void appendManualResult(String text) {
         runOnEdt(() -> {
             if (manualResultArea == null) {
@@ -1376,6 +1399,9 @@ public class CollectorMultPlcAplication {
         return type + " - " + text;
     }
 
+    // Logging to a file is synchronized to avoid interleaving lines from concurrent
+    // log calls, but errors during logging are ignored to avoid breaking
+    // application flow.
     private static synchronized void appendPersistentLog(String message, Throwable error) {
         try {
             StringBuilder line = new StringBuilder();
@@ -1403,17 +1429,27 @@ public class CollectorMultPlcAplication {
         }
     }
 
+    // Data classes for manual production tag bindings and PLC configuration. These
+    // are simple containers for related properties and do not contain behavior.
     private static final class ManualProductionTagBinding {
         private final String memoryName;
         private final int address;
         private final boolean persistHistory;
 
+        // The constructor is private to enforce controlled creation through factory
+        // methods or within the enclosing class, ensuring that all necessary properties
+        // are provided and valid when instances are created.
         private ManualProductionTagBinding(String memoryName, int address, boolean persistHistory) {
             this.memoryName = memoryName;
             this.address = address;
             this.persistHistory = persistHistory;
         }
     }
+
+    // The PlcConfig class encapsulates the configuration details for a PLC,
+    // including its title, mnemonic, description, node ID, and the list of tags to
+    // monitor. This structured approach allows for easy management and retrieval of
+    // PLC configurations based on node IDs or other criteria.
     private static final class PlcConfig {
         private final String title;
         private final String mnemonic;
@@ -1431,5 +1467,3 @@ public class CollectorMultPlcAplication {
         }
     }
 }
-
-

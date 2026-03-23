@@ -24059,3 +24059,6 @@ org.ctrl.comm.MaximumNumberOfRetriesReachedException:  Maximum number of retries
 [2026-03-22 18:18:37] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 80.
 [2026-03-22 18:24:01] Leitura DM manual salva em banco para device PRENSA: blocos=6, historico=31, current-only=0.
 [2026-03-22 18:24:06] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 80.
+[2026-03-23 06:53:20] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-23 06:53:41] Leitura DM manual salva em banco para device PRENSA: blocos=2, historico=11, current-only=0.
+[2026-03-23 06:53:43] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 28.

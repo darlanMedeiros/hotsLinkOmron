@@ -12,6 +12,7 @@ import org.ctrl.db.service.DmValueService;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.omron.collector.util.SharedSerial;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+// import org.springframework.scheduling.annotation.EnableScheduling;
 
 public class DmMonitorApplication {
 
