@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Factory, Activity, AlertTriangle } from 'lucide-react';
+import MemorySearch from './components/MemorySearch';
 import { ProductionLine } from './components/ProductionLine';
 import { AdminCrudScreen } from './components/AdminCrudScreen';
 import { PlcTagCrudScreen } from './components/PlcTagCrudScreen';
@@ -81,7 +82,7 @@ const BACKEND_TARGET = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const OFFLINE_PROBE_TAG = 'PECAPH29';
 
 export default function App() {
-  const [viewMode, setViewMode] = useState<'dashboard' | 'cadastros' | 'plc-tag'>('dashboard');
+  const [viewMode, setViewMode] = useState<'dashboard' | 'cadastros' | 'plc-tag' | 'memory-search'>('dashboard');
   const [linesData, setLinesData] = useState<Record<string, LineData>>(() => {
     return LINE_CONFIG.reduce<Record<string, LineData>>((acc, line) => {
       acc[line.key] = { ...DEFAULT_LINE_DATA };
@@ -309,7 +310,7 @@ export default function App() {
                 >
                   Cadastros
                 </button>
-                <button
+                                <button
                   onClick={() => setViewMode('plc-tag')}
                   className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${
                     viewMode === 'plc-tag'
@@ -318,6 +319,16 @@ export default function App() {
                   }`}
                 >
                   PLC/TAG
+                </button>
+                <button
+                  onClick={() => setViewMode('memory-search')}
+                  className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${
+                    viewMode === 'memory-search'
+                      ? 'bg-white text-blue-700'
+                      : 'text-white hover:bg-white/10'
+                  }`}
+                >
+                  Memory Search
                 </button>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-lg">
@@ -348,7 +359,7 @@ export default function App() {
           </div>
         )}
 
-        {viewMode === 'dashboard' ? (
+                {viewMode === 'dashboard' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
             {LINE_CONFIG.map((line) => {
               const data = linesData[line.key] ?? DEFAULT_LINE_DATA;
@@ -370,9 +381,11 @@ export default function App() {
           </div>
         ) : viewMode === 'cadastros' ? (
           <AdminCrudScreen />
-        ) : (
+        ) : viewMode === 'plc-tag' ? (
           <PlcTagCrudScreen />
-        )}
+        ) : viewMode === 'memory-search' ? (
+          <MemorySearch />
+        ) : null}
       </main>
     </div>
   );

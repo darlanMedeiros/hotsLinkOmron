@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import org.ctrl.db.api.dto.MemoryValueByDeviceDTO;
 import org.ctrl.db.api.model.Memory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,21 +14,18 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
+
+
 public class MemoryRepository {
 
-    private static final String SQL_FIND_ALL =
-            "SELECT m.id, m.device_id, m.name, m.address " +
-                    "FROM public.memory m " +
-                    "JOIN public.device d ON d.id = m.device_id " +
-                    "ORDER BY d.mnemonic, m.device_id, m.name, m.id";
-    private static final String SQL_FIND_BY_ID =
-            "SELECT id, device_id, name, address FROM public.memory WHERE id = ?";
-    private static final String SQL_INSERT =
-            "INSERT INTO public.memory (device_id, name, address) VALUES (?, ?, ?) RETURNING id, device_id, name, address";
-    private static final String SQL_UPDATE =
-            "UPDATE public.memory SET device_id = ?, name = ?, address = ? WHERE id = ? RETURNING id, device_id, name, address";
-    private static final String SQL_DELETE =
-            "DELETE FROM public.memory WHERE id = ?";
+    private static final String SQL_FIND_ALL = "SELECT m.id, m.device_id, m.name, m.address " +
+            "FROM public.memory m " +
+            "JOIN public.device d ON d.id = m.device_id " +
+            "ORDER BY d.mnemonic, m.device_id, m.name, m.id";
+    private static final String SQL_FIND_BY_ID = "SELECT id, device_id, name, address FROM public.memory WHERE id = ?";
+    private static final String SQL_INSERT = "INSERT INTO public.memory (device_id, name, address) VALUES (?, ?, ?) RETURNING id, device_id, name, address";
+    private static final String SQL_UPDATE = "UPDATE public.memory SET device_id = ?, name = ?, address = ? WHERE id = ? RETURNING id, device_id, name, address";
+    private static final String SQL_DELETE = "DELETE FROM public.memory WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final RowMapper<Memory> rowMapper = this::mapRow;
@@ -44,7 +43,8 @@ public class MemoryRepository {
     }
 
     public Memory create(int deviceId, String name, int address) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), deviceId, name, address);
+        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), deviceId, name,
+                address);
     }
 
     public Optional<Memory> update(int id, int deviceId, String name, int address) {
@@ -57,7 +57,8 @@ public class MemoryRepository {
 
     private Optional<Memory> queryOptional(String sql, Object... args) {
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(Objects.requireNonNull(sql, "sql"), Objects.requireNonNull(rowMapper, "rowMapper"), args));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(Objects.requireNonNull(sql, "sql"),
+                    Objects.requireNonNull(rowMapper, "rowMapper"), args));
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
@@ -70,5 +71,26 @@ public class MemoryRepository {
                 rs.getString("name"),
                 rs.getInt("address"));
     }
-}
 
+    public List<MemoryValueByDeviceDTO> findByDeviceMnemonic(String mnemonic) {
+        String sql = "SELECT d.id AS device_id, d.mnemonic AS plc_mnemonic, t.name AS tag_name, " +
+                     " m.name AS memory_name, mv.value AS value, mv.updated_at AS timestamp " +
+                     "FROM public.tag t " +
+                     "JOIN public.device d ON d.id = t.device_id " +
+                     "JOIN public.memory m ON m.id = t.memory_id " +
+                     "JOIN public.memory_value mv ON mv.memory_id = m.id " +
+                     "WHERE d.mnemonic = ? " +
+                     "ORDER BY mv.updated_at DESC";
+
+        return jdbcTemplate.query(sql, new Object[]{mnemonic}, (rs, rowNum) -> {
+            MemoryValueByDeviceDTO dto = new MemoryValueByDeviceDTO();
+            dto.setDeviceId(rs.getInt("device_id"));
+            dto.setPlcMnemonic(rs.getString("plc_mnemonic"));
+            dto.setTagName(rs.getString("tag_name"));
+            dto.setMemoryName(rs.getString("memory_name"));
+            dto.setValue(rs.getInt("value"));
+            dto.setTimestamp(rs.getTimestamp("timestamp").toLocalDateTime());
+            return dto;
+        });
+    }
+}
