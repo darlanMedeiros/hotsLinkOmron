@@ -1,10 +1,35 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { AlertTriangle, Database, Search } from 'lucide-react';
+import { AlertTriangle, Database, Download, Search } from 'lucide-react';
+import { requestApi } from '../../services/api';
 
 interface Device {
   id: number;
   name: string;
   mnemonic: string;
+}
+
+interface Fabrica {
+  id: number;
+  name: string;
+}
+
+interface MiniFabrica {
+  id: number;
+  name: string;
+  fabricaId: number;
+}
+
+interface Setor {
+  id: number;
+  name: string;
+  miniFabricaId: number;
+}
+
+interface Machine {
+  id: number;
+  name: string;
+  deviceId: number;
+  setorId: number;
 }
 
 interface Turno {
@@ -24,8 +49,20 @@ interface MemoryValueByDeviceDTO {
 }
 
 export const MemorySearch: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'device' | 'structure'>('device');
   const [devices, setDevices] = useState<Device[]>([]);
   const [turnos, setTurnos] = useState<Turno[]>([]);
+  const [fabricas, setFabricas] = useState<Fabrica[]>([]);
+  const [miniFabricas, setMiniFabricas] = useState<MiniFabrica[]>([]);
+  const [setores, setSetores] = useState<Setor[]>([]);
+  const [machines, setMachines] = useState<Machine[]>([]);
+
+  const [selectedFabricaId, setSelectedFabricaId] = useState('');
+  const [selectedMiniFabricaId, setSelectedMiniFabricaId] = useState('');
+  const [selectedSetorId, setSelectedSetorId] = useState('');
+  const [selectedMachineId, setSelectedMachineId] = useState('');
+  const [selectedStructuredDeviceId, setSelectedStructuredDeviceId] = useState('');
+
   const [selectedMnemonic, setSelectedMnemonic] = useState<string>('');
   const [selectedTag, setSelectedTag] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
@@ -35,25 +72,39 @@ export const MemorySearch: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/devices')
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Erro HTTP ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => setDevices(data))
-      .catch((err) => setError('Erro ao carregar devices: ' + err.message));
+    let alive = true;
+    const loadBaseData = async () => {
+      try {
+        const [deviceData, turnoData, fabricaData, miniFabricaData, setorData, machineData] = await Promise.all([
+          requestApi<Device[]>('/api/devices'),
+          requestApi<Turno[]>('/api/turnos'),
+          requestApi<Fabrica[]>('/api/fabricas'),
+          requestApi<MiniFabrica[]>('/api/mini-fabricas'),
+          requestApi<Setor[]>('/api/setores'),
+          requestApi<Machine[]>('/api/machines'),
+        ]);
 
-    fetch('/api/turnos')
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Erro HTTP ${res.status}`);
+        if (!alive) {
+          return;
         }
-        return res.json();
-      })
-      .then((data) => setTurnos(data))
-      .catch((err) => setError('Erro ao carregar turnos: ' + err.message));
+
+        setDevices(deviceData);
+        setTurnos(turnoData);
+        setFabricas(fabricaData);
+        setMiniFabricas(miniFabricaData);
+        setSetores(setorData);
+        setMachines(machineData);
+      } catch (err) {
+        if (alive) {
+          setError(`Erro ao carregar filtros: ${err instanceof Error ? err.message : 'erro desconhecido'}`);
+        }
+      }
+    };
+
+    loadBaseData();
+    return () => {
+      alive = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -110,6 +161,42 @@ export const MemorySearch: React.FC = () => {
     () => devices.find((device) => device.mnemonic === selectedMnemonic) ?? null,
     [devices, selectedMnemonic],
   );
+
+  const filteredMiniFabricas = useMemo(() => {
+    const fabricaId = Number(selectedFabricaId);
+    if (!fabricaId) {
+      return [];
+    }
+    return miniFabricas.filter((row) => row.fabricaId === fabricaId);
+  }, [miniFabricas, selectedFabricaId]);
+
+  const filteredSetores = useMemo(() => {
+    const miniFabricaId = Number(selectedMiniFabricaId);
+    if (!miniFabricaId) {
+      return [];
+    }
+    return setores.filter((row) => row.miniFabricaId === miniFabricaId);
+  }, [setores, selectedMiniFabricaId]);
+
+  const filteredMachines = useMemo(() => {
+    const setorId = Number(selectedSetorId);
+    if (!setorId) {
+      return [];
+    }
+    return machines.filter((row) => row.setorId === setorId);
+  }, [machines, selectedSetorId]);
+
+  const filteredDevices = useMemo(() => {
+    const machineId = Number(selectedMachineId);
+    if (!machineId) {
+      return [];
+    }
+    const selectedMachine = machines.find((row) => row.id === machineId);
+    if (!selectedMachine) {
+      return [];
+    }
+    return devices.filter((row) => row.id === selectedMachine.deviceId);
+  }, [machines, devices, selectedMachineId]);
 
   const selectedTurno = useMemo(() => {
     const id = Number(selectedTurnoId);
@@ -195,6 +282,81 @@ export const MemorySearch: React.FC = () => {
     return date.toLocaleString('pt-BR');
   };
 
+  const toCsvField = (value: string | number) => {
+    const text = String(value ?? '');
+    const escaped = text.replaceAll('"', '""');
+    return `"${escaped}"`;
+  };
+
+  const handleExportExcel = () => {
+    if (filteredMemoryValues.length === 0) {
+      return;
+    }
+
+    const headers = ['Device', 'Mnemonic', 'Tag', 'Memoria', 'Valor', 'Atualizado em'];
+    const rows = filteredMemoryValues.map((mv) => [
+      selectedDevice?.name ?? '',
+      mv.plcMnemonic,
+      mv.tagName,
+      mv.memoryName,
+      mv.value,
+      formatTimestamp(mv.timestamp),
+    ]);
+
+    const csv = [headers.map(toCsvField).join(';'), ...rows.map((row) => row.map(toCsvField).join(';'))].join('\n');
+    const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8;' });
+    const filename = `memory-search-${selectedMnemonic || 'filtros'}-${new Date().toISOString().slice(0, 10)}.csv`;
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const onFabricaChange = (value: string) => {
+    setSelectedFabricaId(value);
+    setSelectedMiniFabricaId('');
+    setSelectedSetorId('');
+    setSelectedMachineId('');
+    setSelectedStructuredDeviceId('');
+    setSelectedMnemonic('');
+  };
+
+  const onMiniFabricaChange = (value: string) => {
+    setSelectedMiniFabricaId(value);
+    setSelectedSetorId('');
+    setSelectedMachineId('');
+    setSelectedStructuredDeviceId('');
+    setSelectedMnemonic('');
+  };
+
+  const onSetorChange = (value: string) => {
+    setSelectedSetorId(value);
+    setSelectedMachineId('');
+    setSelectedStructuredDeviceId('');
+    setSelectedMnemonic('');
+  };
+
+  const onMachineChange = (value: string) => {
+    setSelectedMachineId(value);
+    setSelectedStructuredDeviceId('');
+    setSelectedMnemonic('');
+  };
+
+  const onStructuredDeviceChange = (value: string) => {
+    setSelectedStructuredDeviceId(value);
+    if (!value) {
+      setSelectedMnemonic('');
+      return;
+    }
+    const selectedById = devices.find((row) => row.id === Number(value));
+    setSelectedMnemonic(selectedById?.mnemonic ?? '');
+  };
+
   return (
     <div className="space-y-4">
       <section className="rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
@@ -206,44 +368,197 @@ export const MemorySearch: React.FC = () => {
       </section>
 
       <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          <div>
-            <label htmlFor="device-select" className="mb-1 block text-sm font-medium text-slate-700">
-              Selecione um device
-            </label>
-            <select
-              id="device-select"
-              value={selectedMnemonic}
-              onChange={(e) => setSelectedMnemonic(e.target.value)}
-              className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-            >
-              <option value="">Selecione...</option>
-              {devices.map((device) => (
-                <option key={device.id} value={device.mnemonic}>
-                  {device.name} ({device.mnemonic})
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="turno-select" className="mb-1 block text-sm font-medium text-slate-700">
-              Selecione o turno
-            </label>
-            <select
-              id="turno-select"
-              value={selectedTurnoId}
-              onChange={(e) => setSelectedTurnoId(e.target.value)}
-              className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-            >
-              <option value="">Todos os turnos</option>
-              {turnos.map((turno) => (
-                <option key={turno.id} value={String(turno.id)}>
-                  {turno.name} ({turno.horaInicio} - {turno.horaFinal})
-                </option>
-              ))}
-            </select>
-          </div>
+        <div className="mb-4 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setActiveTab('device')}
+            className={`rounded-md px-3 py-2 text-sm font-medium transition ${
+              activeTab === 'device'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            Pesquisa por device
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('structure')}
+            className={`rounded-md px-3 py-2 text-sm font-medium transition ${
+              activeTab === 'structure'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-100'
+            }`}
+          >
+            Pesquisa por estrutura
+          </button>
         </div>
+
+        {activeTab === 'device' && (
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <div>
+              <label htmlFor="device-select" className="mb-1 block text-sm font-medium text-slate-700">
+                Selecione um device
+              </label>
+              <select
+                id="device-select"
+                value={selectedMnemonic}
+                onChange={(e) => setSelectedMnemonic(e.target.value)}
+                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              >
+                <option value="">Selecione...</option>
+                {devices.map((device) => (
+                  <option key={device.id} value={device.mnemonic}>
+                    {device.name} ({device.mnemonic})
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="turno-select-device" className="mb-1 block text-sm font-medium text-slate-700">
+                Selecione o turno
+              </label>
+              <select
+                id="turno-select-device"
+                value={selectedTurnoId}
+                onChange={(e) => setSelectedTurnoId(e.target.value)}
+                className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              >
+                <option value="">Todos os turnos</option>
+                {turnos.map((turno) => (
+                  <option key={turno.id} value={String(turno.id)}>
+                    {turno.name} ({turno.horaInicio} - {turno.horaFinal})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'structure' && (
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+              <div>
+                <label htmlFor="fabrica-select" className="mb-1 block text-sm font-medium text-slate-700">
+                  Fabrica
+                </label>
+                <select
+                  id="fabrica-select"
+                  value={selectedFabricaId}
+                  onChange={(e) => onFabricaChange(e.target.value)}
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                >
+                  <option value="">Selecione...</option>
+                  {fabricas.map((fabrica) => (
+                    <option key={fabrica.id} value={String(fabrica.id)}>
+                      {fabrica.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="mini-fabrica-select" className="mb-1 block text-sm font-medium text-slate-700">
+                  Mini Fabrica
+                </label>
+                <select
+                  id="mini-fabrica-select"
+                  value={selectedMiniFabricaId}
+                  onChange={(e) => onMiniFabricaChange(e.target.value)}
+                  disabled={!selectedFabricaId}
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none transition disabled:cursor-not-allowed disabled:bg-slate-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                >
+                  <option value="">Selecione...</option>
+                  {filteredMiniFabricas.map((miniFabrica) => (
+                    <option key={miniFabrica.id} value={String(miniFabrica.id)}>
+                      {miniFabrica.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="setor-select" className="mb-1 block text-sm font-medium text-slate-700">
+                  Setor
+                </label>
+                <select
+                  id="setor-select"
+                  value={selectedSetorId}
+                  onChange={(e) => onSetorChange(e.target.value)}
+                  disabled={!selectedMiniFabricaId}
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none transition disabled:cursor-not-allowed disabled:bg-slate-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                >
+                  <option value="">Selecione...</option>
+                  {filteredSetores.map((setor) => (
+                    <option key={setor.id} value={String(setor.id)}>
+                      {setor.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="machine-select" className="mb-1 block text-sm font-medium text-slate-700">
+                  Machine
+                </label>
+                <select
+                  id="machine-select"
+                  value={selectedMachineId}
+                  onChange={(e) => onMachineChange(e.target.value)}
+                  disabled={!selectedSetorId}
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none transition disabled:cursor-not-allowed disabled:bg-slate-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                >
+                  <option value="">Selecione...</option>
+                  {filteredMachines.map((machine) => (
+                    <option key={machine.id} value={String(machine.id)}>
+                      {machine.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="device-select-structure" className="mb-1 block text-sm font-medium text-slate-700">
+                  Device
+                </label>
+                <select
+                  id="device-select-structure"
+                  value={selectedStructuredDeviceId}
+                  onChange={(e) => onStructuredDeviceChange(e.target.value)}
+                  disabled={!selectedMachineId}
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none transition disabled:cursor-not-allowed disabled:bg-slate-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                >
+                  <option value="">Selecione...</option>
+                  {filteredDevices.map((device) => (
+                    <option key={device.id} value={String(device.id)}>
+                      {device.name} ({device.mnemonic})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              <div>
+                <label htmlFor="turno-select-structure" className="mb-1 block text-sm font-medium text-slate-700">
+                  Selecione o turno
+                </label>
+                <select
+                  id="turno-select-structure"
+                  value={selectedTurnoId}
+                  onChange={(e) => setSelectedTurnoId(e.target.value)}
+                  className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                >
+                  <option value="">Todos os turnos</option>
+                  {turnos.map((turno) => (
+                    <option key={turno.id} value={String(turno.id)}>
+                      {turno.name} ({turno.horaInicio} - {turno.horaFinal})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
       {error && (
@@ -272,11 +587,22 @@ export const MemorySearch: React.FC = () => {
               <Database className="h-4 w-4 text-blue-600" />
               <h3 className="text-sm font-semibold text-slate-900">Resultados de memoria</h3>
             </div>
-            <div className="text-xs text-slate-600">
-              {selectedDevice
-                ? `${selectedDevice.name} (${selectedDevice.mnemonic})`
-                : selectedMnemonic}{' '}
-              | {filteredMemoryValues.length} de {memoryValues.length} registros
+            <div className="flex items-center gap-2">
+              <div className="text-xs text-slate-600">
+                {selectedDevice
+                  ? `${selectedDevice.name} (${selectedDevice.mnemonic})`
+                  : selectedMnemonic}{' '}
+                | {filteredMemoryValues.length} de {memoryValues.length} registros
+              </div>
+              <button
+                type="button"
+                onClick={handleExportExcel}
+                disabled={filteredMemoryValues.length === 0}
+                className="inline-flex items-center gap-1 rounded-md border border-slate-300 bg-white px-2 py-1 text-xs font-medium text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <Download className="h-3.5 w-3.5" />
+                Exportar Excel
+              </button>
             </div>
           </div>
 
@@ -348,11 +674,4 @@ export const MemorySearch: React.FC = () => {
 };
 
 export default MemorySearch;
-
-
-
-
-
-
-
 

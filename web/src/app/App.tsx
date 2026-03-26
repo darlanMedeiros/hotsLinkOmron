@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router';
 import { MainLayout } from './layout/MainLayout';
 import { DashboardPage } from './pages/DashboardPage';
-import { AdminCrudScreen } from './components/AdminCrudScreen';
+import { AdminCrudPage } from './pages/AdminCrud/AdminCrudPage';
 import { PlcTagCrudScreen } from './components/PlcTagCrudScreen';
 import MemorySearch from './components/MemorySearch';
 
@@ -10,7 +10,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<DashboardPage />} />
-        <Route path="cadastros" element={<AdminCrudScreen />} />
+        <Route path="cadastros" element={<AdminCrudPage />} />
         <Route path="plc-tag" element={<PlcTagCrudScreen />} />
         <Route path="memory-search" element={<MemorySearch />} />
       </Route>
