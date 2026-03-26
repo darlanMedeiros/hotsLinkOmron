@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { Cpu, HardDrive, Tag, Pencil, Save, Trash2, X } from 'lucide-react';
+import { requestApi } from '../../services/api';
 
 type ViewMessage = {
   type: 'success' | 'error';
@@ -31,26 +32,7 @@ type TagCrud = {
 
 type SectionKey = 'device' | 'memory' | 'tag';
 
-async function requestApi<T>(url: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(url, init);
-  if (!response.ok) {
-    let message = `Erro HTTP ${response.status}`;
-    try {
-      const body = await response.json() as { message?: string };
-      if (body.message) {
-        message = body.message;
-      }
-    } catch (_err) {
-      // Keep fallback message for non-json body.
-    }
-    throw new Error(message);
-  }
 
-  if (response.status === 204) {
-    return undefined as T;
-  }
-  return await response.json() as T;
-}
 
 export function PlcTagCrudScreen() {
   const [isLoading, setIsLoading] = useState(true);
