@@ -90,7 +90,7 @@ BEGIN
   Pos:="1 5";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="1 5 1366 56";
+  MRUDockPos:="1 5 1366 30";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
@@ -99,7 +99,7 @@ BEGIN
   MDIChild:=0;
   PctWidth:="1000000";
   MRUFloat:="300 180";
-  MRUHorzDock:="1365 51";
+  MRUHorzDock:="1365 25";
   MRUVertDock:="300 180";
   MRUDockingState:=0;
   DockingStyle:=61440;
@@ -111,10 +111,10 @@ BEGIN
  Bar[4]:=
  BEGIN
   BarID:=59412;
-  Pos:="1 62";
+  Pos:="1 36";
   Docking:=1;
   MRUDockID:=59422;
-  MRUDockPos:="1 62 1366 185";
+  MRUDockPos:="1 36 1366 159";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=36756;
@@ -163,7 +163,7 @@ BEGIN
   Pos:="0 -2";
   Docking:=1;
   MRUDockID:=0;
-  MRUDockPos:="0 -2 286 351";
+  MRUDockPos:="0 -2 286 377";
   MRUFloatStyle:=4;
   MRUFloatPos:="-2147483648 0";
   Style:=8084;
@@ -173,7 +173,7 @@ BEGIN
   PctWidth:="1000000";
   MRUFloat:="300 180";
   MRUHorzDock:="300 180";
-  MRUVertDock:="286 353";
+  MRUVertDock:="286 379";
   MRUDockingState:=0;
   DockingStyle:=61440;
   TypeID:=0;
@@ -336,7 +336,7 @@ BEGIN
  BEGIN
   View[0]:=
   BEGIN
-   Yscroll:=106;
+   Yscroll:=60;
   END;
   nViews:=1;
  END;

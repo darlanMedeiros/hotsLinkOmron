@@ -82,7 +82,7 @@ public class MemoryRepository {
                      "WHERE d.mnemonic = ? " +
                      "ORDER BY mv.updated_at DESC";
 
-        return jdbcTemplate.query(sql, new Object[]{mnemonic}, (rs, rowNum) -> {
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
             MemoryValueByDeviceDTO dto = new MemoryValueByDeviceDTO();
             dto.setDeviceId(rs.getInt("device_id"));
             dto.setPlcMnemonic(rs.getString("plc_mnemonic"));
@@ -91,6 +91,7 @@ public class MemoryRepository {
             dto.setValue(rs.getInt("value"));
             dto.setTimestamp(rs.getTimestamp("timestamp").toLocalDateTime());
             return dto;
-        });
+        }, mnemonic);
     }
 }
+

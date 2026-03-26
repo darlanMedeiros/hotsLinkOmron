@@ -5,14 +5,17 @@ C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\dto\DeviceR
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\dto\FabricaRequest.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\dto\MachineRequest.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\dto\MemoryRequest.java
+C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\dto\MemoryValueByDeviceDTO.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\dto\MemoryValueRequest.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\dto\MiniFabricaRequest.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\dto\SetorRequest.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\dto\TagCrudRequest.java
+C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\dto\TurnoRequest.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\ErrorResponse.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\FabricaRestController.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\MachineRestController.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\MemoryCrudRestController.java
+C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\MemoryRestController.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\MemoryValueCrudRestController.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\MiniFabricaRestController.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\model\Device.java
@@ -23,6 +26,7 @@ C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\model\Memor
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\model\MiniFabrica.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\model\Setor.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\model\TagCrud.java
+C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\model\Turno.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\repository\DeviceRepository.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\repository\FabricaRepository.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\repository\MachineRepository.java
@@ -31,6 +35,7 @@ C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\repository\
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\repository\MiniFabricaRepository.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\repository\SetorRepository.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\repository\TagCrudRepository.java
+C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\repository\TurnoRepository.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\RrValueRestController.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\service\DeviceService.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\service\FabricaService.java
@@ -40,7 +45,9 @@ C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\service\Mem
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\service\MiniFabricaService.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\service\SetorService.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\service\TagCrudService.java
+C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\service\TurnoService.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\SetorRestController.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\TagCrudRestController.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\TagRestController.java
+C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\api\TurnoRestController.java
 C:\dev\hostLinkOmron\hotsLinkOmron\api\src\main\java\org\ctrl\db\ApiApplication.java
