@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
-import { Building2, Cog, Layers3, Map as MapIcon, Pencil, Save, Trash2, X } from 'lucide-react';
+import { Building2, Clock3, Cog, Layers3, Map as MapIcon, Pencil, Save, Trash2, X } from 'lucide-react';
 
 type ViewMessage = {
   type: 'success' | 'error';
@@ -36,6 +36,13 @@ type Device = {
   name: string;
 };
 
+type Turno = {
+  id: number;
+  name: string;
+  horaInicio: string;
+  horaFinal: string;
+};
+
 async function requestApi<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, init);
   if (!response.ok) {
@@ -67,6 +74,7 @@ export function AdminCrudScreen() {
   const [setores, setSetores] = useState<Setor[]>([]);
   const [machines, setMachines] = useState<Machine[]>([]);
   const [devices, setDevices] = useState<Device[]>([]);
+  const [turnos, setTurnos] = useState<Turno[]>([]);
 
   const [newFabricaName, setNewFabricaName] = useState('');
   const [newMiniFabricaName, setNewMiniFabricaName] = useState('');
@@ -76,11 +84,15 @@ export function AdminCrudScreen() {
   const [newMachineName, setNewMachineName] = useState('');
   const [newMachineDeviceId, setNewMachineDeviceId] = useState<number | ''>('');
   const [newMachineSetorId, setNewMachineSetorId] = useState<number | ''>('');
+  const [newTurnoName, setNewTurnoName] = useState('');
+  const [newTurnoHoraInicio, setNewTurnoHoraInicio] = useState('');
+  const [newTurnoHoraFinal, setNewTurnoHoraFinal] = useState('');
 
   const [editingFabrica, setEditingFabrica] = useState<Fabrica | null>(null);
   const [editingMiniFabrica, setEditingMiniFabrica] = useState<MiniFabrica | null>(null);
   const [editingSetor, setEditingSetor] = useState<Setor | null>(null);
   const [editingMachine, setEditingMachine] = useState<Machine | null>(null);
+  const [editingTurno, setEditingTurno] = useState<Turno | null>(null);
 
   const fabricaById = useMemo(() => {
     const map = new Map<number, string>();
@@ -107,18 +119,20 @@ export function AdminCrudScreen() {
   }, [devices]);
 
   const loadAll = async () => {
-    const [fabricaData, miniData, setorData, machineData, deviceData] = await Promise.all([
+    const [fabricaData, miniData, setorData, machineData, deviceData, turnoData] = await Promise.all([
       requestApi<Fabrica[]>('/api/fabricas'),
       requestApi<MiniFabrica[]>('/api/mini-fabricas'),
       requestApi<Setor[]>('/api/setores'),
       requestApi<Machine[]>('/api/machines'),
       requestApi<Device[]>('/api/devices'),
+      requestApi<Turno[]>('/api/turnos'),
     ]);
     setFabricas(fabricaData);
     setMiniFabricas(miniData);
     setSetores(setorData);
     setMachines(machineData);
     setDevices(deviceData);
+    setTurnos(turnoData);
   };
 
   useEffect(() => {
@@ -218,6 +232,25 @@ export function AdminCrudScreen() {
     }, 'Machine criada');
   };
 
+
+  const onCreateTurno = async (e: FormEvent) => {
+    e.preventDefault();
+    await withMutation(async () => {
+      await requestApi<Turno>('/api/turnos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newTurnoName,
+          horaInicio: newTurnoHoraInicio,
+          horaFinal: newTurnoHoraFinal,
+        }),
+      });
+      setNewTurnoName('');
+      setNewTurnoHoraInicio('');
+      setNewTurnoHoraFinal('');
+    }, 'Turno criado');
+  };
+
   const removeItem = async (url: string, successText: string) => {
     await withMutation(async () => {
       await requestApi<void>(url, { method: 'DELETE' });
@@ -290,6 +323,25 @@ export function AdminCrudScreen() {
     }, 'Machine atualizada');
   };
 
+
+  const onSaveTurno = async () => {
+    if (!editingTurno) {
+      return;
+    }
+    await withMutation(async () => {
+      await requestApi<Turno>(`/api/turnos/${editingTurno.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: editingTurno.name,
+          horaInicio: editingTurno.horaInicio,
+          horaFinal: editingTurno.horaFinal,
+        }),
+      });
+      setEditingTurno(null);
+    }, 'Turno atualizado');
+  };
+
   return (
     <div className="space-y-4">
       <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
@@ -343,10 +395,10 @@ export function AdminCrudScreen() {
                   </tr>
                 </thead>
                 <tbody>
-                  {fabricas.map((row) => {
+                  {fabricas.map((row, index) => {
                     const editing = editingFabrica?.id === row.id;
                     return (
-                      <tr key={row.id} className="border-t border-slate-100">
+                      <tr key={row.id} className={`border-t border-slate-200 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-200'} hover:bg-blue-100`}>
                         <td className="py-2 pr-2 text-slate-700">{row.id}</td>
                         <td className="py-2 pr-2">
                           {editing ? (
@@ -429,10 +481,10 @@ export function AdminCrudScreen() {
                   </tr>
                 </thead>
                 <tbody>
-                  {miniFabricas.map((row) => {
+                  {miniFabricas.map((row, index) => {
                     const editing = editingMiniFabrica?.id === row.id;
                     return (
-                      <tr key={row.id} className="border-t border-slate-100">
+                      <tr key={row.id} className={`border-t border-slate-200 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-200'} hover:bg-blue-100`}>
                         <td className="py-2 pr-2">{row.id}</td>
                         <td className="py-2 pr-2">
                           {editing ? (
@@ -532,10 +584,10 @@ export function AdminCrudScreen() {
                   </tr>
                 </thead>
                 <tbody>
-                  {setores.map((row) => {
+                  {setores.map((row, index) => {
                     const editing = editingSetor?.id === row.id;
                     return (
-                      <tr key={row.id} className="border-t border-slate-100">
+                      <tr key={row.id} className={`border-t border-slate-200 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-200'} hover:bg-blue-100`}>
                         <td className="py-2 pr-2">{row.id}</td>
                         <td className="py-2 pr-2">
                           {editing ? (
@@ -598,6 +650,116 @@ export function AdminCrudScreen() {
 
           <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
             <div className="mb-3 flex items-center gap-2">
+              <Clock3 className="h-4 w-4 text-violet-600" />
+              <h3 className="font-semibold text-slate-900">Turno</h3>
+            </div>
+            <form onSubmit={onCreateTurno} className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
+              <input
+                value={newTurnoName}
+                onChange={(e) => setNewTurnoName(e.target.value)}
+                placeholder="Nome do turno"
+                className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+              />
+              <input
+                type="time"
+                value={newTurnoHoraInicio}
+                onChange={(e) => setNewTurnoHoraInicio(e.target.value)}
+                className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+              />
+              <input
+                type="time"
+                value={newTurnoHoraFinal}
+                onChange={(e) => setNewTurnoHoraFinal(e.target.value)}
+                className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+              />
+              <button disabled={isSaving} className="rounded-md bg-violet-600 px-3 py-2 text-sm font-medium text-white sm:col-span-3">
+                Criar
+              </button>
+            </form>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead>
+                  <tr className="text-left text-slate-600">
+                    <th className="pb-2 pr-2">ID</th>
+                    <th className="pb-2 pr-2">Nome</th>
+                    <th className="pb-2 pr-2">Hora Inicio</th>
+                    <th className="pb-2 pr-2">Hora Final</th>
+                    <th className="pb-2 text-right">Acoes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {turnos.map((row, index) => {
+                    const editing = editingTurno?.id === row.id;
+                    return (
+                      <tr key={row.id} className={`border-t border-slate-200 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-200'} hover:bg-blue-100`}>
+                        <td className="py-2 pr-2">{row.id}</td>
+                        <td className="py-2 pr-2">
+                          {editing ? (
+                            <input
+                              value={editingTurno.name}
+                              onChange={(e) => setEditingTurno({ ...editingTurno, name: e.target.value })}
+                              className="w-full rounded-md border border-slate-300 px-2 py-1"
+                            />
+                          ) : (
+                            row.name
+                          )}
+                        </td>
+                        <td className="py-2 pr-2">
+                          {editing ? (
+                            <input
+                              type="time"
+                              value={editingTurno.horaInicio?.slice(0, 5) ?? ''}
+                              onChange={(e) => setEditingTurno({ ...editingTurno, horaInicio: e.target.value })}
+                              className="rounded-md border border-slate-300 px-2 py-1"
+                            />
+                          ) : (
+                            row.horaInicio
+                          )}
+                        </td>
+                        <td className="py-2 pr-2">
+                          {editing ? (
+                            <input
+                              type="time"
+                              value={editingTurno.horaFinal?.slice(0, 5) ?? ''}
+                              onChange={(e) => setEditingTurno({ ...editingTurno, horaFinal: e.target.value })}
+                              className="rounded-md border border-slate-300 px-2 py-1"
+                            />
+                          ) : (
+                            row.horaFinal
+                          )}
+                        </td>
+                        <td className="py-2 text-right">
+                          <div className="inline-flex gap-1">
+                            {editing ? (
+                              <>
+                                <button type="button" onClick={onSaveTurno} className="rounded p-1 text-emerald-700 hover:bg-emerald-50">
+                                  <Save className="h-4 w-4" />
+                                </button>
+                                <button type="button" onClick={() => setEditingTurno(null)} className="rounded p-1 text-slate-600 hover:bg-slate-100">
+                                  <X className="h-4 w-4" />
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button type="button" onClick={() => setEditingTurno(row)} className="rounded p-1 text-blue-700 hover:bg-blue-50">
+                                  <Pencil className="h-4 w-4" />
+                                </button>
+                                <button type="button" onClick={() => removeItem(`/api/turnos/${row.id}`, 'Turno removido')} className="rounded p-1 text-red-700 hover:bg-red-50">
+                                  <Trash2 className="h-4 w-4" />
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </section>
+          <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="mb-3 flex items-center gap-2">
               <Cog className="h-4 w-4 text-emerald-600" />
               <h3 className="font-semibold text-slate-900">Machine</h3>
             </div>
@@ -648,10 +810,10 @@ export function AdminCrudScreen() {
                   </tr>
                 </thead>
                 <tbody>
-                  {machines.map((row) => {
+                  {machines.map((row, index) => {
                     const editing = editingMachine?.id === row.id;
                     return (
-                      <tr key={row.id} className="border-t border-slate-100">
+                      <tr key={row.id} className={`border-t border-slate-200 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-200'} hover:bg-blue-100`}>
                         <td className="py-2 pr-2">{row.id}</td>
                         <td className="py-2 pr-2">
                           {editing ? (
@@ -733,3 +895,4 @@ export function AdminCrudScreen() {
     </div>
   );
 }
+

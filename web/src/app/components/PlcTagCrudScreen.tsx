@@ -226,10 +226,10 @@ export function PlcTagCrudScreen() {
             </tr>
           </thead>
           <tbody>
-            {devices.map((row) => {
+            {devices.map((row, index) => {
               const editing = editingDevice?.id === row.id;
               return (
-                <tr key={row.id} className="border-t border-slate-100">
+                <tr key={row.id} className={`border-t border-slate-200 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-200'} hover:bg-blue-100`}>
                   <td className="py-2 pr-2">{row.id}</td>
                   <td className="py-2 pr-2">
                     {editing ? <input value={editingDevice.mnemonic} onChange={(e) => setEditingDevice({ ...editingDevice, mnemonic: e.target.value })} className="w-24 rounded border border-slate-300 px-2 py-1" /> : row.mnemonic}
@@ -313,10 +313,10 @@ export function PlcTagCrudScreen() {
             </tr>
           </thead>
           <tbody>
-            {memories.map((row) => {
+            {memories.map((row, index) => {
               const editing = editingMemory?.id === row.id;
               return (
-                <tr key={row.id} className="border-t border-slate-100">
+                <tr key={row.id} className={`border-t border-slate-200 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-200'} hover:bg-blue-100`}>
                   <td className="py-2 pr-2">{row.id}</td>
                   <td className="py-2 pr-2">
                     {editing ? (
@@ -422,10 +422,10 @@ export function PlcTagCrudScreen() {
             </tr>
           </thead>
           <tbody>
-            {tags.map((row) => {
+            {tags.map((row, index) => {
               const editing = editingTag?.id === row.id;
               return (
-                <tr key={row.id} className="border-t border-slate-100">
+                <tr key={row.id} className={`border-t border-slate-200 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-200'} hover:bg-blue-100`}>
                   <td className="py-2 pr-2">{row.id}</td>
                   <td className="py-2 pr-2">
                     {editing ? <input value={editingTag.name} onChange={(e) => setEditingTag({ ...editingTag, name: e.target.value })} className="w-36 rounded border border-slate-300 px-2 py-1" /> : row.name}
@@ -534,3 +534,5 @@ export function PlcTagCrudScreen() {
     </div>
   );
 }
+
+

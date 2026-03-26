@@ -24062,3 +24062,19 @@ org.ctrl.comm.MaximumNumberOfRetriesReachedException:  Maximum number of retries
 [2026-03-23 06:53:20] Comunicacao serial compartilhada conectada na porta COM1.
 [2026-03-23 06:53:41] Leitura DM manual salva em banco para device PRENSA: blocos=2, historico=11, current-only=0.
 [2026-03-23 06:53:43] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 28.
+[2026-03-23 22:35:03] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-23 22:35:47] Falha no scanner DM manual: MaximumNumberOfRetriesReachedException -  Maximum number of retries reached: 3 for:  dev:Manual DM id: 0 cmd: RD val: [51, 48, 48, 48, 48, 48, 48, 49] / 30000001
+org.ctrl.comm.MaximumNumberOfRetriesReachedException:  Maximum number of retries reached: 3 for:  dev:Manual DM id: 0 cmd: RD val: [51, 48, 48, 48, 48, 48, 48, 49] / 30000001
+	at org.ctrl.vend.omron.toolbus.ToolbusProtocol.write(ToolbusProtocol.java:160)
+	at org.ctrl.comm.AbstractComHandler.send(AbstractComHandler.java:159)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$14(CollectorMultPlcAplication.java:658)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+
+[2026-03-23 22:35:47] Comunicacao serial compartilhada encerrada.
+[2026-03-23 22:35:50] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-23 22:36:03] Leitura DM manual salva em banco para device PRENSA: blocos=2, historico=11, current-only=0.
+[2026-03-23 22:36:05] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 28.
+[2026-03-24 07:00:36] Leitura DM manual salva em banco para device PRENSA: blocos=1, historico=6, current-only=0.
+[2026-03-24 07:00:37] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 15.
+[2026-03-24 18:34:31] Leitura DM manual salva em banco para device PRENSA: blocos=1, historico=6, current-only=0.
+[2026-03-24 18:34:32] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 15.
