@@ -42,6 +42,13 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- Postgres driver pinned to patched version for CVE-2024-1597 -->
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>42.7.2</version>
+            </dependency>
+
             <!-- JUnit Jupiter -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
@@ -64,6 +71,8 @@
                     <version>3.13.0</version>
                     <configuration>
                         <release>${java.version}</release>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
                     </configuration>
                 </plugin>
 
