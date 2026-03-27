@@ -68,14 +68,10 @@ CREATE TABLE memory_value_current (
 CREATE TABLE tag (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE CASCADE,
+    machine_id BIGINT NOT NULL REFERENCES machine(id) ON DELETE RESTRICT,
     memory_id INTEGER NOT NULL REFERENCES memory(id) ON DELETE CASCADE,
     persist_history BOOLEAN NOT NULL DEFAULT true,
-    CONSTRAINT fk_tag_memory_same_device
-        FOREIGN KEY (memory_id, device_id)
-        REFERENCES memory(id, device_id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+    CONSTRAINT uq_tag_machine_name UNIQUE (machine_id, name)
 );
 
 CREATE TABLE machine (
@@ -157,9 +153,9 @@ CREATE UNIQUE INDEX idx_memory_id_device ON memory(id, device_id);
 CREATE INDEX idx_memory_value_memory ON memory_value(memory_id);
 CREATE INDEX idx_memory_value_updated_at ON memory_value(updated_at);
 CREATE INDEX idx_memory_value_current_updated_at ON memory_value_current(updated_at);
-CREATE UNIQUE INDEX idx_tag_device_name ON tag(device_id, name);
+CREATE UNIQUE INDEX idx_tag_machine_name ON tag(machine_id, name);
 CREATE UNIQUE INDEX idx_tag_memory_unique ON tag(memory_id);
-CREATE INDEX idx_tag_device ON tag(device_id);
+CREATE INDEX idx_tag_machine ON tag(machine_id);
 CREATE INDEX idx_tag_memory ON tag(memory_id);
 CREATE INDEX idx_mini_fabrica_fabrica ON mini_fabrica(fabrica_id);
 CREATE INDEX idx_mini_fabrica_setor_mini_fabrica ON mini_fabrica_setor(mini_fabrica_id);

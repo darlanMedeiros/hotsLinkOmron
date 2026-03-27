@@ -22,17 +22,21 @@ type Memory = {
   address: number;
 };
 
-type TagCrud = {
+type Machine = {
   id: number;
   name: string;
   deviceId: number;
+};
+
+type TagCrud = {
+  id: number;
+  name: string;
+  machineId: number;
   memoryId: number;
   persistHistory: boolean;
 };
 
 type SectionKey = 'device' | 'memory' | 'tag';
-
-
 
 export function PlcTagCrudScreen() {
   const [isLoading, setIsLoading] = useState(true);
@@ -47,6 +51,7 @@ export function PlcTagCrudScreen() {
   const [activeSection, setActiveSection] = useState<SectionKey>('device');
 
   const [devices, setDevices] = useState<Device[]>([]);
+  const [machines, setMachines] = useState<Machine[]>([]);
   const [memories, setMemories] = useState<Memory[]>([]);
   const [tags, setTags] = useState<TagCrud[]>([]);
 
@@ -60,7 +65,7 @@ export function PlcTagCrudScreen() {
   const [newMemoryAddress, setNewMemoryAddress] = useState<number | ''>('');
 
   const [newTagName, setNewTagName] = useState('');
-  const [newTagDeviceId, setNewTagDeviceId] = useState<number | ''>('');
+  const [newTagMachineId, setNewTagMachineId] = useState<number | ''>('');
   const [newTagMemoryId, setNewTagMemoryId] = useState<number | ''>('');
   const [newTagPersistHistory, setNewTagPersistHistory] = useState(true);
 
@@ -69,16 +74,21 @@ export function PlcTagCrudScreen() {
   const [editingTag, setEditingTag] = useState<TagCrud | null>(null);
 
   const availableMemoriesForNewTag = useMemo(() => {
-    if (newTagDeviceId === '') {
+    if (newTagMachineId === '') {
       return [] as Memory[];
     }
-    return memories.filter((m) => m.deviceId === Number(newTagDeviceId));
-  }, [memories, newTagDeviceId]);
+    const machine = machines.find((mc) => mc.id === Number(newTagMachineId));
+    if (!machine) {
+      return [] as Memory[];
+    }
+    return memories.filter((m) => m.deviceId === machine.deviceId);
+  }, [machines, memories, newTagMachineId]);
 
   const loadAll = async (): Promise<string[]> => {
     const failures: string[] = [];
-    const [devicesRes, memoriesRes, tagsRes] = await Promise.allSettled([
+    const [devicesRes, machinesRes, memoriesRes, tagsRes] = await Promise.allSettled([
       requestApi<Device[]>('/api/devices'),
+      requestApi<Machine[]>('/api/machines'),
       requestApi<Memory[]>('/api/memories'),
       requestApi<TagCrud[]>('/api/tags'),
     ]);
@@ -87,6 +97,12 @@ export function PlcTagCrudScreen() {
       setDevices(devicesRes.value);
     } else {
       failures.push(`Device: ${devicesRes.reason instanceof Error ? devicesRes.reason.message : 'erro'}`);
+    }
+
+    if (machinesRes.status === 'fulfilled') {
+      setMachines(machinesRes.value);
+    } else {
+      failures.push(`Machine: ${machinesRes.reason instanceof Error ? machinesRes.reason.message : 'erro'}`);
     }
 
     if (memoriesRes.status === 'fulfilled') {
@@ -154,6 +170,11 @@ export function PlcTagCrudScreen() {
   const deviceLabel = (id: number) => {
     const found = devices.find((d) => d.id === id);
     return found ? `${found.mnemonic} (${id})` : `ID ${id}`;
+  };
+
+  const machineLabel = (id: number) => {
+    const found = machines.find((mc) => mc.id === id);
+    return found ? `${found.name} (${id})` : `ID ${id}`;
   };
 
   const memoryLabel = (id: number) => {
@@ -352,13 +373,13 @@ export function PlcTagCrudScreen() {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 name: newTagName,
-                deviceId: Number(newTagDeviceId),
+                machineId: Number(newTagMachineId),
                 memoryId: Number(newTagMemoryId),
                 persistHistory: newTagPersistHistory,
               }),
             });
             setNewTagName('');
-            setNewTagDeviceId('');
+            setNewTagMachineId('');
             setNewTagMemoryId('');
             setNewTagPersistHistory(true);
           }, 'Tag criada');
@@ -367,18 +388,18 @@ export function PlcTagCrudScreen() {
       >
         <input value={newTagName} onChange={(e) => setNewTagName(e.target.value)} placeholder="Nome da tag" className="rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-3" />
         <select
-          value={newTagDeviceId}
+          value={newTagMachineId}
           onChange={(e) => {
-            setNewTagDeviceId(e.target.value ? Number(e.target.value) : '');
+            setNewTagMachineId(e.target.value ? Number(e.target.value) : '');
             setNewTagMemoryId('');
           }}
           className="rounded-md border border-slate-300 px-3 py-2 text-sm"
         >
-          <option value="">Device</option>
-          {devices.map((d) => <option key={d.id} value={d.id}>{d.mnemonic} ({d.id})</option>)}
+          <option value="">Machine</option>
+          {machines.map((mc) => <option key={mc.id} value={mc.id}>{mc.name} ({mc.id})</option>)}
         </select>
         <select value={newTagMemoryId} onChange={(e) => setNewTagMemoryId(e.target.value ? Number(e.target.value) : '')} className="rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-2">
-          <option value="">{newTagDeviceId === '' ? 'Selecione o device antes' : 'Memory'}</option>
+          <option value="">{newTagMachineId === '' ? 'Selecione a machine antes' : 'Memory'}</option>
           {availableMemoriesForNewTag.map((m) => <option key={m.id} value={m.id}>{m.name} ({m.id})</option>)}
         </select>
         <label className="flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-3">
@@ -397,7 +418,7 @@ export function PlcTagCrudScreen() {
             <tr className="text-left text-slate-600">
               <th className="pb-2 pr-2">ID</th>
               <th className="pb-2 pr-2">Nome</th>
-              <th className="pb-2 pr-2">Device</th>
+              <th className="pb-2 pr-2">Machine</th>
               <th className="pb-2 pr-2">Memory</th>
               <th className="pb-2 pr-2">Persist.</th>
               <th className="pb-2 text-right">Acoes</th>
@@ -414,16 +435,28 @@ export function PlcTagCrudScreen() {
                   </td>
                   <td className="py-2 pr-2">
                     {editing ? (
-                      <select value={editingTag.deviceId} onChange={(e) => setEditingTag({ ...editingTag, deviceId: Number(e.target.value) })} className="rounded border border-slate-300 px-2 py-1">
-                        {devices.map((d) => <option key={d.id} value={d.id}>{d.mnemonic} ({d.id})</option>)}
+                      <select
+                        value={editingTag.machineId}
+                        onChange={(e) => {
+                          const nextMachineId = Number(e.target.value);
+                          const nextMachine = machines.find((mc) => mc.id === nextMachineId);
+                          const nextMemory = memories.find((m) => m.deviceId === nextMachine?.deviceId);
+                          setEditingTag({ ...editingTag, machineId: nextMachineId, memoryId: nextMemory?.id ?? editingTag.memoryId });
+                        }}
+                        className="rounded border border-slate-300 px-2 py-1"
+                      >
+                        {machines.map((mc) => <option key={mc.id} value={mc.id}>{mc.name} ({mc.id})</option>)}
                       </select>
-                    ) : deviceLabel(row.deviceId)}
+                    ) : machineLabel(row.machineId)}
                   </td>
                   <td className="py-2 pr-2">
                     {editing ? (
                       <select value={editingTag.memoryId} onChange={(e) => setEditingTag({ ...editingTag, memoryId: Number(e.target.value) })} className="rounded border border-slate-300 px-2 py-1">
                         {memories
-                          .filter((m) => m.deviceId === editingTag.deviceId)
+                          .filter((m) => {
+                            const machine = machines.find((mc) => mc.id === editingTag.machineId);
+                            return !!machine && m.deviceId === machine.deviceId;
+                          })
                           .map((m) => <option key={m.id} value={m.id}>{m.name} ({m.id})</option>)}
                       </select>
                     ) : memoryLabel(row.memoryId)}
@@ -516,5 +549,3 @@ export function PlcTagCrudScreen() {
     </div>
   );
 }
-
-

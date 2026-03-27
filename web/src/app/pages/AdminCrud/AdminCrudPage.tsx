@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Building2, Cog, Clock3, Layers3, Map as MapIcon } from 'lucide-react';
 import { Fabrica, MiniFabrica, Setor, Machine, Device, Turno, ViewMessage } from './types';
 import { requestApi } from '../../../services/api';
 
@@ -8,10 +9,13 @@ import { SetorSection } from './SetorSection';
 import { TurnoSection } from './TurnoSection';
 import { MachineSection } from './MachineSection';
 
+type SectionKey = 'fabrica' | 'mini_fabrica' | 'setor' | 'turno' | 'machine';
+
 export function AdminCrudPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<ViewMessage | null>(null);
+  const [activeSection, setActiveSection] = useState<SectionKey>('fabrica');
 
   const [fabricas, setFabricas] = useState<Fabrica[]>([]);
   const [miniFabricas, setMiniFabricas] = useState<MiniFabrica[]>([]);
@@ -19,6 +23,14 @@ export function AdminCrudPage() {
   const [machines, setMachines] = useState<Machine[]>([]);
   const [devices, setDevices] = useState<Device[]>([]);
   const [turnos, setTurnos] = useState<Turno[]>([]);
+
+  const sections: { key: SectionKey; label: string; icon: JSX.Element }[] = [
+    { key: 'fabrica', label: 'Fabricas', icon: <Building2 className="h-4 w-4 text-blue-600" /> },
+    { key: 'mini_fabrica', label: 'Mini Fabricas', icon: <Layers3 className="h-4 w-4 text-indigo-600" /> },
+    { key: 'setor', label: 'Setores', icon: <MapIcon className="h-4 w-4 text-amber-600" /> },
+    { key: 'turno', label: 'Turnos', icon: <Clock3 className="h-4 w-4 text-violet-600" /> },
+    { key: 'machine', label: 'Machines', icon: <Cog className="h-4 w-4 text-emerald-600" /> },
+  ];
 
   const fabricaById = useMemo(() => {
     const map = new Map<number, string>();
@@ -108,12 +120,77 @@ export function AdminCrudPage() {
     }, successText);
   };
 
+  const renderSection = () => {
+    if (activeSection === 'fabrica') {
+      return (
+        <FabricaSection
+          fabricas={fabricas}
+          isSaving={isSaving}
+          withMutation={withMutation}
+          removeItem={removeItem}
+        />
+      );
+    }
+
+    if (activeSection === 'mini_fabrica') {
+      return (
+        <MiniFabricaSection
+          miniFabricas={miniFabricas}
+          fabricas={fabricas}
+          setores={setores}
+          fabricaById={fabricaById}
+          setorById={setorById}
+          isSaving={isSaving}
+          withMutation={withMutation}
+          removeItem={removeItem}
+        />
+      );
+    }
+
+    if (activeSection === 'setor') {
+      return (
+        <SetorSection
+          setores={setores}
+          isSaving={isSaving}
+          withMutation={withMutation}
+          removeItem={removeItem}
+        />
+      );
+    }
+
+    if (activeSection === 'turno') {
+      return (
+        <TurnoSection
+          turnos={turnos}
+          isSaving={isSaving}
+          withMutation={withMutation}
+          removeItem={removeItem}
+        />
+      );
+    }
+
+    return (
+      <MachineSection
+        machines={machines}
+        devices={devices}
+        miniFabricas={miniFabricas}
+        setores={setores}
+        miniFabricaById={miniFabricaById}
+        deviceById={deviceById}
+        setorById={setorById}
+        isSaving={isSaving}
+        withMutation={withMutation}
+        removeItem={removeItem}
+      />
+    );
+  };
+
   return (
     <div className="space-y-4">
       <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-900">Cadastro de estrutura</h2>
+        <h2 className="text-lg font-semibold text-slate-900">Cadastro de Estrutura</h2>
         <p className="text-sm text-slate-600">
-          Gerencie Fabrica, Mini Fabrica, Setor e Machine com operacoes de criar, editar, excluir e consultar.
+          Gerencie Fabrica, Mini Fabrica, Setor, Turno e Machine para estruturar a linha de producao.
         </p>
       </div>
 
@@ -134,47 +211,26 @@ export function AdminCrudPage() {
           Carregando dados...
         </div>
       ) : (
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-          <FabricaSection
-            fabricas={fabricas}
-            isSaving={isSaving}
-            withMutation={withMutation}
-            removeItem={removeItem}
-          />
-          <MiniFabricaSection
-            miniFabricas={miniFabricas}
-            fabricas={fabricas}
-            setores={setores}
-            fabricaById={fabricaById}
-            setorById={setorById}
-            isSaving={isSaving}
-            withMutation={withMutation}
-            removeItem={removeItem}
-          />
-          <SetorSection
-            setores={setores}
-            isSaving={isSaving}
-            withMutation={withMutation}
-            removeItem={removeItem}
-          />
-          <TurnoSection
-            turnos={turnos}
-            isSaving={isSaving}
-            withMutation={withMutation}
-            removeItem={removeItem}
-          />
-          <MachineSection
-            machines={machines}
-            devices={devices}
-            miniFabricas={miniFabricas}
-            setores={setores}
-            miniFabricaById={miniFabricaById}
-            deviceById={deviceById}
-            setorById={setorById}
-            isSaving={isSaving}
-            withMutation={withMutation}
-            removeItem={removeItem}
-          />
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center gap-2 rounded-lg border border-slate-200 bg-white/80 p-3 shadow-sm">
+            {sections.map((section) => (
+              <button
+                key={section.key}
+                type="button"
+                onClick={() => setActiveSection(section.key)}
+                className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition ${
+                  activeSection === section.key
+                    ? 'bg-slate-900 text-white'
+                    : 'text-slate-700 hover:bg-slate-100'
+                }`}
+              >
+                {section.icon}
+                {section.label}
+              </button>
+            ))}
+          </div>
+
+          {renderSection()}
         </div>
       )}
     </div>

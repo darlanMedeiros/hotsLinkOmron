@@ -39,11 +39,15 @@ public class TagService {
             "SET name = EXCLUDED.name, address = EXCLUDED.address " +
             "RETURNING id";
 
+    private static final String SQL_FIND_MACHINE_BY_DEVICE =
+            "SELECT id FROM public.machine WHERE device_id = :deviceId ORDER BY id LIMIT 1";
+
     private static final String SQL_FIND_CURRENT_BY_TAG =
             "SELECT t.name AS tag_name, m.name AS memory_name, d.mnemonic AS device_mnemonic, " +
             "mvc.value, mvc.updated_at " +
             "FROM public.tag t " +
-            "JOIN public.device d ON d.id = t.device_id " +
+            "JOIN public.machine mc ON mc.id = t.machine_id " +
+            "JOIN public.device d ON d.id = mc.device_id " +
             "JOIN public.memory m ON m.id = t.memory_id " +
             "JOIN public.memory_value_current mvc ON mvc.memory_id = m.id " +
             "WHERE d.mnemonic = :mnemonic AND t.name = :tagName";
@@ -52,7 +56,8 @@ public class TagService {
             "SELECT t.name AS tag_name, m.name AS memory_name, d.mnemonic AS device_mnemonic, " +
             "mvc.value, mvc.updated_at " +
             "FROM public.tag t " +
-            "JOIN public.device d ON d.id = t.device_id " +
+            "JOIN public.machine mc ON mc.id = t.machine_id " +
+            "JOIN public.device d ON d.id = mc.device_id " +
             "JOIN public.memory m ON m.id = t.memory_id " +
             "LEFT JOIN public.memory_value_current mvc ON mvc.memory_id = m.id " +
             "WHERE t.name = :tagName " +
@@ -72,6 +77,7 @@ public class TagService {
     private final @NonNull RowMapper<TagValue> tagValueMapper = this::mapTagValue;
     private final Map<String, Integer> memoryIdCache = new HashMap<>();
     private Integer cachedDeviceId = null;
+    private Integer cachedMachineId = null;
     private String cachedMnemonic = null;
 
     public TagService(TagRepository repository, JdbcTemplate jdbcTemplate) {
@@ -83,16 +89,17 @@ public class TagService {
     public Tag createTag(DeviceInfo device, String tagName, String memoryName) {
         Objects.requireNonNull(device, "device");
         int deviceId = ensureDevice(device.getMnemonic(), device.getName(), device.getDescription());
+        int machineId = ensureMachine(deviceId, device.getMnemonic());
         int memoryId = ensureMemory(deviceId, memoryName);
-        return repository.create(tagName, deviceId, memoryId);
+        return repository.create(tagName, machineId, memoryId);
     }
 
     public Tag getOrCreateTag(DeviceInfo device, String tagName, String memoryName) {
         Objects.requireNonNull(device, "device");
         int deviceId = ensureDevice(device.getMnemonic(), device.getName(), device.getDescription());
+        int machineId = ensureMachine(deviceId, device.getMnemonic());
         int memoryId = ensureMemory(deviceId, memoryName);
-        // Upsert by (device_id, tag name). If address/memory changes, mapping is updated.
-        return repository.create(tagName, deviceId, memoryId);
+        return repository.create(tagName, machineId, memoryId);
     }
 
     public Tag createDmTag(DeviceInfo device, String tagName, int address) {
@@ -161,9 +168,24 @@ public class TagService {
             throw new IllegalStateException("Device id was null for mnemonic " + mnemonic);
         }
         cachedDeviceId = id;
+        cachedMachineId = null;
         cachedMnemonic = mnemonic;
         memoryIdCache.clear();
         return id.intValue();
+    }
+
+    private int ensureMachine(int deviceId, String mnemonic) {
+        if (cachedMachineId != null && cachedDeviceId != null && cachedDeviceId.intValue() == deviceId) {
+            return cachedMachineId.intValue();
+        }
+
+        MapSqlParameterSource params = new MapSqlParameterSource().addValue("deviceId", deviceId);
+        Integer machineId = namedTemplate.query(SQL_FIND_MACHINE_BY_DEVICE, params, rs -> rs.next() ? rs.getInt("id") : null);
+        if (machineId == null) {
+            throw new IllegalStateException("No machine found for device mnemonic " + mnemonic);
+        }
+        cachedMachineId = machineId;
+        return machineId.intValue();
     }
 
     private int ensureMemory(int deviceId, String name) {

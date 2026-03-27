@@ -62,7 +62,6 @@ export const MemorySearch: React.FC = () => {
   const [selectedMiniFabricaId, setSelectedMiniFabricaId] = useState('');
   const [selectedSetorId, setSelectedSetorId] = useState('');
   const [selectedMachineId, setSelectedMachineId] = useState('');
-  const [selectedStructuredDeviceId, setSelectedStructuredDeviceId] = useState('');
 
   const [selectedMnemonic, setSelectedMnemonic] = useState<string>('');
   const [selectedTag, setSelectedTag] = useState('');
@@ -192,17 +191,7 @@ export const MemorySearch: React.FC = () => {
     return machines.filter((row) => row.setorId === setorId && row.miniFabricaId === miniFabricaId);
   }, [machines, selectedSetorId, selectedMiniFabricaId]);
 
-  const filteredDevices = useMemo(() => {
-    const machineId = Number(selectedMachineId);
-    if (!machineId) {
-      return [];
-    }
-    const selectedMachine = machines.find((row) => row.id === machineId);
-    if (!selectedMachine) {
-      return [];
-    }
-    return devices.filter((row) => row.id === selectedMachine.deviceId);
-  }, [machines, devices, selectedMachineId]);
+
 
   const selectedTurno = useMemo(() => {
     const id = Number(selectedTurnoId);
@@ -328,7 +317,6 @@ export const MemorySearch: React.FC = () => {
     setSelectedMiniFabricaId('');
     setSelectedSetorId('');
     setSelectedMachineId('');
-    setSelectedStructuredDeviceId('');
     setSelectedMnemonic('');
   };
 
@@ -336,30 +324,23 @@ export const MemorySearch: React.FC = () => {
     setSelectedMiniFabricaId(value);
     setSelectedSetorId('');
     setSelectedMachineId('');
-    setSelectedStructuredDeviceId('');
     setSelectedMnemonic('');
   };
 
   const onSetorChange = (value: string) => {
     setSelectedSetorId(value);
     setSelectedMachineId('');
-    setSelectedStructuredDeviceId('');
     setSelectedMnemonic('');
   };
 
   const onMachineChange = (value: string) => {
     setSelectedMachineId(value);
-    setSelectedStructuredDeviceId('');
-    setSelectedMnemonic('');
-  };
-
-  const onStructuredDeviceChange = (value: string) => {
-    setSelectedStructuredDeviceId(value);
     if (!value) {
       setSelectedMnemonic('');
       return;
     }
-    const selectedById = devices.find((row) => row.id === Number(value));
+    const selectedMachine = machines.find((row) => row.id === Number(value));
+    const selectedById = devices.find((row) => row.id === selectedMachine?.deviceId);
     setSelectedMnemonic(selectedById?.mnemonic ?? '');
   };
 
@@ -522,25 +503,6 @@ export const MemorySearch: React.FC = () => {
                 </select>
               </div>
 
-              <div>
-                <label htmlFor="device-select-structure" className="mb-1 block text-sm font-medium text-slate-700">
-                  Device
-                </label>
-                <select
-                  id="device-select-structure"
-                  value={selectedStructuredDeviceId}
-                  onChange={(e) => onStructuredDeviceChange(e.target.value)}
-                  disabled={!selectedMachineId}
-                  className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none transition disabled:cursor-not-allowed disabled:bg-slate-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                >
-                  <option value="">Selecione...</option>
-                  {filteredDevices.map((device) => (
-                    <option key={device.id} value={String(device.id)}>
-                      {device.name} ({device.mnemonic})
-                    </option>
-                  ))}
-                </select>
-              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -680,4 +642,5 @@ export const MemorySearch: React.FC = () => {
 };
 
 export default MemorySearch;
+
 

@@ -16,28 +16,32 @@ import org.springframework.lang.NonNull;
 public class JdbcTagRepository implements TagRepository {
 
     private static final String SQL_INSERT =
-            "INSERT INTO public.tag (name, device_id, memory_id) " +
-            "VALUES (:name, :deviceId, :memoryId) " +
-            "ON CONFLICT (device_id, name) DO UPDATE " +
+            "INSERT INTO public.tag (name, machine_id, memory_id) " +
+            "VALUES (:name, :machineId, :memoryId) " +
+            "ON CONFLICT (machine_id, name) DO UPDATE " +
             "SET memory_id = EXCLUDED.memory_id " +
-            "RETURNING id, name, device_id, memory_id";
+            "RETURNING id, name, machine_id, memory_id";
 
     private static final String SQL_FIND_BY_ID =
-            "SELECT id, name, device_id, memory_id " +
+            "SELECT id, name, machine_id, memory_id " +
             "FROM public.tag WHERE id = ?";
 
     private static final String SQL_FIND_BY_DEVICE_NAME =
-            "SELECT id, name, device_id, memory_id " +
-            "FROM public.tag WHERE device_id = ? AND name = ?";
+            "SELECT t.id, t.name, t.machine_id, t.memory_id " +
+            "FROM public.tag t " +
+            "JOIN public.machine mc ON mc.id = t.machine_id " +
+            "WHERE mc.device_id = ? AND t.name = ?";
 
     private static final String SQL_FIND_BY_MEMORY_ID =
-            "SELECT id, name, device_id, memory_id " +
+            "SELECT id, name, machine_id, memory_id " +
             "FROM public.tag WHERE memory_id = ?";
 
     private static final String SQL_FIND_BY_DEVICE_ID =
-            "SELECT id, name, device_id, memory_id " +
-            "FROM public.tag WHERE device_id = ? " +
-            "ORDER BY name";
+            "SELECT t.id, t.name, t.machine_id, t.memory_id " +
+            "FROM public.tag t " +
+            "JOIN public.machine mc ON mc.id = t.machine_id " +
+            "WHERE mc.device_id = ? " +
+            "ORDER BY t.name";
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedTemplate;
@@ -49,10 +53,10 @@ public class JdbcTagRepository implements TagRepository {
     }
 
     @Override
-    public Tag create(String name, int deviceId, int memoryId) {
+    public Tag create(String name, long machineId, int memoryId) {
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("name", name)
-                .addValue("deviceId", deviceId)
+                .addValue("machineId", machineId)
                 .addValue("memoryId", memoryId);
         return namedTemplate.queryForObject(SQL_INSERT, params, rowMapper);
     }
@@ -91,9 +95,8 @@ public class JdbcTagRepository implements TagRepository {
             id = null;
         }
         String name = rs.getString("name");
-        int deviceId = rs.getInt("device_id");
+        long machineId = rs.getLong("machine_id");
         int memoryId = rs.getInt("memory_id");
-        return new Tag(id, name, deviceId, memoryId);
+        return new Tag(id, name, machineId, memoryId);
     }
 }
-

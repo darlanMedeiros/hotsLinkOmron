@@ -6,7 +6,7 @@ import org.ctrl.db.model.Tag;
 
 public interface TagRepository {
 
-    Tag create(String name, int deviceId, int memoryId);
+    Tag create(String name, long machineId, int memoryId);
 
     Optional<Tag> findById(int id);
 

@@ -2,8 +2,10 @@ package org.ctrl.db.api.service;
 
 import java.util.List;
 import java.util.Optional;
+import org.ctrl.db.api.model.Machine;
 import org.ctrl.db.api.model.Memory;
 import org.ctrl.db.api.model.TagCrud;
+import org.ctrl.db.api.repository.MachineRepository;
 import org.ctrl.db.api.repository.MemoryRepository;
 import org.ctrl.db.api.repository.TagCrudRepository;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,12 @@ public class TagCrudService {
 
     private final TagCrudRepository repository;
     private final MemoryRepository memoryRepository;
+    private final MachineRepository machineRepository;
 
-    public TagCrudService(TagCrudRepository repository, MemoryRepository memoryRepository) {
+    public TagCrudService(TagCrudRepository repository, MemoryRepository memoryRepository, MachineRepository machineRepository) {
         this.repository = repository;
         this.memoryRepository = memoryRepository;
+        this.machineRepository = machineRepository;
     }
 
     public List<TagCrud> findAll() {
@@ -28,19 +32,19 @@ public class TagCrudService {
         return repository.findById(id);
     }
 
-    public TagCrud create(String name, Integer deviceId, Integer memoryId, Boolean persistHistory) {
-        int validatedDeviceId = requireId(deviceId, "deviceId");
+    public TagCrud create(String name, Long machineId, Integer memoryId, Boolean persistHistory) {
+        long validatedMachineId = requireLongId(machineId, "machineId");
         int validatedMemoryId = requireId(memoryId, "memoryId");
-        ensureMemoryBelongsToDevice(validatedMemoryId, validatedDeviceId);
-        return repository.create(requireName(name), validatedDeviceId, validatedMemoryId, resolvePersistHistory(persistHistory));
+        ensureMemoryBelongsToMachineDevice(validatedMemoryId, validatedMachineId);
+        return repository.create(requireName(name), validatedMachineId, validatedMemoryId, resolvePersistHistory(persistHistory));
     }
 
-    public Optional<TagCrud> update(int id, String name, Integer deviceId, Integer memoryId, Boolean persistHistory) {
+    public Optional<TagCrud> update(int id, String name, Long machineId, Integer memoryId, Boolean persistHistory) {
         validateId(id, "id");
-        int validatedDeviceId = requireId(deviceId, "deviceId");
+        long validatedMachineId = requireLongId(machineId, "machineId");
         int validatedMemoryId = requireId(memoryId, "memoryId");
-        ensureMemoryBelongsToDevice(validatedMemoryId, validatedDeviceId);
-        return repository.update(id, requireName(name), validatedDeviceId, validatedMemoryId,
+        ensureMemoryBelongsToMachineDevice(validatedMemoryId, validatedMachineId);
+        return repository.update(id, requireName(name), validatedMachineId, validatedMemoryId,
                 resolvePersistHistory(persistHistory));
     }
 
@@ -63,17 +67,27 @@ public class TagCrudService {
         return id.intValue();
     }
 
+    private long requireLongId(Long id, String field) {
+        if (id == null || id.longValue() <= 0) {
+            throw new IllegalArgumentException(field + " must be greater than zero");
+        }
+        return id.longValue();
+    }
+
     private void validateId(int id, String field) {
         if (id <= 0) {
             throw new IllegalArgumentException(field + " must be greater than zero");
         }
     }
 
-    private void ensureMemoryBelongsToDevice(int memoryId, int deviceId) {
+    private void ensureMemoryBelongsToMachineDevice(int memoryId, long machineId) {
         Memory memory = memoryRepository.findById(memoryId)
                 .orElseThrow(() -> new IllegalArgumentException("memoryId does not exist"));
-        if (memory.getDeviceId().intValue() != deviceId) {
-            throw new IllegalArgumentException("memoryId must belong to the informed deviceId");
+        Machine machine = machineRepository.findById(machineId)
+                .orElseThrow(() -> new IllegalArgumentException("machineId does not exist"));
+
+        if (memory.getDeviceId().intValue() != machine.getDeviceId().intValue()) {
+            throw new IllegalArgumentException("memoryId must belong to the same device configured in machineId");
         }
     }
 

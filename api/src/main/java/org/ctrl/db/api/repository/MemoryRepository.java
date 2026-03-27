@@ -14,8 +14,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
-
-
 public class MemoryRepository {
 
     private static final String SQL_FIND_ALL = "SELECT m.id, m.device_id, m.name, m.address " +
@@ -76,7 +74,8 @@ public class MemoryRepository {
         String sql = "SELECT d.id AS device_id, d.mnemonic AS plc_mnemonic, t.name AS tag_name, " +
                      " m.name AS memory_name, mv.value AS value, mv.updated_at AS timestamp " +
                      "FROM public.tag t " +
-                     "JOIN public.device d ON d.id = t.device_id " +
+                     "JOIN public.machine mc ON mc.id = t.machine_id " +
+                     "JOIN public.device d ON d.id = mc.device_id " +
                      "JOIN public.memory m ON m.id = t.memory_id " +
                      "JOIN public.memory_value mv ON mv.memory_id = m.id " +
                      "WHERE d.mnemonic = ? " +
@@ -94,4 +93,3 @@ public class MemoryRepository {
         }, mnemonic);
     }
 }
-

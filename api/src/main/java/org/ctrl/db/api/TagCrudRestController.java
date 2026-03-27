@@ -38,7 +38,7 @@ public class TagCrudRestController {
     public ResponseEntity<TagCrud> create(@RequestBody TagCrudRequest request) {
         TagCrud created = service.create(
                 request == null ? null : request.getName(),
-                request == null ? null : request.getDeviceId(),
+                request == null ? null : request.getMachineId(),
                 request == null ? null : request.getMemoryId(),
                 request == null ? null : request.getPersistHistory());
         return ResponseEntity.ok(created);
@@ -49,7 +49,7 @@ public class TagCrudRestController {
         return service.update(
                 id,
                 request == null ? null : request.getName(),
-                request == null ? null : request.getDeviceId(),
+                request == null ? null : request.getMachineId(),
                 request == null ? null : request.getMemoryId(),
                 request == null ? null : request.getPersistHistory())
                 .map(ResponseEntity::ok)

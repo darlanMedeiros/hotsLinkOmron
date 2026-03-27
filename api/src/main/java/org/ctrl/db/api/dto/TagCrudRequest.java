@@ -3,7 +3,7 @@ package org.ctrl.db.api.dto;
 public class TagCrudRequest {
 
     private String name;
-    private Integer deviceId;
+    private Long machineId;
     private Integer memoryId;
     private Boolean persistHistory;
 
@@ -15,12 +15,12 @@ public class TagCrudRequest {
         this.name = name;
     }
 
-    public Integer getDeviceId() {
-        return deviceId;
+    public Long getMachineId() {
+        return machineId;
     }
 
-    public void setDeviceId(Integer deviceId) {
-        this.deviceId = deviceId;
+    public void setMachineId(Long machineId) {
+        this.machineId = machineId;
     }
 
     public Integer getMemoryId() {

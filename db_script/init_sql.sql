@@ -68,14 +68,10 @@ CREATE TABLE IF NOT EXISTS memory_value_current (
 CREATE TABLE IF NOT EXISTS tag (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE CASCADE,
+    machine_id BIGINT NOT NULL REFERENCES machine(id) ON DELETE RESTRICT,
     memory_id INTEGER NOT NULL REFERENCES memory(id) ON DELETE CASCADE,
     persist_history BOOLEAN NOT NULL DEFAULT true,
-    CONSTRAINT fk_tag_memory_same_device
-        FOREIGN KEY (memory_id, device_id)
-        REFERENCES memory(id, device_id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+    CONSTRAINT uq_tag_machine_name UNIQUE (machine_id, name)
 );
 
 CREATE TABLE IF NOT EXISTS machine (
@@ -375,6 +371,84 @@ BEGIN
     END IF;
 END $$;
 
+-- tag_machine migration
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'tag'
+          AND column_name = 'machine_id'
+    ) THEN
+        ALTER TABLE public.tag ADD COLUMN machine_id BIGINT;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'tag'
+          AND column_name = 'device_id'
+    ) THEN
+        UPDATE public.tag t
+        SET machine_id = m.id
+        FROM (
+            SELECT device_id, MIN(id) AS id
+            FROM public.machine
+            GROUP BY device_id
+        ) m
+        WHERE m.device_id = t.device_id
+          AND t.machine_id IS NULL;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    ALTER TABLE public.tag DROP CONSTRAINT IF EXISTS fk_tag_memory_same_device;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.table_constraints
+        WHERE table_schema = 'public'
+          AND table_name = 'tag'
+          AND constraint_name = 'fk_tag_machine'
+    ) THEN
+        ALTER TABLE public.tag
+            ADD CONSTRAINT fk_tag_machine
+            FOREIGN KEY (machine_id)
+            REFERENCES public.machine(id)
+            ON DELETE RESTRICT
+            NOT VALID;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    ALTER TABLE public.tag DROP CONSTRAINT IF EXISTS uq_tag_machine_name;
+    ALTER TABLE public.tag
+        ADD CONSTRAINT uq_tag_machine_name UNIQUE (machine_id, name);
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'tag'
+          AND column_name = 'device_id'
+    ) THEN
+        ALTER TABLE public.tag DROP COLUMN device_id;
+    END IF;
+END $$;
+
 CREATE INDEX IF NOT EXISTS idx_mini_fabrica_fabrica ON mini_fabrica(fabrica_id);
 CREATE INDEX IF NOT EXISTS idx_mini_fabrica_setor_mini_fabrica ON mini_fabrica_setor(mini_fabrica_id);
 CREATE INDEX IF NOT EXISTS idx_mini_fabrica_setor_setor ON mini_fabrica_setor(setor_id);
@@ -385,9 +459,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_memory_id_device ON memory(id, device_id);
 CREATE INDEX IF NOT EXISTS idx_memory_value_memory ON memory_value(memory_id);
 CREATE INDEX IF NOT EXISTS idx_memory_value_updated_at ON memory_value(updated_at);
 CREATE INDEX IF NOT EXISTS idx_memory_value_current_updated_at ON memory_value_current(updated_at);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_tag_device_name ON tag(device_id, name);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_tag_machine_name ON tag(machine_id, name);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_tag_memory_unique ON tag(memory_id);
-CREATE INDEX IF NOT EXISTS idx_tag_device ON tag(device_id);
+CREATE INDEX IF NOT EXISTS idx_tag_machine ON tag(machine_id);
 CREATE INDEX IF NOT EXISTS idx_tag_memory ON tag(memory_id);
 CREATE INDEX IF NOT EXISTS idx_machine_device ON machine(device_id);
 CREATE INDEX IF NOT EXISTS idx_machine_mini_fabrica ON machine(mini_fabrica_id);
@@ -405,37 +479,4 @@ CREATE INDEX IF NOT EXISTS idx_ppt_producao ON producao_por_turno(producao_id);
 CREATE INDEX IF NOT EXISTS idx_ppt_mini_fabrica ON producao_por_turno(mini_fabrica_id);
 CREATE INDEX IF NOT EXISTS idx_ppt_data ON producao_por_turno(data);
 CREATE INDEX IF NOT EXISTS idx_pptm_machine ON producao_por_turno_machine(machine_id);
-
-DO $$
-DECLARE
-    fk_update_type "char";
-BEGIN
-    SELECT c.confupdtype
-      INTO fk_update_type
-      FROM pg_constraint c
-      JOIN pg_class t ON t.oid = c.conrelid
-      JOIN pg_namespace n ON n.oid = t.relnamespace
-     WHERE c.conname = 'fk_tag_memory_same_device'
-       AND n.nspname = 'public'
-       AND t.relname = 'tag';
-
-    IF fk_update_type IS NULL THEN
-        ALTER TABLE public.tag
-            ADD CONSTRAINT fk_tag_memory_same_device
-            FOREIGN KEY (memory_id, device_id)
-            REFERENCES public.memory(id, device_id)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE
-            NOT VALID;
-    ELSIF fk_update_type <> 'c' THEN
-        ALTER TABLE public.tag DROP CONSTRAINT fk_tag_memory_same_device;
-        ALTER TABLE public.tag
-            ADD CONSTRAINT fk_tag_memory_same_device
-            FOREIGN KEY (memory_id, device_id)
-            REFERENCES public.memory(id, device_id)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE
-            NOT VALID;
-    END IF;
-END $$;
 
