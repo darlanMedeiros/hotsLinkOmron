@@ -38,7 +38,8 @@ public class MiniFabricaRestController {
     public ResponseEntity<MiniFabrica> create(@RequestBody MiniFabricaRequest request) {
         MiniFabrica created = service.create(
                 request == null ? null : request.getName(),
-                request == null ? null : request.getFabricaId());
+                request == null ? null : request.getFabricaId(),
+                request == null ? null : request.getSetorIds());
         return ResponseEntity.ok(created);
     }
 
@@ -47,7 +48,8 @@ public class MiniFabricaRestController {
         return service.update(
                 id,
                 request == null ? null : request.getName(),
-                request == null ? null : request.getFabricaId())
+                request == null ? null : request.getFabricaId(),
+                request == null ? null : request.getSetorIds())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

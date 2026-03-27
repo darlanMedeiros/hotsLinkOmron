@@ -39,6 +39,7 @@ public class MachineRestController {
         Machine created = service.create(
                 request == null ? null : request.getName(),
                 request == null ? null : request.getDeviceId(),
+                request == null ? null : request.getMiniFabricaId(),
                 request == null ? null : request.getSetorId());
         return ResponseEntity.ok(created);
     }
@@ -49,6 +50,7 @@ public class MachineRestController {
                 id,
                 request == null ? null : request.getName(),
                 request == null ? null : request.getDeviceId(),
+                request == null ? null : request.getMiniFabricaId(),
                 request == null ? null : request.getSetorId())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());

@@ -15,13 +15,13 @@ import org.springframework.stereotype.Repository;
 public class SetorRepository {
 
     private static final String SQL_FIND_ALL =
-            "SELECT id, name, mini_fabrica_id FROM public.setor ORDER BY id";
+            "SELECT id, name FROM public.setor ORDER BY id";
     private static final String SQL_FIND_BY_ID =
-            "SELECT id, name, mini_fabrica_id FROM public.setor WHERE id = ?";
+            "SELECT id, name FROM public.setor WHERE id = ?";
     private static final String SQL_INSERT =
-            "INSERT INTO public.setor (name, mini_fabrica_id) VALUES (?, ?) RETURNING id, name, mini_fabrica_id";
+            "INSERT INTO public.setor (name) VALUES (?) RETURNING id, name";
     private static final String SQL_UPDATE =
-            "UPDATE public.setor SET name = ?, mini_fabrica_id = ? WHERE id = ? RETURNING id, name, mini_fabrica_id";
+            "UPDATE public.setor SET name = ? WHERE id = ? RETURNING id, name";
     private static final String SQL_DELETE =
             "DELETE FROM public.setor WHERE id = ?";
 
@@ -40,12 +40,12 @@ public class SetorRepository {
         return queryOptional(SQL_FIND_BY_ID, id);
     }
 
-    public Setor create(String name, long miniFabricaId) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), name, miniFabricaId);
+    public Setor create(String name) {
+        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), name);
     }
 
-    public Optional<Setor> update(long id, String name, long miniFabricaId) {
-        return queryOptional(SQL_UPDATE, name, miniFabricaId, id);
+    public Optional<Setor> update(long id, String name) {
+        return queryOptional(SQL_UPDATE, name, id);
     }
 
     public boolean delete(long id) {
@@ -61,7 +61,6 @@ public class SetorRepository {
     }
 
     private Setor mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new Setor(rs.getLong("id"), rs.getString("name"), rs.getLong("mini_fabrica_id"));
+        return new Setor(rs.getLong("id"), rs.getString("name"));
     }
 }
-

@@ -1,5 +1,7 @@
 package org.ctrl.db.api.service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import org.ctrl.db.api.model.MiniFabrica;
@@ -24,13 +26,13 @@ public class MiniFabricaService {
         return repository.findById(id);
     }
 
-    public MiniFabrica create(String name, Long fabricaId) {
-        return repository.create(requireName(name), requireId(fabricaId, "fabricaId"));
+    public MiniFabrica create(String name, Long fabricaId, List<Long> setorIds) {
+        return repository.create(requireName(name), requireId(fabricaId, "fabricaId"), normalizeIds(setorIds, "setorIds"));
     }
 
-    public Optional<MiniFabrica> update(long id, String name, Long fabricaId) {
+    public Optional<MiniFabrica> update(long id, String name, Long fabricaId, List<Long> setorIds) {
         validateId(id, "id");
-        return repository.update(id, requireName(name), requireId(fabricaId, "fabricaId"));
+        return repository.update(id, requireName(name), requireId(fabricaId, "fabricaId"), normalizeIds(setorIds, "setorIds"));
     }
 
     public boolean delete(long id) {
@@ -50,6 +52,23 @@ public class MiniFabricaService {
             throw new IllegalArgumentException(fieldName + " must be greater than zero");
         }
         return id.longValue();
+    }
+
+    private List<Long> normalizeIds(List<Long> ids, String fieldName) {
+        if (ids == null || ids.isEmpty()) {
+            return List.of();
+        }
+        List<Long> result = new ArrayList<>();
+        for (Long id : ids) {
+            if (id == null || id.longValue() <= 0) {
+                throw new IllegalArgumentException(fieldName + " must contain only positive ids");
+            }
+            if (!result.contains(id.longValue())) {
+                result.add(id.longValue());
+            }
+        }
+        result.sort(Comparator.naturalOrder());
+        return result;
     }
 
     private void validateId(long id, String fieldName) {

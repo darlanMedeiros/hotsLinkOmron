@@ -4,6 +4,7 @@ public class MachineRequest {
 
     private String name;
     private Integer deviceId;
+    private Long miniFabricaId;
     private Long setorId;
 
     public String getName() {
@@ -20,6 +21,14 @@ public class MachineRequest {
 
     public void setDeviceId(Integer deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public Long getMiniFabricaId() {
+        return miniFabricaId;
+    }
+
+    public void setMiniFabricaId(Long miniFabricaId) {
+        this.miniFabricaId = miniFabricaId;
     }
 
     public Long getSetorId() {

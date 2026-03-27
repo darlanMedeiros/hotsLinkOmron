@@ -25,8 +25,13 @@ CREATE TABLE mini_fabrica (
 CREATE TABLE setor (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(120) NOT NULL,
-    mini_fabrica_id BIGINT NOT NULL REFERENCES mini_fabrica(id) ON DELETE RESTRICT,
-    CONSTRAINT uq_setor_name_per_mini_fabrica UNIQUE (mini_fabrica_id, name)
+    CONSTRAINT uq_setor_name UNIQUE (name)
+);
+
+CREATE TABLE mini_fabrica_setor (
+    mini_fabrica_id BIGINT NOT NULL REFERENCES mini_fabrica(id) ON DELETE CASCADE,
+    setor_id BIGINT NOT NULL REFERENCES setor(id) ON DELETE RESTRICT,
+    PRIMARY KEY (mini_fabrica_id, setor_id)
 );
 
 CREATE TABLE device (
@@ -77,8 +82,13 @@ CREATE TABLE machine (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(120) NOT NULL,
     device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE RESTRICT,
+    mini_fabrica_id BIGINT NOT NULL REFERENCES mini_fabrica(id) ON DELETE RESTRICT,
     setor_id BIGINT NOT NULL REFERENCES setor(id) ON DELETE RESTRICT,
-    CONSTRAINT uq_machine_name_per_setor UNIQUE (setor_id, name)
+    CONSTRAINT fk_machine_mini_fabrica_setor
+        FOREIGN KEY (mini_fabrica_id, setor_id)
+        REFERENCES mini_fabrica_setor(mini_fabrica_id, setor_id)
+        ON DELETE RESTRICT,
+    CONSTRAINT uq_machine_name_per_mini_fabrica_setor UNIQUE (mini_fabrica_id, setor_id, name)
 );
 
 CREATE TABLE produto (
@@ -152,8 +162,10 @@ CREATE UNIQUE INDEX idx_tag_memory_unique ON tag(memory_id);
 CREATE INDEX idx_tag_device ON tag(device_id);
 CREATE INDEX idx_tag_memory ON tag(memory_id);
 CREATE INDEX idx_mini_fabrica_fabrica ON mini_fabrica(fabrica_id);
-CREATE INDEX idx_setor_mini_fabrica ON setor(mini_fabrica_id);
+CREATE INDEX idx_mini_fabrica_setor_mini_fabrica ON mini_fabrica_setor(mini_fabrica_id);
+CREATE INDEX idx_mini_fabrica_setor_setor ON mini_fabrica_setor(setor_id);
 CREATE INDEX idx_machine_device ON machine(device_id);
+CREATE INDEX idx_machine_mini_fabrica ON machine(mini_fabrica_id);
 CREATE INDEX idx_machine_setor ON machine(setor_id);
 CREATE INDEX idx_producao_machine ON producao(machine_id);
 CREATE INDEX idx_producao_turno ON producao(turno_id);

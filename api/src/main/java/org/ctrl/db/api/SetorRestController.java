@@ -36,9 +36,7 @@ public class SetorRestController {
 
     @PostMapping
     public ResponseEntity<Setor> create(@RequestBody SetorRequest request) {
-        Setor created = service.create(
-                request == null ? null : request.getName(),
-                request == null ? null : request.getMiniFabricaId());
+        Setor created = service.create(request == null ? null : request.getName());
         return ResponseEntity.ok(created);
     }
 
@@ -46,8 +44,7 @@ public class SetorRestController {
     public ResponseEntity<Setor> update(@PathVariable long id, @RequestBody SetorRequest request) {
         return service.update(
                 id,
-                request == null ? null : request.getName(),
-                request == null ? null : request.getMiniFabricaId())
+                request == null ? null : request.getName())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

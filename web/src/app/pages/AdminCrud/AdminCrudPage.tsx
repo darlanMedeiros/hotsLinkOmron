@@ -144,15 +144,15 @@ export function AdminCrudPage() {
           <MiniFabricaSection
             miniFabricas={miniFabricas}
             fabricas={fabricas}
+            setores={setores}
             fabricaById={fabricaById}
+            setorById={setorById}
             isSaving={isSaving}
             withMutation={withMutation}
             removeItem={removeItem}
           />
           <SetorSection
             setores={setores}
-            miniFabricas={miniFabricas}
-            miniFabricaById={miniFabricaById}
             isSaving={isSaving}
             withMutation={withMutation}
             removeItem={removeItem}
@@ -166,7 +166,9 @@ export function AdminCrudPage() {
           <MachineSection
             machines={machines}
             devices={devices}
+            miniFabricas={miniFabricas}
             setores={setores}
+            miniFabricaById={miniFabricaById}
             deviceById={deviceById}
             setorById={setorById}
             isSaving={isSaving}

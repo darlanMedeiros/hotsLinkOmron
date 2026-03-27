@@ -1,25 +1,61 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useMemo, useState } from 'react';
 import { Cog, Pencil, Save, Trash2, X } from 'lucide-react';
-import { Device, Machine, Setor, SectionSharedProps } from './types';
+import { Device, Machine, MiniFabrica, Setor, SectionSharedProps } from './types';
 import { requestApi } from '../../../services/api';
 
 interface Props extends SectionSharedProps {
   machines: Machine[];
   devices: Device[];
+  miniFabricas: MiniFabrica[];
   setores: Setor[];
   deviceById: Map<number, string>;
+  miniFabricaById: Map<number, string>;
   setorById: Map<number, string>;
 }
 
-export function MachineSection({ machines, devices, setores, deviceById, setorById, isSaving, withMutation, removeItem }: Props) {
+export function MachineSection({
+  machines,
+  devices,
+  miniFabricas,
+  setores,
+  deviceById,
+  miniFabricaById,
+  setorById,
+  isSaving,
+  withMutation,
+  removeItem,
+}: Props) {
   const [newName, setNewName] = useState('');
   const [newDeviceId, setNewDeviceId] = useState<number | ''>('');
+  const [newMiniFabricaId, setNewMiniFabricaId] = useState<number | ''>('');
   const [newSetorId, setNewSetorId] = useState<number | ''>('');
   const [editing, setEditing] = useState<Machine | null>(null);
 
+  const availableSetoresForNewMachine = useMemo(() => {
+    if (!newMiniFabricaId) {
+      return [] as Setor[];
+    }
+    const mf = miniFabricas.find((row) => row.id === Number(newMiniFabricaId));
+    if (!mf) {
+      return [] as Setor[];
+    }
+    return setores.filter((setor) => mf.setorIds.includes(setor.id));
+  }, [miniFabricas, setores, newMiniFabricaId]);
+
+  const availableSetoresForEditing = useMemo(() => {
+    if (!editing?.miniFabricaId) {
+      return [] as Setor[];
+    }
+    const mf = miniFabricas.find((row) => row.id === editing.miniFabricaId);
+    if (!mf) {
+      return [] as Setor[];
+    }
+    return setores.filter((setor) => mf.setorIds.includes(setor.id));
+  }, [miniFabricas, setores, editing]);
+
   const onCreate = async (e: FormEvent) => {
     e.preventDefault();
-    if (!newName.trim() || !newDeviceId || !newSetorId) return;
+    if (!newName.trim() || !newDeviceId || !newMiniFabricaId || !newSetorId) return;
     await withMutation(async () => {
       await requestApi<Machine>('/api/machines', {
         method: 'POST',
@@ -27,11 +63,13 @@ export function MachineSection({ machines, devices, setores, deviceById, setorBy
         body: JSON.stringify({
           name: newName,
           deviceId: Number(newDeviceId),
+          miniFabricaId: Number(newMiniFabricaId),
           setorId: Number(newSetorId),
         }),
       });
       setNewName('');
       setNewDeviceId('');
+      setNewMiniFabricaId('');
       setNewSetorId('');
     }, 'Machine criada');
   };
@@ -45,11 +83,24 @@ export function MachineSection({ machines, devices, setores, deviceById, setorBy
         body: JSON.stringify({
           name: editing.name,
           deviceId: editing.deviceId,
+          miniFabricaId: editing.miniFabricaId,
           setorId: editing.setorId,
         }),
       });
       setEditing(null);
     }, 'Machine atualizada');
+  };
+
+  const onChangeNewMiniFabrica = (value: string) => {
+    setNewMiniFabricaId(value ? Number(value) : '');
+    setNewSetorId('');
+  };
+
+  const onChangeEditingMiniFabrica = (value: string) => {
+    if (!editing) {
+      return;
+    }
+    setEditing({ ...editing, miniFabricaId: Number(value), setorId: 0 });
   };
 
   return (
@@ -78,12 +129,25 @@ export function MachineSection({ machines, devices, setores, deviceById, setorBy
           ))}
         </select>
         <select
+          value={newMiniFabricaId}
+          onChange={(e) => onChangeNewMiniFabrica(e.target.value)}
+          className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+        >
+          <option value="">Selecione a mini fabrica</option>
+          {miniFabricas.map((mini) => (
+            <option key={mini.id} value={mini.id}>
+              {mini.name} ({mini.id})
+            </option>
+          ))}
+        </select>
+        <select
           value={newSetorId}
           onChange={(e) => setNewSetorId(e.target.value ? Number(e.target.value) : '')}
-          className="rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-2"
+          className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+          disabled={!newMiniFabricaId}
         >
           <option value="">Selecione o setor</option>
-          {setores.map((setor) => (
+          {availableSetoresForNewMachine.map((setor) => (
             <option key={setor.id} value={setor.id}>
               {setor.name} ({setor.id})
             </option>
@@ -100,6 +164,7 @@ export function MachineSection({ machines, devices, setores, deviceById, setorBy
               <th className="pb-2 pr-2">ID</th>
               <th className="pb-2 pr-2">Nome</th>
               <th className="pb-2 pr-2">Device</th>
+              <th className="pb-2 pr-2">Mini Fabrica</th>
               <th className="pb-2 pr-2">Setor</th>
               <th className="pb-2 text-right">Acoes</th>
             </tr>
@@ -141,11 +206,29 @@ export function MachineSection({ machines, devices, setores, deviceById, setorBy
                   <td className="py-2 pr-2">
                     {isEditing ? (
                       <select
+                        value={editing.miniFabricaId}
+                        onChange={(e) => onChangeEditingMiniFabrica(e.target.value)}
+                        className="rounded-md border border-slate-300 px-2 py-1"
+                      >
+                        {miniFabricas.map((mini) => (
+                          <option key={mini.id} value={mini.id}>
+                            {mini.name} ({mini.id})
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      `${miniFabricaById.get(row.miniFabricaId) ?? 'ID'} (${row.miniFabricaId})`
+                    )}
+                  </td>
+                  <td className="py-2 pr-2">
+                    {isEditing ? (
+                      <select
                         value={editing.setorId}
                         onChange={(e) => setEditing({ ...editing, setorId: Number(e.target.value) })}
                         className="rounded-md border border-slate-300 px-2 py-1"
                       >
-                        {setores.map((setor) => (
+                        <option value="0">Selecione o setor</option>
+                        {availableSetoresForEditing.map((setor) => (
                           <option key={setor.id} value={setor.id}>
                             {setor.name} ({setor.id})
                           </option>

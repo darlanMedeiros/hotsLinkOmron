@@ -24,25 +24,39 @@ public class MachineService {
         return repository.findById(id);
     }
 
-    public Machine create(String name, Integer deviceId, Long setorId) {
+    public Machine create(String name, Integer deviceId, Long miniFabricaId, Long setorId) {
+        long validMiniFabricaId = requireLongId(miniFabricaId, "miniFabricaId");
+        long validSetorId = requireLongId(setorId, "setorId");
+        validateSetorAssociation(validMiniFabricaId, validSetorId);
         return repository.create(
                 requireName(name),
                 requireDeviceId(deviceId),
-                requireLongId(setorId, "setorId"));
+                validMiniFabricaId,
+                validSetorId);
     }
 
-    public Optional<Machine> update(long id, String name, Integer deviceId, Long setorId) {
+    public Optional<Machine> update(long id, String name, Integer deviceId, Long miniFabricaId, Long setorId) {
         validateId(id, "id");
+        long validMiniFabricaId = requireLongId(miniFabricaId, "miniFabricaId");
+        long validSetorId = requireLongId(setorId, "setorId");
+        validateSetorAssociation(validMiniFabricaId, validSetorId);
         return repository.update(
                 id,
                 requireName(name),
                 requireDeviceId(deviceId),
-                requireLongId(setorId, "setorId"));
+                validMiniFabricaId,
+                validSetorId);
     }
 
     public boolean delete(long id) {
         validateId(id, "id");
         return repository.delete(id);
+    }
+
+    private void validateSetorAssociation(long miniFabricaId, long setorId) {
+        if (!repository.isSetorAssociatedWithMiniFabrica(miniFabricaId, setorId)) {
+            throw new IllegalArgumentException("setorId is not associated with miniFabricaId");
+        }
     }
 
     private String requireName(String name) {

@@ -17,18 +17,19 @@ interface MiniFabrica {
   id: number;
   name: string;
   fabricaId: number;
+  setorIds: number[];
 }
 
 interface Setor {
   id: number;
   name: string;
-  miniFabricaId: number;
 }
 
 interface Machine {
   id: number;
   name: string;
   deviceId: number;
+  miniFabricaId: number;
   setorId: number;
 }
 
@@ -175,16 +176,21 @@ export const MemorySearch: React.FC = () => {
     if (!miniFabricaId) {
       return [];
     }
-    return setores.filter((row) => row.miniFabricaId === miniFabricaId);
-  }, [setores, selectedMiniFabricaId]);
+    const selectedMini = miniFabricas.find((row) => row.id === miniFabricaId);
+    if (!selectedMini) {
+      return [];
+    }
+    return setores.filter((row) => selectedMini.setorIds.includes(row.id));
+  }, [setores, miniFabricas, selectedMiniFabricaId]);
 
   const filteredMachines = useMemo(() => {
     const setorId = Number(selectedSetorId);
-    if (!setorId) {
+    const miniFabricaId = Number(selectedMiniFabricaId);
+    if (!setorId || !miniFabricaId) {
       return [];
     }
-    return machines.filter((row) => row.setorId === setorId);
-  }, [machines, selectedSetorId]);
+    return machines.filter((row) => row.setorId === setorId && row.miniFabricaId === miniFabricaId);
+  }, [machines, selectedSetorId, selectedMiniFabricaId]);
 
   const filteredDevices = useMemo(() => {
     const machineId = Number(selectedMachineId);

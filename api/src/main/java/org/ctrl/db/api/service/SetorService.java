@@ -24,13 +24,13 @@ public class SetorService {
         return repository.findById(id);
     }
 
-    public Setor create(String name, Long miniFabricaId) {
-        return repository.create(requireName(name), requireId(miniFabricaId, "miniFabricaId"));
+    public Setor create(String name) {
+        return repository.create(requireName(name));
     }
 
-    public Optional<Setor> update(long id, String name, Long miniFabricaId) {
+    public Optional<Setor> update(long id, String name) {
         validateId(id, "id");
-        return repository.update(id, requireName(name), requireId(miniFabricaId, "miniFabricaId"));
+        return repository.update(id, requireName(name));
     }
 
     public boolean delete(long id) {
@@ -43,13 +43,6 @@ public class SetorService {
             throw new IllegalArgumentException("name is required");
         }
         return name.trim();
-    }
-
-    private long requireId(Long id, String fieldName) {
-        if (id == null || id.longValue() <= 0) {
-            throw new IllegalArgumentException(fieldName + " must be greater than zero");
-        }
-        return id.longValue();
     }
 
     private void validateId(long id, String fieldName) {

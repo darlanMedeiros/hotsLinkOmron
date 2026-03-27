@@ -7,18 +7,19 @@ export type MiniFabrica = {
   id: number;
   name: string;
   fabricaId: number;
+  setorIds: number[];
 };
 
 export type Setor = {
   id: number;
   name: string;
-  miniFabricaId: number;
 };
 
 export type Machine = {
   id: number;
   name: string;
   deviceId: number;
+  miniFabricaId: number;
   setorId: number;
 };
 

@@ -15,15 +15,17 @@ import org.springframework.stereotype.Repository;
 public class MachineRepository {
 
     private static final String SQL_FIND_ALL =
-            "SELECT id, name, device_id, setor_id FROM public.machine ORDER BY id";
+            "SELECT id, name, device_id, mini_fabrica_id, setor_id FROM public.machine ORDER BY id";
     private static final String SQL_FIND_BY_ID =
-            "SELECT id, name, device_id, setor_id FROM public.machine WHERE id = ?";
+            "SELECT id, name, device_id, mini_fabrica_id, setor_id FROM public.machine WHERE id = ?";
     private static final String SQL_INSERT =
-            "INSERT INTO public.machine (name, device_id, setor_id) VALUES (?, ?, ?) RETURNING id, name, device_id, setor_id";
+            "INSERT INTO public.machine (name, device_id, mini_fabrica_id, setor_id) VALUES (?, ?, ?, ?) RETURNING id, name, device_id, mini_fabrica_id, setor_id";
     private static final String SQL_UPDATE =
-            "UPDATE public.machine SET name = ?, device_id = ?, setor_id = ? WHERE id = ? RETURNING id, name, device_id, setor_id";
+            "UPDATE public.machine SET name = ?, device_id = ?, mini_fabrica_id = ?, setor_id = ? WHERE id = ? RETURNING id, name, device_id, mini_fabrica_id, setor_id";
     private static final String SQL_DELETE =
             "DELETE FROM public.machine WHERE id = ?";
+    private static final String SQL_EXISTS_REL =
+            "SELECT COUNT(1) FROM public.mini_fabrica_setor WHERE mini_fabrica_id = ? AND setor_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final RowMapper<Machine> rowMapper = this::mapRow;
@@ -40,16 +42,21 @@ public class MachineRepository {
         return queryOptional(SQL_FIND_BY_ID, id);
     }
 
-    public Machine create(String name, int deviceId, long setorId) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), name, deviceId, setorId);
+    public Machine create(String name, int deviceId, long miniFabricaId, long setorId) {
+        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), name, deviceId, miniFabricaId, setorId);
     }
 
-    public Optional<Machine> update(long id, String name, int deviceId, long setorId) {
-        return queryOptional(SQL_UPDATE, name, deviceId, setorId, id);
+    public Optional<Machine> update(long id, String name, int deviceId, long miniFabricaId, long setorId) {
+        return queryOptional(SQL_UPDATE, name, deviceId, miniFabricaId, setorId, id);
     }
 
     public boolean delete(long id) {
         return jdbcTemplate.update(SQL_DELETE, id) > 0;
+    }
+
+    public boolean isSetorAssociatedWithMiniFabrica(long miniFabricaId, long setorId) {
+        Integer count = jdbcTemplate.queryForObject(SQL_EXISTS_REL, Integer.class, miniFabricaId, setorId);
+        return count != null && count > 0;
     }
 
     private Optional<Machine> queryOptional(String sql, Object... args) {
@@ -61,7 +68,6 @@ public class MachineRepository {
     }
 
     private Machine mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new Machine(rs.getLong("id"), rs.getString("name"), rs.getInt("device_id"), rs.getLong("setor_id"));
+        return new Machine(rs.getLong("id"), rs.getString("name"), rs.getInt("device_id"), rs.getLong("mini_fabrica_id"), rs.getLong("setor_id"));
     }
 }
-

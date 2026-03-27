@@ -4,12 +4,10 @@ public class Setor {
 
     private final Long id;
     private final String name;
-    private final Long miniFabricaId;
 
-    public Setor(Long id, String name, Long miniFabricaId) {
+    public Setor(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.miniFabricaId = miniFabricaId;
     }
 
     public Long getId() {
@@ -18,9 +16,5 @@ public class Setor {
 
     public String getName() {
         return name;
-    }
-
-    public Long getMiniFabricaId() {
-        return miniFabricaId;
     }
 }

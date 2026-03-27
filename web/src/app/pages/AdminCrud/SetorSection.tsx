@@ -1,30 +1,26 @@
 import { FormEvent, useState } from 'react';
 import { Map as MapIcon, Pencil, Save, Trash2, X } from 'lucide-react';
-import { MiniFabrica, Setor, SectionSharedProps } from './types';
+import { Setor, SectionSharedProps } from './types';
 import { requestApi } from '../../../services/api';
 
 interface Props extends SectionSharedProps {
   setores: Setor[];
-  miniFabricas: MiniFabrica[];
-  miniFabricaById: Map<number, string>;
 }
 
-export function SetorSection({ setores, miniFabricas, miniFabricaById, isSaving, withMutation, removeItem }: Props) {
+export function SetorSection({ setores, isSaving, withMutation, removeItem }: Props) {
   const [newName, setNewName] = useState('');
-  const [newMiniFabricaId, setNewMiniFabricaId] = useState<number | ''>('');
   const [editing, setEditing] = useState<Setor | null>(null);
 
   const onCreate = async (e: FormEvent) => {
     e.preventDefault();
-    if (!newName.trim() || !newMiniFabricaId) return;
+    if (!newName.trim()) return;
     await withMutation(async () => {
       await requestApi<Setor>('/api/setores', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newName, miniFabricaId: Number(newMiniFabricaId) }),
+        body: JSON.stringify({ name: newName }),
       });
       setNewName('');
-      setNewMiniFabricaId('');
     }, 'Setor criado');
   };
 
@@ -36,7 +32,6 @@ export function SetorSection({ setores, miniFabricas, miniFabricaById, isSaving,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: editing.name,
-          miniFabricaId: editing.miniFabricaId,
         }),
       });
       setEditing(null);
@@ -49,26 +44,14 @@ export function SetorSection({ setores, miniFabricas, miniFabricaById, isSaving,
         <MapIcon className="h-4 w-4 text-amber-600" />
         <h3 className="font-semibold text-slate-900">Setor</h3>
       </div>
-      <form onSubmit={onCreate} className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
+      <form onSubmit={onCreate} className="mb-3 flex gap-2">
         <input
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
           placeholder="Nome"
-          className="rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-2"
+          className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
         />
-        <select
-          value={newMiniFabricaId}
-          onChange={(e) => setNewMiniFabricaId(e.target.value ? Number(e.target.value) : '')}
-          className="rounded-md border border-slate-300 px-3 py-2 text-sm"
-        >
-          <option value="">Selecione a mini fabrica</option>
-          {miniFabricas.map((mf) => (
-            <option key={mf.id} value={mf.id}>
-              {mf.name} ({mf.id})
-            </option>
-          ))}
-        </select>
-        <button disabled={isSaving} className="rounded-md bg-amber-600 px-3 py-2 text-sm font-medium text-white sm:col-span-3">
+        <button disabled={isSaving} className="rounded-md bg-amber-600 px-3 py-2 text-sm font-medium text-white">
           Criar
         </button>
       </form>
@@ -78,7 +61,6 @@ export function SetorSection({ setores, miniFabricas, miniFabricaById, isSaving,
             <tr className="text-left text-slate-600">
               <th className="pb-2 pr-2">ID</th>
               <th className="pb-2 pr-2">Nome</th>
-              <th className="pb-2 pr-2">Mini Fabrica</th>
               <th className="pb-2 text-right">Acoes</th>
             </tr>
           </thead>
@@ -97,23 +79,6 @@ export function SetorSection({ setores, miniFabricas, miniFabricaById, isSaving,
                       />
                     ) : (
                       row.name
-                    )}
-                  </td>
-                  <td className="py-2 pr-2">
-                    {isEditing ? (
-                      <select
-                        value={editing.miniFabricaId}
-                        onChange={(e) => setEditing({ ...editing, miniFabricaId: Number(e.target.value) })}
-                        className="rounded-md border border-slate-300 px-2 py-1"
-                      >
-                        {miniFabricas.map((mf) => (
-                          <option key={mf.id} value={mf.id}>
-                            {mf.name} ({mf.id})
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      `${miniFabricaById.get(row.miniFabricaId) ?? 'ID'} (${row.miniFabricaId})`
                     )}
                   </td>
                   <td className="py-2 text-right">
