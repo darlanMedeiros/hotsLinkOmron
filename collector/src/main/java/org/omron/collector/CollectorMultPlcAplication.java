@@ -216,8 +216,9 @@ public class CollectorMultPlcAplication {
                 "SELECT t.name AS tag_name, t.persist_history AS persist_history, " +
                         "m.address AS memory_address, m.name AS memory_name " +
                         "FROM public.device d " +
-                        "JOIN public.tag t ON t.device_id = d.id " +
-                        "JOIN public.memory m ON m.id = t.memory_id " +
+                        "JOIN public.machine ma ON ma.device_id = d.id " +
+                        "JOIN public.tag t ON t.machine_id = ma.id " +
+                        "JOIN public.memory m ON m.id = t.memory_id AND m.device_id = d.id " +
                         "WHERE d.mnemonic = ? " +
                         "ORDER BY t.id",
                 deviceMnemonic);
@@ -937,8 +938,9 @@ public class CollectorMultPlcAplication {
                 "SELECT t.name AS tag_name, m.name AS memory_name, m.address AS memory_address, " +
                         "t.persist_history AS persist_history " +
                         "FROM public.device d " +
-                        "JOIN public.tag t ON t.device_id = d.id " +
-                        "JOIN public.memory m ON m.id = t.memory_id " +
+                        "JOIN public.machine ma ON ma.device_id = d.id " +
+                        "JOIN public.tag t ON t.machine_id = ma.id " +
+                        "JOIN public.memory m ON m.id = t.memory_id AND m.device_id = d.id " +
                         "WHERE d.mnemonic = ? AND t.name IN (" + placeholders + ")",
                 params);
 

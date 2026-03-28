@@ -24368,3 +24368,5 @@ Caused by: org.postgresql.util.PSQLException: ERRO: coluna t.device_id não exis
 	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:650)
 	... 23 more
 
+[2026-03-28 17:35:55] Encerramento solicitado pelo usuario.
+[2026-03-28 17:35:55] Comunicacao serial compartilhada encerrada.
