@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Versions -->
-        <spring.boot.version>2.7.18</spring.boot.version>
+        <spring.boot.version>3.5.8</spring.boot.version>
         <junit.jupiter.version>5.10.1</junit.jupiter.version>
         <maven.surefire.version>3.2.5</maven.surefire.version>
         <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
@@ -40,6 +40,13 @@
                 <version>${spring.boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- Postgres driver pinned to patched version for CVE-2024-1597 -->
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>42.7.2</version>
             </dependency>
 
             <!-- JUnit Jupiter -->
@@ -64,6 +71,8 @@
                     <version>3.13.0</version>
                     <configuration>
                         <release>${java.version}</release>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
                     </configuration>
                 </plugin>
 
