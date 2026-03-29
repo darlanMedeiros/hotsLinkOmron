@@ -1,3 +1,5 @@
+<!-- spellcheck: off -->
+
 # hotsLinkOmron
 
 Projeto para comunicacao com CLP Omron via protocolo HostLink, com coleta de dados, persistencia em Postgres, API REST em Spring Boot e frontend React.
