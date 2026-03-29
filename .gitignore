@@ -1,0 +1,50 @@
+# Maven
+target/
+.m2/
+*.jar
+*.war
+*.ear
+*.zip
+
+# Gradle
+build/
+.gradle/
+
+# IDE
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+*~
+.DS_Store
+.classpath
+.project
+.settings/
+*.iml
+*.iws
+*.ipr
+
+# Node.js / npm
+node_modules/
+npm-debug.log
+yarn-error.log
+dist/
+.vite/
+
+# Compiler
+*.class
+*.pyc
+__pycache__/
+
+# OS
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+gitCommand.md
