@@ -15,7 +15,6 @@ import org.ctrl.extras.MemoryVariable;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteDM;
 import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
-import org.omron.collector.util.SharedSerial;
 
 /**
  * Gerencia execução de leitura manual de DM.

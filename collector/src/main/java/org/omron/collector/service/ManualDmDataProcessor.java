@@ -15,7 +15,6 @@ import java.util.List;
 public class ManualDmDataProcessor {
 
     private static final DateTimeFormatter MANUAL_DM_DATE_TIME_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private static final int MANUAL_DM_DATE_PART_COUNT = 6;
     private static final int MANUAL_DM_GROUP_SIZE = 13;
     private static final int MANUAL_DM_TAG_VALUES_OFFSET = 8;
 

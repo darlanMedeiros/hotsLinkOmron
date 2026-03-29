@@ -35,10 +35,6 @@ import org.omron.collector.util.PlcNodeMonitorPanel;
 
 public class CollectorMultPlcAplication {
 
-    private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm:ss");
-    private static final DateTimeFormatter FILE_TIME_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private static final int MAX_LOG_LINES = 4000;
-
     private JFrame frame;
     private JTextArea logArea;
 

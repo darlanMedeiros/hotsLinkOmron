@@ -2,7 +2,6 @@ package org.omron.collector.service;
 
 import java.util.function.Consumer;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import org.ctrl.comm.serial.SerialPortAbstract;
 import org.omron.collector.util.SharedSerial;
 
