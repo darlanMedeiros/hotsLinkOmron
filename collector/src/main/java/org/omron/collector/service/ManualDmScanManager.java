@@ -1,11 +1,17 @@
 package org.omron.collector.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import org.ctrl.DeviceImp;
 import org.ctrl.DeviceRegisterImp;
 import org.ctrl.IDevice;
@@ -26,9 +32,10 @@ import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
  */
 public class ManualDmScanManager {
 
-    private static final int MANUAL_DM_MAX_ADDRESSES = 100;
+    private static final int MANUAL_DM_MAX_ADDRESSES = 1000;
     private static final int MANUAL_READ_DELAY_MS = 200;
     private static final int DM_TERMINATOR_VALUE = 0xFFFF;
+    private static final Path PRODUCTION_TAGS_FILE = Paths.get("production_tags.txt");
 
     private final DatabaseManager dbManager;
     private final LoggingService logger;
@@ -39,20 +46,14 @@ public class ManualDmScanManager {
     private Consumer<String> statusCallback;
     private boolean isRunning;
 
-    private String[] productionTagNames = new String[] {
-            "PRODUCAO_PH29",
-            "PRODUCAO_PH30",
-            "PRODUCAO_PH31",
-            "PRODUCAO_SEC25",
-            "PRODUCAO_SEC26",
-            "PRODUCAO_SEC33"
-    };
+    private List<String> productionTagNames;
 
     public ManualDmScanManager(DatabaseManager dbManager, LoggingService logger,
             SerialCommunicationManager serialManager) {
         this.dbManager = dbManager;
         this.logger = logger;
         this.serialManager = serialManager;
+        this.productionTagNames = loadProductionTagNames();
     }
 
     public boolean isRunning() {
@@ -67,8 +68,20 @@ public class ManualDmScanManager {
         this.statusCallback = callback;
     }
 
-    public void setProductionTagNames(String[] names) {
-        this.productionTagNames = names;
+    public void setProductionTagNames(List<String> names) {
+        this.productionTagNames = new ArrayList<>(names);
+        saveProductionTagNames();
+    }
+
+    public List<String> getProductionTagNames() {
+        return new ArrayList<>(productionTagNames);
+    }
+
+    public void addProductionTagName(String tagName) {
+        if (!productionTagNames.contains(tagName)) {
+            productionTagNames.add(tagName);
+            saveProductionTagNames();
+        }
     }
 
     public void startScan(int nodeId, int startAddress) throws IllegalStateException {
@@ -193,7 +206,7 @@ public class ManualDmScanManager {
         }
 
         Map<String, DatabaseManager.ManualProductionTagBinding> tagBindings = dbManager
-                .loadManualProductionTagBindings(cfg.mnemonic, productionTagNames);
+                .loadManualProductionTagBindings(cfg.mnemonic, productionTagNames.toArray(new String[0]));
 
         if (tagBindings.isEmpty()) {
             appendResult("Nenhuma TAG de producao encontrada no banco para o device " + cfg.mnemonic + ".");
@@ -240,13 +253,13 @@ public class ManualDmScanManager {
                 appendResult("Bloco de producao detectado (offset " + offset + "): timestamp "
                         + ManualDmDataProcessor.formatTimestamp(timestamp));
 
-                for (int i = 0; i < productionTagNames.length; i++) {
+                for (int i = 0; i < productionTagNames.size(); i++) {
                     int valueIndex = offset + ManualDmDataProcessor.getManualDmTagValuesOffset() + i;
                     if (valueIndex >= valuesInOrder.size()) {
                         break;
                     }
 
-                    String tagName = productionTagNames[i];
+                    String tagName = productionTagNames.get(i);
                     int value = valuesInOrder.get(valueIndex).intValue() & 0xFFFF;
 
                     DatabaseManager.ManualProductionTagBinding binding = tagBindings.get(tagName);
@@ -319,6 +332,50 @@ public class ManualDmScanManager {
     private void log(String message) {
         if (logger != null) {
             logger.log(message);
+        }
+    }
+
+    private List<String> loadProductionTagNames() {
+        List<String> defaultTags = List.of(
+                "PRODUCAO_PH29",
+                "PRODUCAO_PH30",
+                "PRODUCAO_PH31",
+                "PRODUCAO_SEC25",
+                "PRODUCAO_SEC26",
+                "PRODUCAO_SEC33");
+
+        try {
+            if (Files.exists(PRODUCTION_TAGS_FILE)) {
+                List<String> loadedTags = Files.readAllLines(PRODUCTION_TAGS_FILE)
+                        .stream()
+                        .map(String::trim)
+                        .filter(line -> !line.isEmpty() && !line.startsWith("#"))
+                        .collect(Collectors.toList());
+                if (!loadedTags.isEmpty()) {
+                    return loadedTags;
+                }
+            }
+        } catch (IOException e) {
+            log("Erro ao carregar production_tags.txt: " + e.getMessage());
+        }
+
+        // Fallback para valores padrão
+        try {
+            Files.write(PRODUCTION_TAGS_FILE, defaultTags, StandardOpenOption.CREATE,
+                    StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            log("Erro ao criar arquivo padrão production_tags.txt: " + e.getMessage());
+        }
+
+        return new ArrayList<>(defaultTags);
+    }
+
+    private void saveProductionTagNames() {
+        try {
+            Files.write(PRODUCTION_TAGS_FILE, productionTagNames, StandardOpenOption.CREATE,
+                    StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            log("Erro ao salvar production_tags.txt: " + e.getMessage());
         }
     }
 
