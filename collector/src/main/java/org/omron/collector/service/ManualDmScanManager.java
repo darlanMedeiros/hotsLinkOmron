@@ -23,12 +23,36 @@ import org.ctrl.vend.omron.toolbus.commands.area.AreaWriteDM;
 import org.ctrl.vend.omron.toolbus.memory.MemoryWrite;
 
 /**
- * Gerencia execução de leitura manual de DM.
- * Responsabilidades:
- * - Executar leitura sequencial de endereços DM
- * - Processar e validar valores lidos
- * - Persistir dados de produção
- * - Limpar valores após leitura
+ * Gerencia a execução de varredura manual de endereços de memória DM em PLCs
+ * Omron.
+ * 
+ * <p>
+ * Esta classe é responsável por:
+ * <ul>
+ * <li>Executar leitura sequencial de endereços DM com validação</li>
+ * <li>Processar e validar valores lidos utilizando
+ * {@link ManualDmDataProcessor}</li>
+ * <li>Persistir dados de produção no banco de dados através de
+ * {@link DatabaseManager}</li>
+ * <li>Limpar valores após leitura escrevendo zeros nos endereços lidos</li>
+ * <li>Detectar blocos de produção e extrair timestamps</li>
+ * <li>Gerenciar callbacks de resultado e status em tempo real</li>
+ * </ul>
+ * 
+ * <p>
+ * A classe opera em thread separada ({@link #scanThread}) para não bloquear a
+ * aplicação.
+ * Utiliza {@link SerialCommunicationManager} para comunicação serial
+ * sincronizada com o PLC.
+ * 
+ * <p>
+ * O processo de varredura pode ser controlado via {@link #startScan(int, int)}
+ * e
+ * {@link #stopScan()}, com status reportado através de callbacks.
+ * 
+ * @see ManualDmDataProcessor
+ * @see DatabaseManager
+ * @see SerialCommunicationManager
  */
 public class ManualDmScanManager {
 
@@ -48,6 +72,18 @@ public class ManualDmScanManager {
 
     private List<String> productionTagNames;
 
+    /**
+     * Construtor que inicializa o gerenciador de varredura manual DM.
+     * 
+     * <p>
+     * Carrega a lista de TAGs de produção a partir do arquivo
+     * {@code production_tags.txt}
+     * ou utiliza valores padrão se o arquivo não existir.
+     * 
+     * @param dbManager     gerenciador de banco de dados para persistência
+     * @param logger        serviço de logging para mensagens de erro e informação
+     * @param serialManager gerenciador de comunicação serial sincronizada com o PLC
+     */
     public ManualDmScanManager(DatabaseManager dbManager, LoggingService logger,
             SerialCommunicationManager serialManager) {
         this.dbManager = dbManager;
@@ -56,27 +92,82 @@ public class ManualDmScanManager {
         this.productionTagNames = loadProductionTagNames();
     }
 
+    /**
+     * Verifica se uma varredura manual está em execução.
+     * 
+     * @return {@code true} se o scanner está em execução, {@code false} caso
+     *         contrário
+     */
     public boolean isRunning() {
         return isRunning;
     }
 
+    /**
+     * Define o callback para receber mensagens de resultado e log da varredura.
+     * 
+     * <p>
+     * O callback será invocado com mensagens descritivas sobre endereços lidos,
+     * valores encontrados, blocos de produção detectados e erros.
+     * 
+     * @param callback função a ser chamada com mensagens de resultado, ou
+     *                 {@code null} para desabilitar
+     */
     public void setResultCallback(Consumer<String> callback) {
         this.resultCallback = callback;
     }
 
+    /**
+     * Define o callback para receber atualizações de status da varredura.
+     * 
+     * <p>
+     * O callback será invocado com os seguintes status:
+     * <ul>
+     * <li>"LENDO" - varredura em progresso</li>
+     * <li>"CONCLUIDO" - varredura finalizada com sucesso</li>
+     * <li>"INTERROMPIDO" - varredura parada pelo usuário</li>
+     * <li>"ERRO" - varredura finalizada com erro</li>
+     * <li>"PARADO" - varredura parada manualmente</li>
+     * <li>"DESCONECTADO" - conexão serial não disponível</li>
+     * </ul>
+     * 
+     * @param callback função a ser chamada com atualizações de status, ou
+     *                 {@code null} para desabilitar
+     */
     public void setStatusCallback(Consumer<String> callback) {
         this.statusCallback = callback;
     }
 
+    /**
+     * Define a lista de nomes de TAGs de produção a serem utilizadas na varredura.
+     * 
+     * <p>
+     * A lista é persistida no arquivo {@code production_tags.txt} para uso futuro.
+     * 
+     * @param names lista de nomes de TAGs de produção
+     */
     public void setProductionTagNames(List<String> names) {
         this.productionTagNames = new ArrayList<>(names);
         saveProductionTagNames();
     }
 
+    /**
+     * Retorna uma cópia da lista de nomes de TAGs de produção configuradas.
+     * 
+     * @return lista imutável (cópia) dos nomes de TAGs de produção
+     */
     public List<String> getProductionTagNames() {
         return new ArrayList<>(productionTagNames);
     }
 
+    /**
+     * Adiciona um novo nome de TAG de produção à lista, se ainda não estiver
+     * presente.
+     * 
+     * <p>
+     * A lista atualizada é persistida no arquivo {@code production_tags.txt}.
+     * 
+     * @param tagName nome da TAG de produção a adicionar
+     */
     public void addProductionTagName(String tagName) {
         if (!productionTagNames.contains(tagName)) {
             productionTagNames.add(tagName);
@@ -84,6 +175,30 @@ public class ManualDmScanManager {
         }
     }
 
+    /**
+     * Inicia uma varredura manual de endereços DM em uma thread separada.
+     * 
+     * <p>
+     * A varredura lê sequencialmente endereços DM começando de
+     * {@code startAddress},
+     * validando cada leitura e compara com um marcador terminador ({@code 0xFFFF}).
+     * Após conclusão, persiste os dados no banco de dados e limpa os endereços
+     * lidos.
+     * 
+     * <p>
+     * A varredura pode ser monitorada através dos callbacks de resultado e status
+     * definidos via {@link #setResultCallback(Consumer)} e
+     * {@link #setStatusCallback(Consumer)}.
+     * 
+     * @param nodeId       identificador do nó do PLC (usado para lookup de
+     *                     configuração)
+     * @param startAddress endereço DM inicial para começar a leitura
+     * @throws IllegalStateException se uma varredura já está em execução ou a
+     *                               conexão serial não está ativa
+     * 
+     * @see #stopScan()
+     * @see #isRunning()
+     */
     public void startScan(int nodeId, int startAddress) throws IllegalStateException {
         if (isRunning) {
             throw new IllegalStateException("Scanner DM manual ja esta em execucao.");
@@ -104,6 +219,18 @@ public class ManualDmScanManager {
         scanThread.start();
     }
 
+    /**
+     * Para uma varredura manual em execução de forma segura.
+     * 
+     * <p>
+     * Aguarda até 1.5 segundos para a thread de varredura finalizar antes de
+     * prosseguir.
+     * Atualiza o status para "PARADO" e libera recursos associados.
+     * 
+     * <p>
+     * Este método é seguro para ser chamado mesmo que nenhuma varredura esteja em
+     * execução.
+     */
     public void stopScan() {
         if (scanThread != null && scanThread.isAlive()) {
             scanThread.interrupt();
@@ -118,6 +245,25 @@ public class ManualDmScanManager {
         updateStatus("PARADO");
     }
 
+    /**
+     * Executa a varredura manual de DM em thread separada.
+     * 
+     * <p>
+     * Processo:
+     * <ol>
+     * <li>Cria um device virtual com ID único</li>
+     * <li>Lê sequencialmente até {code MANUAL_DM_MAX_ADDRESSES} endereços</li>
+     * <li>Pausa {code MANUAL_READ_DELAY_MS} ms entre leituras</li>
+     * <li>Para na leitura se encontrar o terminador {code DM_TERMINATOR_VALUE} ou
+     * atingir o máximo</li>
+     * <li>Persiste valores em blocos de produção identificados</li>
+     * <li>Escreve zero nos endereços lidos para limpeza</li>
+     * <li>Notifica callbacks com resultado ou erro</li>
+     * </ol>
+     * 
+     * @param nodeId       identificador do nó do PLC
+     * @param startAddress endereço DM inicial
+     */
     private void executeManualDmScan(int nodeId, int startAddress) {
         List<Integer> addressesRead = new ArrayList<>();
         Map<Integer, Integer> valuesByAddress = new HashMap<>();
@@ -184,6 +330,33 @@ public class ManualDmScanManager {
         }
     }
 
+    /**
+     * Persiste os valores lidos de DM no banco de dados como valores de produção.
+     * 
+     * <p>
+     * Processo:
+     * <ol>
+     * <li>Busca a configuração do device pelo nodeId</li>
+     * <li>Carrega as vinculações de TAGs de produção do banco</li>
+     * <li>Detecta blocos de produção usando {@link ManualDmDataProcessor}</li>
+     * <li>Extrai timestamp de cada bloco</li>
+     * <li>Mapeia valores lidos para TAGs de produção configuradas</li>
+     * <li>Separa em batches: histórico e "current-only" conforme configuração</li>
+     * <li>Persiste cada batch no banco de dados</li>
+     * </ol>
+     * 
+     * <p>
+     * Gera mensagens informativas via {@link #appendResult(String)} durante o
+     * processo.
+     * 
+     * @param nodeId          identificador do nó do PLC
+     * @param addressesRead   lista de endereços lidos em ordem
+     * @param valuesByAddress mapa de endereço para valor lido
+     * 
+     * @see ManualDmDataProcessor#getManualDmGroupSize()
+     * @see ManualDmDataProcessor#matchesManualDateMarker(int, int)
+     * @see ManualDmDataProcessor#tryBuildManualTimestamp(List, int)
+     */
     private void persistProductionValues(int nodeId, List<Integer> addressesRead,
             Map<Integer, Integer> valuesByAddress) {
         PlcConfigurationLoader.PlcConfiguration cfg = null;
@@ -304,6 +477,19 @@ public class ManualDmScanManager {
                 + ", historico=" + historyBatch.size() + ", current-only=" + currentOnlyBatch.size() + ".");
     }
 
+    /**
+     * Escreve valor zero em todos os endereços DM que foram lidos.
+     * 
+     * <p>
+     * Realiza a limpeza dos endereços lidos no PLC após persistência bem-sucedida.
+     * Utiliza sincronização via
+     * {@link SerialCommunicationManager#getSharedSerial()}
+     * para garantir exclusão durante comunicação.
+     * 
+     * @param plc       dispositivo virtual criado para a varredura
+     * @param addresses lista de endereços que foram lidos
+     * @throws Exception se a comunicação serial falhar ou desconectar
+     */
     private void writeZeroToReadAddresses(IDevice plc, List<Integer> addresses) throws Exception {
         synchronized (serialManager.getSharedSerial().getIoLock()) {
             if (!serialManager.isConnected()) {
@@ -317,24 +503,53 @@ public class ManualDmScanManager {
         }
     }
 
+    /**
+     * Envia uma mensagem de resultado para o callback configurado.
+     * 
+     * @param text mensagem a enviar
+     * @see #setResultCallback(Consumer)
+     */
     private void appendResult(String text) {
         if (resultCallback != null) {
             resultCallback.accept(text);
         }
     }
 
+    /**
+     * Atualiza o status da varredura através do callback configurado.
+     * 
+     * @param status novo status (ex: "LENDO", "CONCLUIDO", "ERRO")
+     * @see #setStatusCallback(Consumer)
+     */
     private void updateStatus(String status) {
         if (statusCallback != null) {
             statusCallback.accept(status);
         }
     }
 
+    /**
+     * Registra uma mensagem de log via {@link LoggingService}.
+     * 
+     * @param message mensagem a registrar
+     */
     private void log(String message) {
         if (logger != null) {
             logger.log(message);
         }
     }
 
+    /**
+     * Carrega a lista de nomes de TAGs de produção do arquivo
+     * {@code production_tags.txt}.
+     * 
+     * <p>
+     * Se o arquivo não existir, retorna a lista padrão e cria o arquivo.
+     * Se o arquivo existir mas estar vazio, retorna a lista padrão sem
+     * sobrescrever.
+     * Ignora linhas em branco e comentários (que começam com #).
+     * 
+     * @return lista de nomes de TAGs de produção
+     */
     private List<String> loadProductionTagNames() {
         List<String> defaultTags = List.of(
                 "PRODUCAO_PH29",
@@ -370,6 +585,14 @@ public class ManualDmScanManager {
         return new ArrayList<>(defaultTags);
     }
 
+    /**
+     * Persiste a lista de nomes de TAGs de produção no arquivo
+     * {@code production_tags.txt}.
+     * 
+     * <p>
+     * Sobrescreve completamente o arquivo existente com a lista atual.
+     * Em caso de erro de I/O, apenas registra a falha sem lançar exceção.
+     */
     private void saveProductionTagNames() {
         try {
             Files.write(PRODUCTION_TAGS_FILE, productionTagNames, StandardOpenOption.CREATE,
@@ -379,6 +602,16 @@ public class ManualDmScanManager {
         }
     }
 
+    /**
+     * Retorna uma descrição legível de uma exceção ou erro.
+     * 
+     * <p>
+     * Extrai o nome simples da classe de exceção e sua mensagem.
+     * Se a mensagem estiver vazia, retorna apenas o nome da classe.
+     * 
+     * @param error exceção ou erro a descrever
+     * @return descrição formatada (ex: "IOException - file not found")
+     */
     private static String describeError(Throwable error) {
         if (error == null) {
             return "erro desconhecido";
