@@ -24875,3 +24875,6 @@ Caused by: org.postgresql.util.PSQLException: ERRO: coluna t.device_id não exis
 [2026-03-29 09:44:36] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [17064].
 [2026-03-29 09:44:40] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [34136].
 [2026-03-29 11:55:47] Encerramento solicitado pelo usuario.
+[2026-03-30 22:57:42] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-03-30 22:58:06] Leitura DM manual salva em banco para device Id_04: blocos=5, historico=30, current-only=0.
+[2026-03-30 22:58:11] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 67.
