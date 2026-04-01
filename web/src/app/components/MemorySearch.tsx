@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, Database, Download, Search } from 'lucide-react';
 import { requestApi } from '../../services/api';
 
@@ -68,8 +68,37 @@ export const MemorySearch: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTurnoId, setSelectedTurnoId] = useState('');
   const [memoryValues, setMemoryValues] = useState<MemoryValueByDeviceDTO[]>([]);
+  const [searchScopeLabel, setSearchScopeLabel] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const resetResultFilters = useCallback(() => {
+    setSelectedTag('');
+    setSelectedDate('');
+    setSelectedTurnoId('');
+  }, []);
+
+  const runSearch = useCallback(
+    async (requestUrl: string, scopeLabel: string) => {
+      setMemoryValues([]);
+      resetResultFilters();
+      setLoading(true);
+      setError(null);
+
+      try {
+        const data = await requestApi<MemoryValueByDeviceDTO[] | undefined>(requestUrl, {
+          cache: 'no-store',
+        });
+        setMemoryValues(data ?? []);
+        setSearchScopeLabel(scopeLabel);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Erro ao pesquisar memoria.');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [resetResultFilters],
+  );
 
   useEffect(() => {
     let alive = true;
@@ -108,54 +137,20 @@ export const MemorySearch: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (activeTab !== 'device') {
+      return;
+    }
     if (!selectedMnemonic) {
       setMemoryValues([]);
-      setSelectedTag('');
-      setSelectedDate('');
-      setSelectedTurnoId('');
+      setSearchScopeLabel('');
+      resetResultFilters();
       setError(null);
       return;
     }
 
-    const controller = new AbortController();
-    setMemoryValues([]);
-    setSelectedTag('');
-    setSelectedDate('');
-    setSelectedTurnoId('');
-    setLoading(true);
-    setError(null);
-
     const requestUrl = `/api/devices/${selectedMnemonic}/memory-values?_ts=${Date.now()}`;
-
-    fetch(requestUrl, {
-      signal: controller.signal,
-      cache: 'no-store',
-    })
-      .then((res) => {
-        if (res.status === 204) {
-          return [];
-        }
-        if (!res.ok) {
-          throw new Error('Nenhum dado encontrado.');
-        }
-        return res.json();
-      })
-      .then((data: MemoryValueByDeviceDTO[]) => {
-        setMemoryValues(data);
-      })
-      .catch((err) => {
-        if (err.name !== 'AbortError') {
-          setError(err.message);
-        }
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
-      });
-
-    return () => controller.abort();
-  }, [selectedMnemonic]);
+    void runSearch(requestUrl, `Device ${selectedMnemonic}`);
+  }, [activeTab, selectedMnemonic, resetResultFilters, runSearch]);
 
   const selectedDevice = useMemo(
     () => devices.find((device) => device.mnemonic === selectedMnemonic) ?? null,
@@ -190,8 +185,6 @@ export const MemorySearch: React.FC = () => {
     }
     return machines.filter((row) => row.setorId === setorId && row.miniFabricaId === miniFabricaId);
   }, [machines, selectedSetorId, selectedMiniFabricaId]);
-
-
 
   const selectedTurno = useMemo(() => {
     const id = Number(selectedTurnoId);
@@ -317,31 +310,43 @@ export const MemorySearch: React.FC = () => {
     setSelectedMiniFabricaId('');
     setSelectedSetorId('');
     setSelectedMachineId('');
-    setSelectedMnemonic('');
   };
 
   const onMiniFabricaChange = (value: string) => {
     setSelectedMiniFabricaId(value);
     setSelectedSetorId('');
     setSelectedMachineId('');
-    setSelectedMnemonic('');
   };
 
   const onSetorChange = (value: string) => {
     setSelectedSetorId(value);
     setSelectedMachineId('');
-    setSelectedMnemonic('');
   };
 
   const onMachineChange = (value: string) => {
     setSelectedMachineId(value);
-    if (!value) {
-      setSelectedMnemonic('');
-      return;
+  };
+
+  const handleStructuredSearch = () => {
+    const params = new URLSearchParams();
+
+    if (selectedFabricaId) {
+      params.set('fabricaId', selectedFabricaId);
     }
-    const selectedMachine = machines.find((row) => row.id === Number(value));
-    const selectedById = devices.find((row) => row.id === selectedMachine?.deviceId);
-    setSelectedMnemonic(selectedById?.mnemonic ?? '');
+    if (selectedMiniFabricaId) {
+      params.set('miniFabricaId', selectedMiniFabricaId);
+    }
+    if (selectedSetorId) {
+      params.set('setorId', selectedSetorId);
+    }
+    if (selectedMachineId) {
+      params.set('machineId', selectedMachineId);
+    }
+
+    params.set('_ts', String(Date.now()));
+    const queryString = params.toString();
+    const requestUrl = `/api/devices/memory-values/structured${queryString ? `?${queryString}` : ''}`;
+    void runSearch(requestUrl, 'Pesquisa estruturada');
   };
 
   return (
@@ -502,7 +507,6 @@ export const MemorySearch: React.FC = () => {
                   ))}
                 </select>
               </div>
-
             </div>
 
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -525,6 +529,17 @@ export const MemorySearch: React.FC = () => {
                 </select>
               </div>
             </div>
+
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={handleStructuredSearch}
+                className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+              >
+                <Search className="h-4 w-4" />
+                Pesquisar
+              </button>
+            </div>
           </div>
         )}
       </section>
@@ -542,7 +557,7 @@ export const MemorySearch: React.FC = () => {
         </div>
       )}
 
-      {!loading && selectedMnemonic && memoryValues.length === 0 && !error && (
+      {!loading && activeTab === 'device' && selectedMnemonic && memoryValues.length === 0 && !error && (
         <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-600 shadow-sm">
           Nenhuma memoria encontrada para o device selecionado.
         </div>
@@ -557,7 +572,9 @@ export const MemorySearch: React.FC = () => {
             </div>
             <div className="flex items-center gap-2">
               <div className="text-xs text-slate-600">
-                {selectedDevice
+                {activeTab === 'structure'
+                  ? searchScopeLabel || 'Pesquisa estruturada'
+                  : selectedDevice
                   ? `${selectedDevice.name} (${selectedDevice.mnemonic})`
                   : selectedMnemonic}{' '}
                 | {filteredMemoryValues.length} de {memoryValues.length} registros
@@ -632,7 +649,7 @@ export const MemorySearch: React.FC = () => {
         </section>
       )}
 
-      {!loading && selectedMnemonic && memoryValues.length > 0 && filteredMemoryValues.length === 0 && !error && (
+      {!loading && memoryValues.length > 0 && filteredMemoryValues.length === 0 && !error && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 shadow-sm">
           Nenhuma memoria encontrada com os filtros selecionados.
         </div>
@@ -642,5 +659,4 @@ export const MemorySearch: React.FC = () => {
 };
 
 export default MemorySearch;
-
 

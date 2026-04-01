@@ -2,6 +2,7 @@ package org.ctrl.db.api.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -88,8 +89,41 @@ public class MemoryRepository {
             dto.setTagName(rs.getString("tag_name"));
             dto.setMemoryName(rs.getString("memory_name"));
             dto.setValue(rs.getInt("value"));
-            dto.setTimestamp(rs.getTimestamp("timestamp").toLocalDateTime());
+            Timestamp timestamp = rs.getTimestamp("timestamp");
+            dto.setTimestamp(timestamp == null ? null : timestamp.toLocalDateTime());
             return dto;
         }, mnemonic);
+    }
+
+    public List<MemoryValueByDeviceDTO> findByStructureFilters(
+            Long fabricaId,
+            Long miniFabricaId,
+            Long setorId,
+            Long machineId) {
+        String sql = "SELECT d.id AS device_id, d.mnemonic AS plc_mnemonic, t.name AS tag_name, " +
+                " m.name AS memory_name, mv.value AS value, mv.updated_at AS timestamp " +
+                "FROM public.tag t " +
+                "JOIN public.machine mc ON mc.id = t.machine_id " +
+                "JOIN public.device d ON d.id = mc.device_id " +
+                "JOIN public.memory m ON m.id = t.memory_id " +
+                "JOIN public.memory_value mv ON mv.memory_id = m.id " +
+                "LEFT JOIN public.mini_fabrica mf ON mf.id = mc.mini_fabrica_id " +
+                "WHERE (? IS NULL OR mf.fabrica_id = ?) " +
+                "AND (? IS NULL OR mc.mini_fabrica_id = ?) " +
+                "AND (? IS NULL OR mc.setor_id = ?) " +
+                "AND (? IS NULL OR mc.id = ?) " +
+                "ORDER BY mv.updated_at DESC";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            MemoryValueByDeviceDTO dto = new MemoryValueByDeviceDTO();
+            dto.setDeviceId(rs.getInt("device_id"));
+            dto.setPlcMnemonic(rs.getString("plc_mnemonic"));
+            dto.setTagName(rs.getString("tag_name"));
+            dto.setMemoryName(rs.getString("memory_name"));
+            dto.setValue(rs.getInt("value"));
+            Timestamp timestamp = rs.getTimestamp("timestamp");
+            dto.setTimestamp(timestamp == null ? null : timestamp.toLocalDateTime());
+            return dto;
+        }, fabricaId, fabricaId, miniFabricaId, miniFabricaId, setorId, setorId, machineId, machineId);
     }
 }

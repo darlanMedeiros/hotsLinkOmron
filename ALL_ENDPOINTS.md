@@ -1,8 +1,11 @@
+<!-- spellcheck: off -->
+
 # ALL_ENDPOINTS
 
 Base URL: `/api`
 
 ## Devices (`/api/devices`)
+
 - `GET /api/devices`
 - `GET /api/devices/{id}`
 - `POST /api/devices`
@@ -10,6 +13,7 @@ Base URL: `/api`
 - `DELETE /api/devices/{id}`
 
 ## Memories (`/api/memories`)
+
 - `GET /api/memories`
 - `GET /api/memories/{id}`
 - `POST /api/memories`
@@ -17,6 +21,7 @@ Base URL: `/api`
 - `DELETE /api/memories/{id}`
 
 ## Tags CRUD (`/api/tags`)
+
 - `GET /api/tags`
 - `GET /api/tags/{id}`
 - `POST /api/tags`
@@ -24,6 +29,7 @@ Base URL: `/api`
 - `DELETE /api/tags/{id}`
 
 ## Turnos (`/api/turnos`)
+
 - `GET /api/turnos`
 - `GET /api/turnos/{id}`
 - `POST /api/turnos`
@@ -31,6 +37,7 @@ Base URL: `/api`
 - `DELETE /api/turnos/{id}`
 
 ## Fabricas (`/api/fabricas`)
+
 - `GET /api/fabricas`
 - `GET /api/fabricas/{id}`
 - `POST /api/fabricas`
@@ -38,6 +45,7 @@ Base URL: `/api`
 - `DELETE /api/fabricas/{id}`
 
 ## Mini Fabricas (`/api/mini-fabricas`)
+
 - `GET /api/mini-fabricas`
 - `GET /api/mini-fabricas/{id}`
 - `POST /api/mini-fabricas`
@@ -45,6 +53,7 @@ Base URL: `/api`
 - `DELETE /api/mini-fabricas/{id}`
 
 ## Setores (`/api/setores`)
+
 - `GET /api/setores`
 - `GET /api/setores/{id}`
 - `POST /api/setores`
@@ -52,6 +61,7 @@ Base URL: `/api`
 - `DELETE /api/setores/{id}`
 
 ## Machines (`/api/machines`)
+
 - `GET /api/machines`
 - `GET /api/machines/{id}`
 - `POST /api/machines`
@@ -59,6 +69,7 @@ Base URL: `/api`
 - `DELETE /api/machines/{id}`
 
 ## Memory Values CRUD (`/api/memory-values`)
+
 - `GET /api/memory-values`
 - `GET /api/memory-values/{id}`
 - `POST /api/memory-values`
@@ -66,9 +77,11 @@ Base URL: `/api`
 - `DELETE /api/memory-values/{id}`
 
 ## Memory Search by Device
+
 - `GET /api/devices/{mnemonic}/memory-values`
 
 ## DM
+
 - `GET /api/devices/{mnemonic}/dm/{address}`
 - `GET /api/devices/{mnemonic}/dm/{address}/last`
 - `GET /api/devices/{mnemonic}/dm/{address}/current`
@@ -76,15 +89,18 @@ Base URL: `/api`
 - `GET /api/devices/{mnemonic}/dm`
 
 ## RR
+
 - `GET /api/devices/{mnemonic}/rr/{address}/bit/{bit}`
 - `GET /api/devices/{mnemonic}/rr/10/bit/0`
 - `GET /api/devices/{mnemonic}/rr/{address}/bits`
 - `GET /api/devices/{mnemonic}/rr/{address}`
 
 ## Tag by Device / Global Tag
+
 - `GET /api/devices/{mnemonic}/tag/{name}`
 - `GET /api/devices/tag/{name}`
 
 ## Create Tag Mapping from Device + Memory Type
+
 - `POST /api/devices/{mnemonic}/tags/dm/{address}`
 - `POST /api/devices/{mnemonic}/tags/rr/{address}/bit/{bit}`

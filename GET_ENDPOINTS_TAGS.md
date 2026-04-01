@@ -1,3 +1,5 @@
+<!-- spellcheck: off -->
+
 # Tag Read Endpoints
 
 Base path: /api

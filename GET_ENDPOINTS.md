@@ -1,3 +1,5 @@
+<!-- spellcheck: off -->
+
 # API Endpoints
 
 Base path: `/api`
