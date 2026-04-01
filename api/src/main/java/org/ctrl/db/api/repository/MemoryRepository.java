@@ -108,10 +108,10 @@ public class MemoryRepository {
                 "JOIN public.memory m ON m.id = t.memory_id " +
                 "JOIN public.memory_value mv ON mv.memory_id = m.id " +
                 "LEFT JOIN public.mini_fabrica mf ON mf.id = mc.mini_fabrica_id " +
-                "WHERE (? IS NULL OR mf.fabrica_id = ?) " +
-                "AND (? IS NULL OR mc.mini_fabrica_id = ?) " +
-                "AND (? IS NULL OR mc.setor_id = ?) " +
-                "AND (? IS NULL OR mc.id = ?) " +
+                "WHERE (?::bigint IS NULL OR mf.fabrica_id = ?::bigint) " +
+                "AND (?::bigint IS NULL OR mc.mini_fabrica_id = ?::bigint) " +
+                "AND (?::bigint IS NULL OR mc.setor_id = ?::bigint) " +
+                "AND (?::bigint IS NULL OR mc.id = ?::bigint) " +
                 "ORDER BY mv.updated_at DESC";
 
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
@@ -127,3 +127,4 @@ public class MemoryRepository {
         }, fabricaId, fabricaId, miniFabricaId, miniFabricaId, setorId, setorId, machineId, machineId);
     }
 }
+
