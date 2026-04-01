@@ -13,7 +13,7 @@ Projeto para comunicacao com CLP Omron via protocolo HostLink, com coleta de dad
 
 ## Pre-requisitos
 
-1. Java 11+
+1. Java 21 (a versao efetiva esta em `pom.xml`, propriedade `java.version`)
 2. Maven 3.9+
 3. Node.js 18+
 4. PostgreSQL 14+ (ou compativel)
@@ -97,8 +97,38 @@ Exemplos:
 2. Endpoints: `GET_ENDPOINTS.md`
 3. Integracao dashboard: `web/src/app/components/README-INTEGRATION.md`
 
+## Controle de versao (Git)
+
+Artefatos de build **nao** devem ser commitados. O `.gitignore` ja ignora `target/`, `node_modules/`, `dist/`, `*.class`.
+
+Se pastas `target/` dos modulos Maven **ja estiverem no historico** (rastreadas por engano), pare de rastrear assim (na raiz do repositorio; PowerShell ou Git Bash):
+
+```powershell
+git rm -r --cached api/target
+git rm -r --cached collector/target
+git rm -r --cached core/target
+git status
+git commit -m "chore: parar de rastrear pastas target/ dos modulos Maven"
+```
+
+Os diretorios continuam no disco; apenas saem do indice. Depois disso, `mvn compile` volta a preencher `target/` localmente.
+
+### node_modules acidentalmente versionados
+
+Se `git ls-files` listar arquivos em `node_modules/` ou `web/node_modules/`, remova do indice (operacao pode demorar):
+
+```powershell
+git rm -r --cached node_modules
+git rm -r --cached web/node_modules
+git rm -r --cached web/src/node_modules
+git commit -m "chore: parar de rastrear node_modules"
+```
+
+Reinstale dependencias com `npm install` na raiz e em `web/` conforme o fluxo do projeto.
+
 ## Observacoes
 
 1. A API fixa timezone em `America/Sao_Paulo` (`ApiApplication`).
 2. O dashboard web ja consome API real (nao usa mais mock).
 3. O collector GUI grava log em `collector-gui.log`.
+4. Testes ou collector com serial: em JDKs recentes, `jSerialComm` pode exigir `--enable-native-access=ALL-UNNAMED` (ver avisos do JVM ao rodar).
