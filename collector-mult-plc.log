@@ -24878,3 +24878,7 @@ Caused by: org.postgresql.util.PSQLException: ERRO: coluna t.device_id não exis
 [2026-03-30 22:57:42] Comunicacao serial compartilhada conectada na porta COM1.
 [2026-03-30 22:58:06] Leitura DM manual salva em banco para device Id_04: blocos=5, historico=30, current-only=0.
 [2026-03-30 22:58:11] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 67.
+[2026-04-01 21:32:36] Encerramento solicitado pelo usuario.
+[2026-04-01 21:33:34] Encerramento solicitado pelo usuario.
+[2026-04-01 21:37:15] Encerramento solicitado pelo usuario.
+[2026-04-01 21:37:21] Encerramento solicitado pelo usuario.

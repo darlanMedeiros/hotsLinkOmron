@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import { Factory } from 'lucide-react';
 import { NavLink, Outlet, useLocation } from 'react-router';
 
@@ -14,7 +13,9 @@ export function MainLayout() {
       case '/plc-tag':
         return 'Cadastro PLC, memory e tags';
       case '/memory-search':
-        return 'Busca de Memória';
+        return 'Busca de Memoria';
+      case '/collector':
+        return 'Execucao local do Collector Multi PLC';
       default:
         return '';
     }
@@ -33,7 +34,7 @@ export function MainLayout() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <div className="flex items-center rounded-lg border border-white/20 bg-white/10 p-1">
+              <div className="flex flex-wrap items-center rounded-lg border border-white/20 bg-white/10 p-1">
                 <NavLink
                   to="/"
                   className={({ isActive }) =>
@@ -73,6 +74,16 @@ export function MainLayout() {
                   }
                 >
                   Memory Search
+                </NavLink>
+                <NavLink
+                  to="/collector"
+                  className={({ isActive }) =>
+                    `rounded-md px-3 py-1.5 text-sm font-medium transition ${
+                      isActive ? 'bg-white text-blue-700' : 'text-white hover:bg-white/10'
+                    }`
+                  }
+                >
+                  Collector
                 </NavLink>
               </div>
             </div>
