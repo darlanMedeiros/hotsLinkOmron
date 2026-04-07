@@ -1,6 +1,9 @@
 package org.ctrl.db.config;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
+import java.util.Properties;
 import javax.sql.DataSource;
 import org.ctrl.db.controller.DmValueController;
 import org.ctrl.db.controller.RrValueController;
@@ -20,11 +23,18 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 @Configuration
 public class DbConfig {
 
+    private static final String DEFAULT_DB_URL = "jdbc:postgresql://localhost:5432/omron?currentSchema=public";
+    private static final String DEFAULT_DB_USER = "omron_user";
+    private static final String DEFAULT_DB_PASSWORD = "admin";
+
     @Bean
     public DataSource dataSource() {
-        String url = getenv("DB_URL", "jdbc:postgresql://localhost:5432/omron?currentSchema=public");
-        String user = getenv("DB_USER", "omron_user");
-        String password = getenv("DB_PASSWORD", "admin");
+        String profile = resolveProfile();
+        Properties profileProps = loadProfileProperties(profile);
+
+        String url = resolveValue("DB_URL", "db.url", profileProps, DEFAULT_DB_URL);
+        String user = resolveValue("DB_USER", "db.user", profileProps, DEFAULT_DB_USER);
+        String password = resolveValue("DB_PASSWORD", "db.password", profileProps, DEFAULT_DB_PASSWORD);
 
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("org.postgresql.Driver");
@@ -79,11 +89,62 @@ public class DbConfig {
         return new TagController(service);
     }
 
-    private String getenv(String name, String fallback) {
-        String value = System.getenv(name);
-        if (value == null || value.trim().isEmpty()) {
-            return fallback;
+    private String resolveProfile() {
+        String profile = firstNonBlank(
+                System.getProperty("app.env"),
+                System.getenv("APP_ENV"),
+                System.getProperty("spring.profiles.active"),
+                System.getenv("SPRING_PROFILES_ACTIVE"),
+                "dev");
+
+        if (profile.contains(",")) {
+            profile = profile.split(",", 2)[0].trim();
         }
+        return profile;
+    }
+
+    private Properties loadProfileProperties(String profile) {
+        Properties props = new Properties();
+        String resourceName = "db-" + profile + ".properties";
+
+        try (InputStream in = DbConfig.class.getClassLoader().getResourceAsStream(resourceName)) {
+            if (in != null) {
+                props.load(in);
+                return props;
+            }
+        } catch (IOException ex) {
+            throw new IllegalStateException("Erro ao carregar " + resourceName, ex);
+        }
+
+        if (!"dev".equalsIgnoreCase(profile)) {
+            try (InputStream in = DbConfig.class.getClassLoader().getResourceAsStream("db-dev.properties")) {
+                if (in != null) {
+                    props.load(in);
+                }
+            } catch (IOException ex) {
+                throw new IllegalStateException("Erro ao carregar db-dev.properties", ex);
+            }
+        }
+
+        return props;
+    }
+
+    private String resolveValue(String envKey, String propKey, Properties profileProps, String fallback) {
+        String value = firstNonBlank(
+                System.getenv(envKey),
+                System.getProperty(envKey),
+                System.getProperty(propKey),
+                profileProps.getProperty(propKey),
+                fallback);
         return value;
+    }
+
+    private String firstNonBlank(String... values) {
+        for (String value : values) {
+            if (value != null && !value.trim().isEmpty()) {
+                return value.trim();
+            }
+        }
+        return "";
     }
 }
