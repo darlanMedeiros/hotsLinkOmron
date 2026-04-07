@@ -65,7 +65,8 @@ export const MemorySearch: React.FC = () => {
 
   const [selectedMnemonic, setSelectedMnemonic] = useState<string>('');
   const [selectedTag, setSelectedTag] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedStartDate, setSelectedStartDate] = useState('');
+  const [selectedEndDate, setSelectedEndDate] = useState('');
   const [selectedTurnoId, setSelectedTurnoId] = useState('');
   const [memoryValues, setMemoryValues] = useState<MemoryValueByDeviceDTO[]>([]);
   const [searchScopeLabel, setSearchScopeLabel] = useState('');
@@ -74,7 +75,8 @@ export const MemorySearch: React.FC = () => {
 
   const resetResultFilters = useCallback(() => {
     setSelectedTag('');
-    setSelectedDate('');
+    setSelectedStartDate('');
+    setSelectedEndDate('');
     setSelectedTurnoId('');
   }, []);
 
@@ -251,8 +253,18 @@ export const MemorySearch: React.FC = () => {
       values = values.filter((mv) => mv.tagName.trim().toLowerCase() === selectedTag.trim().toLowerCase());
     }
 
-    if (selectedDate) {
-      values = values.filter((mv) => toLocalDateKey(mv.timestamp) === selectedDate);
+    if (selectedStartDate) {
+      values = values.filter((mv) => {
+        const dateKey = toLocalDateKey(mv.timestamp);
+        return dateKey !== '' && dateKey >= selectedStartDate;
+      });
+    }
+
+    if (selectedEndDate) {
+      values = values.filter((mv) => {
+        const dateKey = toLocalDateKey(mv.timestamp);
+        return dateKey !== '' && dateKey <= selectedEndDate;
+      });
     }
 
     if (selectedTurno) {
@@ -260,7 +272,7 @@ export const MemorySearch: React.FC = () => {
     }
 
     return values;
-  }, [memoryValues, selectedTag, selectedDate, selectedTurno]);
+  }, [memoryValues, selectedTag, selectedStartDate, selectedEndDate, selectedTurno]);
 
   const formatTimestamp = (value: string) => {
     const date = new Date(value);
@@ -592,7 +604,10 @@ export const MemorySearch: React.FC = () => {
           </div>
 
           <div className="max-h-[60vh] overflow-auto">
-            <table key={`${selectedMnemonic}-${selectedTag || 'none'}-${selectedDate || 'all'}-${selectedTurnoId || 'all'}-${memoryValues.length}`} className="min-w-full text-sm">
+            <table
+              key={`${selectedMnemonic}-${selectedTag || 'none'}-${selectedStartDate || 'all'}-${selectedEndDate || 'all'}-${selectedTurnoId || 'all'}-${memoryValues.length}`}
+              className="min-w-full text-sm"
+            >
               <thead className="sticky top-0 z-10 bg-slate-50 text-slate-600 shadow-sm">
                 <tr>
                   <th className="px-4 py-2 text-left font-medium">
@@ -615,16 +630,32 @@ export const MemorySearch: React.FC = () => {
                   <th className="px-4 py-2 text-left font-medium">Memoria</th>
                   <th className="px-4 py-2 text-left font-medium">Valor</th>
                   <th className="px-4 py-2 text-left font-medium">
-                    <div className="flex min-w-[220px] items-center gap-2">
+                    <div className="flex min-w-[320px] items-center gap-2">
                       <span>Atualizado em</span>
                       <input
                         type="date"
-                        value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
+                        value={selectedStartDate}
+                        onChange={(e) => setSelectedStartDate(e.target.value)}
                         onKeyDown={(e) => e.preventDefault()}
                         onPaste={(e) => e.preventDefault()}
                         onDrop={(e) => e.preventDefault()}
                         inputMode="none"
+                        aria-label="Data inicial"
+                        title="Data inicial"
+                        className="rounded-md border border-slate-300 bg-white px-2 py-1 text-xs font-normal text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      />
+                      <span className="text-xs font-normal text-slate-500">ate</span>
+                      <input
+                        type="date"
+                        value={selectedEndDate}
+                        onChange={(e) => setSelectedEndDate(e.target.value)}
+                        onKeyDown={(e) => e.preventDefault()}
+                        onPaste={(e) => e.preventDefault()}
+                        onDrop={(e) => e.preventDefault()}
+                        inputMode="none"
+                        min={selectedStartDate || undefined}
+                        aria-label="Data final"
+                        title="Data final"
                         className="rounded-md border border-slate-300 bg-white px-2 py-1 text-xs font-normal text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                       />
                     </div>
