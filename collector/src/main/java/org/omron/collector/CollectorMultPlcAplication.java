@@ -300,6 +300,9 @@ public class CollectorMultPlcAplication {
                 if (manualStatusLabel != null) {
                     manualStatusLabel.setText(status);
                 }
+                if (manualScanButton != null) {
+                    manualScanButton.setEnabled(!"LENDO".equalsIgnoreCase(status));
+                }
             });
         });
 
