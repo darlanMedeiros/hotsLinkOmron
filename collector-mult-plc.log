@@ -24882,3 +24882,37 @@ Caused by: org.postgresql.util.PSQLException: ERRO: coluna t.device_id não exis
 [2026-04-01 21:33:34] Encerramento solicitado pelo usuario.
 [2026-04-01 21:37:15] Encerramento solicitado pelo usuario.
 [2026-04-01 21:37:21] Encerramento solicitado pelo usuario.
+[2026-04-01 21:44:34] Encerramento solicitado pelo usuario.
+[2026-04-01 21:44:59] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-04-01 21:45:28] Leitura DM manual salva em banco para device Id_04: blocos=5, historico=30, current-only=0.
+[2026-04-01 21:45:32] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 67.
+[2026-04-01 21:48:51] [PLC 4] Lista de TAG atualizada do banco: 18 item(ns).
+[2026-04-01 21:48:51] [PLC 4] Monitor iniciado para 18 TAGs.
+[2026-04-01 21:48:51] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [29914, 0].
+[2026-04-01 21:48:52] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [29915, 0].
+[2026-04-01 21:48:54] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [59834, 0].
+[2026-04-01 21:48:55] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERCARGA41 (DM 106..107) = [0, 0].
+[2026-04-01 21:48:57] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERDESC41 (DM 108..109) = [0, 0].
+[2026-04-01 21:48:58] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERCARGA42 (DM 110..111) = [0, 0].
+[2026-04-01 21:49:00] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERCARGA43 (DM 114..115) = [0, 0].
+[2026-04-01 21:49:02] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERDESC42 (DM 112..113) = [0, 0].
+[2026-04-01 21:49:03] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERDESC43 (DM 116..117) = [0, 0].
+[2026-04-01 21:49:05] [PLC 4] Alteracao salva (historico+current): TAG QUALIDADE41 (DM 118..119) = [0, 0].
+[2026-04-01 21:49:06] [PLC 4] Alteracao salva (historico+current): TAG QUALIDADE42 (DM 120..121) = [0, 0].
+[2026-04-01 21:49:08] [PLC 4] Alteracao salva (historico+current): TAG QUALIDADE43 (DM 122..123) = [0, 0].
+[2026-04-01 21:49:09] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [29932].
+[2026-04-01 21:49:10] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC33 (DM 313..313) = [0].
+[2026-04-01 21:49:11] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [29934].
+[2026-04-01 21:49:13] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC26 (DM 312..312) = [0].
+[2026-04-01 21:49:14] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC25 (DM 311..311) = [6].
+[2026-04-01 21:49:16] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [59876].
+[2026-04-01 21:49:19] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [29942, 0].
+[2026-04-01 21:49:20] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [29943, 0].
+[2026-04-01 21:49:22] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [59888, 0].
+[2026-04-01 21:49:33] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [29956].
+[2026-04-01 21:49:35] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [29958].
+[2026-04-01 21:49:39] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [59922].
+[2026-04-01 21:49:42] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [29965, 0].
+[2026-04-01 21:49:42] [PLC 4] Monitor finalizado.
+[2026-04-01 21:50:20] Encerramento solicitado pelo usuario.
+[2026-04-01 21:50:20] Comunicacao serial compartilhada encerrada.
