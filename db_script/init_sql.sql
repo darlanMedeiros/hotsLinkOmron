@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS memory_value_current (
 CREATE TABLE IF NOT EXISTS tag (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    machine_id BIGINT NOT NULL REFERENCES machine(id) ON DELETE RESTRICT,
+    machine_id BIGINT NOT NULL,
     memory_id INTEGER NOT NULL REFERENCES memory(id) ON DELETE CASCADE,
     persist_history BOOLEAN NOT NULL DEFAULT true,
     CONSTRAINT uq_tag_machine_name UNIQUE (machine_id, name)

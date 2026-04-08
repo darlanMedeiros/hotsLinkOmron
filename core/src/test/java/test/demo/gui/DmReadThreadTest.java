@@ -45,7 +45,7 @@ class DmReadThreadTest {
             assumeTrue(SerialUtils.getPortIdentifiers().stream().anyMatch(
                     name -> name.equalsIgnoreCase("COM1")),
                     "COM1 não disponível para testes de integração");
-        } catch (SerialPortException ex) {
+        } catch (SerialPortException | UnsatisfiedLinkError ex) {
             assumeTrue(false, "Não foi possível listar portas seriais: " + ex.getMessage());
         }
 
@@ -117,3 +117,4 @@ class DmReadThreadTest {
         assertTrue(executed.get(), "A thread de leitura deve executar ao menos uma vez");
     }
 }
+
