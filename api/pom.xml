@@ -16,7 +16,7 @@
     <packaging>jar</packaging>
 
     <name>hostLink-api</name>
-    <description>API Spring Boot para comunicação Omron HostLink</description>
+    <description>API Spring Boot para comunicacao Omron HostLink</description>
 
     <dependencies>
 
@@ -50,10 +50,20 @@
 
     <build>
         <plugins>
-            <!-- versão vem do parent (pluginManagement) -->
+            <!-- versao vem do parent (pluginManagement) -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>org.ctrl.db.ApiApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
