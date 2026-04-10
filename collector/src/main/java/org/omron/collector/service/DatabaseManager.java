@@ -8,6 +8,7 @@ import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.model.MemoryValue;
 import org.ctrl.db.service.DmValueService;
+import org.ctrl.db.service.RrValueService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -22,6 +23,7 @@ public class DatabaseManager {
 
     private AnnotationConfigApplicationContext dbContext;
     private DmValueService dmValueService;
+    private RrValueService rrValueService;
     private volatile boolean initialized;
 
     public void initialize() {
@@ -34,6 +36,7 @@ public class DatabaseManager {
             }
             dbContext = new AnnotationConfigApplicationContext(DbConfig.class);
             dmValueService = dbContext.getBean(DmValueService.class);
+            rrValueService = dbContext.getBean(RrValueService.class);
             initialized = true;
         }
     }
@@ -44,6 +47,7 @@ public class DatabaseManager {
                 dbContext.close();
                 dbContext = null;
                 dmValueService = null;
+                rrValueService = null;
                 initialized = false;
             }
         }
@@ -61,6 +65,11 @@ public class DatabaseManager {
     public DmValueService getDmValueService() {
         initialize();
         return dmValueService;
+    }
+
+    public RrValueService getRrValueService() {
+        initialize();
+        return rrValueService;
     }
 
     /**

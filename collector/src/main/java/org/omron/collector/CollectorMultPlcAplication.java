@@ -125,6 +125,7 @@ public class CollectorMultPlcAplication {
                     serialManager.getSharedSerial()::getHandler,
                     dbManager::initialize,
                     () -> dbManager.getDmValueService(),
+                    // () -> dbManager.getRrValueService(),
                     logger::log,
                     () -> serialManager.requestDisconnectByUnresponsiveNode(nodeId));
             plcPanels.add(panel);

@@ -24947,3 +24947,93 @@ org.ctrl.comm.MaximumNumberOfRetriesReachedException:  Maximum number of retries
 [2026-04-06 20:39:01] Conecte a serial compartilhada antes de executar a leitura DM manual.
 [2026-04-06 20:39:01] Serial nao conectada
 [2026-04-06 20:39:09] Encerramento solicitado pelo usuario.
+[2026-04-09 21:50:49] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-04-09 21:51:19] [PLC 4] Lista de TAG atualizada do banco: 18 item(ns).
+[2026-04-09 21:51:19] [PLC 4] Monitor iniciado para 18 TAGs.
+[2026-04-09 21:51:20] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [30046, 0].
+[2026-04-09 21:51:22] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [30047, 0].
+[2026-04-09 21:51:23] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [60098, 0].
+[2026-04-09 21:51:25] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERCARGA41 (DM 106..107) = [0, 0].
+[2026-04-09 21:51:27] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERDESC41 (DM 108..109) = [0, 0].
+[2026-04-09 21:51:28] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERCARGA42 (DM 110..111) = [0, 0].
+[2026-04-09 21:51:30] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERCARGA43 (DM 114..115) = [0, 0].
+[2026-04-09 21:51:31] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERDESC42 (DM 112..113) = [0, 0].
+[2026-04-09 21:51:33] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERDESC43 (DM 116..117) = [0, 0].
+[2026-04-09 21:51:34] [PLC 4] Alteracao salva (historico+current): TAG QUALIDADE41 (DM 118..119) = [0, 0].
+[2026-04-09 21:51:36] [PLC 4] Alteracao salva (historico+current): TAG QUALIDADE42 (DM 120..121) = [0, 0].
+[2026-04-09 21:51:37] [PLC 4] Alteracao salva (historico+current): TAG QUALIDADE43 (DM 122..123) = [0, 0].
+[2026-04-09 21:51:38] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [30064].
+[2026-04-09 21:51:40] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC33 (DM 313..313) = [0].
+[2026-04-09 21:51:41] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [30067].
+[2026-04-09 21:51:43] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC26 (DM 312..312) = [0].
+[2026-04-09 21:51:44] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC25 (DM 311..311) = [6].
+[2026-04-09 21:51:46] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [60142].
+[2026-04-09 21:51:49] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [30075, 0].
+[2026-04-09 21:51:50] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [30076, 0].
+[2026-04-09 21:51:51] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [60156, 0].
+[2026-04-09 21:52:03] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [30089].
+[2026-04-09 21:52:05] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [30091].
+[2026-04-09 21:52:09] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [60190].
+[2026-04-09 21:52:12] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [30098, 0].
+[2026-04-09 21:52:13] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [30099, 0].
+[2026-04-09 21:52:14] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [60200, 0].
+[2026-04-09 21:52:25] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [30112].
+[2026-04-09 21:52:28] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [30114].
+[2026-04-09 21:52:31] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [60234].
+[2026-04-09 21:52:35] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [30121, 0].
+[2026-04-09 21:52:36] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [30122, 0].
+[2026-04-09 21:52:37] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [60246, 0].
+[2026-04-09 21:52:48] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [30134].
+[2026-04-09 21:52:49] Leitura DM manual salva em banco para device PRENSA: blocos=9, historico=54, current-only=0.
+[2026-04-09 21:52:58] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 119.
+[2026-04-09 21:52:58] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [30144].
+[2026-04-09 21:53:01] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [60294].
+[2026-04-09 21:53:05] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [30151, 0].
+[2026-04-09 21:53:06] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [30152, 0].
+[2026-04-09 21:53:07] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [60306, 0].
+[2026-04-09 21:53:18] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [30164].
+[2026-04-09 21:53:21] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [30166].
+[2026-04-09 21:53:24] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [60340].
+[2026-04-09 21:53:27] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [30173, 0].
+[2026-04-09 21:53:29] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [30175, 0].
+[2026-04-09 21:53:30] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [60352, 0].
+[2026-04-09 21:53:41] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [30187].
+[2026-04-09 21:53:43] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [30189].
+[2026-04-09 21:53:47] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [60386].
+[2026-04-09 21:53:50] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [30196, 0].
+[2026-04-09 21:53:51] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [30197, 0].
+[2026-04-09 21:53:53] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [60398, 0].
+[2026-04-09 21:54:04] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [30210].
+[2026-04-09 21:54:06] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [30212].
+[2026-04-09 21:54:10] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [60432].
+[2026-04-09 21:54:13] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [30219, 0].
+[2026-04-09 21:54:14] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [30220, 0].
+[2026-04-09 21:54:16] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [60444, 0].
+[2026-04-09 21:54:27] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [30233].
+[2026-04-09 21:54:29] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [30235].
+[2026-04-09 21:54:33] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [60476].
+[2026-04-09 21:54:36] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [30242, 0].
+[2026-04-09 21:54:37] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [30243, 0].
+[2026-04-09 21:54:39] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [60488, 0].
+[2026-04-09 21:54:50] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [30256].
+[2026-04-09 21:54:52] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [30258].
+[2026-04-09 21:54:56] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [60522].
+[2026-04-09 21:54:59] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [30265, 0].
+[2026-04-09 21:55:00] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [30266, 0].
+[2026-04-09 21:55:02] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [60536, 0].
+[2026-04-09 21:55:13] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [30279].
+[2026-04-09 21:55:15] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [30279].
+[2026-04-09 21:55:19] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [60570].
+[2026-04-09 21:55:22] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [30288, 0].
+[2026-04-09 21:55:24] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [30279, 0].
+[2026-04-09 21:55:25] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [60582, 0].
+[2026-04-09 21:55:33] [PLC 4] Monitor finalizado.
+[2026-04-09 21:55:35] Comunicacao serial compartilhada encerrada.
+[2026-04-09 21:55:43] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-04-09 21:55:46] [PLC 4] Lista de TAG atualizada do banco: 18 item(ns).
+[2026-04-09 21:55:46] [PLC 4] Monitor iniciado para 18 TAGs.
+[2026-04-09 21:55:46] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [30312, 0].
+[2026-04-09 21:55:47] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [30279, 0].
+[2026-04-09 21:55:49] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [60630, 0].
+[2026-04-09 21:55:50] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERCARGA41 (DM 106..107) = [0, 0].
+[2026-04-09 21:55:50] [PLC 4] Monitor finalizado.
