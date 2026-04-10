@@ -25383,3 +25383,10 @@ org.ctrl.comm.MaximumNumberOfRetriesReachedException:  Maximum number of retries
 [2026-04-09 22:56:13] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [6672].
 [2026-04-09 22:56:21] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [3344, 0].
 [2026-04-09 22:56:23] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [6692, 0].
+[2026-04-09 22:56:34] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [3357].
+[2026-04-09 22:56:40] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [6726].
+[2026-04-09 22:56:48] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [3371, 0].
+[2026-04-09 22:56:50] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [6746, 0].
+[2026-04-09 22:56:52] Comunicacao serial compartilhada encerrada.
+[2026-04-09 22:56:53] [PLC 4] Monitor finalizado.
+[2026-04-09 22:56:55] Encerramento solicitado pelo usuario.
