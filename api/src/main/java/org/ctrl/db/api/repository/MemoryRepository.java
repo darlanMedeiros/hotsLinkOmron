@@ -17,13 +17,22 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class MemoryRepository {
 
-    private static final String SQL_FIND_ALL = "SELECT m.id, m.device_id, m.name, m.address " +
+    private static final String MEMORY_KEY_SQL =
+            "CONCAT(m.name, '_', LPAD(m.address::text, 4, '0'), " +
+            "CASE WHEN m.bit >= 0 THEN CONCAT('.', LPAD(m.bit::text, 2, '0')) ELSE '' END)";
+
+    private static final String SQL_FIND_ALL = "SELECT m.id, m.device_id, m.name AS area, m.address, m.bit " +
             "FROM public.memory m " +
             "JOIN public.device d ON d.id = m.device_id " +
-            "ORDER BY d.mnemonic, m.device_id, m.name, m.id";
-    private static final String SQL_FIND_BY_ID = "SELECT id, device_id, name, address FROM public.memory WHERE id = ?";
-    private static final String SQL_INSERT = "INSERT INTO public.memory (device_id, name, address) VALUES (?, ?, ?) RETURNING id, device_id, name, address";
-    private static final String SQL_UPDATE = "UPDATE public.memory SET device_id = ?, name = ?, address = ? WHERE id = ? RETURNING id, device_id, name, address";
+            "ORDER BY d.mnemonic, m.device_id, m.name, m.address, m.bit, m.id";
+    private static final String SQL_FIND_BY_ID =
+            "SELECT id, device_id, name AS area, address, bit FROM public.memory WHERE id = ?";
+    private static final String SQL_INSERT =
+            "INSERT INTO public.memory (device_id, name, address, bit) VALUES (?, ?, ?, ?) " +
+            "RETURNING id, device_id, name AS area, address, bit";
+    private static final String SQL_UPDATE =
+            "UPDATE public.memory SET device_id = ?, name = ?, address = ?, bit = ? WHERE id = ? " +
+            "RETURNING id, device_id, name AS area, address, bit";
     private static final String SQL_DELETE = "DELETE FROM public.memory WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
@@ -41,13 +50,13 @@ public class MemoryRepository {
         return queryOptional(SQL_FIND_BY_ID, id);
     }
 
-    public Memory create(int deviceId, String name, int address) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), deviceId, name,
-                address);
+    public Memory create(int deviceId, String area, int address, int bit) {
+        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), deviceId, area,
+                address, bit);
     }
 
-    public Optional<Memory> update(int id, int deviceId, String name, int address) {
-        return queryOptional(SQL_UPDATE, deviceId, name, address, id);
+    public Optional<Memory> update(int id, int deviceId, String area, int address, int bit) {
+        return queryOptional(SQL_UPDATE, deviceId, area, address, bit, id);
     }
 
     public boolean delete(int id) {
@@ -67,13 +76,14 @@ public class MemoryRepository {
         return new Memory(
                 rs.getInt("id"),
                 rs.getInt("device_id"),
-                rs.getString("name"),
-                rs.getInt("address"));
+                rs.getString("area"),
+                rs.getInt("address"),
+                rs.getInt("bit"));
     }
 
     public List<MemoryValueByDeviceDTO> findByDeviceMnemonic(String mnemonic) {
         String sql = "SELECT d.id AS device_id, d.mnemonic AS plc_mnemonic, t.name AS tag_name, " +
-                     " m.name AS memory_name, mv.value AS value, mv.updated_at AS timestamp " +
+                     " " + MEMORY_KEY_SQL + " AS memory_name, mv.value AS value, mv.updated_at AS timestamp " +
                      "FROM public.tag t " +
                      "JOIN public.machine mc ON mc.id = t.machine_id " +
                      "JOIN public.device d ON d.id = mc.device_id " +
@@ -101,7 +111,7 @@ public class MemoryRepository {
             Long setorId,
             Long machineId) {
         String sql = "SELECT d.id AS device_id, d.mnemonic AS plc_mnemonic, t.name AS tag_name, " +
-                " m.name AS memory_name, mv.value AS value, mv.updated_at AS timestamp " +
+                " " + MEMORY_KEY_SQL + " AS memory_name, mv.value AS value, mv.updated_at AS timestamp " +
                 "FROM public.tag t " +
                 "JOIN public.machine mc ON mc.id = t.machine_id " +
                 "JOIN public.device d ON d.id = mc.device_id " +
@@ -127,4 +137,3 @@ public class MemoryRepository {
         }, fabricaId, fabricaId, miniFabricaId, miniFabricaId, setorId, setorId, machineId, machineId);
     }
 }
-

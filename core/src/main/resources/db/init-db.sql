@@ -45,8 +45,9 @@ CREATE TABLE device (
 CREATE TABLE memory (
     id SERIAL PRIMARY KEY,
     device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE CASCADE,
-    name VARCHAR(50) NOT NULL,
+    name VARCHAR(10) NOT NULL CHECK (name IN ('DM', 'HR', 'RR', 'WR', 'TC')),
     address INTEGER NOT NULL DEFAULT 0 CHECK (address >= 0),
+    bit SMALLINT NOT NULL DEFAULT -1 CHECK (bit BETWEEN -1 AND 15),
     UNIQUE (id, device_id)
 );
 
@@ -146,9 +147,9 @@ CREATE TABLE producao_por_turno_machine (
 
 CREATE UNIQUE INDEX idx_device_mnemonic ON device(mnemonic);
 CREATE UNIQUE INDEX idx_device_no_id ON device(no_id) WHERE no_id IS NOT NULL;
-CREATE UNIQUE INDEX idx_memory_device_name ON memory(device_id, name);
+CREATE UNIQUE INDEX idx_memory_device_name ON memory(device_id, name, address, bit);
 CREATE INDEX idx_memory_device ON memory(device_id);
-CREATE INDEX idx_memory_device_address ON memory(device_id, address);
+CREATE INDEX idx_memory_device_address ON memory(device_id, name, address, bit);
 CREATE UNIQUE INDEX idx_memory_id_device ON memory(id, device_id);
 CREATE INDEX idx_memory_value_memory ON memory_value(memory_id);
 CREATE INDEX idx_memory_value_updated_at ON memory_value(updated_at);

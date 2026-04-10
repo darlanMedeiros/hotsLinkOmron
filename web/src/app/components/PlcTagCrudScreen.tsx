@@ -18,8 +18,9 @@ type Device = {
 type Memory = {
   id: number;
   deviceId: number;
-  name: string;
+  area: string;
   address: number;
+  bit: number;
 };
 
 type Machine = {
@@ -39,6 +40,7 @@ type TagCrud = {
 type SectionKey = 'device' | 'memory' | 'tag';
 
 export function PlcTagCrudScreen() {
+  const memoryAreas = ['DM', 'HR', 'RR', 'WR', 'TC'] as const;
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<ViewMessage | null>(null);
@@ -61,8 +63,9 @@ export function PlcTagCrudScreen() {
   const [newDeviceNodeId, setNewDeviceNodeId] = useState<number | ''>('');
 
   const [newMemoryDeviceId, setNewMemoryDeviceId] = useState<number | ''>('');
-  const [newMemoryName, setNewMemoryName] = useState('');
+  const [newMemoryArea, setNewMemoryArea] = useState<(typeof memoryAreas)[number]>('DM');
   const [newMemoryAddress, setNewMemoryAddress] = useState<number | ''>('');
+  const [newMemoryBit, setNewMemoryBit] = useState<number | ''>('');
 
   const [newTagName, setNewTagName] = useState('');
   const [newTagMachineId, setNewTagMachineId] = useState<number | ''>('');
@@ -179,7 +182,11 @@ export function PlcTagCrudScreen() {
 
   const memoryLabel = (id: number) => {
     const found = memories.find((m) => m.id === id);
-    return found ? `${found.name} (${id})` : `ID ${id}`;
+    if (!found) {
+      return `ID ${id}`;
+    }
+    const bitSuffix = found.bit >= 0 ? `.${String(found.bit).padStart(2, '0')}` : '';
+    return `${found.area}_${String(found.address).padStart(4, '0')}${bitSuffix} (${id})`;
   };
 
   const renderDeviceSection = () => (
@@ -285,24 +292,29 @@ export function PlcTagCrudScreen() {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 deviceId: Number(newMemoryDeviceId),
-                name: newMemoryName,
+                area: newMemoryArea,
                 address: Number(newMemoryAddress),
+                bit: newMemoryBit === '' ? -1 : Number(newMemoryBit),
               }),
             });
             setNewMemoryDeviceId('');
-            setNewMemoryName('');
+            setNewMemoryArea('DM');
             setNewMemoryAddress('');
+            setNewMemoryBit('');
           }, 'Memory criada');
         }}
-        className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3"
+        className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-4"
       >
         <select value={newMemoryDeviceId} onChange={(e) => setNewMemoryDeviceId(e.target.value ? Number(e.target.value) : '')} className="rounded-md border border-slate-300 px-3 py-2 text-sm">
           <option value="">Selecione Device</option>
           {devices.map((d) => <option key={d.id} value={d.id}>{d.mnemonic} ({d.id})</option>)}
         </select>
-        <input value={newMemoryName} onChange={(e) => setNewMemoryName(e.target.value)} placeholder="Nome da memory (ex: DM_29)" className="rounded-md border border-slate-300 px-3 py-2 text-sm" />
+        <select value={newMemoryArea} onChange={(e) => setNewMemoryArea(e.target.value as (typeof memoryAreas)[number])} className="rounded-md border border-slate-300 px-3 py-2 text-sm">
+          {memoryAreas.map((area) => <option key={area} value={area}>{area}</option>)}
+        </select>
         <input type="number" min={0} value={newMemoryAddress} onChange={(e) => setNewMemoryAddress(e.target.value ? Number(e.target.value) : '')} placeholder="Address" className="rounded-md border border-slate-300 px-3 py-2 text-sm" />
-        <button disabled={isSaving} className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white sm:col-span-3">Criar</button>
+        <input type="number" min={0} max={15} value={newMemoryBit} onChange={(e) => setNewMemoryBit(e.target.value ? Number(e.target.value) : '')} placeholder="Bit (0-15, opcional)" className="rounded-md border border-slate-300 px-3 py-2 text-sm" />
+        <button disabled={isSaving} className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white sm:col-span-4">Criar</button>
       </form>
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm">
@@ -310,8 +322,9 @@ export function PlcTagCrudScreen() {
             <tr className="text-left text-slate-600">
               <th className="pb-2 pr-2">ID</th>
               <th className="pb-2 pr-2">Device</th>
-              <th className="pb-2 pr-2">Nome</th>
+              <th className="pb-2 pr-2">Area</th>
               <th className="pb-2 pr-2">Address</th>
+              <th className="pb-2 pr-2">Bit</th>
               <th className="pb-2 text-right">Acoes</th>
             </tr>
           </thead>
@@ -329,10 +342,17 @@ export function PlcTagCrudScreen() {
                     ) : deviceLabel(row.deviceId)}
                   </td>
                   <td className="py-2 pr-2">
-                    {editing ? <input value={editingMemory.name} onChange={(e) => setEditingMemory({ ...editingMemory, name: e.target.value })} className="w-36 rounded border border-slate-300 px-2 py-1" /> : row.name}
+                    {editing ? (
+                      <select value={editingMemory.area} onChange={(e) => setEditingMemory({ ...editingMemory, area: e.target.value })} className="w-24 rounded border border-slate-300 px-2 py-1">
+                        {memoryAreas.map((area) => <option key={area} value={area}>{area}</option>)}
+                      </select>
+                    ) : row.area}
                   </td>
                   <td className="py-2 pr-2">
                     {editing ? <input type="number" min={0} value={editingMemory.address} onChange={(e) => setEditingMemory({ ...editingMemory, address: Number(e.target.value || 0) })} className="w-24 rounded border border-slate-300 px-2 py-1" /> : row.address}
+                  </td>
+                  <td className="py-2 pr-2">
+                    {editing ? <input type="number" min={-1} max={15} value={editingMemory.bit} onChange={(e) => setEditingMemory({ ...editingMemory, bit: Number(e.target.value || -1) })} className="w-20 rounded border border-slate-300 px-2 py-1" /> : row.bit}
                   </td>
                   <td className="py-2 text-right">
                     <div className="inline-flex gap-1">
@@ -400,7 +420,7 @@ export function PlcTagCrudScreen() {
         </select>
         <select value={newTagMemoryId} onChange={(e) => setNewTagMemoryId(e.target.value ? Number(e.target.value) : '')} className="rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-2">
           <option value="">{newTagMachineId === '' ? 'Selecione a machine antes' : 'Memory'}</option>
-          {availableMemoriesForNewTag.map((m) => <option key={m.id} value={m.id}>{m.name} ({m.id})</option>)}
+          {availableMemoriesForNewTag.map((m) => <option key={m.id} value={m.id}>{memoryLabel(m.id)}</option>)}
         </select>
         <label className="flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-3">
           <input
@@ -457,7 +477,7 @@ export function PlcTagCrudScreen() {
                             const machine = machines.find((mc) => mc.id === editingTag.machineId);
                             return !!machine && m.deviceId === machine.deviceId;
                           })
-                          .map((m) => <option key={m.id} value={m.id}>{m.name} ({m.id})</option>)}
+                          .map((m) => <option key={m.id} value={m.id}>{memoryLabel(m.id)}</option>)}
                       </select>
                     ) : memoryLabel(row.memoryId)}
                   </td>

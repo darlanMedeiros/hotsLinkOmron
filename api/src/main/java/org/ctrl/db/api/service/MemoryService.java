@@ -2,12 +2,15 @@ package org.ctrl.db.api.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.ctrl.db.api.model.Memory;
 import org.ctrl.db.api.repository.MemoryRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MemoryService {
+
+    private static final Set<String> ALLOWED_AREAS = Set.of("DM", "HR", "RR", "WR", "TC");
 
     private final MemoryRepository repository;
 
@@ -24,20 +27,22 @@ public class MemoryService {
         return repository.findById(id);
     }
 
-    public Memory create(Integer deviceId, String name, Integer address) {
+    public Memory create(Integer deviceId, String area, Integer address, Integer bit) {
         return repository.create(
                 requireId(deviceId, "deviceId"),
-                requireName(name),
-                requireAddress(address));
+                requireArea(area),
+                requireAddress(address),
+                requireBit(bit));
     }
 
-    public Optional<Memory> update(int id, Integer deviceId, String name, Integer address) {
+    public Optional<Memory> update(int id, Integer deviceId, String area, Integer address, Integer bit) {
         validateId(id, "id");
         return repository.update(
                 id,
                 requireId(deviceId, "deviceId"),
-                requireName(name),
-                requireAddress(address));
+                requireArea(area),
+                requireAddress(address),
+                requireBit(bit));
     }
 
     public boolean delete(int id) {
@@ -45,11 +50,15 @@ public class MemoryService {
         return repository.delete(id);
     }
 
-    private String requireName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("name is required");
+    private String requireArea(String area) {
+        if (area == null || area.trim().isEmpty()) {
+            throw new IllegalArgumentException("area is required");
         }
-        return name.trim();
+        String normalized = area.trim().toUpperCase();
+        if (!ALLOWED_AREAS.contains(normalized)) {
+            throw new IllegalArgumentException("area must be one of DM, HR, RR, WR, TC");
+        }
+        return normalized;
     }
 
     private int requireId(Integer id, String field) {
@@ -64,6 +73,17 @@ public class MemoryService {
             throw new IllegalArgumentException("address must be zero or greater");
         }
         return address.intValue();
+    }
+
+    private int requireBit(Integer bit) {
+        if (bit == null) {
+            return -1;
+        }
+        int normalized = bit.intValue();
+        if (normalized < -1 || normalized > 15) {
+            throw new IllegalArgumentException("bit must be between 0 and 15, or -1 for word access");
+        }
+        return normalized;
     }
 
     private void validateId(int id, String field) {

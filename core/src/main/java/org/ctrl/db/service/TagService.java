@@ -25,6 +25,10 @@ import org.springframework.lang.NonNull;
 
 public class TagService {
 
+    private static final String MEMORY_KEY_EXPR =
+            "CONCAT(m.name, '_', LPAD(m.address::text, 4, '0'), " +
+            "CASE WHEN m.bit >= 0 THEN CONCAT('.', LPAD(m.bit::text, 2, '0')) ELSE '' END)";
+
     private static final String SQL_UPSERT_DEVICE =
             "INSERT INTO public.device (mnemonic, name, description) " +
             "VALUES (:mnemonic, :name, :description) " +
@@ -33,17 +37,17 @@ public class TagService {
             "RETURNING id";
 
     private static final String SQL_UPSERT_MEMORY =
-            "INSERT INTO public.memory (device_id, name, address) " +
-            "VALUES (:deviceId, :name, :address) " +
-            "ON CONFLICT (device_id, name) DO UPDATE " +
-            "SET name = EXCLUDED.name, address = EXCLUDED.address " +
+            "INSERT INTO public.memory (device_id, name, address, bit) " +
+            "VALUES (:deviceId, :name, :address, :bit) " +
+            "ON CONFLICT (device_id, name, address, bit) DO UPDATE " +
+            "SET name = EXCLUDED.name " +
             "RETURNING id";
 
     private static final String SQL_FIND_MACHINE_BY_DEVICE =
             "SELECT id FROM public.machine WHERE device_id = :deviceId ORDER BY id LIMIT 1";
 
     private static final String SQL_FIND_CURRENT_BY_TAG =
-            "SELECT t.name AS tag_name, m.name AS memory_name, d.mnemonic AS device_mnemonic, " +
+            "SELECT t.name AS tag_name, " + MEMORY_KEY_EXPR + " AS memory_name, d.mnemonic AS device_mnemonic, " +
             "mvc.value, mvc.updated_at " +
             "FROM public.tag t " +
             "JOIN public.machine mc ON mc.id = t.machine_id " +
@@ -53,7 +57,7 @@ public class TagService {
             "WHERE d.mnemonic = :mnemonic AND t.name = :tagName";
 
     private static final String SQL_FIND_CURRENT_BY_TAG_NAME =
-            "SELECT t.name AS tag_name, m.name AS memory_name, d.mnemonic AS device_mnemonic, " +
+            "SELECT t.name AS tag_name, " + MEMORY_KEY_EXPR + " AS memory_name, d.mnemonic AS device_mnemonic, " +
             "mvc.value, mvc.updated_at " +
             "FROM public.tag t " +
             "JOIN public.machine mc ON mc.id = t.machine_id " +
@@ -68,7 +72,7 @@ public class TagService {
             "FROM public.device d " +
             "JOIN public.memory m ON m.device_id = d.id " +
             "JOIN public.memory_value_current mvc ON mvc.memory_id = m.id " +
-            "WHERE d.mnemonic = :mnemonic AND m.name = :memoryName";
+            "WHERE d.mnemonic = :mnemonic AND " + MEMORY_KEY_EXPR + " = :memoryName";
 
     private static final Map<String, org.ctrl.extras.Tag> TAG_CATALOG = buildTagCatalog();
 
@@ -193,11 +197,12 @@ public class TagService {
         if (cached != null) {
             return cached;
         }
-        int address = extractAddress(name);
+        ParsedMemoryKey parsed = parseMemoryKey(name);
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("deviceId", deviceId)
-                .addValue("name", name)
-                .addValue("address", address);
+                .addValue("name", parsed.area)
+                .addValue("address", parsed.address)
+                .addValue("bit", parsed.bit);
         Integer id = namedTemplate.queryForObject(SQL_UPSERT_MEMORY, params, Integer.class);
         if (id == null) {
             throw new IllegalStateException("Memory id was null for name " + name);
@@ -206,17 +211,37 @@ public class TagService {
         return id.intValue();
     }
 
-    private int extractAddress(String memoryName) {
+    private ParsedMemoryKey parseMemoryKey(String memoryName) {
         if (memoryName == null) {
-            return 0;
+            return new ParsedMemoryKey("DM", 0, -1);
         }
-        if (memoryName.startsWith("DM_")) {
-            return DmValueService.parseDmAddress(memoryName);
+        String normalized = memoryName.trim().toUpperCase();
+        if (normalized.isEmpty()) {
+            return new ParsedMemoryKey("DM", 0, -1);
         }
-        if (memoryName.startsWith("RR_")) {
-            return RrValueService.parseRrName(memoryName).getAddress();
+
+        int underscore = normalized.indexOf('_');
+        if (underscore < 0) {
+            return new ParsedMemoryKey(normalized, 0, -1);
         }
-        return 0;
+
+        String area = normalized.substring(0, underscore).trim();
+        String rest = normalized.substring(underscore + 1).trim();
+        if (rest.isEmpty()) {
+            return new ParsedMemoryKey(area, 0, -1);
+        }
+
+        int dot = rest.indexOf('.');
+        try {
+            if (dot < 0) {
+                return new ParsedMemoryKey(area, Integer.parseInt(rest), -1);
+            }
+            int address = Integer.parseInt(rest.substring(0, dot));
+            int bit = Integer.parseInt(rest.substring(dot + 1));
+            return new ParsedMemoryKey(area, address, bit);
+        } catch (NumberFormatException ex) {
+            return new ParsedMemoryKey(area, 0, -1);
+        }
     }
 
     private TagValue mapTagValue(ResultSet rs, int rowNum) throws SQLException {
@@ -313,6 +338,18 @@ public class TagService {
             return a;
         }
         return a.isAfter(b) ? a : b;
+    }
+
+    private static final class ParsedMemoryKey {
+        private final String area;
+        private final int address;
+        private final int bit;
+
+        private ParsedMemoryKey(String area, int address, int bit) {
+            this.area = area == null || area.trim().isEmpty() ? "DM" : area.trim();
+            this.address = Math.max(0, address);
+            this.bit = Math.max(-1, Math.min(15, bit));
+        }
     }
 
     private static final class MemoryCurrent {

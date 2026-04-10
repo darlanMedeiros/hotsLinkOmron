@@ -110,7 +110,7 @@ public class DatabaseManager {
 
         List<Map<String, Object>> rows = jdbc.queryForList(
                 "SELECT t.name AS tag_name, t.persist_history AS persist_history, " +
-                        "m.address AS memory_address, m.name AS memory_name " +
+                        "m.name AS memory_area, m.address AS memory_address, m.bit AS memory_bit " +
                         "FROM public.device d " +
                         "JOIN public.machine ma ON ma.device_id = d.id " +
                         "JOIN public.tag t ON t.machine_id = ma.id " +
@@ -122,13 +122,18 @@ public class DatabaseManager {
         for (Map<String, Object> row : rows) {
             String tagName = asString(row.get("tag_name"));
             Integer address = asInt(row.get("memory_address"));
-            String memoryName = asString(row.get("memory_name"));
+            String memoryArea = asString(row.get("memory_area"));
+            Integer memoryBit = asInt(row.get("memory_bit"));
+            String memoryName = formatMemoryKey(memoryArea, address, memoryBit);
             boolean persistHistory = asBoolean(row.get("persist_history"), true);
 
             if (tagName == null || address == null || address.intValue() < 0) {
                 continue;
             }
-            if (memoryName != null && !memoryName.startsWith("DM_")) {
+            if (!"DM".equalsIgnoreCase(asString(memoryArea, ""))) {
+                continue;
+            }
+            if (memoryBit != null && memoryBit.intValue() >= 0) {
                 continue;
             }
 
@@ -160,7 +165,7 @@ public class DatabaseManager {
         }
 
         List<Map<String, Object>> rows = jdbc.queryForList(
-                "SELECT t.name AS tag_name, m.name AS memory_name, m.address AS memory_address, " +
+                "SELECT t.name AS tag_name, m.name AS memory_area, m.address AS memory_address, m.bit AS memory_bit, " +
                         "t.persist_history AS persist_history " +
                         "FROM public.device d " +
                         "JOIN public.machine ma ON ma.device_id = d.id " +
@@ -172,17 +177,18 @@ public class DatabaseManager {
         Map<String, ManualProductionTagBinding> out = new LinkedHashMap<>();
         for (Map<String, Object> row : rows) {
             String tagName = asString(row.get("tag_name"));
-            String memoryName = asString(row.get("memory_name"));
+            String memoryArea = asString(row.get("memory_area"));
             Integer address = asInt(row.get("memory_address"));
+            Integer memoryBit = asInt(row.get("memory_bit"));
             boolean persistHistory = asBoolean(row.get("persist_history"), true);
 
-            if (tagName == null || memoryName == null || memoryName.trim().isEmpty()
+            if (tagName == null || memoryArea == null || memoryArea.trim().isEmpty()
                     || address == null || address.intValue() < 0) {
                 continue;
             }
 
             out.put(tagName, new ManualProductionTagBinding(
-                    memoryName, address.intValue(), persistHistory));
+                    formatMemoryKey(memoryArea, address, memoryBit), address.intValue(), persistHistory));
         }
         return out;
     }
@@ -242,6 +248,16 @@ public class DatabaseManager {
         if ("0".equals(text))
             return false;
         return Boolean.parseBoolean(text);
+    }
+
+    private static String formatMemoryKey(String area, Integer address, Integer bit) {
+        String normalizedArea = area == null || area.trim().isEmpty() ? "DM" : area.trim().toUpperCase();
+        int normalizedAddress = address == null ? 0 : Math.max(0, address.intValue());
+        int normalizedBit = bit == null ? -1 : bit.intValue();
+        if (normalizedBit >= 0) {
+            return String.format("%s_%04d.%02d", normalizedArea, normalizedAddress, normalizedBit);
+        }
+        return String.format("%s_%04d", normalizedArea, normalizedAddress);
     }
 
     // Data classes

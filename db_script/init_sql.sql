@@ -44,11 +44,12 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_device_mnemonic ON device(mnemonic);
 CREATE TABLE IF NOT EXISTS memory (
     id SERIAL PRIMARY KEY,
     device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE CASCADE,
-    name VARCHAR(50) NOT NULL,
-    address INTEGER NOT NULL DEFAULT 0 CHECK (address >= 0)
+    name VARCHAR(10) NOT NULL,
+    address INTEGER NOT NULL DEFAULT 0 CHECK (address >= 0),
+    bit SMALLINT NOT NULL DEFAULT -1 CHECK (bit BETWEEN -1 AND 15)
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS idx_memory_device_name ON memory(device_id, name);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_memory_device_name ON memory(device_id, name, address, bit);
 
 CREATE TABLE IF NOT EXISTS memory_value (
     id SERIAL PRIMARY KEY,
@@ -453,8 +454,10 @@ CREATE INDEX IF NOT EXISTS idx_mini_fabrica_fabrica ON mini_fabrica(fabrica_id);
 CREATE INDEX IF NOT EXISTS idx_mini_fabrica_setor_mini_fabrica ON mini_fabrica_setor(mini_fabrica_id);
 CREATE INDEX IF NOT EXISTS idx_mini_fabrica_setor_setor ON mini_fabrica_setor(setor_id);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_device_no_id ON device(no_id) WHERE no_id IS NOT NULL;
+DROP INDEX IF EXISTS idx_memory_device_name;
+CREATE UNIQUE INDEX IF NOT EXISTS idx_memory_device_name ON memory(device_id, name, address, bit);
 CREATE INDEX IF NOT EXISTS idx_memory_device ON memory(device_id);
-CREATE INDEX IF NOT EXISTS idx_memory_device_address ON memory(device_id, address);
+CREATE INDEX IF NOT EXISTS idx_memory_device_address ON memory(device_id, name, address, bit);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_memory_id_device ON memory(id, device_id);
 CREATE INDEX IF NOT EXISTS idx_memory_value_memory ON memory_value(memory_id);
 CREATE INDEX IF NOT EXISTS idx_memory_value_updated_at ON memory_value(updated_at);

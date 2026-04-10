@@ -44,11 +44,12 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_device_mnemonic ON device(mnemonic);
 CREATE TABLE IF NOT EXISTS memory (
     id SERIAL PRIMARY KEY,
     device_id INTEGER NOT NULL REFERENCES device(id) ON DELETE CASCADE,
-    name VARCHAR(50) NOT NULL,
-    address INTEGER NOT NULL DEFAULT 0 CHECK (address >= 0)
+    name VARCHAR(10) NOT NULL,
+    address INTEGER NOT NULL DEFAULT 0 CHECK (address >= 0),
+    bit SMALLINT NOT NULL DEFAULT -1 CHECK (bit BETWEEN -1 AND 15)
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS idx_memory_device_name ON memory(device_id, name);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_memory_device_name ON memory(device_id, name, address, bit);
 
 CREATE TABLE IF NOT EXISTS memory_value (
     id SERIAL PRIMARY KEY,
@@ -68,7 +69,7 @@ CREATE TABLE IF NOT EXISTS memory_value_current (
 CREATE TABLE IF NOT EXISTS tag (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    machine_id BIGINT NOT NULL REFERENCES machine(id) ON DELETE RESTRICT,
+    machine_id BIGINT NOT NULL,
     memory_id INTEGER NOT NULL REFERENCES memory(id) ON DELETE CASCADE,
     persist_history BOOLEAN NOT NULL DEFAULT true,
     CONSTRAINT uq_tag_machine_name UNIQUE (machine_id, name)
@@ -223,12 +224,240 @@ SET address = COALESCE(
     0
 );
 
+-- mini_fabrica_setor migration
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.tables
+        WHERE table_schema = 'public'
+          AND table_name = 'mini_fabrica_setor'
+    ) THEN
+        CREATE TABLE public.mini_fabrica_setor (
+            mini_fabrica_id BIGINT NOT NULL REFERENCES public.mini_fabrica(id) ON DELETE CASCADE,
+            setor_id BIGINT NOT NULL REFERENCES public.setor(id) ON DELETE RESTRICT,
+            PRIMARY KEY (mini_fabrica_id, setor_id)
+        );
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'setor'
+          AND column_name = 'mini_fabrica_id'
+    ) THEN
+        INSERT INTO public.mini_fabrica_setor (mini_fabrica_id, setor_id)
+        SELECT s.mini_fabrica_id, s.id
+        FROM public.setor s
+        ON CONFLICT DO NOTHING;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'machine'
+          AND column_name = 'mini_fabrica_id'
+    ) THEN
+        ALTER TABLE public.machine ADD COLUMN mini_fabrica_id BIGINT;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'setor'
+          AND column_name = 'mini_fabrica_id'
+    ) THEN
+        UPDATE public.machine m
+        SET mini_fabrica_id = s.mini_fabrica_id
+        FROM public.setor s
+        WHERE m.setor_id = s.id
+          AND m.mini_fabrica_id IS NULL;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'machine'
+          AND column_name = 'mini_fabrica_id'
+    ) THEN
+        IF NOT EXISTS (
+            SELECT 1
+            FROM information_schema.table_constraints
+            WHERE table_schema = 'public'
+              AND table_name = 'machine'
+              AND constraint_name = 'fk_machine_mini_fabrica_setor'
+        ) THEN
+            ALTER TABLE public.machine
+                ADD CONSTRAINT fk_machine_mini_fabrica_setor
+                FOREIGN KEY (mini_fabrica_id, setor_id)
+                REFERENCES public.mini_fabrica_setor(mini_fabrica_id, setor_id)
+                ON DELETE RESTRICT
+                NOT VALID;
+        END IF;
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM information_schema.table_constraints
+            WHERE table_schema = 'public'
+              AND table_name = 'machine'
+              AND constraint_name = 'fk_machine_mini_fabrica'
+        ) THEN
+            ALTER TABLE public.machine
+                ADD CONSTRAINT fk_machine_mini_fabrica
+                FOREIGN KEY (mini_fabrica_id)
+                REFERENCES public.mini_fabrica(id)
+                ON DELETE RESTRICT
+                NOT VALID;
+        END IF;
+
+        IF NOT EXISTS (
+            SELECT 1
+            FROM pg_constraint
+            WHERE conname = 'uq_machine_name_per_mini_fabrica_setor'
+        ) THEN
+            CREATE UNIQUE INDEX IF NOT EXISTS uq_machine_name_per_mini_fabrica_setor
+                ON public.machine(mini_fabrica_id, setor_id, name);
+        END IF;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    ALTER TABLE public.machine DROP CONSTRAINT IF EXISTS uq_machine_name_per_setor;
+END $$;
+
+DO $$
+BEGIN
+    ALTER TABLE public.setor DROP CONSTRAINT IF EXISTS uq_setor_name_per_mini_fabrica;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'setor'
+          AND column_name = 'mini_fabrica_id'
+    ) THEN
+        ALTER TABLE public.setor DROP COLUMN mini_fabrica_id;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'uq_setor_name'
+    ) THEN
+        ALTER TABLE public.setor
+            ADD CONSTRAINT uq_setor_name UNIQUE (name);
+    END IF;
+END $$;
+
+-- tag_machine migration
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'tag'
+          AND column_name = 'machine_id'
+    ) THEN
+        ALTER TABLE public.tag ADD COLUMN machine_id BIGINT;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'tag'
+          AND column_name = 'device_id'
+    ) THEN
+        UPDATE public.tag t
+        SET machine_id = m.id
+        FROM (
+            SELECT device_id, MIN(id) AS id
+            FROM public.machine
+            GROUP BY device_id
+        ) m
+        WHERE m.device_id = t.device_id
+          AND t.machine_id IS NULL;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    ALTER TABLE public.tag DROP CONSTRAINT IF EXISTS fk_tag_memory_same_device;
+END $$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.table_constraints
+        WHERE table_schema = 'public'
+          AND table_name = 'tag'
+          AND constraint_name = 'fk_tag_machine'
+    ) THEN
+        ALTER TABLE public.tag
+            ADD CONSTRAINT fk_tag_machine
+            FOREIGN KEY (machine_id)
+            REFERENCES public.machine(id)
+            ON DELETE RESTRICT
+            NOT VALID;
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    ALTER TABLE public.tag DROP CONSTRAINT IF EXISTS uq_tag_machine_name;
+    ALTER TABLE public.tag
+        ADD CONSTRAINT uq_tag_machine_name UNIQUE (machine_id, name);
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'tag'
+          AND column_name = 'device_id'
+    ) THEN
+        ALTER TABLE public.tag DROP COLUMN device_id;
+    END IF;
+END $$;
+
 CREATE INDEX IF NOT EXISTS idx_mini_fabrica_fabrica ON mini_fabrica(fabrica_id);
 CREATE INDEX IF NOT EXISTS idx_mini_fabrica_setor_mini_fabrica ON mini_fabrica_setor(mini_fabrica_id);
 CREATE INDEX IF NOT EXISTS idx_mini_fabrica_setor_setor ON mini_fabrica_setor(setor_id);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_device_no_id ON device(no_id) WHERE no_id IS NOT NULL;
+DROP INDEX IF EXISTS idx_memory_device_name;
+CREATE UNIQUE INDEX IF NOT EXISTS idx_memory_device_name ON memory(device_id, name, address, bit);
 CREATE INDEX IF NOT EXISTS idx_memory_device ON memory(device_id);
-CREATE INDEX IF NOT EXISTS idx_memory_device_address ON memory(device_id, address);
+CREATE INDEX IF NOT EXISTS idx_memory_device_address ON memory(device_id, name, address, bit);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_memory_id_device ON memory(id, device_id);
 CREATE INDEX IF NOT EXISTS idx_memory_value_memory ON memory_value(memory_id);
 CREATE INDEX IF NOT EXISTS idx_memory_value_updated_at ON memory_value(updated_at);

@@ -3,8 +3,9 @@ package org.ctrl.db.api.dto;
 public class MemoryRequest {
 
     private Integer deviceId;
-    private String name;
+    private String area;
     private Integer address;
+    private Integer bit;
 
     public Integer getDeviceId() {
         return deviceId;
@@ -14,12 +15,12 @@ public class MemoryRequest {
         this.deviceId = deviceId;
     }
 
-    public String getName() {
-        return name;
+    public String getArea() {
+        return area;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setArea(String area) {
+        this.area = area;
     }
 
     public Integer getAddress() {
@@ -28,5 +29,13 @@ public class MemoryRequest {
 
     public void setAddress(Integer address) {
         this.address = address;
+    }
+
+    public Integer getBit() {
+        return bit;
+    }
+
+    public void setBit(Integer bit) {
+        this.bit = bit;
     }
 }
