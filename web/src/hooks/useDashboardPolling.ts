@@ -12,6 +12,7 @@ export interface LineData {
   pecasPrensa: number;
   pecasRoller: number;
   qualidade: number;
+  statusPrensaBit: number | null;
   lastUpdatedAt: string | null;
 }
 
@@ -24,6 +25,7 @@ export interface LineConfig {
     pecasPrensa: string[];
     pecasRoller: string[];
     qualidade: string[];
+    statusPrensa: string[];
   };
 }
 
@@ -37,6 +39,7 @@ export const LINE_CONFIG: LineConfig[] = [
       pecasPrensa: ['PECAPH29'],
       pecasRoller: ['PECAROLLERCARGA41'],
       qualidade: ['QUALIDADE41'],
+      statusPrensa: ['STATUS_PH29'],
     },
   },
   {
@@ -48,6 +51,7 @@ export const LINE_CONFIG: LineConfig[] = [
       pecasPrensa: ['PECAPH30'],
       pecasRoller: ['PECAROLLERCARGA42'],
       qualidade: ['QUALIDADE42'],
+      statusPrensa: ['STATUS_PH30'],
     },
   },
   {
@@ -59,6 +63,7 @@ export const LINE_CONFIG: LineConfig[] = [
       pecasPrensa: ['PECAPH31'],
       pecasRoller: ['PECAROLLERCARGA43'],
       qualidade: ['QUALIDADE43'],
+      statusPrensa: ['STATUS_PH31'],
     },
   },
 ];
@@ -67,6 +72,7 @@ export const DEFAULT_LINE_DATA: LineData = {
   pecasPrensa: 0,
   pecasRoller: 0,
   qualidade: 0,
+  statusPrensaBit: null,
   lastUpdatedAt: null,
 };
 
@@ -177,22 +183,25 @@ export function useDashboardPolling() {
         const nextData: Record<string, LineData> = {};
 
         for (const line of LINE_CONFIG) {
-          const [pecasPrensaTag, pecasRollerTag, qualidadeTag] = await Promise.all([
+          const [pecasPrensaTag, pecasRollerTag, qualidadeTag, statusPrensaTag] = await Promise.all([
             fetchTagValue(line.tags.pecasPrensa),
             fetchTagValue(line.tags.pecasRoller),
             fetchTagValue(line.tags.qualidade),
+            fetchTagValue(line.tags.statusPrensa),
           ]);
 
           const lastUpdatedAt = mostRecent([
             pecasPrensaTag.updatedAt,
             pecasRollerTag.updatedAt,
             qualidadeTag.updatedAt,
+            statusPrensaTag.updatedAt,
           ]);
 
           nextData[line.key] = {
             pecasPrensa: pecasPrensaTag.value ?? 0,
             pecasRoller: pecasRollerTag.value ?? 0,
             qualidade: qualidadeTag.value ?? 0,
+            statusPrensaBit: statusPrensaTag.value,
             lastUpdatedAt: formatTimestamp(lastUpdatedAt),
           };
         }

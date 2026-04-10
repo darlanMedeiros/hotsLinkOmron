@@ -47,6 +47,7 @@ export function DashboardPage() {
               pecasPrensa={data.pecasPrensa}
               pecasRoller={data.pecasRoller}
               qualidade={data.qualidade}
+              statusPrensaBit={data.statusPrensaBit}
               lastUpdatedAt={data.lastUpdatedAt}
               trendPrensa={0}
               trendRoller={0}
