@@ -47,3 +47,4 @@ logs/
 temp/
 tmp/
 *.tmp
+collector-mult-plc.log
