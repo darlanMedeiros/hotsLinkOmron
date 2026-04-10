@@ -139,12 +139,14 @@ public class DatabaseManager {
             if (tagName == null || address == null || address.intValue() < 0) {
                 continue;
             }
-            if (!"DM".equalsIgnoreCase(asString(memoryArea, ""))) {
-                continue;
-            }
-            if (memoryBit != null && memoryBit.intValue() >= 0) {
-                continue;
-            }
+            /**
+             * if (!"DM".equalsIgnoreCase(asString(memoryArea, ""))) {
+             * continue;
+             * }
+             * if (memoryBit != null && memoryBit.intValue() >= 0) {
+             * continue;
+             * }
+             */
 
             tags.put(tagName, new TagData(
                     tagName, address.intValue(), memoryName, persistHistory));
