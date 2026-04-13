@@ -33,11 +33,17 @@ import org.omron.collector.service.PlcConfigurationLoader;
 import org.omron.collector.service.SerialCommunicationManager;
 import org.omron.collector.util.PlcNodeMonitorPanel;
 
+/**
+ * Aplicação principal para coleta de dados de múltiplos CLPs Omron via protocolo Host Link.
+ * Esta classe gerencia a interface gráfica (Swing), o monitoramento em tempo real de vários nodos,
+ * a comunicação serial compartilhada e operações manuais de leitura de memória DM.
+ */
 public class CollectorMultPlcAplication {
 
-    private JFrame frame;
-    private JTextArea logArea;
+    private JFrame frame; // Janela principal da aplicação
+    private JTextArea logArea; // Área de exibição de logs globais
 
+    // Componentes de configuração da comunicação serial
     private JComboBox<String> portCombo;
     private JComboBox<String> baudCombo;
     private JTextField dataBitsField;
@@ -48,22 +54,27 @@ public class CollectorMultPlcAplication {
     private JCheckBox dtrCheckBox;
     private JLabel serialStatusLabel;
 
+    // Componentes para leitura manual de DM
     private JComboBox<String> manualNodeCombo;
     private JTextField manualStartAddressField;
     private JButton manualScanButton;
     private JTextArea manualResultArea;
     private JLabel manualStatusLabel;
 
+    // Gerenciadores de serviços e lógica de negócio
     private final DatabaseManager dbManager = new DatabaseManager();
     private final LoggingService logger;
     private final SerialCommunicationManager serialManager;
     private final ManualDmScanManager manualDmScanManager;
     private final PlcConfigurationLoader configLoader;
 
-    private final List<PlcNodeMonitorPanel> plcPanels = new ArrayList<>();
-    private volatile boolean shuttingDown;
-    private List<PlcConfigurationLoader.PlcConfiguration> plcConfigs = new ArrayList<>();
+    private final List<PlcNodeMonitorPanel> plcPanels = new ArrayList<>(); // Painéis de monitoramento de cada CLP
+    private volatile boolean shuttingDown; // Flag para indicar que a aplicação está sendo encerrada
+    private List<PlcConfigurationLoader.PlcConfiguration> plcConfigs = new ArrayList<>(); // Configurações carregadas do banco
 
+    /**
+     * Ponto de entrada da aplicação. Inicializa os logs e a interface gráfica na Event Dispatch Thread.
+     */
     public static void main(String[] args) {
         LoggingService.installGlobalHandler(null);
         SwingUtilities.invokeLater(() -> {
@@ -72,6 +83,9 @@ public class CollectorMultPlcAplication {
         });
     }
 
+    /**
+     * Construtor da aplicação. Inicializa os serviços de logging, comunicação serial e carregamento de configuração.
+     */
     public CollectorMultPlcAplication() {
         this.logger = new LoggingService(createDummyTextArea());
         this.serialManager = new SerialCommunicationManager(this::updateSerialStatus, logger::log);
@@ -88,11 +102,16 @@ public class CollectorMultPlcAplication {
         return dummy;
     }
 
+    /**
+     * Constrói a interface gráfica principal, configurando janelas, abas e painéis de monitoramento.
+     */
     private void buildUi() {
         frame = new JFrame("Collector Multi PLC Monitor");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setSize(new Dimension(1366, 700));
         frame.setLayout(new BorderLayout(5, 5));
+        
+        // Listener para interceptar o fechamento da janela e realizar o shutdown seguro
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -100,8 +119,10 @@ public class CollectorMultPlcAplication {
             }
         });
 
+        // Painel superior de conexão serial
         frame.add(buildSharedSerialPanel(), BorderLayout.NORTH);
 
+        // Carrega configurações dos CLPs e cria painéis de monitoramento dinamicamente
         plcConfigs = configLoader.loadAllConfigurations();
         JPanel container = new JPanel(new GridLayout(Math.max(1, plcConfigs.size()), 1, 4, 4));
         container.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
@@ -110,6 +131,7 @@ public class CollectorMultPlcAplication {
             logger.log("Nenhum device/tag DM encontrado no banco. Cadastre devices e tags para iniciar monitoramento.");
         }
 
+        // Para cada CLP configurado, cria um painel de monitoramento específico
         for (PlcConfigurationLoader.PlcConfiguration cfg : plcConfigs) {
             final int nodeId = cfg.nodeId;
             PlcNodeMonitorPanel panel = new PlcNodeMonitorPanel(
@@ -132,6 +154,7 @@ public class CollectorMultPlcAplication {
             container.add(panel.getPanel());
         }
 
+        // Organiza a interface em abas (Monitoramento e Leitura Manual)
         JTabbedPane centerTabs = new JTabbedPane();
         centerTabs.addTab("Monitoramento", container);
         centerTabs.addTab("Leitura DM", buildManualDmPanel());
@@ -139,6 +162,9 @@ public class CollectorMultPlcAplication {
         frame.add(buildLogPanel(), BorderLayout.EAST);
     }
 
+    /**
+     * Constrói o painel de configuração e controle da comunicação serial.
+     */
     private JPanel buildSharedSerialPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Comunicacao serial compartilhada"));
@@ -147,6 +173,7 @@ public class CollectorMultPlcAplication {
         c.insets = new Insets(4, 6, 4, 6);
         c.fill = GridBagConstraints.HORIZONTAL;
 
+        // Inicializa combos e campos com valores padrão
         portCombo = new JComboBox<>();
         portCombo.setEditable(true);
         baudCombo = new JComboBox<>(new String[] { "4800", "9600", "14400", "19200", "38400", "57600", "115200" });
@@ -159,6 +186,7 @@ public class CollectorMultPlcAplication {
         rtsCheckBox = new JCheckBox("RTS", true);
         dtrCheckBox = new JCheckBox("DTS", true);
 
+        // Layout dos componentes de configuração
         int row = 0;
         c.gridx = 0;
         c.gridy = row;
@@ -225,6 +253,9 @@ public class CollectorMultPlcAplication {
         return panel;
     }
 
+    /**
+     * Constrói o painel de log global para exibir mensagens do sistema.
+     */
     private JPanel buildLogPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Log Global"));
@@ -235,6 +266,9 @@ public class CollectorMultPlcAplication {
         return panel;
     }
 
+    /**
+     * Constrói o painel para operações manuais de leitura de palavras DM.
+     */
     private JPanel buildManualDmPanel() {
         JPanel panel = new JPanel(new BorderLayout(8, 8));
         panel.setBorder(BorderFactory.createTitledBorder("Leitura DM manual"));
@@ -288,6 +322,7 @@ public class CollectorMultPlcAplication {
         manualResultArea = new JTextArea(16, 70);
         manualResultArea.setEditable(false);
 
+        // Callbacks para atualizar os resultados e o status da leitura manual na UI
         manualDmScanManager.setResultCallback(text -> {
             String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
             SwingUtilities.invokeLater(() -> {
@@ -312,6 +347,10 @@ public class CollectorMultPlcAplication {
         return panel;
     }
 
+    /**
+     * Atualiza as opções do combo de seleção de nodos para a leitura manual
+     * com base nos CLPs carregados da configuração.
+     */
     private void rebuildManualNodeOptions() {
         if (manualNodeCombo == null) {
             return;
@@ -331,6 +370,9 @@ public class CollectorMultPlcAplication {
         manualNodeCombo.setSelectedIndex(0);
     }
 
+    /**
+     * Tenta estabelecer a conexão com a porta serial configurada pelo usuário.
+     */
     private void connectSharedSerial() {
         if (serialManager.isConnected()) {
             logger.log("Comunicacao serial compartilhada ja esta ativa.");
@@ -345,6 +387,7 @@ public class CollectorMultPlcAplication {
         }
 
         try {
+            // Verifica a disponibilidade da porta antes de tentar conectar
             SerialCommunicationManager.refreshAvailablePorts(portCombo, requestedPort, "COM1");
             if (!SerialCommunicationManager.isPortAvailable(requestedPort)) {
                 updateSerialStatus("PORTA INEXISTENTE");
@@ -352,6 +395,7 @@ public class CollectorMultPlcAplication {
                 return;
             }
 
+            // Realiza a conexão através do serialManager
             serialManager.connect(
                     requestedPort,
                     Integer.parseInt(baudCombo.getSelectedItem().toString()),
@@ -362,6 +406,7 @@ public class CollectorMultPlcAplication {
                     rtsCheckBox.isSelected(),
                     dtrCheckBox.isSelected());
 
+            // Inicializa a conexão com o banco de dados após sucesso na serial
             dbManager.initialize();
             updateSerialStatus("CONECTADO");
             refreshNodeCommStatus();
@@ -373,6 +418,9 @@ public class CollectorMultPlcAplication {
         }
     }
 
+    /**
+     * Fecha a conexão serial e interrompe todos os processos de monitoramento ativos.
+     */
     private void disconnectSharedSerial() {
         manualDmScanManager.stopScan();
         for (PlcNodeMonitorPanel panel : plcPanels) {
@@ -383,6 +431,9 @@ public class CollectorMultPlcAplication {
         refreshNodeCommStatus();
     }
 
+    /**
+     * Atualiza o status de comunicação em todos os painéis de nodo individuais.
+     */
     private void refreshNodeCommStatus() {
         String shared = serialManager.isConnected() ? "CONECTADA" : "DESCONECTADA";
         for (PlcNodeMonitorPanel panel : plcPanels) {
@@ -390,6 +441,9 @@ public class CollectorMultPlcAplication {
         }
     }
 
+    /**
+     * Inicia o processo de leitura manual de DM para o nodo e endereço especificados.
+     */
     private void startManualDmScan() {
         if (manualDmScanManager.isRunning()) {
             logger.log("Scanner DM manual ja esta em execucao.");
@@ -425,6 +479,11 @@ public class CollectorMultPlcAplication {
         }
     }
 
+    /**
+     * Extrai o ID do nodo a partir da seleção no combo ou do texto digitado.
+     * @return O ID numérico do nodo.
+     * @throws NumberFormatException Se o formato do ID for inválido.
+     */
     private int parseManualNodeId() {
         if (manualNodeCombo == null) {
             return 0;
@@ -464,6 +523,10 @@ public class CollectorMultPlcAplication {
         return parsed;
     }
 
+    /**
+     * Atualiza o rótulo de status da conexão serial na interface gráfica.
+     * @param status O novo status a ser exibido.
+     */
     private void updateSerialStatus(String status) {
         SwingUtilities.invokeLater(() -> {
             if (serialStatusLabel != null) {
@@ -472,6 +535,10 @@ public class CollectorMultPlcAplication {
         });
     }
 
+    /**
+     * Atualiza o rótulo de status da leitura manual na interface gráfica.
+     * @param status O novo status a ser exibido.
+     */
     private void updateManualStatus(String status) {
         SwingUtilities.invokeLater(() -> {
             if (manualStatusLabel != null) {
@@ -480,6 +547,9 @@ public class CollectorMultPlcAplication {
         });
     }
 
+    /**
+     * Exibe um diálogo de confirmação antes de encerrar o programa.
+     */
     private void confirmAndShutdown() {
         int confirm = JOptionPane.showConfirmDialog(
                 frame,
@@ -495,6 +565,9 @@ public class CollectorMultPlcAplication {
         }
     }
 
+    /**
+     * Executa os procedimentos de desligamento seguro: para scanners, desconecta serial e fecha banco de dados.
+     */
     private void shutdown() {
         if (shuttingDown) {
             return;
