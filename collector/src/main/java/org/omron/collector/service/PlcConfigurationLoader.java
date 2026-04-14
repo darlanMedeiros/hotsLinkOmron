@@ -62,7 +62,9 @@ public class PlcConfigurationLoader {
 
             PlcNodeMonitorPanel.MonitoredTag monitored = new PlcNodeMonitorPanel.MonitoredTag(
                     tagData.name,
+                    tagData.memoryArea,
                     tagData.address,
+                    tagData.bit,
                     lengthWords,
                     tagData.persistHistory);
 

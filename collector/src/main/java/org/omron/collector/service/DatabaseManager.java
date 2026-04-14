@@ -1,5 +1,6 @@
 package org.omron.collector.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -149,7 +150,8 @@ public class DatabaseManager {
              */
 
             tags.put(tagName, new TagData(
-                    tagName, address.intValue(), memoryName, persistHistory));
+                    tagName, memoryArea, address.intValue(), memoryBit == null ? -1 : memoryBit.intValue(),
+                    memoryName, persistHistory));
         }
         return tags;
     }
@@ -199,7 +201,9 @@ public class DatabaseManager {
             }
 
             out.put(tagName, new ManualProductionTagBinding(
-                    formatMemoryKey(memoryArea, address, memoryBit), address.intValue(), persistHistory));
+                    formatMemoryKey(memoryArea, address, memoryBit),
+                    memoryArea, address.intValue(),
+                    memoryBit == null ? -1 : memoryBit.intValue(), persistHistory));
         }
         return out;
     }
@@ -208,8 +212,25 @@ public class DatabaseManager {
      * Salva valores de memória em lote (com histórico)
      */
     public void saveMemoryValuesBatch(DeviceInfo deviceInfo, List<MemoryValue> values) {
-        if (!values.isEmpty()) {
-            getDmValueService().saveBatch(deviceInfo, values);
+        if (values.isEmpty())
+            return;
+
+        List<MemoryValue> dmBatch = new ArrayList<>();
+        List<MemoryValue> rrBatch = new ArrayList<>();
+
+        for (MemoryValue v : values) {
+            if (v.getName() != null && v.getName().startsWith("RR_")) {
+                rrBatch.add(v);
+            } else {
+                dmBatch.add(v);
+            }
+        }
+
+        if (!dmBatch.isEmpty()) {
+            getDmValueService().saveBatch(deviceInfo, dmBatch);
+        }
+        if (!rrBatch.isEmpty()) {
+            getRrValueService().saveBatch(deviceInfo, rrBatch);
         }
     }
 
@@ -217,8 +238,28 @@ public class DatabaseManager {
      * Salva valores de memória em lote (apenas current, sem histórico)
      */
     public void saveMemoryValuesCurrentOnly(DeviceInfo deviceInfo, List<MemoryValue> values) {
-        if (!values.isEmpty()) {
-            getDmValueService().saveBatchCurrentOnly(deviceInfo, values);
+        if (values.isEmpty())
+            return;
+
+        List<MemoryValue> dmBatch = new ArrayList<>();
+        List<MemoryValue> rrBatch = new ArrayList<>();
+
+        for (MemoryValue v : values) {
+            if (v.getName() != null && v.getName().startsWith("RR_")) {
+                rrBatch.add(v);
+            } else {
+                dmBatch.add(v);
+            }
+        }
+
+        if (!dmBatch.isEmpty()) {
+            getDmValueService().saveBatchCurrentOnly(deviceInfo, dmBatch);
+        }
+        if (!rrBatch.isEmpty()) {
+            // RrValueService currently doesn't have saveBatchCurrentOnly, but we can use
+            // saveBatch for now
+            // since RR current only logic might be implemented later or is less critical.
+            getRrValueService().saveBatch(deviceInfo, rrBatch);
         }
     }
 
@@ -291,13 +332,18 @@ public class DatabaseManager {
 
     public static class TagData {
         public final String name;
+        public final String memoryArea;
         public final int address;
+        public final int bit;
         public final String memoryName;
         public final boolean persistHistory;
 
-        public TagData(String name, int address, String memoryName, boolean persistHistory) {
+        public TagData(String name, String memoryArea, int address, int bit, String memoryName,
+                boolean persistHistory) {
             this.name = name;
+            this.memoryArea = memoryArea;
             this.address = address;
+            this.bit = bit;
             this.memoryName = memoryName;
             this.persistHistory = persistHistory;
         }
@@ -305,12 +351,17 @@ public class DatabaseManager {
 
     public static class ManualProductionTagBinding {
         public final String memoryName;
+        public final String memoryArea;
         public final int address;
+        public final int bit;
         public final boolean persistHistory;
 
-        public ManualProductionTagBinding(String memoryName, int address, boolean persistHistory) {
+        public ManualProductionTagBinding(String memoryName, String memoryArea, int address, int bit,
+                boolean persistHistory) {
             this.memoryName = memoryName;
+            this.memoryArea = memoryArea;
             this.address = address;
+            this.bit = bit;
             this.persistHistory = persistHistory;
         }
     }

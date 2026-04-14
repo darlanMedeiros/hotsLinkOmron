@@ -28,8 +28,11 @@ import org.ctrl.IDeviceRegister;
 import org.ctrl.comm.serial.SerialPortHandlerImp;
 import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.service.DmValueService;
+import org.ctrl.db.service.RrValueService;
 import org.ctrl.extras.MemoryVariable;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaReadRR;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaReadTC;
 
 public class PlcNodeMonitorPanel {
 
@@ -54,6 +57,7 @@ public class PlcNodeMonitorPanel {
     private final Supplier<SerialPortHandlerImp> sharedComHandlerSupplier;
     private final Runnable ensureDbAction;
     private final Supplier<DmValueService> dmValueServiceSupplier;
+    private final Supplier<RrValueService> rrValueServiceSupplier;
     private final Consumer<String> globalLogger;
     private final Runnable sharedDisconnectAction;
     private final JPanel panel;
@@ -80,6 +84,7 @@ public class PlcNodeMonitorPanel {
             Supplier<SerialPortHandlerImp> sharedComHandlerSupplier,
             Runnable ensureDbAction,
             Supplier<DmValueService> dmValueServiceSupplier,
+            Supplier<RrValueService> rrValueServiceSupplier,
             Consumer<String> globalLogger,
             Runnable sharedDisconnectAction) {
         this.nodeIndex = nodeIndex;
@@ -96,6 +101,7 @@ public class PlcNodeMonitorPanel {
         this.sharedComHandlerSupplier = sharedComHandlerSupplier;
         this.ensureDbAction = ensureDbAction;
         this.dmValueServiceSupplier = dmValueServiceSupplier;
+        this.rrValueServiceSupplier = rrValueServiceSupplier;
         this.globalLogger = globalLogger;
         this.sharedDisconnectAction = sharedDisconnectAction;
         this.panel = buildNodePanel(this.configuredNodeId);
@@ -252,35 +258,58 @@ public class PlcNodeMonitorPanel {
                         break;
                     }
 
+                    String area = tag.getMemoryArea();
+                    boolean isRrBit = "RR".equalsIgnoreCase(area) && tag.getBit() >= 0;
+
                     MemoryVariable memory = new MemoryVariable(
                             tag.getName(),
-                            "DM",
+                            area,
                             tag.getAddress(),
-                            tag.getLengthWords());
-                    AreaReadDM read = new AreaReadDM(plc, memory);
+                            isRrBit ? 1 : tag.getLengthWords());
+
+                    org.ctrl.vend.omron.toolbus.memory.MemoryRead readCmd;
+                    if ("RR".equalsIgnoreCase(area)) {
+                        readCmd = new AreaReadRR(plc, tag.getAddress(), isRrBit ? 1 : tag.getLengthWords());
+                    } else if ("TC".equalsIgnoreCase(area) || "TIMER".equalsIgnoreCase(area)
+                            || "COUNTER".equalsIgnoreCase(area)) {
+                        readCmd = new AreaReadTC(plc, tag.getAddress(), tag.getLengthWords());
+                    } else {
+                        readCmd = new AreaReadDM(plc, memory);
+                    }
+
                     synchronized (comLock) {
                         if (!isSharedConnected()) {
                             throw new IllegalStateException("Serial compartilhada desconectada.");
                         }
-                        sharedComHandlerSupplier.get().send(read);
+                        sharedComHandlerSupplier.get().send(readCmd);
                     }
 
-                    int[] values = parseReply(read.getReply(), tag.getLengthWords());
+                    int[] values = parseReply(readCmd.getReply(), isRrBit ? 1 : tag.getLengthWords());
                     if (values == null) {
                         logPrefix("Leitura invalida para TAG " + tag.getName() + ".");
                     } else {
                         int[] previous = lastValues.get(tag.getName());
                         if (hasChanged(previous, values)) {
-                            if (tag.isPersistHistory()) {
-                                dmValueServiceSupplier.get().saveRange(deviceInfo, tag.getAddress(), values);
+                            if (isRrBit) {
+                                // Extrai o bit do word lido
+                                int bitValue = (values[0] >> tag.getBit()) & 0x01;
+                                rrValueServiceSupplier.get().saveValue(deviceInfo, tag.getAddress(), tag.getBit(),
+                                        bitValue != 0);
+                                logPrefix("Alteracao salva (RR BIT): TAG " + tag.getName() + " (" + area + " "
+                                        + tag.getAddress() + "." + tag.getBit() + ") = " + bitValue);
                             } else {
-                                dmValueServiceSupplier.get().saveRangeCurrentOnly(deviceInfo, tag.getAddress(),
-                                        values);
+                                if (tag.isPersistHistory()) {
+                                    dmValueServiceSupplier.get().saveRange(deviceInfo, tag.getAddress(), values);
+                                } else {
+                                    dmValueServiceSupplier.get().saveRangeCurrentOnly(deviceInfo, tag.getAddress(),
+                                            values);
+                                }
+                                logPrefix(
+                                        "Alteracao salva (" + (tag.isPersistHistory() ? "historico+current" : "current")
+                                                + "): TAG " + tag.getName() + " (" + area + " " + tag.getAddress()
+                                                + ".." + (tag.getAddress() + tag.getLengthWords() - 1) + ") = "
+                                                + formatWords(values) + ".");
                             }
-                            logPrefix("Alteracao salva (" + (tag.isPersistHistory() ? "historico+current" : "current")
-                                    + "): TAG " + tag.getName() + " (DM " + tag.getAddress()
-                                    + ".." + (tag.getAddress() + tag.getLengthWords() - 1) + ") = "
-                                    + formatWords(values) + ".");
                             lastValues.put(tag.getName(), copyWords(values));
                         }
                     }
@@ -535,13 +564,18 @@ public class PlcNodeMonitorPanel {
 
     public static final class MonitoredTag {
         private final String name;
+        private final String memoryArea;
         private final int address;
+        private final int bit;
         private final int lengthWords;
         private final boolean persistHistory;
 
-        public MonitoredTag(String name, int address, int lengthWords, boolean persistHistory) {
+        public MonitoredTag(String name, String memoryArea, int address, int bit, int lengthWords,
+                boolean persistHistory) {
             this.name = name;
+            this.memoryArea = memoryArea == null ? "DM" : memoryArea.toUpperCase();
             this.address = address;
+            this.bit = bit;
             this.lengthWords = Math.max(1, lengthWords);
             this.persistHistory = persistHistory;
         }
@@ -550,8 +584,16 @@ public class PlcNodeMonitorPanel {
             return name;
         }
 
+        public String getMemoryArea() {
+            return memoryArea;
+        }
+
         public int getAddress() {
             return address;
+        }
+
+        public int getBit() {
+            return bit;
         }
 
         public int getLengthWords() {

@@ -49,6 +49,13 @@ public class RrValueService {
         }
     }
 
+    public void saveBatch(DeviceInfo device, List<MemoryValue> values) {
+        if (values == null || values.isEmpty()) {
+            return;
+        }
+        repository.upsertBatch(device.getMnemonic(), device.getName(), device.getDescription(), values);
+    }
+
     public static String formatRrName(int address, int bit) {
         return String.format("RR_%04d.%02d", address, bit);
     }
