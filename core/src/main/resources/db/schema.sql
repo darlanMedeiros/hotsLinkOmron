@@ -98,8 +98,9 @@ CREATE TABLE IF NOT EXISTS produto (
 
 CREATE TABLE IF NOT EXISTS defeito (
     id BIGSERIAL PRIMARY KEY,
-    nome VARCHAR(120) NOT NULL,
-    CONSTRAINT uq_defeito_nome UNIQUE (nome)
+    name VARCHAR(120) NOT NULL,
+    number INTEGER UNIQUE,
+    CONSTRAINT uq_defeito_name UNIQUE (name)
 );
 
 CREATE TABLE IF NOT EXISTS producao (
@@ -483,3 +484,25 @@ CREATE INDEX IF NOT EXISTS idx_ppt_mini_fabrica ON producao_por_turno(mini_fabri
 CREATE INDEX IF NOT EXISTS idx_ppt_data ON producao_por_turno(data);
 CREATE INDEX IF NOT EXISTS idx_pptm_machine ON producao_por_turno_machine(machine_id);
 
+DO $$ 
+BEGIN 
+    -- Garante que a coluna existe
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name='defeito' AND column_name='number') THEN
+        ALTER TABLE public.defeito ADD COLUMN number INTEGER;
+    END IF;
+
+    -- Limpa duplicatas antes de aplicar a constraint (define como NULL registros extras com mesmo número)
+    UPDATE public.defeito 
+    SET number = NULL 
+    WHERE id NOT IN (
+        SELECT MIN(id)
+        FROM public.defeito
+        WHERE number IS NOT NULL
+        GROUP BY number
+    ) AND number IS NOT NULL;
+
+    -- Adiciona a restrição de unicidade se não existir
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'uq_defeito_number') THEN
+        ALTER TABLE public.defeito ADD CONSTRAINT uq_defeito_number UNIQUE (number);
+    END IF;
+END $$;

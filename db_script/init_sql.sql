@@ -98,8 +98,9 @@ CREATE TABLE IF NOT EXISTS produto (
 
 CREATE TABLE IF NOT EXISTS defeito (
     id BIGSERIAL PRIMARY KEY,
-    nome VARCHAR(120) NOT NULL,
-    CONSTRAINT uq_defeito_nome UNIQUE (nome)
+    name VARCHAR(120) NOT NULL,
+    number INTEGER UNIQUE,
+    CONSTRAINT uq_defeito_name UNIQUE (name)
 );
 
 CREATE TABLE IF NOT EXISTS producao (

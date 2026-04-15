@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Building2, Cog, Clock3, Layers3, Map as MapIcon } from 'lucide-react';
-import { Fabrica, MiniFabrica, Setor, Machine, Device, Turno, ViewMessage } from './types';
+import { Building2, Cog, Clock3, Layers3, Map as MapIcon, AlertCircle } from 'lucide-react';
+import { Fabrica, MiniFabrica, Setor, Machine, Device, Turno, Defeito, ViewMessage } from './types';
 import { requestApi } from '../../../services/api';
 
 import { FabricaSection } from './FabricaSection';
@@ -8,8 +8,9 @@ import { MiniFabricaSection } from './MiniFabricaSection';
 import { SetorSection } from './SetorSection';
 import { TurnoSection } from './TurnoSection';
 import { MachineSection } from './MachineSection';
+import { DefeitoSection } from './DefeitoSection';
 
-type SectionKey = 'fabrica' | 'mini_fabrica' | 'setor' | 'turno' | 'machine';
+type SectionKey = 'fabrica' | 'mini_fabrica' | 'setor' | 'turno' | 'machine' | 'defeito';
 
 export function AdminCrudPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,6 +24,7 @@ export function AdminCrudPage() {
   const [machines, setMachines] = useState<Machine[]>([]);
   const [devices, setDevices] = useState<Device[]>([]);
   const [turnos, setTurnos] = useState<Turno[]>([]);
+  const [defeitos, setDefeitos] = useState<Defeito[]>([]);
 
   const sections: { key: SectionKey; label: string; icon: JSX.Element }[] = [
     { key: 'fabrica', label: 'Fabricas', icon: <Building2 className="h-4 w-4 text-blue-600" /> },
@@ -30,6 +32,7 @@ export function AdminCrudPage() {
     { key: 'setor', label: 'Setores', icon: <MapIcon className="h-4 w-4 text-amber-600" /> },
     { key: 'turno', label: 'Turnos', icon: <Clock3 className="h-4 w-4 text-violet-600" /> },
     { key: 'machine', label: 'Machines', icon: <Cog className="h-4 w-4 text-emerald-600" /> },
+    { key: 'defeito', label: 'Defeitos', icon: <AlertCircle className="h-4 w-4 text-red-600" /> },
   ];
 
   const fabricaById = useMemo(() => {
@@ -57,13 +60,14 @@ export function AdminCrudPage() {
   }, [devices]);
 
   const loadAll = async () => {
-    const [fabricaData, miniData, setorData, machineData, deviceData, turnoData] = await Promise.all([
+    const [fabricaData, miniData, setorData, machineData, deviceData, turnoData, defeitoData] = await Promise.all([
       requestApi<Fabrica[]>('/api/fabricas'),
       requestApi<MiniFabrica[]>('/api/mini-fabricas'),
       requestApi<Setor[]>('/api/setores'),
       requestApi<Machine[]>('/api/machines'),
       requestApi<Device[]>('/api/devices'),
       requestApi<Turno[]>('/api/turnos'),
+      requestApi<Defeito[]>('/api/defeitos'),
     ]);
     setFabricas(fabricaData);
     setMiniFabricas(miniData);
@@ -71,6 +75,7 @@ export function AdminCrudPage() {
     setMachines(machineData);
     setDevices(deviceData);
     setTurnos(turnoData);
+    setDefeitos(defeitoData);
   };
 
   useEffect(() => {
@@ -169,6 +174,17 @@ export function AdminCrudPage() {
       );
     }
 
+    if (activeSection === 'defeito') {
+      return (
+        <DefeitoSection
+          defeitos={defeitos}
+          isSaving={isSaving}
+          withMutation={withMutation}
+          removeItem={removeItem}
+        />
+      );
+    }
+
     return (
       <MachineSection
         machines={machines}
@@ -190,7 +206,7 @@ export function AdminCrudPage() {
       <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
         <h2 className="text-lg font-semibold text-slate-900">Cadastro de Estrutura</h2>
         <p className="text-sm text-slate-600">
-          Gerencie Fabrica, Mini Fabrica, Setor, Turno e Machine para estruturar a linha de producao.
+          Gerencie Fabrica, Mini Fabrica, Setor, Turno, Machine e Defeito para estruturar a linha de producao.
         </p>
       </div>
 

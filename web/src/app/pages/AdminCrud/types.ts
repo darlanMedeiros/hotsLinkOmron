@@ -41,6 +41,12 @@ export type ViewMessage = {
   text: string;
 };
 
+export type Defeito = {
+  id: number;
+  name: string;
+  number: number | null;
+};
+
 export interface SectionSharedProps {
   isSaving: boolean;
   withMutation: (work: () => Promise<void>, successText: string) => Promise<void>;
