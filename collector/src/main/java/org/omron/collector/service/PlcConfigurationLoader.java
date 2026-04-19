@@ -35,6 +35,7 @@ public class PlcConfigurationLoader {
             List<PlcNodeMonitorPanel.MonitoredTag> monitoredTags = loadTagsForDevice(deviceConfig.mnemonic);
 
             PlcConfiguration cfg = new PlcConfiguration(
+                    deviceConfig.id,
                     deviceConfig.title,
                     deviceConfig.mnemonic,
                     deviceConfig.description,
@@ -131,14 +132,16 @@ public class PlcConfigurationLoader {
      * Classe de dados para configuração de PLC
      */
     public static class PlcConfiguration {
+        public final int id;
         public final String title;
         public final String mnemonic;
         public final String description;
         public final int nodeId;
         public final List<PlcNodeMonitorPanel.MonitoredTag> tags;
 
-        public PlcConfiguration(String title, String mnemonic, String description,
+        public PlcConfiguration(int id, String title, String mnemonic, String description,
                 int nodeId, List<PlcNodeMonitorPanel.MonitoredTag> tags) {
+            this.id = id;
             this.title = title;
             this.mnemonic = mnemonic;
             this.description = description;

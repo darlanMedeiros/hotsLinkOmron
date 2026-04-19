@@ -25518,3 +25518,132 @@ org.ctrl.comm.MaximumNumberOfRetriesReachedException:  Maximum number of retries
 [2026-04-13 21:20:32] Encerramento solicitado pelo usuario.
 [2026-04-13 21:20:32] [PLC 4] Monitor finalizado.
 [2026-04-13 21:20:32] Comunicacao serial compartilhada encerrada.
+[2026-04-19 09:34:29] Uncaught exception thread=AWT-EventQueue-0: Error - Unresolved compilation problems: 
+	Syntax error, insert "Finally" to complete BlockStatements
+	Syntax error on token "catch", invalid RecordHeaderName
+	Syntax error on token ".", { expected
+	Syntax error on token "catch", Identifier expected
+	Syntax error, insert "}" to complete ClassBody
+	Return type for the method is missing
+	Syntax error on token ""PARADO"", delete this token
+	Syntax error on token ")", { expected after this token
+	The method getId() is undefined for the type DeviceInfo
+	Optional cannot be resolved to a type
+
+java.lang.Error: Unresolved compilation problems: 
+	Syntax error, insert "Finally" to complete BlockStatements
+	Syntax error on token "catch", invalid RecordHeaderName
+	Syntax error on token ".", { expected
+	Syntax error on token "catch", Identifier expected
+	Syntax error, insert "}" to complete ClassBody
+	Return type for the method is missing
+	Syntax error on token ""PARADO"", delete this token
+	Syntax error on token ")", { expected after this token
+	The method getId() is undefined for the type DeviceInfo
+	Optional cannot be resolved to a type
+
+	at org.omron.collector.util.PlcNodeMonitorPanel$MonitoredTag.<init>(PlcNodeMonitorPanel.java:356)
+	at org.omron.collector.service.PlcConfigurationLoader.loadTagsForDevice(PlcConfigurationLoader.java:63)
+	at org.omron.collector.service.PlcConfigurationLoader.loadAllConfigurations(PlcConfigurationLoader.java:35)
+	at org.omron.collector.CollectorMultPlcAplication.buildUi(CollectorMultPlcAplication.java:126)
+	at org.omron.collector.CollectorMultPlcAplication.<init>(CollectorMultPlcAplication.java:95)
+	at org.omron.collector.CollectorMultPlcAplication.lambda$0(CollectorMultPlcAplication.java:81)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:318)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:773)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:720)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:714)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+[2026-04-19 09:57:21] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-04-19 09:58:39] Leitura DM manual salva em banco para device PRENSA: blocos=17, historico=102, current-only=0.
+[2026-04-19 09:58:55] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 223.
+[2026-04-19 09:59:01] [PLC 4] Lista de TAG atualizada do banco: 38 item(ns).
+[2026-04-19 09:59:01] [PLC 4] Monitor iniciado para 38 TAGs.
+[2026-04-19 09:59:01] [PLC 4] Grupos de qualidade carregados: 1
+[2026-04-19 09:59:01] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [17891, 0].
+[2026-04-19 09:59:03] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [17892, 0].
+[2026-04-19 09:59:05] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [35786, 0].
+[2026-04-19 09:59:06] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERCARGA41 (DM 106..107) = [0, 0].
+[2026-04-19 09:59:07] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERDESC41 (DM 108..109) = [0, 0].
+[2026-04-19 09:59:09] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERCARGA42 (DM 110..111) = [0, 0].
+[2026-04-19 09:59:10] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERCARGA43 (DM 114..115) = [0, 0].
+[2026-04-19 09:59:12] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERDESC42 (DM 112..113) = [0, 0].
+[2026-04-19 09:59:13] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERDESC43 (DM 116..117) = [0, 0].
+[2026-04-19 09:59:15] [PLC 4] Alteracao salva (historico+current): TAG QUALIDADE41 (DM 118..119) = [0, 0].
+[2026-04-19 09:59:16] [PLC 4] Alteracao salva (historico+current): TAG QUALIDADE42 (DM 120..121) = [0, 0].
+[2026-04-19 09:59:18] [PLC 4] Alteracao salva (historico+current): TAG QUALIDADE43 (DM 122..123) = [0, 0].
+[2026-04-19 09:59:19] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [17908].
+[2026-04-19 09:59:20] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC33 (DM 313..313) = [0].
+[2026-04-19 09:59:22] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [17911].
+[2026-04-19 09:59:23] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC26 (DM 312..312) = [0].
+[2026-04-19 09:59:24] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC25 (DM 311..311) = [6].
+[2026-04-19 09:59:25] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [35830].
+[2026-04-19 09:59:27] [PLC 4] Alteracao salva (historico+current): TAG STATUS_PH29 (RR 0..0) = [0].
+[2026-04-19 09:59:28] [PLC 4] Alteracao salva (RR BIT): TAG STATUS_PH30 (RR 0.1) = 0
+[2026-04-19 09:59:30] [PLC 4] Alteracao salva (RR BIT): TAG STATUS_PH31 (RR 0.2) = 0
+[2026-04-19 09:59:31] [PLC 4] Alteracao salva (historico+current): TAG DM_200 (RR 200..200) = [0].
+[2026-04-19 09:59:32] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [0].
+[2026-04-19 09:59:32] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-19 09:59:33] [PLC 4] Erro ao converter data do CLP: Invalid value for MonthOfYear (valid values 1 - 12): 0. Usando hora local.
+[2026-04-19 09:59:33] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-19 09:59:35] [PLC 4] Alteracao salva (historico+current): TAG Total_Defeitos1 (DM_4001 4001..4001) = [0].
+[2026-04-19 09:59:36] [PLC 4] Alteracao salva (historico+current): TAG Total_Defeitos2 (DM_4002 4002..4002) = [0].
+[2026-04-19 09:59:37] [PLC 4] Alteracao salva (historico+current): TAG Total_Defeitos3 (DM_4003 4003..4003) = [0].
+[2026-04-19 09:59:39] [PLC 4] Alteracao salva (historico+current): TAG Codigo_Defeito1 (DM_4004 4004..4004) = [0].
+[2026-04-19 09:59:40] [PLC 4] Alteracao salva (historico+current): TAG Codigo_Defeito2 (DM_4005 4005..4005) = [0].
+[2026-04-19 09:59:42] [PLC 4] Alteracao salva (historico+current): TAG Codigo_Defeito3 (DM_4006 4006..4006) = [0].
+[2026-04-19 09:59:43] [PLC 4] Alteracao salva (historico+current): TAG Qtde_Amostragem (DM_4007 4007..4007) = [0].
+[2026-04-19 09:59:44] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Ano (DM_4008 4008..4008) = [0].
+[2026-04-19 09:59:46] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Mes (DM_4009 4009..4009) = [0].
+[2026-04-19 09:59:47] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Dia (DM_4010 4010..4010) = [0].
+[2026-04-19 09:59:48] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Hora (DM_4011 4011..4011) = [0].
+[2026-04-19 09:59:50] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [0].
+[2026-04-19 09:59:51] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [0].
+[2026-04-19 09:59:52] [PLC 4] Alteracao salva (current): TAG Qualidade_Maquina_Current (DM_4014 4014..4014) = [0].
+[2026-04-19 09:59:54] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Maquina_Persisted (DM_4015 4015..4015) = [0].
+[2026-04-19 09:59:55] [PLC 4] >>> Atualizando Qualidade da Maquina (intervalo 5 min)...
+[2026-04-19 09:59:58] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [17947, 0].
+[2026-04-19 09:59:59] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [17948, 0].
+[2026-04-19 10:00:00] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [35898, 0].
+[2026-04-19 10:00:11] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [17961].
+[2026-04-19 10:00:14] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [17963].
+[2026-04-19 10:00:17] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [35932].
+[2026-04-19 10:00:42] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [17991, 0].
+[2026-04-19 10:00:43] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [17992, 0].
+[2026-04-19 10:00:45] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [35988, 0].
+[2026-04-19 10:00:56] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [18005].
+[2026-04-19 10:00:58] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [18007].
+[2026-04-19 10:01:01] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [36022].
+[2026-04-19 10:01:26] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [18036, 0].
+[2026-04-19 10:01:28] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [18037, 0].
+[2026-04-19 10:01:29] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [36076, 0].
+[2026-04-19 10:01:40] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [18049].
+[2026-04-19 10:01:42] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [18051].
+[2026-04-19 10:01:46] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [36110].
+[2026-04-19 10:02:11] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [18070, 0].
+[2026-04-19 10:02:12] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [18071, 0].
+[2026-04-19 10:02:13] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [36144, 0].
+[2026-04-19 10:02:24] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [18084].
+[2026-04-19 10:02:27] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [18086].
+[2026-04-19 10:02:30] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [36178].
+[2026-04-19 10:02:36] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [1].
+[2026-04-19 10:02:36] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-19 10:02:37] [PLC 4] Erro ao converter data do CLP: Invalid value for MonthOfYear (valid values 1 - 12): 0. Usando hora local.
+[2026-04-19 10:02:37] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-19 10:02:56] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [18116, 0].
+[2026-04-19 10:02:58] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [18117, 0].
+[2026-04-19 10:02:59] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [36236, 0].
+[2026-04-19 10:03:10] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [18129].
+[2026-04-19 10:03:12] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [18132].
+[2026-04-19 10:03:16] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [36270].
+[2026-04-19 10:03:41] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [18160, 0].
+[2026-04-19 10:03:42] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [18161, 0].
+[2026-04-19 10:03:43] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [36324, 0].

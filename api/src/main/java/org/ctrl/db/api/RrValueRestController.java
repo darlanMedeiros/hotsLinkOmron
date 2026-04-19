@@ -27,7 +27,7 @@ public class RrValueRestController {
             @PathVariable String mnemonic,
             @PathVariable int address,
             @PathVariable int bit) {
-        DeviceInfo device = new DeviceInfo(mnemonic, "", "");
+        DeviceInfo device = new DeviceInfo(0, mnemonic, "", "");
         Optional<MemoryValue> value = service.getCurrent(device, address, bit);
         return value.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -35,7 +35,7 @@ public class RrValueRestController {
     @GetMapping("/devices/{mnemonic}/rr/10/bit/0")
     public ResponseEntity<MemoryValue> getBit1000(
             @PathVariable String mnemonic) {
-        DeviceInfo device = new DeviceInfo(mnemonic, "", "");
+        DeviceInfo device = new DeviceInfo(0, mnemonic, "", "");
         Optional<MemoryValue> value = service.getCurrent(device, 10, 0);
         return value.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -46,7 +46,7 @@ public class RrValueRestController {
             @PathVariable int address,
             @RequestParam(defaultValue = "0") int start,
             @RequestParam(defaultValue = "15") int end) {
-        DeviceInfo device = new DeviceInfo(mnemonic, "", "");
+        DeviceInfo device = new DeviceInfo(0, mnemonic, "", "");
         return service.getRangeCurrent(device, address, start, end);
     }
 
@@ -54,7 +54,7 @@ public class RrValueRestController {
     public List<MemoryValue> getAllBits(
             @PathVariable String mnemonic,
             @PathVariable int address) {
-        DeviceInfo device = new DeviceInfo(mnemonic, "", "");
+        DeviceInfo device = new DeviceInfo(0, mnemonic, "", "");
         return service.getRangeCurrent(device, address, 0, 15);
     }
 }

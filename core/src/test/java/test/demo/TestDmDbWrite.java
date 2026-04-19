@@ -60,7 +60,7 @@ public class TestDmDbWrite {
             IDevice plc = new DeviceImp(nodeId, "PLC", "PLC", "Omron PLC");
             IDeviceRegister deviceRegister = DeviceRegisterImp.getInstance();
             deviceRegister.addDevice(plc);
-            DeviceInfo deviceInfo = new DeviceInfo("PLC", plc.getName(), plc.getDescription());
+            DeviceInfo deviceInfo = new DeviceInfo(0, "PLC", plc.getName(), plc.getDescription());
 
             int addr = START_ADDR;
             while (addr <= END_ADDR) {

@@ -4,8 +4,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
-import org.ctrl.db.api.model.Turno;
-import org.ctrl.db.api.repository.TurnoRepository;
+import org.ctrl.db.model.Turno;
+import org.ctrl.db.repository.TurnoRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,12 +27,18 @@ public class TurnoService {
     }
 
     public Turno create(String name, String horaInicio, String horaFinal) {
-        return repository.create(requireName(name), requireTime(horaInicio, "horaInicio"), requireTime(horaFinal, "horaFinal"));
+        LocalTime start = parseTime(horaInicio, "horaInicio");
+        LocalTime end = parseTime(horaFinal, "horaFinal");
+        Long id = repository.create(requireName(name), start, end);
+        return new Turno(id, name, start, end);
     }
 
     public Optional<Turno> update(long id, String name, String horaInicio, String horaFinal) {
         validateId(id, "id");
-        return repository.update(id, requireName(name), requireTime(horaInicio, "horaInicio"), requireTime(horaFinal, "horaFinal"));
+        LocalTime start = parseTime(horaInicio, "horaInicio");
+        LocalTime end = parseTime(horaFinal, "horaFinal");
+        repository.update(id, requireName(name), start, end);
+        return Optional.of(new Turno(id, name, start, end));
     }
 
     public boolean delete(long id) {
@@ -47,13 +53,12 @@ public class TurnoService {
         return name.trim();
     }
 
-    private String requireTime(String time, String fieldName) {
+    private LocalTime parseTime(String time, String fieldName) {
         if (time == null || time.trim().isEmpty()) {
             throw new IllegalArgumentException(fieldName + " is required");
         }
         try {
-            LocalTime parsed = LocalTime.parse(time.trim());
-            return parsed.toString();
+            return LocalTime.parse(time.trim());
         } catch (DateTimeParseException ex) {
             throw new IllegalArgumentException(fieldName + " must be a valid time (HH:mm or HH:mm:ss)");
         }
@@ -65,3 +70,4 @@ public class TurnoService {
         }
     }
 }
+

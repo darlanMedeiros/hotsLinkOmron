@@ -28,7 +28,7 @@ public class TagRestController {
             @PathVariable String mnemonic,
             @PathVariable int address,
             @RequestParam String name) {
-        DeviceInfo device = new DeviceInfo(mnemonic, "", "");
+        DeviceInfo device = new DeviceInfo(0, mnemonic, "", "");
         Tag tag = service.createDmTag(device, name, address);
         return ResponseEntity.ok(tag);
     }
@@ -39,7 +39,7 @@ public class TagRestController {
             @PathVariable int address,
             @PathVariable int bit,
             @RequestParam String name) {
-        DeviceInfo device = new DeviceInfo(mnemonic, "", "");
+        DeviceInfo device = new DeviceInfo(0, mnemonic, "", "");
         Tag tag = service.createRrTag(device, name, address, bit);
         return ResponseEntity.ok(tag);
     }

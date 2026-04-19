@@ -227,7 +227,7 @@ public class ManualDmScanManager {
             return;
         }
 
-        DeviceInfo deviceInfo = new DeviceInfo(cfg.mnemonic, cfg.title, cfg.description);
+        DeviceInfo deviceInfo = new DeviceInfo(0, cfg.mnemonic, cfg.title, cfg.description);
         List<MemoryValue> historyBatch = new ArrayList<>();
         List<MemoryValue> currentOnlyBatch = new ArrayList<>();
 

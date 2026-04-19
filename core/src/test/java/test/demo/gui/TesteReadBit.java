@@ -423,7 +423,7 @@ public class TesteReadBit {
         boolean previous = lastBits[bit];
         if (current != previous) {
             lastBits[bit] = current;
-            DeviceInfo device = new DeviceInfo(DEVICE_MNEMONIC, plc.getName(), plc.getDescription());
+            DeviceInfo device = new DeviceInfo(0, DEVICE_MNEMONIC, plc.getName(), plc.getDescription());
             rrValueService.saveValue(device, address, bit, current);
             setDbStatus("gravado " + formatBitLabel(address, bit) + "=" + (current ? "1" : "0"));
         }

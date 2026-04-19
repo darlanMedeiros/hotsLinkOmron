@@ -109,6 +109,7 @@ public class DatabaseManager {
                 continue;
             }
 
+            Integer deviceId = asInt(row.get("device_id"));
             Integer nodeId = asInt(row.get("device_node_id"));
             int configuredNodeId = nodeId == null ? 0 : nodeId.intValue();
             String deviceName = asString(row.get("device_name"), mnemonic);
@@ -116,6 +117,7 @@ public class DatabaseManager {
 
             if (!grouped.containsKey(mnemonic)) {
                 grouped.put(mnemonic, new DeviceConfigData(
+                        deviceId == null ? 0 : deviceId,
                         deviceName, mnemonic, description, configuredNodeId, new HashMap<>()));
             }
         }
@@ -375,14 +377,16 @@ public class DatabaseManager {
 
     // Data classes
     public static class DeviceConfigData {
+        public final int id;
         public final String title;
         public final String mnemonic;
         public final String description;
         public final int nodeId;
         public final Map<String, TagData> tags;
 
-        public DeviceConfigData(String title, String mnemonic, String description,
+        public DeviceConfigData(int id, String title, String mnemonic, String description,
                 int nodeId, Map<String, TagData> tags) {
+            this.id = id;
             this.title = title;
             this.mnemonic = mnemonic;
             this.description = description;

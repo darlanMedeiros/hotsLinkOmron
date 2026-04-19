@@ -2,7 +2,7 @@ package org.ctrl.db.api;
 
 import java.util.List;
 import org.ctrl.db.api.dto.TurnoRequest;
-import org.ctrl.db.api.model.Turno;
+import org.ctrl.db.model.Turno;
 import org.ctrl.db.api.service.TurnoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

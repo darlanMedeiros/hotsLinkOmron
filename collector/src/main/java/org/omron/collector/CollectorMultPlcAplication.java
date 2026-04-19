@@ -140,6 +140,7 @@ public class CollectorMultPlcAplication {
                     cfg.mnemonic,
                     cfg.description,
                     cfg.nodeId,
+                    cfg.id,
                     cfg.tags,
                     () -> configLoader.loadTagsForDevice(cfg.mnemonic),
                     serialManager.getSharedSerial().getIoLock(),

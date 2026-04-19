@@ -27,7 +27,7 @@ public class DmValueRestController {
     public ResponseEntity<MemoryValue> getByAddress(
             @PathVariable String mnemonic,
             @PathVariable int address) {
-        DeviceInfo device = new DeviceInfo(mnemonic, "", "");
+        DeviceInfo device = new DeviceInfo(0, mnemonic, "", "");
         Optional<MemoryValue> value = service.getByAddress(device, address);
         return value.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -36,7 +36,7 @@ public class DmValueRestController {
     public ResponseEntity<MemoryValue> getLatestByAddress(
             @PathVariable String mnemonic,
             @PathVariable int address) {
-        DeviceInfo device = new DeviceInfo(mnemonic, "", "");
+        DeviceInfo device = new DeviceInfo(0, mnemonic, "", "");
         Optional<MemoryValue> value = service.getByAddress(device, address);
         return value.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -45,7 +45,7 @@ public class DmValueRestController {
     public ResponseEntity<MemoryValue> getCurrentByAddress(
             @PathVariable String mnemonic,
             @PathVariable int address) {
-        DeviceInfo device = new DeviceInfo(mnemonic, "", "");
+        DeviceInfo device = new DeviceInfo(0, mnemonic, "", "");
         Optional<MemoryValue> value = service.getCurrentByAddress(device, address);
         return value.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -53,7 +53,7 @@ public class DmValueRestController {
     @GetMapping("/devices/{mnemonic}/dm/last")
     public ResponseEntity<MemoryValue> getLatest(
             @PathVariable String mnemonic) {
-        DeviceInfo device = new DeviceInfo(mnemonic, "", "");
+        DeviceInfo device = new DeviceInfo(0, mnemonic, "", "");
         Optional<MemoryValue> value = service.getLatest(device);
         return value.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -63,7 +63,7 @@ public class DmValueRestController {
             @PathVariable String mnemonic,
             @RequestParam(defaultValue = "0") int start,
             @RequestParam(defaultValue = "1000") int end) {
-        DeviceInfo device = new DeviceInfo(mnemonic, "", "");
+        DeviceInfo device = new DeviceInfo(0, mnemonic, "", "");
         return service.getRange(device, start, end);
     }
 }

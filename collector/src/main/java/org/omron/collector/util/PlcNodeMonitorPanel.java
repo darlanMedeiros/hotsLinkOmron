@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.Optional;
 import org.ctrl.db.service.QualidadeService;
 import org.ctrl.db.repository.DefeitoRepository;
-import org.ctrl.db.repository.QualidadeRepository;
 import org.ctrl.db.model.Qualidade;
 import org.ctrl.db.model.Defeito;
 import java.util.HashMap;
@@ -56,6 +56,7 @@ public class PlcNodeMonitorPanel {
 
     private final int nodeIndex;
     private final int configuredNodeId;
+    private final int dbDeviceId;
     private final String plcTitle;
     private final String plcMnemonic;
     private final String plcDescription;
@@ -89,6 +90,7 @@ public class PlcNodeMonitorPanel {
             String plcMnemonic,
             String plcDescription,
             int configuredNodeId,
+            int dbDeviceId,
             List<MonitoredTag> monitoredTags,
             Supplier<List<MonitoredTag>> monitoredTagsSupplier,
             Object comLock,
@@ -104,6 +106,7 @@ public class PlcNodeMonitorPanel {
             Runnable sharedDisconnectAction) {
         this.nodeIndex = nodeIndex;
         this.configuredNodeId = Math.max(0, configuredNodeId);
+        this.dbDeviceId = dbDeviceId;
         this.plcTitle = plcTitle;
         this.plcMnemonic = plcMnemonic;
         this.plcDescription = plcDescription == null ? "" : plcDescription;
@@ -268,12 +271,12 @@ public class PlcNodeMonitorPanel {
         long lastQualityUpdateMs = 0;
         Map<Integer, QualityGroup> qualityGroups = new HashMap<>();
         try {
-           qualityGroups = qualityGroupsSupplier.get();
-           if (!qualityGroups.isEmpty()) {
-               logPrefix("Grupos de qualidade carregados: " + qualityGroups.size());
-           }
+            qualityGroups = qualityGroupsSupplier.get();
+            if (qualityGroups != null && !qualityGroups.isEmpty()) {
+                logPrefix("Grupos de qualidade carregados: " + qualityGroups.size());
+            }
         } catch (Exception e) {
-           logPrefix("Erro ao carregar grupos de qualidade: " + e.getMessage());
+            logPrefix("Erro ao carregar grupos de qualidade: " + e.getMessage());
         }
 
         while (monitoring) {
@@ -333,18 +336,17 @@ public class PlcNodeMonitorPanel {
                                     dmValueServiceSupplier.get().saveRangeCurrentOnly(deviceInfo, tag.getAddress(),
                                             values);
                                 }
-                                logPrefix(
-                                        "Alteracao salva (" + (tag.isPersistHistory() ? "historico+current" : "current")
-                                                + "): TAG " + tag.getName() + " (" + area + " " + tag.getAddress()
-                                                + ".." + (tag.getAddress() + tag.getLengthWords() - 1) + ") = "
-                                                + formatWords(values) + ".");
-                                }
-                                lastValues.put(tag.getName(), copyWords(values));
+                                logPrefix("Alteracao salva (" + (tag.isPersistHistory() ? "historico+current" : "current")
+                                        + "): TAG " + tag.getName() + " (" + area + " " + tag.getAddress()
+                                        + ".." + (tag.getAddress() + tag.getLengthWords() - 1) + ") = "
+                                        + formatWords(values) + ".");
+                            }
+                            lastValues.put(tag.getName(), copyWords(values));
 
-                                // Lógica de Gatilho de Qualidade
+                            // Lógica de Gatilho de Qualidade
+                            if (qualityGroups != null) {
                                 for (QualityGroup qg : qualityGroups.values()) {
                                     if (qg.trigger != null && qg.trigger.name.equals(tag.getName())) {
-                                        // Gatilho detectado! (Qualquer mudança de valor numérico conforme PROBLEMA.MD)
                                         processQualityTrigger(qg);
                                     }
                                 }
@@ -358,8 +360,10 @@ public class PlcNodeMonitorPanel {
                 // Lógica de 5 minutos para Qualidade da Máquina
                 long now = System.currentTimeMillis();
                 if (now - lastQualityUpdateMs > 5 * 60 * 1000) {
-                    for (QualityGroup qg : qualityGroups.values()) {
-                        updateMachineQuality(qg);
+                    if (qualityGroups != null) {
+                        for (QualityGroup qg : qualityGroups.values()) {
+                            updateMachineQuality(qg);
+                        }
                     }
                     lastQualityUpdateMs = now;
                 }
@@ -442,7 +446,7 @@ public class PlcNodeMonitorPanel {
             plc = new DeviceImp(activeNodeId, plcMnemonic, plcTitle, plcDescription);
             IDeviceRegister deviceRegister = DeviceRegisterImp.getInstance();
             deviceRegister.addDevice(plc);
-            deviceInfo = new DeviceInfo(plcMnemonic, plc.getName(), plc.getDescription());
+            deviceInfo = new DeviceInfo(dbDeviceId, plcMnemonic, plc.getName(), plc.getDescription());
         }
     }
 

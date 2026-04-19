@@ -451,7 +451,7 @@ public class CollectorGuiApplication {
             plc = new DeviceImp(nodeId, "PLC", "PLC", "Omron PLC");
             IDeviceRegister deviceRegister = DeviceRegisterImp.getInstance();
             deviceRegister.addDevice(plc);
-            deviceInfo = new DeviceInfo("PLC", plc.getName(), plc.getDescription());
+            deviceInfo = new DeviceInfo(0, "PLC", plc.getName(), plc.getDescription());
         }
     }
 

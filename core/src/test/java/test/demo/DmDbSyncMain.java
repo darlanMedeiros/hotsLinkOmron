@@ -63,7 +63,7 @@ public class DmDbSyncMain {
             IDevice plc = new DeviceImp(nodeId, "PLC", "PLC", "Omron PLC");
             IDeviceRegister deviceRegister = DeviceRegisterImp.getInstance();
             deviceRegister.addDevice(plc);
-            DeviceInfo deviceInfo = new DeviceInfo("PLC", plc.getName(), plc.getDescription());
+            DeviceInfo deviceInfo = new DeviceInfo(0, "PLC", plc.getName(), plc.getDescription());
 
             int[] lastValues = new int[END_ADDR - START_ADDR + 1];
             for (int i = 0; i < lastValues.length; i++) {
