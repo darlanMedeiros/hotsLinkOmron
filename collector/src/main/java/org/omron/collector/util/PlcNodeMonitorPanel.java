@@ -12,6 +12,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import org.ctrl.db.service.QualidadeService;
+import org.ctrl.db.repository.DefeitoRepository;
+import org.ctrl.db.repository.QualidadeRepository;
+import org.ctrl.db.model.Qualidade;
+import org.ctrl.db.model.Defeito;
+import java.util.HashMap;
+import org.omron.collector.service.DatabaseManager.QualityGroup;
+import org.omron.collector.service.DatabaseManager.TagData;
+import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -58,6 +67,9 @@ public class PlcNodeMonitorPanel {
     private final Runnable ensureDbAction;
     private final Supplier<DmValueService> dmValueServiceSupplier;
     private final Supplier<RrValueService> rrValueServiceSupplier;
+    private final Supplier<QualidadeService> qualidadeServiceSupplier;
+    private final Supplier<DefeitoRepository> defeitoRepositorySupplier;
+    private final Supplier<Map<Integer, QualityGroup>> qualityGroupsSupplier;
     private final Consumer<String> globalLogger;
     private final Runnable sharedDisconnectAction;
     private final JPanel panel;
@@ -85,6 +97,9 @@ public class PlcNodeMonitorPanel {
             Runnable ensureDbAction,
             Supplier<DmValueService> dmValueServiceSupplier,
             Supplier<RrValueService> rrValueServiceSupplier,
+            Supplier<QualidadeService> qualidadeServiceSupplier,
+            Supplier<DefeitoRepository> defeitoRepositorySupplier,
+            Supplier<Map<Integer, QualityGroup>> qualityGroupsSupplier,
             Consumer<String> globalLogger,
             Runnable sharedDisconnectAction) {
         this.nodeIndex = nodeIndex;
@@ -102,6 +117,9 @@ public class PlcNodeMonitorPanel {
         this.ensureDbAction = ensureDbAction;
         this.dmValueServiceSupplier = dmValueServiceSupplier;
         this.rrValueServiceSupplier = rrValueServiceSupplier;
+        this.qualidadeServiceSupplier = qualidadeServiceSupplier;
+        this.defeitoRepositorySupplier = defeitoRepositorySupplier;
+        this.qualityGroupsSupplier = qualityGroupsSupplier;
         this.globalLogger = globalLogger;
         this.sharedDisconnectAction = sharedDisconnectAction;
         this.panel = buildNodePanel(this.configuredNodeId);
@@ -247,6 +265,17 @@ public class PlcNodeMonitorPanel {
         long maxRetriesErrorStartMs = 0L;
         boolean monitorStopRequested = false;
 
+        long lastQualityUpdateMs = 0;
+        Map<Integer, QualityGroup> qualityGroups = new HashMap<>();
+        try {
+           qualityGroups = qualityGroupsSupplier.get();
+           if (!qualityGroups.isEmpty()) {
+               logPrefix("Grupos de qualidade carregados: " + qualityGroups.size());
+           }
+        } catch (Exception e) {
+           logPrefix("Erro ao carregar grupos de qualidade: " + e.getMessage());
+        }
+
         while (monitoring) {
             try {
                 if (!isSharedConnected()) {
@@ -309,12 +338,30 @@ public class PlcNodeMonitorPanel {
                                                 + "): TAG " + tag.getName() + " (" + area + " " + tag.getAddress()
                                                 + ".." + (tag.getAddress() + tag.getLengthWords() - 1) + ") = "
                                                 + formatWords(values) + ".");
+                                }
+                                lastValues.put(tag.getName(), copyWords(values));
+
+                                // Lógica de Gatilho de Qualidade
+                                for (QualityGroup qg : qualityGroups.values()) {
+                                    if (qg.trigger != null && qg.trigger.name.equals(tag.getName())) {
+                                        // Gatilho detectado! (Qualquer mudança de valor numérico conforme PROBLEMA.MD)
+                                        processQualityTrigger(qg);
+                                    }
+                                }
                             }
-                            lastValues.put(tag.getName(), copyWords(values));
                         }
                     }
 
                     Thread.sleep(INTER_TAG_DELAY_MS);
+                }
+
+                // Lógica de 5 minutos para Qualidade da Máquina
+                long now = System.currentTimeMillis();
+                if (now - lastQualityUpdateMs > 5 * 60 * 1000) {
+                    for (QualityGroup qg : qualityGroups.values()) {
+                        updateMachineQuality(qg);
+                    }
+                    lastQualityUpdateMs = now;
                 }
 
                 setCommStatus("CONECTADA - ciclo " + LocalDateTime.now().format(TIME_FMT));
@@ -492,6 +539,93 @@ public class PlcNodeMonitorPanel {
             }
         }
         return false;
+    }
+
+    private void processQualityTrigger(QualityGroup qg) {
+        logPrefix(">>> Processando Gatilho de Qualidade...");
+        try {
+            // 1. Ler as 13 tags complementares
+            int year = readTagValue(qg.year);
+            int month = readTagValue(qg.month);
+            int day = readTagValue(qg.day);
+            int hour = readTagValue(qg.hour);
+            int min = readTagValue(qg.minute);
+            int sec = readTagValue(qg.second);
+            int sampling = readTagValue(qg.sampling);
+            
+            // Defeitos
+            Map<Integer, Integer> defectMap = new HashMap<>();
+            for (int i = 0; i < 3; i++) {
+                int defNum = readTagValue(qg.defectsCode[i]);
+                int defCount = readTagValue(qg.defectsTotal[i]);
+                if (defNum > 0 && defCount > 0) {
+                    defectMap.put(defNum, defCount);
+                }
+            }
+
+            // 2. Construir Data/Hora
+            // Supondo formato decimal simples (ou BCD se fosse o caso, mas aqui usamos o int bruto lido)
+            LocalDateTime plcTime;
+            try {
+                plcTime = LocalDateTime.of(2000 + year, month, day, hour, min, sec);
+            } catch (Exception e) {
+                logPrefix("Erro ao converter data do CLP: " + e.getMessage() + ". Usando hora local.");
+                plcTime = LocalDateTime.now();
+            }
+
+            // 3. Criar objeto Qualidade
+            Qualidade qualidade = new Qualidade();
+            qualidade.setMachineId(deviceInfo.getId().longValue()); // Assumindo machineId == deviceId persistente para Escolha_41
+            qualidade.setValue(sampling);
+            qualidade.setHora(plcTime);
+
+            // 4. Mapear Defeitos para IDs do banco
+            for (Map.Entry<Integer, Integer> entry : defectMap.entrySet()) {
+                Optional<Defeito> d = defeitoRepositorySupplier.get().findByNumber(entry.getKey());
+                if (d.isPresent()) {
+                    qualidade.addDefeito(d.get().getId(), entry.getValue());
+                } else {
+                    logPrefix("AVISO: Defeito numero " + entry.getKey() + " nao encontrado no banco.");
+                }
+            }
+
+            // 5. Salvar
+            qualidadeServiceSupplier.get().saveWithShiftDetection(qualidade);
+            logPrefix(" Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.");
+
+        } catch (Exception e) {
+            logPrefix("ERRO ao processar qualidade: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void updateMachineQuality(QualityGroup qg) {
+        if (qg.machineQualityCurrent == null && qg.machineQualityPersisted == null) return;
+        
+        logPrefix(">>> Atualizando Qualidade da Maquina (intervalo 5 min)...");
+        try {
+            if (qg.machineQualityCurrent != null) {
+                int val = readTagValue(qg.machineQualityCurrent);
+                dmValueServiceSupplier.get().saveRangeCurrentOnly(deviceInfo, qg.machineQualityCurrent.address, new int[]{val});
+            }
+            if (qg.machineQualityPersisted != null) {
+                int val = readTagValue(qg.machineQualityPersisted);
+                dmValueServiceSupplier.get().saveRange(deviceInfo, qg.machineQualityPersisted.address, new int[]{val});
+            }
+        } catch (Exception e) {
+            logPrefix("Erro ao atualizar qualidade da maquina: " + e.getMessage());
+        }
+    }
+
+    private int readTagValue(TagData td) throws Exception {
+        if (td == null) return 0;
+        MemoryVariable memory = new MemoryVariable(td.name, td.memoryArea, td.address, 1);
+        AreaReadDM readCmd = new AreaReadDM(plc, memory);
+        synchronized (comLock) {
+            sharedComHandlerSupplier.get().send(readCmd);
+        }
+        int[] vals = parseReply(readCmd.getReply(), 1);
+        return (vals != null && vals.length > 0) ? vals[0] : 0;
     }
 
     private static int[] copyWords(int[] values) {

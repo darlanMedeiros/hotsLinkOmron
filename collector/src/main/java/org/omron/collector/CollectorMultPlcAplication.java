@@ -148,6 +148,9 @@ public class CollectorMultPlcAplication {
                     dbManager::initialize,
                     () -> dbManager.getDmValueService(),
                     () -> dbManager.getRrValueService(),
+                    () -> dbManager.getQualidadeService(),
+                    () -> dbManager.getDefeitoRepository(),
+                    () -> dbManager.loadQualityTagGroups(cfg.mnemonic),
                     logger::log,
                     () -> serialManager.requestDisconnectByUnresponsiveNode(nodeId));
             plcPanels.add(panel);

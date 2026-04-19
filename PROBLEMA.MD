@@ -34,6 +34,45 @@ Para que a coleta de qualidade funcione automaticamente, as tags no banco de dad
 
 
 
+**Criar o Sql**: Criar o sql para salvar os defeitos na tabela defeitos com os seguintes dados:
+number - name
+32 - Arranhados
+33 - Arranhado de Linha(caco)
+34 - Bolha de Ar (caco)
+36 - Contaminação
+38 - Depressão
+39 - Depressão de Borda
+5 - Enfolhamentos
+6 - Estampo sujo / Marcado
+11 - Falha Decorado / Desenho
+41 - Falha Rebarbador
+12 - Facheado
+13 - Fervido
+14 - Furo de Esmalte
+28 - Grumo
+42 - Martelado
+43 - Massinha
+44 - Pingo d'água
+45 - Pingo Verde
+18 - Ponta quebrada
+20 - Re-presagem
+49 - Retração
+50 - Sujeira / Resíduo forno
+51 - Sujeira Amarela
+52 - Sujeira no Rebarbador
+53 - Sujeira Preta
+54 - Trinca de Extração
+55 - Trinca de Resfriamento
+56 - Trinca de Secagem
+57 - Trinca Mecânica
+58 - Trinca Aresta
+31 - Lascados
+46 - Quebra na aresta
+59 - Fora de Esquadro
+60 - Luneta
+61 - Tamanho GG
+62 - Tamanho PP
+63 - Torto
 
 
 

@@ -8,6 +8,8 @@ import java.util.Map;
 import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.model.MemoryValue;
+import org.ctrl.db.service.QualidadeService;
+import org.ctrl.db.repository.DefeitoRepository;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.db.service.RrValueService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -25,6 +27,8 @@ public class DatabaseManager {
     private AnnotationConfigApplicationContext dbContext;
     private DmValueService dmValueService;
     private RrValueService rrValueService;
+    private QualidadeService qualidadeService;
+    private DefeitoRepository defeitoRepository;
     private volatile boolean initialized;
 
     public void initialize() {
@@ -38,6 +42,8 @@ public class DatabaseManager {
             dbContext = new AnnotationConfigApplicationContext(DbConfig.class);
             dmValueService = dbContext.getBean(DmValueService.class);
             rrValueService = dbContext.getBean(RrValueService.class);
+            qualidadeService = dbContext.getBean(QualidadeService.class);
+            defeitoRepository = dbContext.getBean(DefeitoRepository.class);
             initialized = true;
         }
     }
@@ -71,6 +77,16 @@ public class DatabaseManager {
     public RrValueService getRrValueService() {
         initialize();
         return rrValueService;
+    }
+
+    public QualidadeService getQualidadeService() {
+        initialize();
+        return qualidadeService;
+    }
+
+    public DefeitoRepository getDefeitoRepository() {
+        initialize();
+        return defeitoRepository;
     }
 
     /**
@@ -312,6 +328,51 @@ public class DatabaseManager {
         return String.format("%s_%04d", normalizedArea, normalizedAddress);
     }
 
+    /**
+     * Identifica grupos de tags de qualidade baseados na convenção de nomes
+     */
+    public Map<Integer, QualityGroup> loadQualityTagGroups(String deviceMnemonic) {
+        initialize();
+        Map<String, TagData> allTags = loadTagsForDevice(deviceMnemonic);
+        Map<Integer, QualityGroup> groups = new HashMap<>();
+
+        // Para simplificar, assumimos um grupo por device se as tags existirem.
+        // Se houver múltiplas máquinas no mesmo device, os nomes das tags poderiam ter prefixos.
+        // Como o usuário não especificou prefixos por máquina no PROBLEMA.MD, vamos agrupar 
+        // as tags soltas em um grupo se elas existirem.
+        
+        QualityGroup group = new QualityGroup();
+        boolean foundAny = false;
+
+        for (TagData td : allTags.values()) {
+            String name = td.name;
+            if ("Qualidade_Gatilho".equals(name)) { group.trigger = td; foundAny = true; }
+            else if ("Total_Defeitos1".equals(name)) { group.defectsTotal[0] = td; foundAny = true; }
+            else if ("Total_Defeitos2".equals(name)) { group.defectsTotal[1] = td; foundAny = true; }
+            else if ("Total_Defeitos3".equals(name)) { group.defectsTotal[2] = td; foundAny = true; }
+            else if ("Codigo_Defeito1".equals(name)) { group.defectsCode[0] = td; foundAny = true; }
+            else if ("Codigo_Defeito2".equals(name)) { group.defectsCode[1] = td; foundAny = true; }
+            else if ("Codigo_Defeito3".equals(name)) { group.defectsCode[2] = td; foundAny = true; }
+            else if ("Qtde_Amostragem".equals(name)) { group.sampling = td; foundAny = true; }
+            else if ("Qualidade_Ano".equals(name)) { group.year = td; foundAny = true; }
+            else if ("Qualidade_Mes".equals(name)) { group.month = td; foundAny = true; }
+            else if ("Qualidade_Dia".equals(name)) { group.day = td; foundAny = true; }
+            else if ("Qualidade_Hora".equals(name)) { group.hour = td; foundAny = true; }
+            else if ("Qualidade_Min".equals(name)) { group.minute = td; foundAny = true; }
+            else if ("Qualidade_Seg".equals(name)) { group.second = td; foundAny = true; }
+            else if ("Qualidade_Maquina_Current".equals(name)) { group.machineQualityCurrent = td; foundAny = true; }
+            else if ("Qualidade_Maquina_Persisted".equals(name)) { group.machineQualityPersisted = td; foundAny = true; }
+        }
+
+        if (foundAny && group.trigger != null) {
+            // Usamos o machine_id da tag gatilho como chave se necessário, 
+            // no momento 0 como único grupo por PLC para simplificar.
+            groups.put(0, group); 
+        }
+
+        return groups;
+    }
+
     // Data classes
     public static class DeviceConfigData {
         public final String title;
@@ -363,6 +424,26 @@ public class DatabaseManager {
             this.address = address;
             this.bit = bit;
             this.persistHistory = persistHistory;
+        }
+    }
+
+    public static class QualityGroup {
+        public TagData trigger;
+        public TagData[] defectsTotal = new TagData[3];
+        public TagData[] defectsCode = new TagData[3];
+        public TagData sampling;
+        public TagData year;
+        public TagData month;
+        public TagData day;
+        public TagData hour;
+        public TagData minute;
+        public TagData second;
+        public TagData machineQualityCurrent;
+        public TagData machineQualityPersisted;
+
+        public boolean isValidTriggerGroup() {
+            return trigger != null && year != null && month != null && day != null &&
+                   hour != null && minute != null && second != null;
         }
     }
 }

@@ -15,6 +15,10 @@ import org.ctrl.db.repository.TagRepository;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.db.service.RrValueService;
 import org.ctrl.db.service.TagService;
+import org.ctrl.db.repository.TurnoRepository;
+import org.ctrl.db.repository.QualidadeRepository;
+import org.ctrl.db.repository.DefeitoRepository;
+import org.ctrl.db.service.QualidadeService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -87,6 +91,26 @@ public class DbConfig {
     @Bean
     public TagController tagController(TagService service) {
         return new TagController(service);
+    }
+
+    @Bean
+    public TurnoRepository turnoRepository(JdbcTemplate jdbcTemplate) {
+        return new TurnoRepository(jdbcTemplate);
+    }
+
+    @Bean
+    public QualidadeRepository qualidadeRepository(JdbcTemplate jdbcTemplate) {
+        return new QualidadeRepository(jdbcTemplate);
+    }
+
+    @Bean
+    public DefeitoRepository defeitoRepository(JdbcTemplate jdbcTemplate) {
+        return new DefeitoRepository(jdbcTemplate);
+    }
+
+    @Bean
+    public QualidadeService qualidadeService(QualidadeRepository repository, TurnoRepository turnoRepository) {
+        return new QualidadeService(repository, turnoRepository);
     }
 
     private String resolveProfile() {
