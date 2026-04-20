@@ -39,7 +39,6 @@ import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.service.DmValueService;
 import org.ctrl.db.service.RrValueService;
 import org.ctrl.extras.MemoryVariable;
-import org.ctrl.vend.omron.toolbus.commands.area.AreaReadDM;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadRR;
 import org.ctrl.vend.omron.toolbus.commands.area.AreaReadTC;
 
@@ -336,10 +335,11 @@ public class PlcNodeMonitorPanel {
                                     dmValueServiceSupplier.get().saveRangeCurrentOnly(deviceInfo, tag.getAddress(),
                                             values);
                                 }
-                                logPrefix("Alteracao salva (" + (tag.isPersistHistory() ? "historico+current" : "current")
-                                        + "): TAG " + tag.getName() + " (" + area + " " + tag.getAddress()
-                                        + ".." + (tag.getAddress() + tag.getLengthWords() - 1) + ") = "
-                                        + formatWords(values) + ".");
+                                logPrefix(
+                                        "Alteracao salva (" + (tag.isPersistHistory() ? "historico+current" : "current")
+                                                + "): TAG " + tag.getName() + " (" + area + " " + tag.getAddress()
+                                                + ".." + (tag.getAddress() + tag.getLengthWords() - 1) + ") = "
+                                                + formatWords(values) + ".");
                             }
                             lastValues.put(tag.getName(), copyWords(values));
 
@@ -556,7 +556,7 @@ public class PlcNodeMonitorPanel {
             int min = readTagValue(qg.minute);
             int sec = readTagValue(qg.second);
             int sampling = readTagValue(qg.sampling);
-            
+
             // Defeitos
             Map<Integer, Integer> defectMap = new HashMap<>();
             for (int i = 0; i < 3; i++) {
@@ -568,7 +568,8 @@ public class PlcNodeMonitorPanel {
             }
 
             // 2. Construir Data/Hora
-            // Supondo formato decimal simples (ou BCD se fosse o caso, mas aqui usamos o int bruto lido)
+            // Supondo formato decimal simples (ou BCD se fosse o caso, mas aqui usamos o
+            // int bruto lido)
             LocalDateTime plcTime;
             try {
                 plcTime = LocalDateTime.of(2000 + year, month, day, hour, min, sec);
@@ -579,7 +580,8 @@ public class PlcNodeMonitorPanel {
 
             // 3. Criar objeto Qualidade
             Qualidade qualidade = new Qualidade();
-            qualidade.setMachineId(deviceInfo.getId().longValue()); // Assumindo machineId == deviceId persistente para Escolha_41
+            qualidade.setMachineId(deviceInfo.getId().longValue()); // Assumindo machineId == deviceId persistente para
+                                                                    // Escolha_41
             qualidade.setValue(sampling);
             qualidade.setHora(plcTime);
 
@@ -587,7 +589,7 @@ public class PlcNodeMonitorPanel {
             for (Map.Entry<Integer, Integer> entry : defectMap.entrySet()) {
                 Optional<Defeito> d = defeitoRepositorySupplier.get().findByNumber(entry.getKey());
                 if (d.isPresent()) {
-                    qualidade.addDefeito(d.get().getId(), entry.getValue());
+                    qualidade.addDefeito(d.get().getId(), d.get().getName(), entry.getValue());
                 } else {
                     logPrefix("AVISO: Defeito numero " + entry.getKey() + " nao encontrado no banco.");
                 }
@@ -604,17 +606,20 @@ public class PlcNodeMonitorPanel {
     }
 
     private void updateMachineQuality(QualityGroup qg) {
-        if (qg.machineQualityCurrent == null && qg.machineQualityPersisted == null) return;
-        
+        if (qg.machineQualityCurrent == null && qg.machineQualityPersisted == null)
+            return;
+
         logPrefix(">>> Atualizando Qualidade da Maquina (intervalo 5 min)...");
         try {
             if (qg.machineQualityCurrent != null) {
                 int val = readTagValue(qg.machineQualityCurrent);
-                dmValueServiceSupplier.get().saveRangeCurrentOnly(deviceInfo, qg.machineQualityCurrent.address, new int[]{val});
+                dmValueServiceSupplier.get().saveRangeCurrentOnly(deviceInfo, qg.machineQualityCurrent.address,
+                        new int[] { val });
             }
             if (qg.machineQualityPersisted != null) {
                 int val = readTagValue(qg.machineQualityPersisted);
-                dmValueServiceSupplier.get().saveRange(deviceInfo, qg.machineQualityPersisted.address, new int[]{val});
+                dmValueServiceSupplier.get().saveRange(deviceInfo, qg.machineQualityPersisted.address,
+                        new int[] { val });
             }
         } catch (Exception e) {
             logPrefix("Erro ao atualizar qualidade da maquina: " + e.getMessage());
@@ -622,7 +627,8 @@ public class PlcNodeMonitorPanel {
     }
 
     private int readTagValue(TagData td) throws Exception {
-        if (td == null) return 0;
+        if (td == null)
+            return 0;
         MemoryVariable memory = new MemoryVariable(td.name, td.memoryArea, td.address, 1);
         AreaReadDM readCmd = new AreaReadDM(plc, memory);
         synchronized (comLock) {

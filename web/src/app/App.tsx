@@ -4,6 +4,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { AdminCrudPage } from './pages/AdminCrud/AdminCrudPage';
 import { PlcTagCrudScreen } from './components/PlcTagCrudScreen';
 import MemorySearch from './components/MemorySearch';
+import { QualitySearchPage } from './pages/QualitySearchPage';
 import { CollectorControlPage } from './pages/CollectorControlPage';
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="cadastros" element={<AdminCrudPage />} />
         <Route path="plc-tag" element={<PlcTagCrudScreen />} />
         <Route path="memory-search" element={<MemorySearch />} />
+        <Route path="qualidade" element={<QualitySearchPage />} />
         <Route path="collector" element={<CollectorControlPage />} />
       </Route>
     </Routes>

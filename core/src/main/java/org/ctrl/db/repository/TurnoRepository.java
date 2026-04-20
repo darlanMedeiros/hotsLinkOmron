@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import org.ctrl.db.model.Turno;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public class TurnoRepository {
 
     private final JdbcTemplate jdbcTemplate;

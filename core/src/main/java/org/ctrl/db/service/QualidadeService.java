@@ -1,14 +1,13 @@
 package org.ctrl.db.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.ctrl.db.model.Qualidade;
 import org.ctrl.db.model.Turno;
 import org.ctrl.db.repository.QualidadeRepository;
 import org.ctrl.db.repository.TurnoRepository;
-import org.springframework.stereotype.Service;
 
-@Service
 public class QualidadeService {
 
     private final QualidadeRepository qualidadeRepository;
@@ -35,5 +34,9 @@ public class QualidadeService {
             // Se não encontrar turno, NÃO podemos salvar pois o banco exige turno_id (NOT NULL)
             System.err.println("ERRO CRÍTICO: Turno não encontrado para o horário " + qualidade.getHora() + ". Registro de qualidade ignorado.");
         }
+    }
+
+    public List<Qualidade> findHistory(Long machineId, Long turnoId, LocalDateTime start, LocalDateTime end) {
+        return qualidadeRepository.findAll(machineId, turnoId, start, end);
     }
 }

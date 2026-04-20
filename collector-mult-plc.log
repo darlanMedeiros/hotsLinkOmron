@@ -25650,3 +25650,493 @@ java.lang.Error: Unresolved compilation problems:
 [2026-04-19 10:03:48] [PLC 4] Monitor finalizado.
 [2026-04-19 10:03:48] Comunicacao serial compartilhada encerrada.
 [2026-04-19 10:04:03] Encerramento solicitado pelo usuario.
+[2026-04-20 19:41:31] Comunicacao serial compartilhada conectada na porta COM1.
+[2026-04-20 19:41:36] [PLC 4] Lista de TAG atualizada do banco: 38 item(ns).
+[2026-04-20 19:41:36] [PLC 4] Monitor iniciado para 38 TAGs.
+[2026-04-20 19:41:36] [PLC 4] Grupos de qualidade carregados: 1
+[2026-04-20 19:41:37] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22219, 0].
+[2026-04-20 19:41:39] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22220, 0].
+[2026-04-20 19:41:40] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [44444, 0].
+[2026-04-20 19:41:42] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERCARGA41 (DM 106..107) = [0, 0].
+[2026-04-20 19:41:43] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERDESC41 (DM 108..109) = [0, 0].
+[2026-04-20 19:41:45] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERCARGA42 (DM 110..111) = [0, 0].
+[2026-04-20 19:41:46] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERCARGA43 (DM 114..115) = [0, 0].
+[2026-04-20 19:41:48] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERDESC42 (DM 112..113) = [0, 0].
+[2026-04-20 19:41:49] [PLC 4] Alteracao salva (historico+current): TAG PECAROLLERDESC43 (DM 116..117) = [0, 0].
+[2026-04-20 19:41:51] [PLC 4] Alteracao salva (historico+current): TAG QUALIDADE41 (DM 118..119) = [0, 0].
+[2026-04-20 19:41:52] [PLC 4] Alteracao salva (historico+current): TAG QUALIDADE42 (DM 120..121) = [0, 0].
+[2026-04-20 19:41:54] [PLC 4] Alteracao salva (historico+current): TAG QUALIDADE43 (DM 122..123) = [0, 0].
+[2026-04-20 19:41:55] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22237].
+[2026-04-20 19:41:57] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC33 (DM 313..313) = [0].
+[2026-04-20 19:41:58] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22240].
+[2026-04-20 19:41:59] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC26 (DM 312..312) = [0].
+[2026-04-20 19:42:01] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_SEC25 (DM 311..311) = [6].
+[2026-04-20 19:42:02] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [44488].
+[2026-04-20 19:42:04] [PLC 4] Alteracao salva (historico+current): TAG STATUS_PH29 (RR 0..0) = [0].
+[2026-04-20 19:42:05] [PLC 4] Alteracao salva (RR BIT): TAG STATUS_PH30 (RR 0.1) = 0
+[2026-04-20 19:42:06] [PLC 4] Alteracao salva (RR BIT): TAG STATUS_PH31 (RR 0.2) = 0
+[2026-04-20 19:42:08] [PLC 4] Alteracao salva (historico+current): TAG DM_200 (RR 200..200) = [0].
+[2026-04-20 19:42:09] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [0].
+[2026-04-20 19:42:09] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 19:42:11] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 19:42:12] [PLC 4] Alteracao salva (historico+current): TAG Total_Defeitos1 (DM_4001 4001..4001) = [16].
+[2026-04-20 19:42:14] [PLC 4] Alteracao salva (historico+current): TAG Total_Defeitos2 (DM_4002 4002..4002) = [16].
+[2026-04-20 19:42:15] [PLC 4] Alteracao salva (historico+current): TAG Total_Defeitos3 (DM_4003 4003..4003) = [5].
+[2026-04-20 19:42:16] [PLC 4] Alteracao salva (historico+current): TAG Codigo_Defeito1 (DM_4004 4004..4004) = [50].
+[2026-04-20 19:42:18] [PLC 4] Alteracao salva (historico+current): TAG Codigo_Defeito2 (DM_4005 4005..4005) = [51].
+[2026-04-20 19:42:19] [PLC 4] Alteracao salva (historico+current): TAG Codigo_Defeito3 (DM_4006 4006..4006) = [52].
+[2026-04-20 19:42:21] [PLC 4] Alteracao salva (historico+current): TAG Qtde_Amostragem (DM_4007 4007..4007) = [4096].
+[2026-04-20 19:42:22] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Ano (DM_4008 4008..4008) = [2026].
+[2026-04-20 19:42:23] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Mes (DM_4009 4009..4009) = [4].
+[2026-04-20 19:42:25] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Dia (DM_4010 4010..4010) = [20].
+[2026-04-20 19:42:26] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Hora (DM_4011 4011..4011) = [19].
+[2026-04-20 19:42:28] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [41].
+[2026-04-20 19:42:29] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [34].
+[2026-04-20 19:42:30] [PLC 4] Alteracao salva (current): TAG Qualidade_Maquina_Current (DM_4014 4014..4014) = [0].
+[2026-04-20 19:42:31] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Maquina_Persisted (DM_4015 4015..4015) = [0].
+[2026-04-20 19:42:32] [PLC 4] >>> Atualizando Qualidade da Maquina (intervalo 5 min)...
+[2026-04-20 19:42:35] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22277, 0].
+[2026-04-20 19:42:37] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22278, 0].
+[2026-04-20 19:42:38] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [44560, 0].
+[2026-04-20 19:42:49] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22291].
+[2026-04-20 19:42:51] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22293].
+[2026-04-20 19:42:55] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [44594].
+[2026-04-20 19:43:13] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [42].
+[2026-04-20 19:43:15] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [20].
+[2026-04-20 19:43:20] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22322, 0].
+[2026-04-20 19:43:22] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22323, 0].
+[2026-04-20 19:43:23] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [44650, 0].
+[2026-04-20 19:43:34] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22336].
+[2026-04-20 19:43:37] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22338].
+[2026-04-20 19:43:40] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [44684].
+[2026-04-20 19:43:46] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [1].
+[2026-04-20 19:43:46] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 19:43:48] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 19:44:01] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [43].
+[2026-04-20 19:44:02] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [8].
+[2026-04-20 19:44:03] [PLC 4] Alteracao salva (current): TAG Qualidade_Maquina_Current (DM_4014 4014..4014) = [144].
+[2026-04-20 19:44:08] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22370, 0].
+[2026-04-20 19:44:09] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22371, 0].
+[2026-04-20 19:44:10] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [44744, 0].
+[2026-04-20 19:44:21] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22383].
+[2026-04-20 19:44:24] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22385].
+[2026-04-20 19:44:27] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [44778].
+[2026-04-20 19:44:47] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [52].
+[2026-04-20 19:44:48] [PLC 4] Alteracao salva (current): TAG Qualidade_Maquina_Current (DM_4014 4014..4014) = [90].
+[2026-04-20 19:44:52] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22414, 0].
+[2026-04-20 19:44:54] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22415, 0].
+[2026-04-20 19:44:55] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [44834, 0].
+[2026-04-20 19:45:06] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22428].
+[2026-04-20 19:45:08] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22430].
+[2026-04-20 19:45:12] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [44868].
+[2026-04-20 19:45:17] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [0].
+[2026-04-20 19:45:17] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 19:45:19] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 19:45:33] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [44].
+[2026-04-20 19:45:34] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [40].
+[2026-04-20 19:45:40] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22462, 0].
+[2026-04-20 19:45:42] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22463, 0].
+[2026-04-20 19:45:43] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [44930, 0].
+[2026-04-20 19:45:54] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22476].
+[2026-04-20 19:45:56] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22478].
+[2026-04-20 19:46:00] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [44964].
+[2026-04-20 19:46:19] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [45].
+[2026-04-20 19:46:20] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [25].
+[2026-04-20 19:46:25] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22507, 0].
+[2026-04-20 19:46:27] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22508, 0].
+[2026-04-20 19:46:28] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [45020, 0].
+[2026-04-20 19:46:39] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22521].
+[2026-04-20 19:46:41] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22523].
+[2026-04-20 19:46:45] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [45054].
+[2026-04-20 19:46:50] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [1].
+[2026-04-20 19:46:50] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 19:46:53] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 19:47:06] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [46].
+[2026-04-20 19:47:07] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [12].
+[2026-04-20 19:47:12] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22554, 0].
+[2026-04-20 19:47:14] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22556, 0].
+[2026-04-20 19:47:15] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [45114, 0].
+[2026-04-20 19:47:26] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22568].
+[2026-04-20 19:47:28] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22570].
+[2026-04-20 19:47:32] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [45148].
+[2026-04-20 19:47:52] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [57].
+[2026-04-20 19:47:55] [PLC 4] >>> Atualizando Qualidade da Maquina (intervalo 5 min)...
+[2026-04-20 19:47:57] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22599, 0].
+[2026-04-20 19:47:59] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22600, 0].
+[2026-04-20 19:48:00] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [45204, 0].
+[2026-04-20 19:48:11] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22613].
+[2026-04-20 19:48:13] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22615].
+[2026-04-20 19:48:17] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [45236].
+[2026-04-20 19:48:22] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [0].
+[2026-04-20 19:48:22] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 19:48:24] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 19:48:37] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [47].
+[2026-04-20 19:48:38] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [44].
+[2026-04-20 19:48:44] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22646, 0].
+[2026-04-20 19:48:45] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22647, 0].
+[2026-04-20 19:48:47] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [45296, 0].
+[2026-04-20 19:48:58] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22660].
+[2026-04-20 19:49:00] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22662].
+[2026-04-20 19:49:04] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [45330].
+[2026-04-20 19:49:22] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [48].
+[2026-04-20 19:49:23] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [29].
+[2026-04-20 19:49:29] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22691, 0].
+[2026-04-20 19:49:30] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22692, 0].
+[2026-04-20 19:49:31] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [45386, 0].
+[2026-04-20 19:49:42] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22704].
+[2026-04-20 19:49:45] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22707].
+[2026-04-20 19:49:48] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [45420].
+[2026-04-20 19:49:54] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [1].
+[2026-04-20 19:49:54] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 19:49:55] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 19:50:09] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [49].
+[2026-04-20 19:50:10] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [15].
+[2026-04-20 19:50:15] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22737, 0].
+[2026-04-20 19:50:16] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22738, 0].
+[2026-04-20 19:50:18] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [45480, 0].
+[2026-04-20 19:50:29] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22751].
+[2026-04-20 19:50:31] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22753].
+[2026-04-20 19:50:34] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [45512].
+[2026-04-20 19:50:54] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [0].
+[2026-04-20 19:51:00] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22782, 0].
+[2026-04-20 19:51:01] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22783, 0].
+[2026-04-20 19:51:02] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [45568, 0].
+[2026-04-20 19:51:13] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22795].
+[2026-04-20 19:51:16] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22797].
+[2026-04-20 19:51:19] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [45602].
+[2026-04-20 19:51:38] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [50].
+[2026-04-20 19:51:39] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [44].
+[2026-04-20 19:51:45] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22826, 0].
+[2026-04-20 19:51:46] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22828, 0].
+[2026-04-20 19:51:47] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [45658, 0].
+[2026-04-20 19:51:58] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22840].
+[2026-04-20 19:52:01] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22842].
+[2026-04-20 19:52:04] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [45692].
+[2026-04-20 19:52:09] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [0].
+[2026-04-20 19:52:09] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 19:52:12] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 19:52:25] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [51].
+[2026-04-20 19:52:26] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [32].
+[2026-04-20 19:52:31] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22873, 0].
+[2026-04-20 19:52:33] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22875, 0].
+[2026-04-20 19:52:34] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [45752, 0].
+[2026-04-20 19:52:45] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22887].
+[2026-04-20 19:52:48] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22889].
+[2026-04-20 19:52:51] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [45786].
+[2026-04-20 19:53:10] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [52].
+[2026-04-20 19:53:11] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [17].
+[2026-04-20 19:53:14] [PLC 4] >>> Atualizando Qualidade da Maquina (intervalo 5 min)...
+[2026-04-20 19:53:17] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22919, 0].
+[2026-04-20 19:53:18] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22920, 0].
+[2026-04-20 19:53:20] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [45842, 0].
+[2026-04-20 19:53:31] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22933].
+[2026-04-20 19:53:34] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22935].
+[2026-04-20 19:53:37] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [45878].
+[2026-04-20 19:53:43] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [1].
+[2026-04-20 19:53:43] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 19:53:44] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 19:53:57] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [53].
+[2026-04-20 19:53:59] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [4].
+[2026-04-20 19:54:04] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [22966, 0].
+[2026-04-20 19:54:06] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [22967, 0].
+[2026-04-20 19:54:07] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [45938, 0].
+[2026-04-20 19:54:18] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [22980].
+[2026-04-20 19:54:21] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [22982].
+[2026-04-20 19:54:24] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [45972].
+[2026-04-20 19:54:44] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [49].
+[2026-04-20 19:54:49] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23011, 0].
+[2026-04-20 19:54:51] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23012, 0].
+[2026-04-20 19:54:52] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [46028, 0].
+[2026-04-20 19:55:03] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23025].
+[2026-04-20 19:55:05] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23027].
+[2026-04-20 19:55:09] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [46060].
+[2026-04-20 19:55:15] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [0].
+[2026-04-20 19:55:15] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 19:55:16] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 19:55:29] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [54].
+[2026-04-20 19:55:31] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [36].
+[2026-04-20 19:55:36] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23058, 0].
+[2026-04-20 19:55:38] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23060, 0].
+[2026-04-20 19:55:39] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [46122, 0].
+[2026-04-20 19:55:51] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23072].
+[2026-04-20 19:55:53] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23075].
+[2026-04-20 19:55:56] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [46156].
+[2026-04-20 19:56:15] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [55].
+[2026-04-20 19:56:17] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [22].
+[2026-04-20 19:56:22] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23104, 0].
+[2026-04-20 19:56:23] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23105, 0].
+[2026-04-20 19:56:25] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [46212, 0].
+[2026-04-20 19:56:36] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23118].
+[2026-04-20 19:56:38] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23120].
+[2026-04-20 19:56:42] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [46246].
+[2026-04-20 19:56:47] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [1].
+[2026-04-20 19:56:47] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 19:56:49] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 19:57:03] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [56].
+[2026-04-20 19:57:04] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [9].
+[2026-04-20 19:57:10] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23152, 0].
+[2026-04-20 19:57:11] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23153, 0].
+[2026-04-20 19:57:13] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [46310, 0].
+[2026-04-20 19:57:24] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23166].
+[2026-04-20 19:57:26] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23168].
+[2026-04-20 19:57:30] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [46344].
+[2026-04-20 19:57:49] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [55].
+[2026-04-20 19:57:55] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23197, 0].
+[2026-04-20 19:57:57] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23198, 0].
+[2026-04-20 19:57:58] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [46400, 0].
+[2026-04-20 19:58:09] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23211].
+[2026-04-20 19:58:12] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23214].
+[2026-04-20 19:58:15] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [46434].
+[2026-04-20 19:58:21] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [0].
+[2026-04-20 19:58:21] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 19:58:23] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 19:58:36] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [57].
+[2026-04-20 19:58:37] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [43].
+[2026-04-20 19:58:40] [PLC 4] >>> Atualizando Qualidade da Maquina (intervalo 5 min)...
+[2026-04-20 19:58:43] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23245, 0].
+[2026-04-20 19:58:45] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23246, 0].
+[2026-04-20 19:58:46] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [46496, 0].
+[2026-04-20 19:58:57] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23259].
+[2026-04-20 19:58:59] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23261].
+[2026-04-20 19:59:03] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [46528].
+[2026-04-20 19:59:22] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [58].
+[2026-04-20 19:59:23] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [28].
+[2026-04-20 19:59:28] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23290, 0].
+[2026-04-20 19:59:30] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23291, 0].
+[2026-04-20 19:59:31] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [46586, 0].
+[2026-04-20 19:59:42] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23304].
+[2026-04-20 19:59:44] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23306].
+[2026-04-20 19:59:48] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [46618].
+[2026-04-20 19:59:54] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [1].
+[2026-04-20 19:59:54] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 19:59:55] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 20:00:08] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [59].
+[2026-04-20 20:00:10] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [15].
+[2026-04-20 20:00:15] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23337, 0].
+[2026-04-20 20:00:17] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23338, 0].
+[2026-04-20 20:00:18] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [46680, 0].
+[2026-04-20 20:00:29] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23351].
+[2026-04-20 20:00:31] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23353].
+[2026-04-20 20:00:35] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [46712].
+[2026-04-20 20:00:55] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [0].
+[2026-04-20 20:01:00] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23382, 0].
+[2026-04-20 20:01:02] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23383, 0].
+[2026-04-20 20:01:03] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [46770, 0].
+[2026-04-20 20:01:14] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23396].
+[2026-04-20 20:01:17] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23399].
+[2026-04-20 20:01:20] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [46804].
+[2026-04-20 20:01:38] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Hora (DM_4011 4011..4011) = [20].
+[2026-04-20 20:01:39] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [0].
+[2026-04-20 20:01:40] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [46].
+[2026-04-20 20:01:46] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23428, 0].
+[2026-04-20 20:01:47] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23429, 0].
+[2026-04-20 20:01:48] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [46860, 0].
+[2026-04-20 20:02:00] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23441].
+[2026-04-20 20:02:02] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23444].
+[2026-04-20 20:02:06] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [46894].
+[2026-04-20 20:02:11] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [0].
+[2026-04-20 20:02:11] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 20:02:13] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 20:02:27] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [1].
+[2026-04-20 20:02:28] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [33].
+[2026-04-20 20:02:33] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23475, 0].
+[2026-04-20 20:02:35] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23477, 0].
+[2026-04-20 20:02:36] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [46956, 0].
+[2026-04-20 20:02:47] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23489].
+[2026-04-20 20:02:50] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23491].
+[2026-04-20 20:02:54] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [46990].
+[2026-04-20 20:03:12] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [2].
+[2026-04-20 20:03:14] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [19].
+[2026-04-20 20:03:20] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23522, 0].
+[2026-04-20 20:03:21] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23523, 0].
+[2026-04-20 20:03:23] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [47048, 0].
+[2026-04-20 20:03:34] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23536].
+[2026-04-20 20:03:36] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23538].
+[2026-04-20 20:03:40] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [47082].
+[2026-04-20 20:03:46] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [1].
+[2026-04-20 20:03:46] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 20:03:47] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 20:04:01] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [3].
+[2026-04-20 20:04:04] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [8].
+[2026-04-20 20:04:07] [PLC 4] >>> Atualizando Qualidade da Maquina (intervalo 5 min)...
+[2026-04-20 20:04:12] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23573, 0].
+[2026-04-20 20:04:13] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23575, 0].
+[2026-04-20 20:04:14] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [47152, 0].
+[2026-04-20 20:04:25] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23587].
+[2026-04-20 20:04:28] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23590].
+[2026-04-20 20:04:31] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [47186].
+[2026-04-20 20:04:51] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [56].
+[2026-04-20 20:04:57] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23618, 0].
+[2026-04-20 20:04:58] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23620, 0].
+[2026-04-20 20:05:00] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [47242, 0].
+[2026-04-20 20:05:11] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23633].
+[2026-04-20 20:05:14] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23636].
+[2026-04-20 20:05:18] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [47278].
+[2026-04-20 20:05:25] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [0].
+[2026-04-20 20:05:25] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 20:05:31] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 20:05:46] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [4].
+[2026-04-20 20:05:47] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [52].
+[2026-04-20 20:05:53] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23675, 0].
+[2026-04-20 20:05:55] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23676, 0].
+[2026-04-20 20:05:56] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [47356, 0].
+[2026-04-20 20:06:07] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23689].
+[2026-04-20 20:06:10] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23692].
+[2026-04-20 20:06:13] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [47390].
+[2026-04-20 20:06:32] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [5].
+[2026-04-20 20:06:33] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [38].
+[2026-04-20 20:06:38] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23720, 0].
+[2026-04-20 20:06:40] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23722, 0].
+[2026-04-20 20:06:41] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [47446, 0].
+[2026-04-20 20:06:52] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23734].
+[2026-04-20 20:06:54] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23736].
+[2026-04-20 20:06:58] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [47480].
+[2026-04-20 20:07:16] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [6].
+[2026-04-20 20:07:18] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [23].
+[2026-04-20 20:07:23] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23765, 0].
+[2026-04-20 20:07:24] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23766, 0].
+[2026-04-20 20:07:26] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [47534, 0].
+[2026-04-20 20:07:37] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23779].
+[2026-04-20 20:07:39] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23781].
+[2026-04-20 20:07:42] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [47568].
+[2026-04-20 20:07:48] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [1].
+[2026-04-20 20:07:48] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 20:07:50] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 20:08:03] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [7].
+[2026-04-20 20:08:04] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [10].
+[2026-04-20 20:08:09] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23811, 0].
+[2026-04-20 20:08:11] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23813, 0].
+[2026-04-20 20:08:12] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [47628, 0].
+[2026-04-20 20:08:23] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23825].
+[2026-04-20 20:08:25] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23827].
+[2026-04-20 20:08:29] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [47662].
+[2026-04-20 20:08:48] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [54].
+[2026-04-20 20:08:54] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23856, 0].
+[2026-04-20 20:08:55] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23857, 0].
+[2026-04-20 20:08:56] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [47716, 0].
+[2026-04-20 20:09:08] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23870].
+[2026-04-20 20:09:10] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23872].
+[2026-04-20 20:09:14] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [47752].
+[2026-04-20 20:09:20] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [0].
+[2026-04-20 20:09:20] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 20:09:21] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 20:09:35] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [8].
+[2026-04-20 20:09:36] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [41].
+[2026-04-20 20:09:39] [PLC 4] >>> Atualizando Qualidade da Maquina (intervalo 5 min)...
+[2026-04-20 20:09:42] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23904, 0].
+[2026-04-20 20:09:43] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23905, 0].
+[2026-04-20 20:09:44] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [47812, 0].
+[2026-04-20 20:09:55] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23917].
+[2026-04-20 20:09:58] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23920].
+[2026-04-20 20:10:01] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [47846].
+[2026-04-20 20:10:20] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [9].
+[2026-04-20 20:10:21] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [26].
+[2026-04-20 20:10:26] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23948, 0].
+[2026-04-20 20:10:28] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23950, 0].
+[2026-04-20 20:10:29] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [47902, 0].
+[2026-04-20 20:10:40] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [23962].
+[2026-04-20 20:10:42] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [23964].
+[2026-04-20 20:10:46] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [47936].
+[2026-04-20 20:10:51] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [1].
+[2026-04-20 20:10:51] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 20:10:53] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 20:11:06] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [10].
+[2026-04-20 20:11:07] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [13].
+[2026-04-20 20:11:13] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [23995, 0].
+[2026-04-20 20:11:14] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [23996, 0].
+[2026-04-20 20:11:15] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [47994, 0].
+[2026-04-20 20:11:26] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [24008].
+[2026-04-20 20:11:29] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [24010].
+[2026-04-20 20:11:32] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [48028].
+[2026-04-20 20:11:52] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [57].
+[2026-04-20 20:11:57] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [24039, 0].
+[2026-04-20 20:11:58] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [24040, 0].
+[2026-04-20 20:11:59] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [48082, 0].
+[2026-04-20 20:12:10] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [24053].
+[2026-04-20 20:12:13] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [24055].
+[2026-04-20 20:12:16] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [48116].
+[2026-04-20 20:12:22] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [0].
+[2026-04-20 20:12:22] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 20:12:24] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 20:12:37] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [11].
+[2026-04-20 20:12:38] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [43].
+[2026-04-20 20:12:43] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [24085, 0].
+[2026-04-20 20:12:45] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [24087, 0].
+[2026-04-20 20:12:46] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [48176, 0].
+[2026-04-20 20:12:57] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [24099].
+[2026-04-20 20:12:59] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [24101].
+[2026-04-20 20:13:03] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [48210].
+[2026-04-20 20:13:21] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [12].
+[2026-04-20 20:13:23] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [28].
+[2026-04-20 20:13:28] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [24130, 0].
+[2026-04-20 20:13:29] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [24131, 0].
+[2026-04-20 20:13:31] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [48264, 0].
+[2026-04-20 20:13:42] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [24144].
+[2026-04-20 20:13:44] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [24146].
+[2026-04-20 20:13:47] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [48298].
+[2026-04-20 20:13:53] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [1].
+[2026-04-20 20:13:53] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 20:13:56] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 20:14:09] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [13].
+[2026-04-20 20:14:10] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [16].
+[2026-04-20 20:14:16] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [24178, 0].
+[2026-04-20 20:14:18] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [24179, 0].
+[2026-04-20 20:14:19] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [48362, 0].
+[2026-04-20 20:14:30] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [24192].
+[2026-04-20 20:14:32] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [24194].
+[2026-04-20 20:14:36] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [48396].
+[2026-04-20 20:14:55] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [14].
+[2026-04-20 20:14:56] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [1].
+[2026-04-20 20:14:59] [PLC 4] >>> Atualizando Qualidade da Maquina (intervalo 5 min)...
+[2026-04-20 20:15:02] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [24224, 0].
+[2026-04-20 20:15:04] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [24225, 0].
+[2026-04-20 20:15:05] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [48454, 0].
+[2026-04-20 20:15:16] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [24238].
+[2026-04-20 20:15:18] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [24240].
+[2026-04-20 20:15:22] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [48488].
+[2026-04-20 20:15:42] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [47].
+[2026-04-20 20:15:47] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [24269, 0].
+[2026-04-20 20:15:49] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [24271, 0].
+[2026-04-20 20:15:50] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [48544, 0].
+[2026-04-20 20:16:01] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [24283].
+[2026-04-20 20:16:03] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [24285].
+[2026-04-20 20:16:07] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [48578].
+[2026-04-20 20:16:12] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [0].
+[2026-04-20 20:16:12] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 20:16:14] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 20:16:27] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [15].
+[2026-04-20 20:16:28] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [34].
+[2026-04-20 20:16:34] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [24316, 0].
+[2026-04-20 20:16:35] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [24317, 0].
+[2026-04-20 20:16:36] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [48636, 0].
+[2026-04-20 20:16:47] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [24329].
+[2026-04-20 20:16:49] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [24331].
+[2026-04-20 20:16:53] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [48670].
+[2026-04-20 20:17:12] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [16].
+[2026-04-20 20:17:13] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [19].
+[2026-04-20 20:17:19] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [24361, 0].
+[2026-04-20 20:17:20] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [24362, 0].
+[2026-04-20 20:17:21] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [48726, 0].
+[2026-04-20 20:17:32] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [24374].
+[2026-04-20 20:17:35] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [24377].
+[2026-04-20 20:17:38] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [48760].
+[2026-04-20 20:17:46] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Gatilho (DM_4000 4000..4000) = [1].
+[2026-04-20 20:17:46] [PLC 4] >>> Processando Gatilho de Qualidade...
+[2026-04-20 20:17:48] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
+[2026-04-20 20:18:01] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [17].
+[2026-04-20 20:18:02] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [8].
+[2026-04-20 20:18:08] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [24410, 0].
+[2026-04-20 20:18:09] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [24411, 0].
+[2026-04-20 20:18:10] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [48824, 0].
+[2026-04-20 20:18:21] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH29 (DM 308..308) = [24423].
+[2026-04-20 20:18:24] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH31 (DM 310..310) = [24426].
+[2026-04-20 20:18:27] [PLC 4] Alteracao salva (historico+current): TAG PRODUCAO_PH30 (DM 309..309) = [48858].
+[2026-04-20 20:18:32] Leitura DM manual salva em banco para device PRENSA: blocos=4, historico=24, current-only=0.
+[2026-04-20 20:18:36] Scanner DM manual concluido. Node 4, inicio DM 3000, total lido 54.
+[2026-04-20 20:18:50] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [56].
+[2026-04-20 20:18:56] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [24458, 0].
+[2026-04-20 20:18:57] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [24459, 0].
+[2026-04-20 20:18:58] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [48920, 0].
+[2026-04-20 20:19:07] [PLC 4] Monitor finalizado.
+[2026-04-20 20:19:12] Comunicacao serial compartilhada encerrada.
+[2026-04-20 20:19:17] Encerramento solicitado pelo usuario.

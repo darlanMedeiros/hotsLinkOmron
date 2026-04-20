@@ -14,6 +14,8 @@ export function MainLayout() {
         return 'Cadastro PLC, memory e tags';
       case '/memory-search':
         return 'Busca de Memoria';
+      case '/qualidade':
+        return 'Resumo de Qualidade por Turno';
       case '/collector':
         return 'Execucao local do Collector Multi PLC';
       default:
@@ -74,6 +76,16 @@ export function MainLayout() {
                   }
                 >
                   Memory Search
+                </NavLink>
+                <NavLink
+                  to="/qualidade"
+                  className={({ isActive }) =>
+                    `rounded-md px-3 py-1.5 text-sm font-medium transition ${
+                      isActive ? 'bg-white text-blue-700' : 'text-white hover:bg-white/10'
+                    }`
+                  }
+                >
+                  Qualidade
                 </NavLink>
                 <NavLink
                   to="/collector"

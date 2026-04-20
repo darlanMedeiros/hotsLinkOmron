@@ -2,7 +2,7 @@ package org.ctrl.db.api;
 
 import java.util.List;
 import org.ctrl.db.api.dto.DefeitoRequest;
-import org.ctrl.db.api.model.Defeito;
+import org.ctrl.db.model.Defeito;
 import org.ctrl.db.api.service.DefeitoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

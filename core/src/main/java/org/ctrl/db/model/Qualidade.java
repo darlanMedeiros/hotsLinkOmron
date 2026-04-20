@@ -8,19 +8,23 @@ public class Qualidade {
 
     private Long id;
     private Long machineId;
+    private String machineName;
     private Integer value;
     private LocalDateTime hora;
     private Long turnoId;
+    private String turnoName;
     private List<QualidadeDefeitoValor> defeitos = new ArrayList<>();
 
     public Qualidade() {}
 
-    public Qualidade(Long id, Long machineId, Integer value, LocalDateTime hora, Long turnoId) {
+    public Qualidade(Long id, Long machineId, String machineName, Integer value, LocalDateTime hora, Long turnoId, String turnoName) {
         this.id = id;
         this.machineId = machineId;
+        this.machineName = machineName;
         this.value = value;
         this.hora = hora;
         this.turnoId = turnoId;
+        this.turnoName = turnoName;
     }
 
     public Long getId() {
@@ -63,6 +67,22 @@ public class Qualidade {
         this.turnoId = turnoId;
     }
 
+    public String getMachineName() {
+        return machineName;
+    }
+
+    public void setMachineName(String machineName) {
+        this.machineName = machineName;
+    }
+
+    public String getTurnoName() {
+        return turnoName;
+    }
+
+    public void setTurnoName(String turnoName) {
+        this.turnoName = turnoName;
+    }
+
     public List<QualidadeDefeitoValor> getDefeitos() {
         return defeitos;
     }
@@ -71,7 +91,7 @@ public class Qualidade {
         this.defeitos = defeitos;
     }
     
-    public void addDefeito(Long defeitoId, Integer value) {
-        this.defeitos.add(new QualidadeDefeitoValor(null, null, defeitoId, value));
+    public void addDefeito(Long defeitoId, String defeitoName, Integer value) {
+        this.defeitos.add(new QualidadeDefeitoValor(null, null, defeitoId, defeitoName, value));
     }
 }

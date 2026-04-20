@@ -2,8 +2,8 @@ package org.ctrl.db.api.service;
 
 import java.util.List;
 import java.util.Optional;
-import org.ctrl.db.api.model.Defeito;
-import org.ctrl.db.api.repository.DefeitoRepository;
+import org.ctrl.db.model.Defeito;
+import org.ctrl.db.repository.DefeitoRepository;
 import org.springframework.stereotype.Service;
 
 @Service
