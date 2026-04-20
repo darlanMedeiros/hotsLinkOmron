@@ -25647,3 +25647,6 @@ java.lang.Error: Unresolved compilation problems:
 [2026-04-19 10:03:41] [PLC 4] Alteracao salva (historico+current): TAG PECAPH29 (DM 100..101) = [18160, 0].
 [2026-04-19 10:03:42] [PLC 4] Alteracao salva (historico+current): TAG PECAPH31 (DM 104..105) = [18161, 0].
 [2026-04-19 10:03:43] [PLC 4] Alteracao salva (historico+current): TAG PECAPH30 (DM 102..103) = [36324, 0].
+[2026-04-19 10:03:48] [PLC 4] Monitor finalizado.
+[2026-04-19 10:03:48] Comunicacao serial compartilhada encerrada.
+[2026-04-19 10:04:03] Encerramento solicitado pelo usuario.
