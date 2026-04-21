@@ -92,6 +92,10 @@ public class Qualidade {
     }
     
     public void addDefeito(Long defeitoId, String defeitoName, Integer value) {
-        this.defeitos.add(new QualidadeDefeitoValor(null, null, defeitoId, defeitoName, value));
+        addDefeito(defeitoId, defeitoName, value, this.value);
+    }
+
+    public void addDefeito(Long defeitoId, String defeitoName, Integer value, Integer amostragem) {
+        this.defeitos.add(new QualidadeDefeitoValor(null, null, defeitoId, defeitoName, value, amostragem));
     }
 }

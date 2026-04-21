@@ -47,13 +47,15 @@ public class QualidadeHistoryDTO {
         private Long defeitoId;
         private String defeitoName;
         private Integer value;
+        private Integer amostragem;
 
         public QualidadeDefeitoDTO() {}
 
-        public QualidadeDefeitoDTO(Long defeitoId, String defeitoName, Integer value) {
+        public QualidadeDefeitoDTO(Long defeitoId, String defeitoName, Integer value, Integer amostragem) {
             this.defeitoId = defeitoId;
             this.defeitoName = defeitoName;
             this.value = value;
+            this.amostragem = amostragem;
         }
 
         public Long getDefeitoId() { return defeitoId; }
@@ -62,5 +64,7 @@ public class QualidadeHistoryDTO {
         public void setDefeitoName(String defeitoName) { this.defeitoName = defeitoName; }
         public Integer getValue() { return value; }
         public void setValue(Integer value) { this.value = value; }
+        public Integer getAmostragem() { return amostragem; }
+        public void setAmostragem(Integer amostragem) { this.amostragem = amostragem; }
     }
 }

@@ -343,12 +343,13 @@ public class PlcNodeMonitorPanel {
                             }
                             lastValues.put(tag.getName(), copyWords(values));
 
-                            // Lógica de Gatilho de Qualidade
-                            if (qualityGroups != null) {
-                                for (QualityGroup qg : qualityGroups.values()) {
-                                    if (qg.trigger != null && qg.trigger.name.equals(tag.getName())) {
-                                        processQualityTrigger(qg);
-                                    }
+                        }
+
+                        // Gatilho de qualidade: salva apenas na borda de subida (0 -> 1).
+                        if (isQualityTriggerRisingEdge(previous, values) && qualityGroups != null) {
+                            for (QualityGroup qg : qualityGroups.values()) {
+                                if (qg.trigger != null && qg.trigger.name.equals(tag.getName())) {
+                                    processQualityTrigger(qg);
                                 }
                             }
                         }
@@ -545,6 +546,16 @@ public class PlcNodeMonitorPanel {
         return false;
     }
 
+    private static boolean isQualityTriggerRisingEdge(int[] previous, int[] current) {
+        if (current == null || current.length == 0) {
+            return false;
+        }
+        if (previous == null || previous.length == 0) {
+            return current[0] > 0;
+        }
+        return previous[0] <= 0 && current[0] > 0;
+    }
+
     private void processQualityTrigger(QualityGroup qg) {
         logPrefix(">>> Processando Gatilho de Qualidade...");
         try {
@@ -572,7 +583,8 @@ public class PlcNodeMonitorPanel {
             // int bruto lido)
             LocalDateTime plcTime;
             try {
-                plcTime = LocalDateTime.of(2000 + year, month, day, hour, min, sec);
+                int normalizedYear = normalizePlcYear(year);
+                plcTime = LocalDateTime.of(normalizedYear, month, day, hour, min, sec);
             } catch (Exception e) {
                 logPrefix("Erro ao converter data do CLP: " + e.getMessage() + ". Usando hora local.");
                 plcTime = LocalDateTime.now();
@@ -580,8 +592,10 @@ public class PlcNodeMonitorPanel {
 
             // 3. Criar objeto Qualidade
             Qualidade qualidade = new Qualidade();
-            qualidade.setMachineId(deviceInfo.getId().longValue()); // Assumindo machineId == deviceId persistente para
-                                                                    // Escolha_41
+            long qualityMachineId = (qg.trigger != null && qg.trigger.machineId > 0)
+                    ? qg.trigger.machineId
+                    : deviceInfo.getId().longValue();
+            qualidade.setMachineId(qualityMachineId);
             qualidade.setValue(sampling);
             qualidade.setHora(plcTime);
 
@@ -589,7 +603,7 @@ public class PlcNodeMonitorPanel {
             for (Map.Entry<Integer, Integer> entry : defectMap.entrySet()) {
                 Optional<Defeito> d = defeitoRepositorySupplier.get().findByNumber(entry.getKey());
                 if (d.isPresent()) {
-                    qualidade.addDefeito(d.get().getId(), d.get().getName(), entry.getValue());
+                    qualidade.addDefeito(d.get().getId(), d.get().getName(), entry.getValue(), sampling);
                 } else {
                     logPrefix("AVISO: Defeito numero " + entry.getKey() + " nao encontrado no banco.");
                 }
@@ -636,6 +650,19 @@ public class PlcNodeMonitorPanel {
         }
         int[] vals = parseReply(readCmd.getReply(), 1);
         return (vals != null && vals.length > 0) ? vals[0] : 0;
+    }
+
+    private static int normalizePlcYear(int rawYear) {
+        if (rawYear >= 2000 && rawYear <= 2099) {
+            return rawYear;
+        }
+        if (rawYear >= 4000 && rawYear <= 4099) {
+            return rawYear - 2000;
+        }
+        if (rawYear >= 0 && rawYear <= 99) {
+            return 2000 + rawYear;
+        }
+        return rawYear;
     }
 
     private static int[] copyWords(int[] values) {

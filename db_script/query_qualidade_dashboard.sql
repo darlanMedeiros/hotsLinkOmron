@@ -6,8 +6,9 @@ SELECT
     q.hora AS data_hora,
     m.name AS maquina,
     t.name AS turno,
-    q.value AS amostragem_percentual,
+    q.value AS quantidade_amostragem_total,
     d.name AS defeito,
+    qdv.amostragem AS quantidade_amostragem_defeito,
     qdv.value AS quantidade_defeito
 FROM 
     public.qualidade q

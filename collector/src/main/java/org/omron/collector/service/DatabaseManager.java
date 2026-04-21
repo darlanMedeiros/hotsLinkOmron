@@ -137,7 +137,7 @@ public class DatabaseManager {
         Map<String, TagData> tags = new LinkedHashMap<>();
 
         List<Map<String, Object>> rows = jdbc.queryForList(
-                "SELECT t.name AS tag_name, t.persist_history AS persist_history, " +
+                "SELECT t.name AS tag_name, t.machine_id AS machine_id, t.persist_history AS persist_history, " +
                         "m.name AS memory_area, m.address AS memory_address, m.bit AS memory_bit " +
                         "FROM public.device d " +
                         "JOIN public.machine ma ON ma.device_id = d.id " +
@@ -149,13 +149,15 @@ public class DatabaseManager {
 
         for (Map<String, Object> row : rows) {
             String tagName = asString(row.get("tag_name"));
+            Integer machineId = asInt(row.get("machine_id"));
             Integer address = asInt(row.get("memory_address"));
             String memoryArea = asString(row.get("memory_area"));
             Integer memoryBit = asInt(row.get("memory_bit"));
             String memoryName = formatMemoryKey(memoryArea, address, memoryBit);
             boolean persistHistory = asBoolean(row.get("persist_history"), true);
 
-            if (tagName == null || address == null || address.intValue() < 0) {
+            if (tagName == null || machineId == null || machineId.intValue() <= 0
+                    || address == null || address.intValue() < 0) {
                 continue;
             }
             /**
@@ -168,7 +170,7 @@ public class DatabaseManager {
              */
 
             tags.put(tagName, new TagData(
-                    tagName, memoryArea, address.intValue(), memoryBit == null ? -1 : memoryBit.intValue(),
+                    tagName, machineId.intValue(), memoryArea, address.intValue(), memoryBit == null ? -1 : memoryBit.intValue(),
                     memoryName, persistHistory));
         }
         return tags;
@@ -397,15 +399,17 @@ public class DatabaseManager {
 
     public static class TagData {
         public final String name;
+        public final int machineId;
         public final String memoryArea;
         public final int address;
         public final int bit;
         public final String memoryName;
         public final boolean persistHistory;
 
-        public TagData(String name, String memoryArea, int address, int bit, String memoryName,
+        public TagData(String name, int machineId, String memoryArea, int address, int bit, String memoryName,
                 boolean persistHistory) {
             this.name = name;
+            this.machineId = machineId;
             this.memoryArea = memoryArea;
             this.address = address;
             this.bit = bit;

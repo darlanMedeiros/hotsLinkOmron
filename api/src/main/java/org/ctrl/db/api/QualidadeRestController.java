@@ -42,7 +42,8 @@ public class QualidadeRestController {
 
     private QualidadeHistoryDTO convertToDTO(Qualidade q) {
         List<QualidadeHistoryDTO.QualidadeDefeitoDTO> defeitos = q.getDefeitos().stream()
-                .map(d -> new QualidadeHistoryDTO.QualidadeDefeitoDTO(d.getDefeitoId(), d.getDefeitoName(), d.getValue()))
+                .map(d -> new QualidadeHistoryDTO.QualidadeDefeitoDTO(d.getDefeitoId(), d.getDefeitoName(),
+                        d.getValue(), d.getAmostragem()))
                 .collect(Collectors.toList());
 
         return new QualidadeHistoryDTO(
@@ -53,7 +54,6 @@ public class QualidadeRestController {
                 q.getHora(),
                 q.getTurnoId(),
                 q.getTurnoName(),
-                defeitos
-        );
+                defeitos);
     }
 }

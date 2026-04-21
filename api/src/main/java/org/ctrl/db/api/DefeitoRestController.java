@@ -2,10 +2,17 @@ package org.ctrl.db.api;
 
 import java.util.List;
 import org.ctrl.db.api.dto.DefeitoRequest;
-import org.ctrl.db.model.Defeito;
 import org.ctrl.db.api.service.DefeitoService;
+import org.ctrl.db.model.Defeito;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/defeitos")
@@ -29,19 +36,18 @@ public class DefeitoRestController {
 
     @PostMapping
     public ResponseEntity<Defeito> create(@RequestBody DefeitoRequest request) {
-        if (request == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        Defeito created = service.create(request.getName(), request.getNumber());
+        Defeito created = service.create(
+                request == null ? null : request.getName(),
+                request == null ? null : request.getNumber());
         return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id:\\d+}")
     public ResponseEntity<Defeito> update(@PathVariable long id, @RequestBody DefeitoRequest request) {
-        if (request == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return service.update(id, request.getName(), request.getNumber())
+        return service.update(
+                id,
+                request == null ? null : request.getName(),
+                request == null ? null : request.getNumber())
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

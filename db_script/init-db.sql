@@ -126,6 +126,7 @@ CREATE TABLE qualidade_defeito_valor (
     id BIGSERIAL PRIMARY KEY,
     qualidade_id BIGINT NOT NULL REFERENCES qualidade(id) ON DELETE CASCADE,
     defeito_id BIGINT NOT NULL REFERENCES defeito(id) ON DELETE RESTRICT,
+    amostragem INTEGER NOT NULL CHECK (amostragem >= 0),
     value INTEGER NOT NULL CHECK (value >= 0),
     CONSTRAINT uq_qualidade_defeito UNIQUE (qualidade_id, defeito_id)
 );

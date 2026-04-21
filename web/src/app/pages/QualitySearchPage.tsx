@@ -18,6 +18,7 @@ interface QualidadeDefeito {
   defeitoId: number;
   defeitoName: string;
   value: number;
+  amostragem: number;
 }
 
 interface QualidadeHistory {
@@ -32,17 +33,50 @@ interface QualidadeHistory {
 }
 
 export const QualitySearchPage: React.FC = () => {
+  const toLocalInputDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  const today = new Date();
+  const sevenDaysAgo = new Date(today);
+  sevenDaysAgo.setDate(today.getDate() - 7);
+
+  const parseApiDateTime = (value: string): Date | null => {
+    if (!value) return null;
+
+    const direct = new Date(value);
+    if (!Number.isNaN(direct.getTime())) {
+      return direct;
+    }
+
+    const normalized = value.includes(' ') ? value.replace(' ', 'T') : value;
+    const fallback = new Date(normalized);
+    if (!Number.isNaN(fallback.getTime())) {
+      return fallback;
+    }
+
+    return null;
+  };
+
+  const formatApiDateTime = (value: string): string => {
+    const parsed = parseApiDateTime(value);
+    return parsed ? parsed.toLocaleString('pt-BR') : value;
+  };
+
   const [machines, setMachines] = useState<Machine[]>([]);
   const [turnos, setTurnos] = useState<Turno[]>([]);
   
   const [selectedMachineId, setSelectedMachineId] = useState<string>('');
   const [selectedTurnoId, setSelectedTurnoId] = useState<string>('');
-  const [selectedStartDate, setSelectedStartDate] = useState<string>(new Date().toISOString().slice(0, 10));
-  const [selectedEndDate, setSelectedEndDate] = useState<string>(new Date().toISOString().slice(0, 10));
+  const [selectedStartDate, setSelectedStartDate] = useState<string>(toLocalInputDate(sevenDaysAgo));
+  const [selectedEndDate, setSelectedEndDate] = useState<string>(toLocalInputDate(today));
   
   const [history, setHistory] = useState<QualidadeHistory[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
 
   useEffect(() => {
     const loadFilters = async () => {
@@ -63,6 +97,7 @@ export const QualitySearchPage: React.FC = () => {
   const handleSearch = useCallback(async () => {
     setLoading(true);
     setError(null);
+    setHasSearched(true);
     try {
       const params = new URLSearchParams();
       if (selectedMachineId) params.set('machineId', selectedMachineId);
@@ -108,7 +143,7 @@ export const QualitySearchPage: React.FC = () => {
 
     const headers = ['Data/Hora', 'Maquina', 'Turno', 'Amostragem (%)', 'Defeitos'];
     const rows = history.map(h => [
-      new Date(h.hora).toLocaleString('pt-BR'),
+      formatApiDateTime(h.hora),
       h.machineName,
       h.turnoName,
       h.value,
@@ -278,7 +313,7 @@ export const QualitySearchPage: React.FC = () => {
               <tbody className="divide-y divide-slate-100">
                 {history.map((reg) => (
                   <tr key={reg.id} className="hover:bg-slate-50 transition">
-                    <td className="px-4 py-3 font-medium text-slate-900">{new Date(reg.hora).toLocaleString('pt-BR')}</td>
+                    <td className="px-4 py-3 font-medium text-slate-900">{formatApiDateTime(reg.hora)}</td>
                     <td className="px-4 py-3 text-slate-600">{reg.machineName}</td>
                     <td className="px-4 py-3 text-slate-600">{reg.turnoName}</td>
                     <td className="px-4 py-3">
@@ -314,7 +349,11 @@ export const QualitySearchPage: React.FC = () => {
       {!loading && history.length === 0 && !error && (
         <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50/50 p-12 text-center">
           <ShieldCheck className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-500 font-medium">Use os filtros acima para pesquisar o histórico de qualidade.</p>
+          <p className="text-slate-500 font-medium">
+            {hasSearched
+              ? 'Nenhum registro encontrado para os filtros selecionados.'
+              : 'Use os filtros acima para pesquisar o histórico de qualidade.'}
+          </p>
         </div>
       )}
     </div>

@@ -127,9 +127,24 @@ CREATE TABLE IF NOT EXISTS qualidade_defeito_valor (
     id BIGSERIAL PRIMARY KEY,
     qualidade_id BIGINT NOT NULL REFERENCES qualidade(id) ON DELETE CASCADE,
     defeito_id BIGINT NOT NULL REFERENCES defeito(id) ON DELETE RESTRICT,
+    amostragem INTEGER NOT NULL CHECK (amostragem >= 0),
     value INTEGER NOT NULL CHECK (value >= 0),
     CONSTRAINT uq_qualidade_defeito UNIQUE (qualidade_id, defeito_id)
 );
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = 'qualidade_defeito_valor'
+          AND column_name = 'amostragem'
+    ) THEN
+        ALTER TABLE public.qualidade_defeito_valor
+            ADD COLUMN amostragem INTEGER NOT NULL DEFAULT 0 CHECK (amostragem >= 0);
+    END IF;
+END $$;
 
 CREATE TABLE IF NOT EXISTS producao_por_turno (
     id BIGSERIAL PRIMARY KEY,
