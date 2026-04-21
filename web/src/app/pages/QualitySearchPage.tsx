@@ -29,6 +29,7 @@ interface QualidadeHistory {
   hora: string;
   turnoId: number;
   turnoName: string;
+  qualidadeParcial: number;
   defeitos: QualidadeDefeito[];
 }
 
@@ -119,7 +120,7 @@ export const QualitySearchPage: React.FC = () => {
     if (history.length === 0) return { totalRecords: 0, avgQuality: 0, totalDefects: 0 };
     
     const totalRecords = history.length;
-    const avgQuality = history.reduce((acc, curr) => acc + curr.value, 0) / totalRecords;
+    const avgQuality = history.reduce((acc, curr) => acc + curr.qualidadeParcial, 0) / totalRecords;
     const totalDefects = history.reduce((acc, curr) => 
       acc + curr.defeitos.reduce((dAcc, dCurr) => dAcc + dCurr.value, 0), 0);
     
@@ -141,12 +142,13 @@ export const QualitySearchPage: React.FC = () => {
   const handleExportCsv = () => {
     if (history.length === 0) return;
 
-    const headers = ['Data/Hora', 'Maquina', 'Turno', 'Amostragem (%)', 'Defeitos'];
+    const headers = ['Data/Hora', 'Maquina', 'Turno', 'Amostragem', 'Qualidade (%)', 'Defeitos'];
     const rows = history.map(h => [
       formatApiDateTime(h.hora),
       h.machineName,
       h.turnoName,
       h.value,
+      h.qualidadeParcial.toFixed(1),
       h.defeitos.map(d => `${d.defeitoName}: ${d.value}`).join(' | ')
     ]);
 
@@ -307,6 +309,7 @@ export const QualitySearchPage: React.FC = () => {
                   <th className="px-4 py-3">Máquina</th>
                   <th className="px-4 py-3">Turno</th>
                   <th className="px-4 py-3 text-center">Amostragem</th>
+                  <th className="px-4 py-3 text-center">Qualidade</th>
                   <th className="px-4 py-3">Principais Defeitos</th>
                 </tr>
               </thead>
@@ -316,11 +319,17 @@ export const QualitySearchPage: React.FC = () => {
                     <td className="px-4 py-3 font-medium text-slate-900">{formatApiDateTime(reg.hora)}</td>
                     <td className="px-4 py-3 text-slate-600">{reg.machineName}</td>
                     <td className="px-4 py-3 text-slate-600">{reg.turnoName}</td>
+                    <td className="px-4 py-3 text-center font-bold text-blue-600">{reg.value}</td>
                     <td className="px-4 py-3">
                       <div className="flex flex-col items-center gap-1">
-                        <span className={`text-xs font-bold ${reg.value >= 95 ? 'text-emerald-600' : 'text-amber-600'}`}>{reg.value}%</span>
+                        <span className={`text-xs font-bold ${reg.qualidadeParcial >= 95 ? 'text-emerald-600' : 'text-amber-600'}`}>
+                          {reg.qualidadeParcial.toFixed(1)}%
+                        </span>
                         <div className="w-16 bg-slate-200 h-1 rounded-full overflow-hidden">
-                          <div className={`h-full ${reg.value >= 95 ? 'bg-emerald-500' : 'bg-amber-500'}`} style={{ width: `${reg.value}%` }} />
+                          <div 
+                            className={`h-full ${reg.qualidadeParcial >= 95 ? 'bg-emerald-500' : 'bg-amber-500'}`} 
+                            style={{ width: `${Math.min(100, Math.max(0, reg.qualidadeParcial))}%` }} 
+                          />
                         </div>
                       </div>
                     </td>
@@ -330,7 +339,10 @@ export const QualitySearchPage: React.FC = () => {
                           reg.defeitos.map(def => (
                             <span key={def.defeitoId} className="inline-flex flex-col border border-red-100 bg-red-50 text-red-700 px-2 py-0.5 rounded text-[11px]">
                               <span className="font-bold">{def.defeitoName}</span>
-                              <span className="opacity-80">Qtd: {def.value}</span>
+                              <div className="flex justify-between gap-2 opacity-80">
+                                <span>Qtd: {def.value}</span>
+                                <span>{( (def.value / (reg.value || 1)) * 100 ).toFixed(1)}%</span>
+                              </div>
                             </span>
                           ))
                         ) : (

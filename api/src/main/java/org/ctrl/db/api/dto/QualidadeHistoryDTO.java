@@ -11,11 +11,12 @@ public class QualidadeHistoryDTO {
     private LocalDateTime hora;
     private Long turnoId;
     private String turnoName;
+    private Double qualidadeParcial;
     private List<QualidadeDefeitoDTO> defeitos;
 
     public QualidadeHistoryDTO() {}
 
-    public QualidadeHistoryDTO(Long id, Long machineId, String machineName, Integer value, LocalDateTime hora, Long turnoId, String turnoName, List<QualidadeDefeitoDTO> defeitos) {
+    public QualidadeHistoryDTO(Long id, Long machineId, String machineName, Integer value, LocalDateTime hora, Long turnoId, String turnoName, Double qualidadeParcial, List<QualidadeDefeitoDTO> defeitos) {
         this.id = id;
         this.machineId = machineId;
         this.machineName = machineName;
@@ -23,6 +24,7 @@ public class QualidadeHistoryDTO {
         this.hora = hora;
         this.turnoId = turnoId;
         this.turnoName = turnoName;
+        this.qualidadeParcial = qualidadeParcial;
         this.defeitos = defeitos;
     }
 
@@ -40,6 +42,8 @@ public class QualidadeHistoryDTO {
     public void setTurnoId(Long turnoId) { this.turnoId = turnoId; }
     public String getTurnoName() { return turnoName; }
     public void setTurnoName(String turnoName) { this.turnoName = turnoName; }
+    public Double getQualidadeParcial() { return qualidadeParcial; }
+    public void setQualidadeParcial(Double qualidadeParcial) { this.qualidadeParcial = qualidadeParcial; }
     public List<QualidadeDefeitoDTO> getDefeitos() { return defeitos; }
     public void setDefeitos(List<QualidadeDefeitoDTO> defeitos) { this.defeitos = defeitos; }
 

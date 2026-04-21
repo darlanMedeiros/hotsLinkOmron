@@ -46,14 +46,23 @@ public class QualidadeRestController {
                         d.getValue(), d.getAmostragem()))
                 .collect(Collectors.toList());
 
+        // Cálculo da Qualidade Parcial: 100 - (Total Defeitos / Amostragem * 100)
+        double totalDefeitos = q.getDefeitos().stream().mapToDouble(d -> (double) d.getValue()).sum();
+        double amostragem = (q.getValue() != null && q.getValue() > 0) ? q.getValue() : 1.0;
+        double qualidadeParcial = 100.0 - (totalDefeitos / amostragem * 100.0);
+        
+        // Garantir que não seja negativo (embora raro)
+        if (qualidadeParcial < 0) qualidadeParcial = 0;
+
         return new QualidadeHistoryDTO(
                 q.getId(),
                 q.getMachineId(),
                 q.getMachineName(),
-                q.getValue(),
+                q.getValue(), // Este é a Amostragem (valor inteiro do PLC)
                 q.getHora(),
                 q.getTurnoId(),
                 q.getTurnoName(),
+                qualidadeParcial,
                 defeitos);
     }
 }
