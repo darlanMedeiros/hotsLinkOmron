@@ -100,14 +100,24 @@ export function ProductionLine({
             icon={Factory}
             trend={trendPrensa}
             color="bg-blue-500"
+            containerClassName={
+              !prensaStatusKnown
+                ? 'bg-white border-gray-200'
+                : prensaStatusOn
+                  ? 'bg-emerald-600 border-emerald-700 shadow-md'
+                  : 'bg-red-600 border-red-700 shadow-md'
+            }
+            titleClassName={!prensaStatusKnown ? 'text-gray-600' : 'text-white/90'}
+            valueClassName={!prensaStatusKnown ? 'text-2xl text-gray-900' : 'text-5xl text-white'}
+            unitClassName={!prensaStatusKnown ? 'text-gray-500' : 'text-white/80'}
             footer={
               <div
                 className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
                   !prensaStatusKnown
                     ? 'border-slate-300 bg-slate-100 text-slate-600'
                     : prensaStatusOn
-                      ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                      : 'border-slate-300 bg-slate-100 text-slate-600'
+                      ? 'border-emerald-400 bg-emerald-500 text-white shadow-sm'
+                      : 'border-red-400 bg-red-500 text-white shadow-sm'
                 }`}
               >
                 <span
@@ -185,12 +195,27 @@ export function ProductionLine({
           
           <span className="text-[9px] font-semibold text-slate-500 mb-1 block uppercase tracking-wider">Principais Defeitos</span>
           <div className="space-y-1">
-            {defeitos.map((def, idx) => (
-              <div key={idx} className="flex justify-between items-center bg-white border border-slate-200 px-2 py-1.5 rounded shadow-sm text-[10px]">
-                <span className="font-semibold text-slate-600 uppercase truncate">{def.name}</span>
-                <span className="text-slate-500 font-bold">{def.percentage.toFixed(1).replace('.', ',')}%</span>
-              </div>
-            ))}
+            {defeitos.map((def, idx) => {
+              const bgColors = [
+                'bg-red-50 border-l-[3px] border-l-red-500 border-y border-r border-red-100',
+                'bg-orange-50 border-l-[3px] border-l-orange-500 border-y border-r border-orange-100',
+                'bg-amber-50 border-l-[3px] border-l-amber-500 border-y border-r border-amber-100'
+              ];
+              const textColors = [
+                'text-red-700',
+                'text-orange-700',
+                'text-amber-700'
+              ];
+              const bgClass = bgColors[idx] || 'bg-white border border-slate-200';
+              const textClass = textColors[idx] || 'text-slate-600';
+              
+              return (
+                <div key={idx} className={`flex justify-between items-center px-2 py-1.5 rounded shadow-sm text-[10px] ${bgClass}`}>
+                  <span className={`font-bold uppercase truncate ${textClass}`}>{def.name}</span>
+                  <span className={`font-bold ${textClass}`}>{def.percentage.toFixed(1).replace('.', ',')}%</span>
+                </div>
+              );
+            })}
             {defeitos.length === 0 && (
               <div className="text-center text-[10px] text-slate-400 italic py-1">Nenhum defeito</div>
             )}
