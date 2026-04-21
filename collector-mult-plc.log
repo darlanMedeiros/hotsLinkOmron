@@ -27154,3 +27154,4 @@ java.lang.Error: Unresolved compilation problems:
 [2026-04-20 22:49:55] [PLC 4]  Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.
 [2026-04-20 22:50:08] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Min (DM_4012 4012..4012) = [50].
 [2026-04-20 22:50:10] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [7].
+[2026-04-20 22:50:53] [PLC 4] Alteracao salva (historico+current): TAG Qualidade_Seg (DM_4013 4013..4013) = [50].
