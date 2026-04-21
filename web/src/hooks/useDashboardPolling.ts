@@ -20,6 +20,7 @@ export interface LineConfig {
   key: '41' | '42' | '43';
   lineNumber: number;
   lineName: string;
+  machineId: number;
   color: string;
   tags: {
     pecasPrensa: string[];
@@ -34,6 +35,7 @@ export const LINE_CONFIG: LineConfig[] = [
     key: '41',
     lineNumber: 1,
     lineName: 'MF 41',
+    machineId: 13, // ID do banco para ESCOLHA 41
     color: 'bg-gradient-to-r from-blue-500 to-blue-600',
     tags: {
       pecasPrensa: ['PECAPH29'],
@@ -46,6 +48,7 @@ export const LINE_CONFIG: LineConfig[] = [
     key: '42',
     lineNumber: 2,
     lineName: 'MF 42',
+    machineId: 42, // Mock ID
     color: 'bg-gradient-to-r from-green-500 to-green-600',
     tags: {
       pecasPrensa: ['PECAPH30'],
@@ -58,6 +61,7 @@ export const LINE_CONFIG: LineConfig[] = [
     key: '43',
     lineNumber: 3,
     lineName: 'MF 43',
+    machineId: 43, // Mock ID
     color: 'bg-gradient-to-r from-orange-500 to-orange-600',
     tags: {
       pecasPrensa: ['PECAPH31'],

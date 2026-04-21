@@ -74,7 +74,7 @@ public class QualidadeRepository {
 
         sql.append("ORDER BY q.hora DESC, q.id DESC");
 
-        return jdbcTemplate.query(String.valueOf(sql), (ResultSetExtractor<List<Qualidade>>) rs -> {
+        List<Qualidade> result = jdbcTemplate.query(Objects.requireNonNull(sql.toString()), (ResultSetExtractor<List<Qualidade>>) rs -> {
             Map<Long, Qualidade> map = new LinkedHashMap<>();
             while (rs.next()) {
                 Long id = rs.getLong("id");
@@ -101,5 +101,7 @@ public class QualidadeRepository {
             }
             return new ArrayList<>(map.values());
         }, params.toArray());
+        
+        return result != null ? result : new ArrayList<>();
     }
 }

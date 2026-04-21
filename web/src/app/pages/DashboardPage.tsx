@@ -44,6 +44,7 @@ export function DashboardPage() {
               key={line.key}
               lineNumber={line.lineNumber}
               lineName={line.lineName}
+              machineId={line.machineId}
               pecasPrensa={data.pecasPrensa}
               pecasRoller={data.pecasRoller}
               qualidade={data.qualidade}
@@ -59,3 +60,4 @@ export function DashboardPage() {
     </div>
   );
 }
+
