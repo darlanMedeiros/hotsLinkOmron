@@ -40,7 +40,7 @@ export const LINE_CONFIG: LineConfig[] = [
     tags: {
       pecasPrensa: ['PECAPH29'],
       pecasRoller: ['PECAROLLERCARGA41'],
-      qualidade: ['QUALIDADE41'],
+      qualidade: ['Qualidade_Maquina_Current'],
       statusPrensa: ['STATUS_PH29'],
     },
   },

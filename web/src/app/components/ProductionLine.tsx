@@ -175,7 +175,17 @@ export function ProductionLine({
             </div>
           )}
           
-          <h3 className="text-[10px] font-bold text-slate-500 uppercase mb-2 tracking-wider">Qualidade</h3>
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Qualidade</h3>
+            {machineId === 13 && data?.hora && (
+              <span className="text-[11px] font-bold text-slate-700 bg-white px-1.5 py-0.5 rounded shadow-sm border border-slate-200">
+                {new Date(data.hora).toLocaleString('pt-BR', { 
+                  day: '2-digit', month: '2-digit', 
+                  hour: '2-digit', minute: '2-digit' 
+                })}
+              </span>
+            )}
+          </div>
           
           <div className="flex justify-around items-center mb-4">
             <div className="flex flex-col items-center justify-center">

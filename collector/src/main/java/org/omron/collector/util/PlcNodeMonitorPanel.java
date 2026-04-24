@@ -358,16 +358,7 @@ public class PlcNodeMonitorPanel {
                     Thread.sleep(INTER_TAG_DELAY_MS);
                 }
 
-                // Lógica de 5 minutos para Qualidade da Máquina
-                long now = System.currentTimeMillis();
-                if (now - lastQualityUpdateMs > 5 * 60 * 1000) {
-                    if (qualityGroups != null) {
-                        for (QualityGroup qg : qualityGroups.values()) {
-                            updateMachineQuality(qg);
-                        }
-                    }
-                    lastQualityUpdateMs = now;
-                }
+                // A condição de 5 minutos foi removida a pedido do usuário
 
                 setCommStatus("CONECTADA - ciclo " + LocalDateTime.now().format(TIME_FMT));
                 cycleCount++;
@@ -559,28 +550,86 @@ public class PlcNodeMonitorPanel {
     private void processQualityTrigger(QualityGroup qg) {
         logPrefix(">>> Processando Gatilho de Qualidade...");
         try {
-            // 1. Ler as 13 tags complementares
-            int year = readTagValue(qg.year);
-            int month = readTagValue(qg.month);
-            int day = readTagValue(qg.day);
-            int hour = readTagValue(qg.hour);
-            int min = readTagValue(qg.minute);
-            int sec = readTagValue(qg.second);
-            int sampling = readTagValue(qg.sampling);
+            // 1. Determinar o bloco de endereços a ler
+            List<TagData> allQualityTags = new ArrayList<>();
+            if (qg.year != null) allQualityTags.add(qg.year);
+            if (qg.month != null) allQualityTags.add(qg.month);
+            if (qg.day != null) allQualityTags.add(qg.day);
+            if (qg.hour != null) allQualityTags.add(qg.hour);
+            if (qg.minute != null) allQualityTags.add(qg.minute);
+            if (qg.second != null) allQualityTags.add(qg.second);
+            if (qg.sampling != null) allQualityTags.add(qg.sampling);
+            for (TagData td : qg.defectsCode) if (td != null) allQualityTags.add(td);
+            for (TagData td : qg.defectsTotal) if (td != null) allQualityTags.add(td);
+            if (qg.machineQualityCurrent != null) allQualityTags.add(qg.machineQualityCurrent);
+            if (qg.machineQualityPersisted != null) allQualityTags.add(qg.machineQualityPersisted);
+
+            if (allQualityTags.isEmpty()) {
+                logPrefix("Nenhuma tag de qualidade configurada.");
+                return;
+            }
+
+            int minAddress = allQualityTags.stream().mapToInt(td -> td.address).min().orElse(0);
+            int maxAddress = allQualityTags.stream().mapToInt(td -> td.address).max().orElse(0);
+            int length = maxAddress - minAddress + 1;
+
+            if (length > 100) {
+                logPrefix("Bloco de qualidade muito grande: " + length + " words.");
+                return;
+            }
+
+            // Ler o bloco inteiro
+            MemoryVariable memory = new MemoryVariable("QualityBlock", "DM", minAddress, length);
+            AreaReadDM readCmd = new AreaReadDM(plc, memory);
+            synchronized (comLock) {
+                sharedComHandlerSupplier.get().send(readCmd);
+            }
+            int[] blockValues = parseReply(readCmd.getReply(), length);
+
+            if (blockValues == null || blockValues.length < length) {
+                logPrefix("Falha ao ler o bloco de qualidade DM" + minAddress + " a DM" + maxAddress);
+                return;
+            }
+
+            logPrefix("VALORES DO BLOCO LIDO (DM" + minAddress + " a DM" + maxAddress + "): " + formatWords(blockValues));
+
+            // Função auxiliar para extrair o valor lido do bloco
+            java.util.function.Function<TagData, Integer> getVal = td -> {
+                if (td == null) return 0;
+                int offset = td.address - minAddress;
+                return blockValues[offset];
+            };
+
+            int year = getVal.apply(qg.year);
+            int month = getVal.apply(qg.month);
+            int day = getVal.apply(qg.day);
+            int hour = getVal.apply(qg.hour);
+            int min = getVal.apply(qg.minute);
+            int sec = getVal.apply(qg.second);
+            int sampling = getVal.apply(qg.sampling);
 
             // Defeitos
             Map<Integer, Integer> defectMap = new HashMap<>();
             for (int i = 0; i < 3; i++) {
-                int defNum = readTagValue(qg.defectsCode[i]);
-                int defCount = readTagValue(qg.defectsTotal[i]);
+                int defNum = getVal.apply(qg.defectsCode[i]);
+                int defCount = getVal.apply(qg.defectsTotal[i]);
                 if (defNum > 0 && defCount > 0) {
                     defectMap.put(defNum, defCount);
                 }
             }
 
+            // Salvar os valores das tags no banco de dados (memory_value) conforme configurado
+            for (TagData td : allQualityTags) {
+                int val = getVal.apply(td);
+                if (td.persistHistory) {
+                    dmValueServiceSupplier.get().saveRange(deviceInfo, td.address, new int[]{val});
+                } else {
+                    dmValueServiceSupplier.get().saveRangeCurrentOnly(deviceInfo, td.address, new int[]{val});
+                }
+            }
+            logPrefix(" Bloco de dados DM" + minAddress + " a DM" + maxAddress + " salvo nas tags.");
+
             // 2. Construir Data/Hora
-            // Supondo formato decimal simples (ou BCD se fosse o caso, mas aqui usamos o
-            // int bruto lido)
             LocalDateTime plcTime;
             try {
                 int normalizedYear = normalizePlcYear(year);
@@ -609,9 +658,9 @@ public class PlcNodeMonitorPanel {
                 }
             }
 
-            // 5. Salvar
+            // 5. Salvar registro de Qualidade consolidado
             qualidadeServiceSupplier.get().saveWithShiftDetection(qualidade);
-            logPrefix(" Registro de Qualidade salvo com sucesso. Turno detectado automaticamente.");
+            logPrefix(" Registro de Qualidade consolidado salvo com sucesso. Turno detectado automaticamente.");
 
         } catch (Exception e) {
             logPrefix("ERRO ao processar qualidade: " + e.getMessage());
@@ -619,26 +668,7 @@ public class PlcNodeMonitorPanel {
         }
     }
 
-    private void updateMachineQuality(QualityGroup qg) {
-        if (qg.machineQualityCurrent == null && qg.machineQualityPersisted == null)
-            return;
 
-        logPrefix(">>> Atualizando Qualidade da Maquina (intervalo 5 min)...");
-        try {
-            if (qg.machineQualityCurrent != null) {
-                int val = readTagValue(qg.machineQualityCurrent);
-                dmValueServiceSupplier.get().saveRangeCurrentOnly(deviceInfo, qg.machineQualityCurrent.address,
-                        new int[] { val });
-            }
-            if (qg.machineQualityPersisted != null) {
-                int val = readTagValue(qg.machineQualityPersisted);
-                dmValueServiceSupplier.get().saveRange(deviceInfo, qg.machineQualityPersisted.address,
-                        new int[] { val });
-            }
-        } catch (Exception e) {
-            logPrefix("Erro ao atualizar qualidade da maquina: " + e.getMessage());
-        }
-    }
 
     private int readTagValue(TagData td) throws Exception {
         if (td == null)
@@ -677,10 +707,13 @@ public class PlcNodeMonitorPanel {
         if (words == null || words.length == 0) {
             return "[]";
         }
-        if (words.length == 1) {
-            return "[" + words[0] + "]";
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < words.length; i++) {
+            if (i > 0) sb.append(", ");
+            sb.append(words[i]);
         }
-        return "[" + words[0] + ", " + words[1] + "]";
+        sb.append("]");
+        return sb.toString();
     }
 
     private static String describeError(Throwable error) {
