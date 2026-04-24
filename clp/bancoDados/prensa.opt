@@ -180,11 +180,11 @@ ProjectTree:=
 BEGIN
  Item[0]:=0;
  Item[1]:=2;
- Item[2]:=37;
- Item[3]:=38;
+ Item[2]:=36;
+ Item[3]:=37;
  ItemCount:=4;
  Sumcheck:=111;
- Selected:=50;
+ Selected:=49;
 END;
 Frame[0]:=
 BEGIN

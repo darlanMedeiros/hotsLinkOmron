@@ -34,7 +34,9 @@ export function QualityChart({ percentage }: QualityChartProps) {
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center flex-col">
-            <span className="text-2xl font-bold text-gray-900">{percentage}%</span>
+            <span className="text-2xl font-bold text-gray-900">
+              {percentage.toLocaleString('pt-BR', { maximumFractionDigits: 2 })}%
+            </span>
             <span className="text-[10px] text-gray-500">Aprovação</span>
           </div>
         </div>

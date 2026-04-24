@@ -30,7 +30,7 @@ export function ProductionLine({
   trendRoller,
   color
 }: ProductionLineProps) {
-  const qualidadePercentual = Math.max(0, Math.min(100, Math.round(qualidade)));
+  const qualidadePercentual = Math.max(0, Math.min(100, qualidade));
   const prensaStatusOn = statusPrensaBit === 1;
   const prensaStatusKnown = statusPrensaBit === 0 || statusPrensaBit === 1;
 
@@ -43,7 +43,7 @@ export function ProductionLine({
   let forno18 = 0;
 
   if (machineId === 13) {
-    previa = Math.round(data?.qualidadeParcial ?? 0);
+    previa = data?.qualidadeParcial ?? 0;
     estoque = 8; // Placeholder
     forno18 = 879; // Placeholder
     defeitos = data?.defeitos
