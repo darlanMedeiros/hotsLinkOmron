@@ -267,7 +267,6 @@ public class PlcNodeMonitorPanel {
         long maxRetriesErrorStartMs = 0L;
         boolean monitorStopRequested = false;
 
-        long lastQualityUpdateMs = 0;
         Map<Integer, QualityGroup> qualityGroups = new HashMap<>();
         try {
             qualityGroups = qualityGroupsSupplier.get();
@@ -552,17 +551,30 @@ public class PlcNodeMonitorPanel {
         try {
             // 1. Determinar o bloco de endereços a ler
             List<TagData> allQualityTags = new ArrayList<>();
-            if (qg.year != null) allQualityTags.add(qg.year);
-            if (qg.month != null) allQualityTags.add(qg.month);
-            if (qg.day != null) allQualityTags.add(qg.day);
-            if (qg.hour != null) allQualityTags.add(qg.hour);
-            if (qg.minute != null) allQualityTags.add(qg.minute);
-            if (qg.second != null) allQualityTags.add(qg.second);
-            if (qg.sampling != null) allQualityTags.add(qg.sampling);
-            for (TagData td : qg.defectsCode) if (td != null) allQualityTags.add(td);
-            for (TagData td : qg.defectsTotal) if (td != null) allQualityTags.add(td);
-            if (qg.machineQualityCurrent != null) allQualityTags.add(qg.machineQualityCurrent);
-            if (qg.machineQualityPersisted != null) allQualityTags.add(qg.machineQualityPersisted);
+            if (qg.year != null)
+                allQualityTags.add(qg.year);
+            if (qg.month != null)
+                allQualityTags.add(qg.month);
+            if (qg.day != null)
+                allQualityTags.add(qg.day);
+            if (qg.hour != null)
+                allQualityTags.add(qg.hour);
+            if (qg.minute != null)
+                allQualityTags.add(qg.minute);
+            if (qg.second != null)
+                allQualityTags.add(qg.second);
+            if (qg.sampling != null)
+                allQualityTags.add(qg.sampling);
+            for (TagData td : qg.defectsCode)
+                if (td != null)
+                    allQualityTags.add(td);
+            for (TagData td : qg.defectsTotal)
+                if (td != null)
+                    allQualityTags.add(td);
+            if (qg.machineQualityCurrent != null)
+                allQualityTags.add(qg.machineQualityCurrent);
+            if (qg.machineQualityPersisted != null)
+                allQualityTags.add(qg.machineQualityPersisted);
 
             if (allQualityTags.isEmpty()) {
                 logPrefix("Nenhuma tag de qualidade configurada.");
@@ -591,11 +603,13 @@ public class PlcNodeMonitorPanel {
                 return;
             }
 
-            logPrefix("VALORES DO BLOCO LIDO (DM" + minAddress + " a DM" + maxAddress + "): " + formatWords(blockValues));
+            logPrefix(
+                    "VALORES DO BLOCO LIDO (DM" + minAddress + " a DM" + maxAddress + "): " + formatWords(blockValues));
 
             // Função auxiliar para extrair o valor lido do bloco
             java.util.function.Function<TagData, Integer> getVal = td -> {
-                if (td == null) return 0;
+                if (td == null)
+                    return 0;
                 int offset = td.address - minAddress;
                 return blockValues[offset];
             };
@@ -618,13 +632,14 @@ public class PlcNodeMonitorPanel {
                 }
             }
 
-            // Salvar os valores das tags no banco de dados (memory_value) conforme configurado
+            // Salvar os valores das tags no banco de dados (memory_value) conforme
+            // configurado
             for (TagData td : allQualityTags) {
                 int val = getVal.apply(td);
                 if (td.persistHistory) {
-                    dmValueServiceSupplier.get().saveRange(deviceInfo, td.address, new int[]{val});
+                    dmValueServiceSupplier.get().saveRange(deviceInfo, td.address, new int[] { val });
                 } else {
-                    dmValueServiceSupplier.get().saveRangeCurrentOnly(deviceInfo, td.address, new int[]{val});
+                    dmValueServiceSupplier.get().saveRangeCurrentOnly(deviceInfo, td.address, new int[] { val });
                 }
             }
             logPrefix(" Bloco de dados DM" + minAddress + " a DM" + maxAddress + " salvo nas tags.");
@@ -668,20 +683,6 @@ public class PlcNodeMonitorPanel {
         }
     }
 
-
-
-    private int readTagValue(TagData td) throws Exception {
-        if (td == null)
-            return 0;
-        MemoryVariable memory = new MemoryVariable(td.name, td.memoryArea, td.address, 1);
-        AreaReadDM readCmd = new AreaReadDM(plc, memory);
-        synchronized (comLock) {
-            sharedComHandlerSupplier.get().send(readCmd);
-        }
-        int[] vals = parseReply(readCmd.getReply(), 1);
-        return (vals != null && vals.length > 0) ? vals[0] : 0;
-    }
-
     private static int normalizePlcYear(int rawYear) {
         if (rawYear >= 2000 && rawYear <= 2099) {
             return rawYear;
@@ -709,7 +710,8 @@ public class PlcNodeMonitorPanel {
         }
         StringBuilder sb = new StringBuilder("[");
         for (int i = 0; i < words.length; i++) {
-            if (i > 0) sb.append(", ");
+            if (i > 0)
+                sb.append(", ");
             sb.append(words[i]);
         }
         sb.append("]");
