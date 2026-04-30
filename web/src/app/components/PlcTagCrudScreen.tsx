@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
-import { Cpu, HardDrive, Tag, Pencil, Save, Trash2, X } from 'lucide-react';
+import { Cpu, HardDrive, Tag, ListChecks, Pencil, Save, Trash2, X } from 'lucide-react';
 import { requestApi } from '../../services/api';
 
 type ViewMessage = {
@@ -35,9 +35,18 @@ type TagCrud = {
   machineId: number;
   memoryId: number;
   persistHistory: boolean;
+  qualityGroup: string | null;
+  qualityRole: string | null;
 };
 
-type SectionKey = 'device' | 'memory' | 'tag';
+type QualityRoleOption = {
+  id: number;
+  name: string;
+  description: string | null;
+  active: boolean;
+};
+
+type SectionKey = 'device' | 'memory' | 'tag' | 'qualityRole';
 
 export function PlcTagCrudScreen() {
   const memoryAreas = ['DM', 'HR', 'RR', 'WR', 'TC'] as const;
@@ -49,6 +58,7 @@ export function PlcTagCrudScreen() {
     { key: 'device', label: 'Devices', icon: <Cpu className="h-4 w-4 text-blue-600" /> },
     { key: 'memory', label: 'Memories', icon: <HardDrive className="h-4 w-4 text-indigo-600" /> },
     { key: 'tag', label: 'Tags', icon: <Tag className="h-4 w-4 text-emerald-600" /> },
+    { key: 'qualityRole', label: 'Quality Roles', icon: <ListChecks className="h-4 w-4 text-amber-600" /> },
   ];
   const [activeSection, setActiveSection] = useState<SectionKey>('device');
 
@@ -56,6 +66,7 @@ export function PlcTagCrudScreen() {
   const [machines, setMachines] = useState<Machine[]>([]);
   const [memories, setMemories] = useState<Memory[]>([]);
   const [tags, setTags] = useState<TagCrud[]>([]);
+  const [qualityRoles, setQualityRoles] = useState<QualityRoleOption[]>([]);
 
   const [newDeviceMnemonic, setNewDeviceMnemonic] = useState('');
   const [newDeviceName, setNewDeviceName] = useState('');
@@ -71,10 +82,16 @@ export function PlcTagCrudScreen() {
   const [newTagMachineId, setNewTagMachineId] = useState<number | ''>('');
   const [newTagMemoryId, setNewTagMemoryId] = useState<number | ''>('');
   const [newTagPersistHistory, setNewTagPersistHistory] = useState(true);
+  const [newTagQualityGroup, setNewTagQualityGroup] = useState('');
+  const [newTagQualityRole, setNewTagQualityRole] = useState('');
 
   const [editingDevice, setEditingDevice] = useState<Device | null>(null);
   const [editingMemory, setEditingMemory] = useState<Memory | null>(null);
   const [editingTag, setEditingTag] = useState<TagCrud | null>(null);
+  const [editingQualityRole, setEditingQualityRole] = useState<QualityRoleOption | null>(null);
+  const [newQualityRoleName, setNewQualityRoleName] = useState('');
+  const [newQualityRoleDescription, setNewQualityRoleDescription] = useState('');
+  const [newQualityRoleActive, setNewQualityRoleActive] = useState(true);
 
   const availableMemoriesForNewTag = useMemo(() => {
     if (newTagMachineId === '') {
@@ -89,11 +106,12 @@ export function PlcTagCrudScreen() {
 
   const loadAll = async (): Promise<string[]> => {
     const failures: string[] = [];
-    const [devicesRes, machinesRes, memoriesRes, tagsRes] = await Promise.allSettled([
+    const [devicesRes, machinesRes, memoriesRes, tagsRes, qualityRolesRes] = await Promise.allSettled([
       requestApi<Device[]>('/api/devices'),
       requestApi<Machine[]>('/api/machines'),
       requestApi<Memory[]>('/api/memories'),
       requestApi<TagCrud[]>('/api/tags'),
+      requestApi<QualityRoleOption[]>('/api/tags/quality-roles'),
     ]);
 
     if (devicesRes.status === 'fulfilled') {
@@ -118,6 +136,12 @@ export function PlcTagCrudScreen() {
       setTags(tagsRes.value);
     } else {
       failures.push(`Tag: ${tagsRes.reason instanceof Error ? tagsRes.reason.message : 'erro'}`);
+    }
+
+    if (qualityRolesRes.status === 'fulfilled') {
+      setQualityRoles(qualityRolesRes.value);
+    } else {
+      failures.push(`QualityRole: ${qualityRolesRes.reason instanceof Error ? qualityRolesRes.reason.message : 'erro'}`);
     }
 
     return failures;
@@ -396,12 +420,16 @@ export function PlcTagCrudScreen() {
                 machineId: Number(newTagMachineId),
                 memoryId: Number(newTagMemoryId),
                 persistHistory: newTagPersistHistory,
+                qualityGroup: newTagQualityGroup.trim() || null,
+                qualityRole: newTagQualityRole.trim() || null,
               }),
             });
             setNewTagName('');
             setNewTagMachineId('');
             setNewTagMemoryId('');
             setNewTagPersistHistory(true);
+            setNewTagQualityGroup('');
+            setNewTagQualityRole('');
           }, 'Tag criada');
         }}
         className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3"
@@ -430,6 +458,26 @@ export function PlcTagCrudScreen() {
           />
           Persistir historico (memory_value)
         </label>
+        <input
+          value={newTagQualityGroup}
+          onChange={(e) => setNewTagQualityGroup(e.target.value)}
+          placeholder="Grupo de qualidade (ex: PRENSA_1)"
+          className="rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-2"
+        />
+        <select
+          value={newTagQualityRole}
+          onChange={(e) => setNewTagQualityRole(e.target.value)}
+          className="rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-1"
+        >
+          <option value="">Papel de qualidade (opcional)</option>
+          {qualityRoles.filter((role) => role.active).map((role) => (
+            <option key={role.id} value={role.name}>{role.name}</option>
+          ))}
+        </select>
+        <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 sm:col-span-3">
+          O collector processa qualidade quando uma tag com papel <strong>TRIGGER</strong> muda de 0 para maior que 0.
+          Ele busca as demais tags do mesmo <strong>Machine</strong> e mesmo <strong>Grupo de qualidade</strong>.
+        </p>
         <button disabled={isSaving} className="rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white sm:col-span-3">Criar</button>
       </form>
       <div className="overflow-x-auto">
@@ -441,6 +489,8 @@ export function PlcTagCrudScreen() {
               <th className="pb-2 pr-2">Machine</th>
               <th className="pb-2 pr-2">Memory</th>
               <th className="pb-2 pr-2">Persist.</th>
+              <th className="pb-2 pr-2">Grupo Qualidade</th>
+              <th className="pb-2 pr-2">Papel Qualidade</th>
               <th className="pb-2 text-right">Acoes</th>
             </tr>
           </thead>
@@ -493,17 +543,112 @@ export function PlcTagCrudScreen() {
                       </label>
                     ) : (row.persistHistory ? 'Historico' : 'Current')}
                   </td>
+                  <td className="py-2 pr-2">
+                    {editing ? <input value={editingTag.qualityGroup ?? ''} onChange={(e) => setEditingTag({ ...editingTag, qualityGroup: e.target.value })} className="w-32 rounded border border-slate-300 px-2 py-1" /> : (row.qualityGroup ?? '-')}
+                  </td>
+                  <td className="py-2 pr-2">
+                    {editing ? <input value={editingTag.qualityRole ?? ''} onChange={(e) => setEditingTag({ ...editingTag, qualityRole: e.target.value.toUpperCase() })} className="w-40 rounded border border-slate-300 px-2 py-1" /> : (row.qualityRole ?? '-')}
+                  </td>
                   <td className="py-2 text-right">
                     <div className="inline-flex gap-1">
                       {editing ? (
                         <>
-                          <button type="button" onClick={async () => { await withMutation(async () => { await requestApi<TagCrud>(`/api/tags/${editingTag.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(editingTag) }); setEditingTag(null); }, 'Tag atualizada'); }} className="rounded p-1 text-emerald-700 hover:bg-emerald-50"><Save className="h-4 w-4" /></button>
+                          <button type="button" onClick={async () => { await withMutation(async () => { await requestApi<TagCrud>(`/api/tags/${editingTag.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...editingTag, qualityGroup: editingTag.qualityGroup?.trim() || null, qualityRole: editingTag.qualityRole?.trim() || null }) }); setEditingTag(null); }, 'Tag atualizada'); }} className="rounded p-1 text-emerald-700 hover:bg-emerald-50"><Save className="h-4 w-4" /></button>
                           <button type="button" onClick={() => setEditingTag(null)} className="rounded p-1 text-slate-600 hover:bg-slate-100"><X className="h-4 w-4" /></button>
                         </>
                       ) : (
                         <>
                           <button type="button" onClick={() => setEditingTag(row)} className="rounded p-1 text-blue-700 hover:bg-blue-50"><Pencil className="h-4 w-4" /></button>
                           <button type="button" onClick={() => removeItem(`/api/tags/${row.id}`, 'Tag removida')} className="rounded p-1 text-red-700 hover:bg-red-50"><Trash2 className="h-4 w-4" /></button>
+                        </>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+
+  const renderQualityRoleSection = () => (
+    <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="mb-3 flex items-center gap-2">
+        <ListChecks className="h-4 w-4 text-amber-600" />
+        <h3 className="font-semibold text-slate-900">Quality Roles</h3>
+      </div>
+      <form
+        onSubmit={async (e: FormEvent) => {
+          e.preventDefault();
+          await withMutation(async () => {
+            await requestApi<QualityRoleOption>('/api/tags/quality-roles', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                name: newQualityRoleName,
+                description: newQualityRoleDescription,
+                active: newQualityRoleActive,
+              }),
+            });
+            setNewQualityRoleName('');
+            setNewQualityRoleDescription('');
+            setNewQualityRoleActive(true);
+          }, 'Quality role criada');
+        }}
+        className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3"
+      >
+        <input value={newQualityRoleName} onChange={(e) => setNewQualityRoleName(e.target.value.toUpperCase())} placeholder="Nome do papel (ex: TRIGGER)" className="rounded-md border border-slate-300 px-3 py-2 text-sm" />
+        <input value={newQualityRoleDescription} onChange={(e) => setNewQualityRoleDescription(e.target.value)} placeholder="Descricao (opcional)" className="rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-2" />
+        <label className="flex items-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm sm:col-span-3">
+          <input type="checkbox" checked={newQualityRoleActive} onChange={(e) => setNewQualityRoleActive(e.target.checked)} />
+          Ativo
+        </label>
+        <button disabled={isSaving} className="rounded-md bg-amber-600 px-3 py-2 text-sm font-medium text-white sm:col-span-3">Criar</button>
+      </form>
+      <div className="overflow-x-auto">
+        <table className="min-w-full text-sm">
+          <thead>
+            <tr className="text-left text-slate-600">
+              <th className="pb-2 pr-2">ID</th>
+              <th className="pb-2 pr-2">Nome</th>
+              <th className="pb-2 pr-2">Descricao</th>
+              <th className="pb-2 pr-2">Ativo</th>
+              <th className="pb-2 text-right">Acoes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {qualityRoles.map((row, index) => {
+              const editing = editingQualityRole?.id === row.id;
+              return (
+                <tr key={row.id} className={`border-t border-slate-200 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-200'} hover:bg-blue-100`}>
+                  <td className="py-2 pr-2">{row.id}</td>
+                  <td className="py-2 pr-2">
+                    {editing ? <input value={editingQualityRole.name} onChange={(e) => setEditingQualityRole({ ...editingQualityRole, name: e.target.value.toUpperCase() })} className="w-44 rounded border border-slate-300 px-2 py-1" /> : row.name}
+                  </td>
+                  <td className="py-2 pr-2">
+                    {editing ? <input value={editingQualityRole.description ?? ''} onChange={(e) => setEditingQualityRole({ ...editingQualityRole, description: e.target.value })} className="w-64 rounded border border-slate-300 px-2 py-1" /> : (row.description ?? '-')}
+                  </td>
+                  <td className="py-2 pr-2">
+                    {editing ? (
+                      <label className="flex items-center gap-2">
+                        <input type="checkbox" checked={editingQualityRole.active} onChange={(e) => setEditingQualityRole({ ...editingQualityRole, active: e.target.checked })} />
+                        {editingQualityRole.active ? 'Sim' : 'Nao'}
+                      </label>
+                    ) : (row.active ? 'Sim' : 'Nao')}
+                  </td>
+                  <td className="py-2 text-right">
+                    <div className="inline-flex gap-1">
+                      {editing ? (
+                        <>
+                          <button type="button" onClick={async () => { await withMutation(async () => { await requestApi<QualityRoleOption>(`/api/tags/quality-roles/${editingQualityRole.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(editingQualityRole) }); setEditingQualityRole(null); }, 'Quality role atualizada'); }} className="rounded p-1 text-emerald-700 hover:bg-emerald-50"><Save className="h-4 w-4" /></button>
+                          <button type="button" onClick={() => setEditingQualityRole(null)} className="rounded p-1 text-slate-600 hover:bg-slate-100"><X className="h-4 w-4" /></button>
+                        </>
+                      ) : (
+                        <>
+                          <button type="button" onClick={() => setEditingQualityRole(row)} className="rounded p-1 text-blue-700 hover:bg-blue-50"><Pencil className="h-4 w-4" /></button>
+                          <button type="button" onClick={() => removeItem(`/api/tags/quality-roles/${row.id}`, 'Quality role removida')} className="rounded p-1 text-red-700 hover:bg-red-50"><Trash2 className="h-4 w-4" /></button>
                         </>
                       )}
                     </div>
@@ -564,6 +709,7 @@ export function PlcTagCrudScreen() {
           {activeSection === 'device' && renderDeviceSection()}
           {activeSection === 'memory' && renderMemorySection()}
           {activeSection === 'tag' && renderTagSection()}
+          {activeSection === 'qualityRole' && renderQualityRoleSection()}
         </div>
       )}
     </div>

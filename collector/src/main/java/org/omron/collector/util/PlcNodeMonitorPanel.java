@@ -547,7 +547,7 @@ public class PlcNodeMonitorPanel {
     }
 
     private void processQualityTrigger(QualityGroup qg) {
-        logPrefix(">>> Processando Gatilho de Qualidade...");
+        logPrefix(">>> Processando Gatilho de Qualidade (grupo=" + qg.groupName + ", machineId=" + qg.machineId + ")...");
         try {
             // 1. Determinar o bloco de endereços a ler
             List<TagData> allQualityTags = new ArrayList<>();
@@ -658,7 +658,7 @@ public class PlcNodeMonitorPanel {
             Qualidade qualidade = new Qualidade();
             long qualityMachineId = (qg.trigger != null && qg.trigger.machineId > 0)
                     ? qg.trigger.machineId
-                    : deviceInfo.getId().longValue();
+                    : qg.machineId > 0 ? qg.machineId : deviceInfo.getId().longValue();
             qualidade.setMachineId(qualityMachineId);
             qualidade.setValue(sampling);
             qualidade.setHora(plcTime);

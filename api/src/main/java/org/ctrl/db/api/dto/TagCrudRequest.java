@@ -6,6 +6,8 @@ public class TagCrudRequest {
     private Long machineId;
     private Integer memoryId;
     private Boolean persistHistory;
+    private String qualityGroup;
+    private String qualityRole;
 
     public String getName() {
         return name;
@@ -37,5 +39,21 @@ public class TagCrudRequest {
 
     public void setPersistHistory(Boolean persistHistory) {
         this.persistHistory = persistHistory;
+    }
+
+    public String getQualityGroup() {
+        return qualityGroup;
+    }
+
+    public void setQualityGroup(String qualityGroup) {
+        this.qualityGroup = qualityGroup;
+    }
+
+    public String getQualityRole() {
+        return qualityRole;
+    }
+
+    public void setQualityRole(String qualityRole) {
+        this.qualityRole = qualityRole;
     }
 }

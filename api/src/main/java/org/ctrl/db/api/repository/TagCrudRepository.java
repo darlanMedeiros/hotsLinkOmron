@@ -15,18 +15,18 @@ import org.springframework.stereotype.Repository;
 public class TagCrudRepository {
 
     private static final String SQL_FIND_ALL =
-            "SELECT t.id, t.name, t.machine_id, t.memory_id, t.persist_history " +
+            "SELECT t.id, t.name, t.machine_id, t.memory_id, t.persist_history, t.quality_group, t.quality_role " +
                     "FROM public.tag t " +
                     "JOIN public.machine mc ON mc.id = t.machine_id " +
                     "JOIN public.device d ON d.id = mc.device_id " +
                     "JOIN public.memory m ON m.id = t.memory_id " +
                     "ORDER BY d.mnemonic, mc.id, m.name, t.name, t.id";
     private static final String SQL_FIND_BY_ID =
-            "SELECT id, name, machine_id, memory_id, persist_history FROM public.tag WHERE id = ?";
+            "SELECT id, name, machine_id, memory_id, persist_history, quality_group, quality_role FROM public.tag WHERE id = ?";
     private static final String SQL_INSERT =
-            "INSERT INTO public.tag (name, machine_id, memory_id, persist_history) VALUES (?, ?, ?, ?) RETURNING id, name, machine_id, memory_id, persist_history";
+            "INSERT INTO public.tag (name, machine_id, memory_id, persist_history, quality_group, quality_role) VALUES (?, ?, ?, ?, ?, ?) RETURNING id, name, machine_id, memory_id, persist_history, quality_group, quality_role";
     private static final String SQL_UPDATE =
-            "UPDATE public.tag SET name = ?, machine_id = ?, memory_id = ?, persist_history = ? WHERE id = ? RETURNING id, name, machine_id, memory_id, persist_history";
+            "UPDATE public.tag SET name = ?, machine_id = ?, memory_id = ?, persist_history = ?, quality_group = ?, quality_role = ? WHERE id = ? RETURNING id, name, machine_id, memory_id, persist_history, quality_group, quality_role";
     private static final String SQL_DELETE =
             "DELETE FROM public.tag WHERE id = ?";
 
@@ -45,12 +45,14 @@ public class TagCrudRepository {
         return queryOptional(SQL_FIND_BY_ID, id);
     }
 
-    public TagCrud create(String name, long machineId, int memoryId, boolean persistHistory) {
-        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), name, machineId, memoryId, persistHistory);
+    public TagCrud create(String name, long machineId, int memoryId, boolean persistHistory, String qualityGroup, String qualityRole) {
+        return jdbcTemplate.queryForObject(SQL_INSERT, Objects.requireNonNull(rowMapper, "rowMapper"), name, machineId,
+                memoryId, persistHistory, qualityGroup, qualityRole);
     }
 
-    public Optional<TagCrud> update(int id, String name, long machineId, int memoryId, boolean persistHistory) {
-        return queryOptional(SQL_UPDATE, name, machineId, memoryId, persistHistory, id);
+    public Optional<TagCrud> update(int id, String name, long machineId, int memoryId, boolean persistHistory,
+            String qualityGroup, String qualityRole) {
+        return queryOptional(SQL_UPDATE, name, machineId, memoryId, persistHistory, qualityGroup, qualityRole, id);
     }
 
     public boolean delete(int id) {
@@ -71,6 +73,8 @@ public class TagCrudRepository {
                 rs.getString("name"),
                 rs.getLong("machine_id"),
                 rs.getInt("memory_id"),
-                rs.getBoolean("persist_history"));
+                rs.getBoolean("persist_history"),
+                rs.getString("quality_group"),
+                rs.getString("quality_role"));
     }
 }

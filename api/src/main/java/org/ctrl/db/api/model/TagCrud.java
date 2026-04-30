@@ -7,13 +7,18 @@ public class TagCrud {
     private final Long machineId;
     private final Integer memoryId;
     private final Boolean persistHistory;
+    private final String qualityGroup;
+    private final String qualityRole;
 
-    public TagCrud(Integer id, String name, Long machineId, Integer memoryId, Boolean persistHistory) {
+    public TagCrud(Integer id, String name, Long machineId, Integer memoryId, Boolean persistHistory,
+            String qualityGroup, String qualityRole) {
         this.id = id;
         this.name = name;
         this.machineId = machineId;
         this.memoryId = memoryId;
         this.persistHistory = persistHistory;
+        this.qualityGroup = qualityGroup;
+        this.qualityRole = qualityRole;
     }
 
     public Integer getId() {
@@ -34,5 +39,13 @@ public class TagCrud {
 
     public Boolean getPersistHistory() {
         return persistHistory;
+    }
+
+    public String getQualityGroup() {
+        return qualityGroup;
+    }
+
+    public String getQualityRole() {
+        return qualityRole;
     }
 }

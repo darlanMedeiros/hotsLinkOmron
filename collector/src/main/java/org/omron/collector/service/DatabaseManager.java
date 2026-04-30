@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import org.ctrl.db.config.DbConfig;
 import org.ctrl.db.model.DeviceInfo;
 import org.ctrl.db.model.MemoryValue;
@@ -138,6 +139,7 @@ public class DatabaseManager {
 
         List<Map<String, Object>> rows = jdbc.queryForList(
                 "SELECT t.name AS tag_name, t.machine_id AS machine_id, t.persist_history AS persist_history, " +
+                        "t.quality_group AS quality_group, t.quality_role AS quality_role, " +
                         "m.name AS memory_area, m.address AS memory_address, m.bit AS memory_bit " +
                         "FROM public.device d " +
                         "JOIN public.machine ma ON ma.device_id = d.id " +
@@ -153,6 +155,8 @@ public class DatabaseManager {
             Integer address = asInt(row.get("memory_address"));
             String memoryArea = asString(row.get("memory_area"));
             Integer memoryBit = asInt(row.get("memory_bit"));
+            String qualityGroup = asString(row.get("quality_group"));
+            String qualityRole = asString(row.get("quality_role"));
             String memoryName = formatMemoryKey(memoryArea, address, memoryBit);
             boolean persistHistory = asBoolean(row.get("persist_history"), true);
 
@@ -171,7 +175,7 @@ public class DatabaseManager {
 
             tags.put(tagName, new TagData(
                     tagName, machineId.intValue(), memoryArea, address.intValue(), memoryBit == null ? -1 : memoryBit.intValue(),
-                    memoryName, persistHistory));
+                    memoryName, persistHistory, qualityGroup, qualityRole));
         }
         return tags;
     }
@@ -340,41 +344,58 @@ public class DatabaseManager {
         Map<String, TagData> allTags = loadTagsForDevice(deviceMnemonic);
         Map<Integer, QualityGroup> groups = new HashMap<>();
 
-        // Para simplificar, assumimos um grupo por device se as tags existirem.
-        // Se houver múltiplas máquinas no mesmo device, os nomes das tags poderiam ter prefixos.
-        // Como o usuário não especificou prefixos por máquina no PROBLEMA.MD, vamos agrupar 
-        // as tags soltas em um grupo se elas existirem.
-        
-        QualityGroup group = new QualityGroup();
-        boolean foundAny = false;
-
         for (TagData td : allTags.values()) {
-            String name = td.name;
-            if ("Qualidade_Gatilho".equals(name)) { group.trigger = td; foundAny = true; }
-            else if ("Total_Defeitos1".equals(name)) { group.defectsTotal[0] = td; foundAny = true; }
-            else if ("Total_Defeitos2".equals(name)) { group.defectsTotal[1] = td; foundAny = true; }
-            else if ("Total_Defeitos3".equals(name)) { group.defectsTotal[2] = td; foundAny = true; }
-            else if ("Codigo_Defeito1".equals(name)) { group.defectsCode[0] = td; foundAny = true; }
-            else if ("Codigo_Defeito2".equals(name)) { group.defectsCode[1] = td; foundAny = true; }
-            else if ("Codigo_Defeito3".equals(name)) { group.defectsCode[2] = td; foundAny = true; }
-            else if ("Qtde_Amostragem".equals(name)) { group.sampling = td; foundAny = true; }
-            else if ("Qualidade_Ano".equals(name)) { group.year = td; foundAny = true; }
-            else if ("Qualidade_Mes".equals(name)) { group.month = td; foundAny = true; }
-            else if ("Qualidade_Dia".equals(name)) { group.day = td; foundAny = true; }
-            else if ("Qualidade_Hora".equals(name)) { group.hour = td; foundAny = true; }
-            else if ("Qualidade_Min".equals(name)) { group.minute = td; foundAny = true; }
-            else if ("Qualidade_Seg".equals(name)) { group.second = td; foundAny = true; }
-            else if ("Qualidade_Maquina_Current".equals(name)) { group.machineQualityCurrent = td; foundAny = true; }
-            else if ("Qualidade_Maquina_Persisted".equals(name)) { group.machineQualityPersisted = td; foundAny = true; }
-        }
+            String role = resolveQualityRole(td);
+            if (role == null) {
+                continue;
+            }
+            String groupName = td.qualityGroup == null || td.qualityGroup.trim().isEmpty() ? "DEFAULT" : td.qualityGroup.trim();
+            int key = Objects.hash(Integer.valueOf(td.machineId), groupName);
+            QualityGroup group = groups.computeIfAbsent(Integer.valueOf(key), k -> new QualityGroup(td.machineId, groupName));
 
-        if (foundAny && group.trigger != null) {
-            // Usamos o machine_id da tag gatilho como chave se necessário, 
-            // no momento 0 como único grupo por PLC para simplificar.
-            groups.put(0, group); 
+            if ("TRIGGER".equals(role)) { group.trigger = td; }
+            else if ("DEFECT_TOTAL_1".equals(role)) { group.defectsTotal[0] = td; }
+            else if ("DEFECT_TOTAL_2".equals(role)) { group.defectsTotal[1] = td; }
+            else if ("DEFECT_TOTAL_3".equals(role)) { group.defectsTotal[2] = td; }
+            else if ("DEFECT_CODE_1".equals(role)) { group.defectsCode[0] = td; }
+            else if ("DEFECT_CODE_2".equals(role)) { group.defectsCode[1] = td; }
+            else if ("DEFECT_CODE_3".equals(role)) { group.defectsCode[2] = td; }
+            else if ("SAMPLING".equals(role)) { group.sampling = td; }
+            else if ("YEAR".equals(role)) { group.year = td; }
+            else if ("MONTH".equals(role)) { group.month = td; }
+            else if ("DAY".equals(role)) { group.day = td; }
+            else if ("HOUR".equals(role)) { group.hour = td; }
+            else if ("MINUTE".equals(role)) { group.minute = td; }
+            else if ("SECOND".equals(role)) { group.second = td; }
+            else if ("MACHINE_QUALITY_CURRENT".equals(role)) { group.machineQualityCurrent = td; }
+            else if ("MACHINE_QUALITY_PERSISTED".equals(role)) { group.machineQualityPersisted = td; }
         }
 
         return groups;
+    }
+
+    private String resolveQualityRole(TagData td) {
+        if (td.qualityRole != null && !td.qualityRole.trim().isEmpty()) {
+            return td.qualityRole.trim().toUpperCase();
+        }
+        String name = td.name;
+        if ("Qualidade_Gatilho".equals(name)) return "TRIGGER";
+        if ("Total_Defeitos1".equals(name)) return "DEFECT_TOTAL_1";
+        if ("Total_Defeitos2".equals(name)) return "DEFECT_TOTAL_2";
+        if ("Total_Defeitos3".equals(name)) return "DEFECT_TOTAL_3";
+        if ("Codigo_Defeito1".equals(name)) return "DEFECT_CODE_1";
+        if ("Codigo_Defeito2".equals(name)) return "DEFECT_CODE_2";
+        if ("Codigo_Defeito3".equals(name)) return "DEFECT_CODE_3";
+        if ("Qtde_Amostragem".equals(name)) return "SAMPLING";
+        if ("Qualidade_Ano".equals(name)) return "YEAR";
+        if ("Qualidade_Mes".equals(name)) return "MONTH";
+        if ("Qualidade_Dia".equals(name)) return "DAY";
+        if ("Qualidade_Hora".equals(name)) return "HOUR";
+        if ("Qualidade_Min".equals(name)) return "MINUTE";
+        if ("Qualidade_Seg".equals(name)) return "SECOND";
+        if ("Qualidade_Maquina_Current".equals(name)) return "MACHINE_QUALITY_CURRENT";
+        if ("Qualidade_Maquina_Persisted".equals(name)) return "MACHINE_QUALITY_PERSISTED";
+        return null;
     }
 
     // Data classes
@@ -405,9 +426,11 @@ public class DatabaseManager {
         public final int bit;
         public final String memoryName;
         public final boolean persistHistory;
+        public final String qualityGroup;
+        public final String qualityRole;
 
         public TagData(String name, int machineId, String memoryArea, int address, int bit, String memoryName,
-                boolean persistHistory) {
+                boolean persistHistory, String qualityGroup, String qualityRole) {
             this.name = name;
             this.machineId = machineId;
             this.memoryArea = memoryArea;
@@ -415,6 +438,8 @@ public class DatabaseManager {
             this.bit = bit;
             this.memoryName = memoryName;
             this.persistHistory = persistHistory;
+            this.qualityGroup = qualityGroup;
+            this.qualityRole = qualityRole;
         }
     }
 
@@ -436,6 +461,8 @@ public class DatabaseManager {
     }
 
     public static class QualityGroup {
+        public final int machineId;
+        public final String groupName;
         public TagData trigger;
         public TagData[] defectsTotal = new TagData[3];
         public TagData[] defectsCode = new TagData[3];
@@ -448,6 +475,11 @@ public class DatabaseManager {
         public TagData second;
         public TagData machineQualityCurrent;
         public TagData machineQualityPersisted;
+
+        public QualityGroup(int machineId, String groupName) {
+            this.machineId = machineId;
+            this.groupName = groupName;
+        }
 
         public boolean isValidTriggerGroup() {
             return trigger != null && year != null && month != null && day != null &&

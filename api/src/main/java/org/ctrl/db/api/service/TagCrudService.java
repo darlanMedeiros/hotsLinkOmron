@@ -33,19 +33,32 @@ public class TagCrudService {
     }
 
     public TagCrud create(String name, Long machineId, Integer memoryId, Boolean persistHistory) {
+        return create(name, machineId, memoryId, persistHistory, null, null);
+    }
+
+    public TagCrud create(String name, Long machineId, Integer memoryId, Boolean persistHistory, String qualityGroup,
+            String qualityRole) {
         long validatedMachineId = requireLongId(machineId, "machineId");
         int validatedMemoryId = requireId(memoryId, "memoryId");
         ensureMemoryBelongsToMachineDevice(validatedMemoryId, validatedMachineId);
-        return repository.create(requireName(name), validatedMachineId, validatedMemoryId, resolvePersistHistory(persistHistory));
+        return repository.create(requireName(name), validatedMachineId, validatedMemoryId,
+                resolvePersistHistory(persistHistory), normalizeQualityGroup(qualityGroup),
+                normalizeQualityRole(qualityRole));
     }
 
     public Optional<TagCrud> update(int id, String name, Long machineId, Integer memoryId, Boolean persistHistory) {
+        return update(id, name, machineId, memoryId, persistHistory, null, null);
+    }
+
+    public Optional<TagCrud> update(int id, String name, Long machineId, Integer memoryId, Boolean persistHistory,
+            String qualityGroup, String qualityRole) {
         validateId(id, "id");
         long validatedMachineId = requireLongId(machineId, "machineId");
         int validatedMemoryId = requireId(memoryId, "memoryId");
         ensureMemoryBelongsToMachineDevice(validatedMemoryId, validatedMachineId);
         return repository.update(id, requireName(name), validatedMachineId, validatedMemoryId,
-                resolvePersistHistory(persistHistory));
+                resolvePersistHistory(persistHistory), normalizeQualityGroup(qualityGroup),
+                normalizeQualityRole(qualityRole));
     }
 
     public boolean delete(int id) {
@@ -93,5 +106,21 @@ public class TagCrudService {
 
     private boolean resolvePersistHistory(Boolean persistHistory) {
         return persistHistory == null ? true : persistHistory.booleanValue();
+    }
+
+    private String normalizeQualityGroup(String qualityGroup) {
+        if (qualityGroup == null) {
+            return null;
+        }
+        String normalized = qualityGroup.trim();
+        return normalized.isEmpty() ? null : normalized;
+    }
+
+    private String normalizeQualityRole(String qualityRole) {
+        if (qualityRole == null) {
+            return null;
+        }
+        String normalized = qualityRole.trim().toUpperCase();
+        return normalized.isEmpty() ? null : normalized;
     }
 }
