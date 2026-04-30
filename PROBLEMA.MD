@@ -89,3 +89,5 @@ Para que a coleta de qualidade funcione automaticamente, as tags no banco de dad
 - **Qualadede**: `Qualidade_Maquina_Current`, `Qualidade_Maquina_Persisted`
 
 Hoje já está funcionando desta forma, porém não é possível escalar para outras máquinas, para isso criar o crud de tag sendo possível definir que essas tags pertençam a um grupo de tags que o collector vai ler quando receber o gatilho de mudança da qualidade. Ficar claro para o usuário essa condição.
+
+Testar o collector para ler por bloco as tags, ajustar os endereços das memórias da tags de qualidade
