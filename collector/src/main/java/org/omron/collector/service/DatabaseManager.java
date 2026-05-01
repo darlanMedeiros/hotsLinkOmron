@@ -173,11 +173,19 @@ public class DatabaseManager {
              * }
              */
 
-            tags.put(tagName, new TagData(
+            String tagKey = buildTagKey(tagName, machineId.intValue(), memoryArea, address.intValue(),
+                    memoryBit == null ? -1 : memoryBit.intValue());
+            tags.put(tagKey, new TagData(
                     tagName, machineId.intValue(), memoryArea, address.intValue(), memoryBit == null ? -1 : memoryBit.intValue(),
                     memoryName, persistHistory, qualityGroup, qualityRole));
         }
         return tags;
+    }
+
+    private static String buildTagKey(String tagName, int machineId, String memoryArea, int address, int bit) {
+        String normalizedName = tagName == null ? "" : tagName.trim();
+        String normalizedArea = memoryArea == null ? "DM" : memoryArea.trim().toUpperCase();
+        return normalizedName + "|" + machineId + "|" + normalizedArea + "|" + address + "|" + bit;
     }
 
     /**

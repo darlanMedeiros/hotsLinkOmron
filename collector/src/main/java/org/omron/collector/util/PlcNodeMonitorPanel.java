@@ -347,7 +347,7 @@ public class PlcNodeMonitorPanel {
                         // Gatilho de qualidade: salva apenas na borda de subida (0 -> 1).
                         if (isQualityTriggerRisingEdge(previous, values) && qualityGroups != null) {
                             for (QualityGroup qg : qualityGroups.values()) {
-                                if (qg.trigger != null && qg.trigger.name.equals(tag.getName())) {
+                                if (qg.trigger != null && matchesTriggerTag(qg.trigger, tag)) {
                                     processQualityTrigger(qg);
                                 }
                             }
@@ -544,6 +544,17 @@ public class PlcNodeMonitorPanel {
             return current[0] > 0;
         }
         return previous[0] <= 0 && current[0] > 0;
+    }
+
+    private static boolean matchesTriggerTag(TagData trigger, MonitoredTag monitored) {
+        if (trigger == null || monitored == null) {
+            return false;
+        }
+        String triggerArea = trigger.memoryArea == null ? "DM" : trigger.memoryArea.trim().toUpperCase();
+        String monitoredArea = monitored.getMemoryArea() == null ? "DM" : monitored.getMemoryArea().trim().toUpperCase();
+        return triggerArea.equals(monitoredArea)
+                && trigger.address == monitored.getAddress()
+                && trigger.bit == monitored.getBit();
     }
 
     private void processQualityTrigger(QualityGroup qg) {
